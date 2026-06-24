@@ -130,6 +130,7 @@ const guardrails = [
 ];
 
 const libraryOnPage = [
+  { label: "Manifesto", href: "/manifesto" },
   { label: "Origin story", href: "#origin" },
   { label: "Open-world framework", href: "#framework" },
   { label: "Meta Academy Tahoe pilot sketch", href: "#meta-academy" },
@@ -138,7 +139,6 @@ const libraryOnPage = [
 ];
 
 const libraryComingSoon = [
-  "Manifesto (full document)",
   "One-page concept brief",
   "Future white paper",
   "Downloadable mission template packs",

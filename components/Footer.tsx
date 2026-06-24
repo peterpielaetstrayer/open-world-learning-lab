@@ -1,9 +1,12 @@
+import Link from "next/link";
+
 const footerLinks = [
-  { href: "#origin", label: "Origin" },
-  { href: "#framework", label: "Framework" },
-  { href: "#missions", label: "Missions" },
-  { href: "#guardrails", label: "Guardrails" },
-  { href: "#library", label: "Library" },
+  { href: "/#origin", label: "Origin" },
+  { href: "/#framework", label: "Framework" },
+  { href: "/#missions", label: "Missions" },
+  { href: "/#guardrails", label: "Guardrails" },
+  { href: "/#library", label: "Library" },
+  { href: "/manifesto", label: "Manifesto" },
 ];
 
 export default function Footer() {
@@ -22,12 +25,12 @@ export default function Footer() {
             <ul className="flex flex-wrap gap-x-6 gap-y-2">
               {footerLinks.map((link) => (
                 <li key={link.href}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-sm text-sand/70 hover:text-background transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
