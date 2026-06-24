@@ -18,7 +18,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a
           href="#"
-          className="font-serif text-lg md:text-xl text-foreground tracking-tight hover:text-tahoe transition-colors"
+          className="font-serif text-base leading-snug sm:text-lg md:text-xl text-foreground tracking-tight hover:text-tahoe transition-colors min-w-0 pr-3 sm:pr-0"
         >
           Open World Learning Lab
         </a>

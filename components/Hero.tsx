@@ -24,16 +24,16 @@ export default function Hero() {
               emerging tools.
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
               <a
                 href="#meta-academy"
-                className="inline-flex items-center justify-center rounded-full bg-pine px-7 py-3 text-sm font-medium text-white hover:bg-pine-light transition-colors"
+                className="inline-flex w-full sm:w-auto items-center justify-center rounded-full bg-pine px-7 py-3.5 text-sm font-medium text-white hover:bg-pine-light transition-colors"
               >
                 Explore Meta Academy Tahoe
               </a>
               <a
                 href="#framework"
-                className="inline-flex items-center justify-center rounded-full border border-sand-dark bg-card px-7 py-3 text-sm font-medium text-foreground hover:border-tahoe/40 transition-colors"
+                className="inline-flex w-full sm:w-auto items-center justify-center rounded-full border border-sand-dark bg-card px-7 py-3.5 text-sm font-medium text-foreground hover:border-tahoe/40 transition-colors"
               >
                 Read the framework
               </a>
@@ -94,7 +94,7 @@ export default function Hero() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 pt-2 border-t border-sand-dark/40">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-sand-dark/40">
                   <div>
                     <p className="text-xs font-medium uppercase tracking-wider text-stone">
                       Participants

@@ -29,7 +29,7 @@ export default function Section({
   return (
     <section
       id={id}
-      className={`py-20 md:py-28 ${variantStyles[variant]} ${className}`}
+      className={`scroll-mt-28 md:scroll-mt-32 py-16 md:py-28 ${variantStyles[variant]} ${className}`}
     >
       <div className="mx-auto max-w-6xl px-6">
         {(title || subtitle || intro) && (

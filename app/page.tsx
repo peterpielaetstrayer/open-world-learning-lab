@@ -127,14 +127,21 @@ const guardrails = [
   },
 ];
 
-const libraryResources = [
-  "Manifesto",
+const libraryOnPage = [
+  { label: "Origin story", href: "#origin" },
+  { label: "Open-world framework", href: "#framework" },
+  { label: "Meta Academy Tahoe pilot sketch", href: "#meta-academy" },
+  { label: "Sample learning missions", href: "#missions" },
+  { label: "Design guardrails", href: "#guardrails" },
+];
+
+const libraryComingSoon = [
+  "Manifesto (full document)",
   "One-page concept brief",
-  "Meta Academy Tahoe pilot sketch",
-  "Sample mission templates",
-  "Guardrails for open-world education",
   "Future white paper",
+  "Downloadable mission template packs",
   "Field guide and reflection templates",
+  "Meta Academy Tahoe pilot blueprints",
 ];
 
 export default function Home() {
@@ -205,7 +212,7 @@ export default function Home() {
             <p>
               Open-world education starts from a different sequence:
             </p>
-            <p className="font-medium text-foreground text-lg">
+            <p className="font-medium text-foreground text-base sm:text-lg leading-relaxed">
               Experience → curiosity → guided inquiry → knowledge → practice →
               artifact → reflection
             </p>
@@ -216,8 +223,8 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-16 overflow-x-auto pb-4">
-            <div className="flex gap-4 lg:gap-2 min-w-max lg:min-w-0 lg:justify-between px-2">
+          <div className="mt-12 md:mt-16 -mx-6 px-6 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory">
+            <div className="flex gap-5 lg:gap-2 min-w-max lg:min-w-0 lg:justify-between">
               {processSteps.map((step, i) => (
                 <ProcessStep
                   key={step.title}
@@ -297,7 +304,7 @@ export default function Home() {
 
         {/* How it works */}
         <Section id="how-it-works" title="How the model works." variant="sand">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {howItWorksCards.map((card, i) => (
               <article
                 key={card.title}
@@ -330,7 +337,7 @@ export default function Home() {
           title="Sample learning missions."
           intro="Open-world learning needs structure. Missions turn exploration into rigorous inquiry, practice, and evidence of learning."
         >
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
             {missions.map((mission) => (
               <MissionCard key={mission.title} {...mission} />
             ))}
@@ -341,14 +348,10 @@ export default function Home() {
         <Section
           id="guardrails"
           title="The future has to be built carefully."
+          intro="Open-world education could become deeply human, or it could become another layer of surveillance, distraction, and commercialization. The design matters."
           variant="sand"
         >
-          <p className="max-w-3xl text-muted leading-relaxed -mt-6 mb-12">
-            Open-world education could become deeply human, or it could become
-            another layer of surveillance, distraction, and commercialization.
-            The design matters.
-          </p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {guardrails.map((guardrail) => (
               <GuardrailCard key={guardrail.title} {...guardrail} />
             ))}
@@ -368,20 +371,52 @@ export default function Home() {
               designers, technologists, families, and communities can study,
               remix, critique, and improve.
             </p>
-            <p>Initial resources will include:</p>
           </div>
 
-          <ul className="mt-8 grid sm:grid-cols-2 gap-3 max-w-2xl">
-            {libraryResources.map((resource) => (
-              <li
-                key={resource}
-                className="flex items-center gap-3 rounded-lg border border-sand-dark/40 bg-card px-4 py-3 text-sm text-foreground"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-pine shrink-0" />
-                {resource}
-              </li>
-            ))}
-          </ul>
+          <div className="mt-10 grid gap-8 lg:grid-cols-2">
+            <div>
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-pine">
+                On this site (v0)
+              </h3>
+              <p className="mt-2 text-sm text-muted leading-relaxed">
+                The following are already represented in the sections below.
+              </p>
+              <ul className="mt-4 space-y-2">
+                {libraryOnPage.map((resource) => (
+                  <li key={resource.label}>
+                    <a
+                      href={resource.href}
+                      className="flex items-center gap-3 rounded-lg border border-sand-dark/40 bg-card px-4 py-3 text-sm text-foreground hover:border-tahoe/30 transition-colors"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-pine shrink-0" />
+                      {resource.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-stone">
+                Downloadable releases (next)
+              </h3>
+              <p className="mt-2 text-sm text-muted leading-relaxed">
+                Standalone documents and templates will be published here as they
+                are finalized.
+              </p>
+              <ul className="mt-4 space-y-2">
+                {libraryComingSoon.map((resource) => (
+                  <li
+                    key={resource}
+                    className="flex items-center gap-3 rounded-lg border border-dashed border-sand-dark/50 bg-sand/20 px-4 py-3 text-sm text-muted"
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-stone/60 shrink-0" />
+                    {resource}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
           <div className="mt-10 rounded-xl border border-sand-dark/40 bg-sand/30 p-6 max-w-3xl">
             <p className="text-sm text-muted leading-relaxed">
@@ -395,9 +430,9 @@ export default function Home() {
             </p>
           </div>
 
-          <p className="mt-8 text-sm font-medium text-tahoe">
-            Coming soon: downloadable briefs, mission templates, and pilot
-            blueprints.
+          <p className="mt-8 text-sm text-muted max-w-3xl">
+            Briefs, templates, and blueprints will be available for download as
+            the library matures. This page is the first public sketch.
           </p>
         </Section>
 
@@ -411,16 +446,16 @@ export default function Home() {
               It should feel like finally seeing reality clearly.
             </p>
 
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <a
                 href="mailto:hello@openworldlearninglab.com?subject=Follow%20the%20project"
-                className="inline-flex items-center justify-center rounded-full bg-background px-7 py-3 text-sm font-medium text-foreground hover:bg-sand transition-colors"
+                className="inline-flex w-full sm:w-auto items-center justify-center rounded-full bg-background px-7 py-3.5 text-sm font-medium text-foreground hover:bg-sand transition-colors"
               >
                 Follow the project
               </a>
               <a
-                href="mailto:hello@openworldlearninglab.com"
-                className="inline-flex items-center justify-center rounded-full border border-sand/30 px-7 py-3 text-sm font-medium text-background hover:bg-sand/10 transition-colors"
+                href="mailto:hello@openworldlearninglab.com?subject=Collaboration%20inquiry"
+                className="inline-flex w-full sm:w-auto items-center justify-center rounded-full border border-sand/30 px-7 py-3.5 text-sm font-medium text-background hover:bg-sand/10 transition-colors"
               >
                 Contact / collaborate
               </a>

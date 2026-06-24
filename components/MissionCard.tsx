@@ -13,8 +13,8 @@ export default function MissionCard({
 }: MissionCardProps) {
   return (
     <article className="rounded-2xl border border-sand-dark/50 bg-card p-6 md:p-8 flex flex-col h-full hover:border-tahoe/30 hover:shadow-md hover:shadow-foreground/5 transition-all">
-      <div className="flex items-center gap-3 mb-4">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-tahoe/10 text-tahoe">
+      <div className="flex items-start gap-3 mb-4">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-tahoe/10 text-tahoe">
           <svg
             className="h-4 w-4"
             fill="none"
@@ -30,7 +30,9 @@ export default function MissionCard({
             />
           </svg>
         </span>
-        <h3 className="font-serif text-xl text-foreground">{title}</h3>
+        <h3 className="font-serif text-lg sm:text-xl text-foreground leading-snug min-w-0">
+          {title}
+        </h3>
       </div>
 
       <p className="text-sm text-muted leading-relaxed flex-grow">
