@@ -41,6 +41,26 @@ body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Shared focus ring for interactive elements */
+:focus-visible {
+  outline: 2px solid var(--tahoe-blue);
+  outline-offset: 2px;
+}
+
 /* Subtle topographic field-note pattern */
 .pattern-topo {
   background-image:
@@ -56,4 +76,90 @@ body {
     linear-gradient(rgba(74, 124, 155, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(74, 124, 155, 0.06) 1px, transparent 1px);
   background-size: 24px 24px;
+}
+
+/* Hero: expedition field-map atmosphere */
+.hero-field-map {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(ellipse 90% 70% at 72% 42%, rgba(74, 124, 155, 0.11) 0%, transparent 62%),
+    radial-gradient(ellipse 55% 45% at 18% 78%, rgba(45, 90, 71, 0.07) 0%, transparent 58%),
+    radial-gradient(ellipse 40% 30% at 85% 88%, rgba(138, 130, 120, 0.08) 0%, transparent 55%),
+    linear-gradient(175deg, #faf8f5 0%, #f3f0ea 48%, #eef3f6 100%);
+}
+
+.pattern-map-texture {
+  background-image:
+    linear-gradient(rgba(74, 124, 155, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 124, 155, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 30% 40%, rgba(74, 124, 155, 0.06) 0%, transparent 35%),
+    radial-gradient(circle at 70% 60%, rgba(45, 90, 71, 0.05) 0%, transparent 30%);
+  background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%;
+}
+
+/* Mission marker dot */
+.mission-marker {
+  position: relative;
+}
+
+.mission-marker::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  border: 1px solid rgba(74, 124, 155, 0.35);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mission-marker:hover::before,
+  .mission-marker:focus-within::before {
+    opacity: 1;
+  }
+}
+
+/* Field-note label micro-style */
+.field-label {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+/* Tactile button base (used with Tailwind utilities) */
+.btn-tactile {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn-tactile:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(26, 35, 50, 0.08);
+  }
+
+  .btn-tactile:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}
+
+/* Card lift on hover */
+.card-lift {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(26, 35, 50, 0.07);
+  }
 }

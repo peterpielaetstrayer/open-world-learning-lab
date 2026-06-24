@@ -18,7 +18,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a
           href="#"
-          className="font-serif text-base leading-snug sm:text-lg md:text-xl text-foreground tracking-tight hover:text-tahoe transition-colors min-w-0 pr-3 sm:pr-0"
+          className="font-serif text-base leading-snug sm:text-lg md:text-xl text-foreground tracking-tight hover:text-tahoe transition-colors min-w-0 pr-3 sm:pr-0 focus-visible:rounded-sm"
         >
           Open World Learning Lab
         </a>
@@ -28,14 +28,14 @@ export default function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm text-muted hover:text-foreground transition-colors"
+              className="text-sm text-muted hover:text-foreground transition-colors focus-visible:rounded-sm"
             >
               {link.label}
             </a>
           ))}
           <a
             href="#meta-academy"
-            className="rounded-full bg-pine px-5 py-2 text-sm font-medium text-white hover:bg-pine-light transition-colors"
+            className="btn-tactile rounded-full bg-pine px-5 py-2 text-sm font-medium text-white hover:bg-pine-light"
           >
             Explore the concept
           </a>

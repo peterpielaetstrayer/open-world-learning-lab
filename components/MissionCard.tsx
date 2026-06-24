@@ -12,9 +12,9 @@ export default function MissionCard({
   artifact,
 }: MissionCardProps) {
   return (
-    <article className="rounded-2xl border border-sand-dark/50 bg-card p-6 md:p-8 flex flex-col h-full hover:border-tahoe/30 hover:shadow-md hover:shadow-foreground/5 transition-all">
+    <article className="card-lift rounded-2xl border border-sand-dark/50 bg-card p-6 md:p-8 flex flex-col h-full hover:border-tahoe/30 focus-within:border-tahoe/40">
       <div className="flex items-start gap-3 mb-4">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-tahoe/10 text-tahoe">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-tahoe/10 text-tahoe border border-tahoe/15">
           <svg
             className="h-4 w-4"
             fill="none"
@@ -30,9 +30,12 @@ export default function MissionCard({
             />
           </svg>
         </span>
-        <h3 className="font-serif text-lg sm:text-xl text-foreground leading-snug min-w-0">
-          {title}
-        </h3>
+        <div className="min-w-0">
+          <p className="field-label mb-1">Mission</p>
+          <h3 className="font-serif text-lg sm:text-xl text-foreground leading-snug">
+            {title}
+          </h3>
+        </div>
       </div>
 
       <p className="text-sm text-muted leading-relaxed flex-grow">
@@ -40,7 +43,7 @@ export default function MissionCard({
       </p>
 
       <div className="mt-5">
-        <p className="text-xs font-medium uppercase tracking-wider text-stone mb-2">
+        <p className="field-label mb-2">
           Concepts
         </p>
         <div className="flex flex-wrap gap-1.5">
@@ -56,7 +59,7 @@ export default function MissionCard({
       </div>
 
       <div className="mt-5 pt-5 border-t border-sand-dark/40">
-        <p className="text-xs font-medium uppercase tracking-wider text-stone">
+        <p className="field-label">
           Possible artifact
         </p>
         <p className="mt-1 text-sm text-tahoe">{artifact}</p>

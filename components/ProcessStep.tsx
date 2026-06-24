@@ -10,8 +10,8 @@ export default function ProcessStep({
   phrase,
 }: ProcessStepProps) {
   return (
-    <div className="relative flex flex-col items-center text-center min-w-[108px] sm:min-w-[120px] flex-1 snap-center shrink-0">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-tahoe/30 bg-card text-sm font-medium text-tahoe">
+    <div className="relative flex flex-col items-center text-center min-w-[108px] sm:min-w-[120px] flex-1 snap-center shrink-0 group">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-tahoe/30 bg-card text-sm font-medium text-tahoe transition-colors group-hover:border-tahoe/50 group-hover:bg-tahoe/5">
         {number}
       </div>
       <h3 className="mt-3 text-sm font-semibold text-foreground">{title}</h3>

@@ -1,9 +1,11 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import WorldAsClassroomBand from "@/components/WorldAsClassroomBand";
 import Section from "@/components/Section";
 import ProcessStep from "@/components/ProcessStep";
 import MissionCard from "@/components/MissionCard";
 import GuardrailCard from "@/components/GuardrailCard";
+import TahoeLearningMap from "@/components/TahoeLearningMap";
 import Footer from "@/components/Footer";
 
 const processSteps = [
@@ -150,6 +152,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
+        <WorldAsClassroomBand />
 
         {/* Origin story */}
         <Section id="origin" variant="sand">
@@ -184,11 +187,12 @@ export default function Home() {
               </div>
             </div>
 
-            <blockquote className="relative rounded-2xl border border-sand-dark/60 bg-card p-8 md:p-10 shadow-sm">
-              <div className="absolute top-6 left-6 text-6xl font-serif text-tahoe/20 leading-none select-none" aria-hidden="true">
+            <blockquote className="relative rounded-2xl border border-sand-dark/60 bg-card p-8 md:p-10 shadow-sm card-lift">
+              <p className="field-label mb-4">Field note · origin</p>
+              <div className="absolute top-6 right-6 text-6xl font-serif text-tahoe/15 leading-none select-none" aria-hidden="true">
                 &ldquo;
               </div>
-              <p className="relative font-serif text-2xl md:text-[1.65rem] leading-snug text-foreground pt-8">
+              <p className="relative font-serif text-2xl md:text-[1.65rem] leading-snug text-foreground">
                 Maybe students do not hate knowledge. Maybe they hate knowledge
                 removed from reality.
               </p>
@@ -275,31 +279,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-14 rounded-2xl border border-sand-dark/50 bg-background pattern-grid p-6 md:p-10">
-            <h3 className="font-serif text-xl text-foreground mb-8">
-              Tahoe learning map
-            </h3>
-            <div className="grid sm:grid-cols-2 gap-5">
-              {tahoeZones.map((zone) => (
-                <div
-                  key={zone.name}
-                  className="rounded-xl border border-sand-dark/40 bg-card p-5"
-                >
-                  <h4 className="font-semibold text-tahoe">{zone.name}</h4>
-                  <ul className="mt-3 flex flex-wrap gap-1.5">
-                    {zone.concepts.map((concept) => (
-                      <li
-                        key={concept}
-                        className="rounded-md bg-sand/50 px-2 py-0.5 text-xs text-foreground list-none"
-                      >
-                        {concept}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
+          <TahoeLearningMap zones={tahoeZones} />
         </Section>
 
         {/* How it works */}
@@ -308,12 +288,12 @@ export default function Home() {
             {howItWorksCards.map((card, i) => (
               <article
                 key={card.title}
-                className={`rounded-2xl border border-sand-dark/50 bg-card p-6 md:p-7 ${
+                className={`rounded-2xl border border-sand-dark/50 bg-card p-6 md:p-7 card-lift hover:border-tahoe/25 ${
                   i === 4 ? "md:col-span-2 lg:col-span-1" : ""
                 }`}
               >
-                <span className="text-xs font-mono text-stone">
-                  {String(i + 1).padStart(2, "0")}
+                <span className="field-label">
+                  module {String(i + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mt-2 font-serif text-lg text-foreground">
                   {card.title}
@@ -386,7 +366,7 @@ export default function Home() {
                   <li key={resource.label}>
                     <a
                       href={resource.href}
-                      className="flex items-center gap-3 rounded-lg border border-sand-dark/40 bg-card px-4 py-3 text-sm text-foreground hover:border-tahoe/30 transition-colors"
+                      className="flex items-center gap-3 rounded-lg border border-sand-dark/40 bg-card px-4 py-3 text-sm text-foreground hover:border-tahoe/30 card-lift"
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-pine shrink-0" />
                       {resource.label}
@@ -449,13 +429,13 @@ export default function Home() {
             <div className="mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <a
                 href="mailto:hello@openworldlearninglab.com?subject=Follow%20the%20project"
-                className="inline-flex w-full sm:w-auto items-center justify-center rounded-full bg-background px-7 py-3.5 text-sm font-medium text-foreground hover:bg-sand transition-colors"
+                className="btn-tactile inline-flex w-full sm:w-auto items-center justify-center rounded-full bg-background px-7 py-3.5 text-sm font-medium text-foreground hover:bg-sand"
               >
                 Follow the project
               </a>
               <a
                 href="mailto:hello@openworldlearninglab.com?subject=Collaboration%20inquiry"
-                className="inline-flex w-full sm:w-auto items-center justify-center rounded-full border border-sand/30 px-7 py-3.5 text-sm font-medium text-background hover:bg-sand/10 transition-colors"
+                className="btn-tactile inline-flex w-full sm:w-auto items-center justify-center rounded-full border border-sand/30 px-7 py-3.5 text-sm font-medium text-background hover:bg-sand/10"
               >
                 Contact / collaborate
               </a>
