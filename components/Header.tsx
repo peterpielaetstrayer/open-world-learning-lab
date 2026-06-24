@@ -14,7 +14,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-sand-dark/50 bg-background/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-sand-dark/40 bg-background/80 backdrop-blur-xl shadow-sm shadow-foreground/[0.03]">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a
           href="#"

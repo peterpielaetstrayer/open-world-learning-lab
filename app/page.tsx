@@ -155,7 +155,7 @@ export default function Home() {
         <WorldAsClassroomBand />
 
         {/* Origin story */}
-        <Section id="origin" variant="sand">
+        <Section id="origin" variant="sand" divider>
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div>
               <h2 className="font-serif text-3xl md:text-4xl leading-tight tracking-tight text-foreground">
@@ -187,7 +187,8 @@ export default function Home() {
               </div>
             </div>
 
-            <blockquote className="relative rounded-2xl border border-sand-dark/60 bg-card p-8 md:p-10 shadow-sm card-lift">
+            <blockquote className="relative card-premium glass-panel p-8 md:p-10 card-lift overflow-hidden">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-tahoe/20 to-transparent" aria-hidden="true" />
               <p className="field-label mb-4">Field note · origin</p>
               <div className="absolute top-6 right-6 text-6xl font-serif text-tahoe/15 leading-none select-none" aria-hidden="true">
                 &ldquo;
@@ -205,6 +206,7 @@ export default function Home() {
         <Section
           id="framework"
           title="Schooling and education are not the same thing."
+          divider
         >
           <div className="max-w-3xl space-y-5 text-muted leading-relaxed">
             <p>
@@ -228,7 +230,7 @@ export default function Home() {
           </div>
 
           <div className="mt-12 md:mt-16 -mx-6 px-6 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory">
-            <div className="flex gap-5 lg:gap-2 min-w-max lg:min-w-0 lg:justify-between">
+            <div className="flex gap-5 lg:gap-2 min-w-max lg:min-w-0 lg:justify-between rounded-2xl border border-sand-dark/30 bg-card/60 backdrop-blur-sm p-6 lg:p-8 lg:border-0 lg:bg-transparent lg:backdrop-blur-none lg:p-0">
               {processSteps.map((step, i) => (
                 <ProcessStep
                   key={step.title}
@@ -244,9 +246,10 @@ export default function Home() {
         {/* Meta Academy Tahoe */}
         <Section
           id="meta-academy"
-          variant="white"
+          variant="slate"
           title="Meta Academy Tahoe: a first pilot concept."
           subtitle="A place-based, globally networked learning environment built around Tahoe as an open-world classroom."
+          divider
         >
           <div className="max-w-3xl space-y-5 text-muted leading-relaxed">
             <p>
@@ -283,12 +286,12 @@ export default function Home() {
         </Section>
 
         {/* How it works */}
-        <Section id="how-it-works" title="How the model works." variant="sand">
+        <Section id="how-it-works" title="How the model works." variant="sand" divider>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {howItWorksCards.map((card, i) => (
               <article
                 key={card.title}
-                className={`rounded-2xl border border-sand-dark/50 bg-card p-6 md:p-7 card-lift hover:border-tahoe/25 ${
+                className={`card-premium card-lift p-6 md:p-7 hover:border-tahoe/25 ${
                   i === 4 ? "md:col-span-2 lg:col-span-1" : ""
                 }`}
               >
@@ -316,10 +319,12 @@ export default function Home() {
           id="missions"
           title="Sample learning missions."
           intro="Open-world learning needs structure. Missions turn exploration into rigorous inquiry, practice, and evidence of learning."
+          variant="interface"
+          divider
         >
           <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
-            {missions.map((mission) => (
-              <MissionCard key={mission.title} {...mission} />
+            {missions.map((mission, i) => (
+              <MissionCard key={mission.title} {...mission} index={i} />
             ))}
           </div>
         </Section>
@@ -330,10 +335,11 @@ export default function Home() {
           title="The future has to be built carefully."
           intro="Open-world education could become deeply human, or it could become another layer of surveillance, distraction, and commercialization. The design matters."
           variant="sand"
+          divider
         >
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {guardrails.map((guardrail) => (
-              <GuardrailCard key={guardrail.title} {...guardrail} />
+            {guardrails.map((guardrail, i) => (
+              <GuardrailCard key={guardrail.title} {...guardrail} index={i} />
             ))}
           </div>
         </Section>
@@ -342,6 +348,7 @@ export default function Home() {
         <Section
           id="library"
           title="An open-source design library for the future of education."
+          divider
         >
           <div className="max-w-3xl space-y-5 text-muted leading-relaxed">
             <p>
@@ -366,9 +373,11 @@ export default function Home() {
                   <li key={resource.label}>
                     <a
                       href={resource.href}
-                      className="flex items-center gap-3 rounded-lg border border-sand-dark/40 bg-card px-4 py-3 text-sm text-foreground hover:border-tahoe/30 card-lift"
+                      className="card-premium card-lift flex items-center gap-3 px-4 py-3.5 text-sm text-foreground hover:border-tahoe/30"
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-pine shrink-0" />
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-pine/10 border border-pine/15">
+                        <span className="h-1.5 w-1.5 rounded-full bg-pine" />
+                      </span>
                       {resource.label}
                     </a>
                   </li>
@@ -388,9 +397,11 @@ export default function Home() {
                 {libraryComingSoon.map((resource) => (
                   <li
                     key={resource}
-                    className="flex items-center gap-3 rounded-lg border border-dashed border-sand-dark/50 bg-sand/20 px-4 py-3 text-sm text-muted"
+                    className="card-premium flex items-center gap-3 border-dashed px-4 py-3.5 text-sm text-muted bg-sand/15"
                   >
-                    <span className="h-1.5 w-1.5 rounded-full bg-stone/60 shrink-0" />
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-sand/40 border border-sand-dark/30">
+                      <span className="h-1.5 w-1.5 rounded-full bg-stone/50" />
+                    </span>
                     {resource}
                   </li>
                 ))}
@@ -398,7 +409,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-10 rounded-xl border border-sand-dark/40 bg-sand/30 p-6 max-w-3xl">
+          <div className="mt-10 card-premium bg-sand/20 p-6 max-w-3xl">
             <p className="text-sm text-muted leading-relaxed">
               Unless otherwise noted, project writing and educational design
               materials are intended to be shared under{" "}
@@ -417,8 +428,9 @@ export default function Home() {
         </Section>
 
         {/* Final CTA */}
-        <Section id="contact" variant="dark" className="pattern-topo">
-          <div className="text-center max-w-2xl mx-auto">
+        <Section id="contact" variant="dark" className="pattern-topo relative overflow-hidden">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-tahoe/5 via-transparent to-pine/5" aria-hidden="true" />
+          <div className="relative text-center max-w-2xl mx-auto">
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
               The future of education should not feel like escaping reality.
             </h2>
