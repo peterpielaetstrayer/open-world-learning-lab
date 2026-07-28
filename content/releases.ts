@@ -10,6 +10,7 @@ export interface Release {
   version: string;
   publishedAt: string;
   updatedAt?: string;
+  conceptStartedAt?: string;
   summary: string;
   relatedProject?: string;
   license?: string;
@@ -27,7 +28,7 @@ export const releases: Release[] = [
     releaseType: "Concept Brief",
     status: "published",
     version: "1.0",
-    publishedAt: "2026-01-15",
+    publishedAt: "2026-07-28",
     summary:
       "A concise introduction to the lab, its thesis, its current work, and the relationship between OWLL, learning journeys, Field Notes, and LOCUS.",
     relatedProject: undefined,
@@ -42,7 +43,7 @@ export const releases: Release[] = [
     releaseType: "System Map",
     status: "research-in-progress",
     version: "0.1",
-    publishedAt: "2026-01-10",
+    publishedAt: "2026-07-28",
     summary:
       "A visual model showing how experience, inquiry, practice, mentorship, creation, reflection, and return form a cumulative learning process.",
     relatedProject: undefined,
@@ -57,7 +58,7 @@ export const releases: Release[] = [
     releaseType: "Pilot Sketch",
     status: "pilot-design",
     version: "0.1",
-    publishedAt: "2026-01-08",
+    publishedAt: "2026-07-28",
     summary:
       "A public overview of a proposed place-based learning journey in Virginia Beach.",
     relatedProject: "first-landing",
@@ -72,7 +73,8 @@ export const releases: Release[] = [
     releaseType: "Origin Study",
     status: "origin-study",
     version: "1.0",
-    publishedAt: "2025-06-01",
+    conceptStartedAt: "2025-06-01",
+    publishedAt: "2026-07-28",
     summary:
       "The original Tahoe concept that helped establish the foundations of open-world education.",
     relatedProject: "open-world-tahoe",
@@ -87,7 +89,7 @@ export const releases: Release[] = [
     releaseType: "Concept Note",
     status: "early-concept",
     version: "0.1",
-    publishedAt: "2026-01-05",
+    publishedAt: "2026-07-28",
     summary:
       "An early exploration of a mentor-supported Saturday model for learner motivation and reengagement.",
     relatedProject: "open-world-saturdays",

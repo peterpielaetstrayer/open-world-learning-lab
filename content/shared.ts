@@ -12,48 +12,7 @@ export const siteConfig = {
     "Selected resources may be released under separate Creative Commons or open-source licenses.",
 };
 
-export const learningLoopStages = [
-  {
-    number: 1,
-    title: "Experience",
-    description: "Begin with a real place, practice, problem, encounter, or question.",
-  },
-  {
-    number: 2,
-    title: "Notice and Capture",
-    description:
-      "Record observations, images, audio, measurements, reactions, and questions through Field Notes.",
-  },
-  {
-    number: 3,
-    title: "Guided Inquiry",
-    description:
-      "Use prompts, credible sources, mentors, peers, and appropriate AI support to investigate what matters.",
-  },
-  {
-    number: 4,
-    title: "Knowledge and Practice",
-    description: "Develop concepts, build skills, and apply new understanding in the world.",
-  },
-  {
-    number: 5,
-    title: "Creation",
-    description:
-      "Produce a field guide, map, essay, explanation, dataset, design, demonstration, performance, or other meaningful artifact.",
-  },
-  {
-    number: 6,
-    title: "Explanation and Reflection",
-    description:
-      "Explain the work, receive feedback, examine the evidence, and notice how understanding has changed.",
-  },
-  {
-    number: 7,
-    title: "Return",
-    description:
-      "Revisit the place, practice, or question with sharper perception and add the experience to a growing Learning Atlas.",
-  },
-];
+export { learningLoopStages } from "./learning-loop";
 
 export const guardrails = [
   {

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ShareActions from "@/components/ShareActions";
-import PrintButton from "@/components/PrintButton";
 import { createPageMetadata } from "@/lib/metadata";
 import { projects } from "@/content/projects";
 import { guardrails, learningLoopStages, siteConfig } from "@/content/shared";
@@ -21,14 +20,13 @@ export default function OwllAtAGlancePage() {
       <Header />
       <main className="py-12 md:py-16">
         <article className="owll-brief mx-auto max-w-3xl px-6">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-10" data-print-hide="true">
+          <div className="mb-10" data-print-hide="true">
             <ShareActions showPrint />
-            <PrintButton />
           </div>
 
           <header className="border-b border-sand-dark/40 pb-8 mb-10 print:pb-6 print:mb-8">
             <p className="field-label">Open World Learning Lab</p>
-            <p className="field-label mt-1">OWLL Brief 001 · Version 1.0 · 2026</p>
+            <p className="font-mono text-metadata text-quiet">OWLL Brief 001 · Version 1.0 · July 2026</p>
             <h1 className="mt-6 font-serif text-4xl md:text-5xl leading-tight tracking-tight text-foreground print:text-3xl">
               OWLL at a Glance
             </h1>

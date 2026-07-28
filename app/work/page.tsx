@@ -3,13 +3,12 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SectionHeader from "@/components/SectionHeader";
-import ProjectCard from "@/components/ProjectCard";
+import ProjectIndexEntry from "@/components/ProjectIndexEntry";
+import DevelopmentSequence from "@/components/DevelopmentSequence";
 import ProjectStatusBadge from "@/components/ProjectStatusBadge";
+import WideContainer from "@/components/layout/WideContainer";
 import { createPageMetadata } from "@/lib/metadata";
-import {
-  projects,
-  projectDevelopmentSequence,
-} from "@/content/projects";
+import { projects } from "@/content/projects";
 import { projectStatuses, type ProjectStatus } from "@/content/statuses";
 
 export const metadata: Metadata = createPageMetadata({
@@ -34,58 +33,43 @@ export default function WorkPage() {
   return (
     <>
       <Header />
-      <main className="py-16 md:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <main className="py-section-y">
+        <WideContainer>
           <SectionHeader
             eyebrow="Current work"
             title="From questions to prototypes."
             intro="OWLL develops learning journeys, mentor systems, field tools, and infrastructure through a sequence of research, design, testing, and release. Not every project moves through the same path—but each begins with a genuine question about how learning can become more connected to the real world."
           />
 
-          <div className="mb-16 card-premium p-6 md:p-8">
-            <p className="field-label mb-4">Project development sequence</p>
-            <ol className="flex flex-wrap gap-2">
-              {projectDevelopmentSequence.map((step, i) => (
-                <li key={step} className="flex items-center gap-2 list-none">
-                  <span className="rounded-md bg-sand/50 px-2.5 py-1 text-xs text-foreground border border-sand-dark/30">
-                    {step}
-                  </span>
-                  {i < projectDevelopmentSequence.length - 1 && (
-                    <span className="text-stone/40 hidden sm:inline" aria-hidden="true">→</span>
-                  )}
-                </li>
-              ))}
-            </ol>
-            <p className="mt-4 text-sm text-muted leading-relaxed">
-              Not every project will move through this sequence identically. Some remain origin studies; others advance toward pilot design or product prototype.
-            </p>
+          <div className="mb-16">
+            <DevelopmentSequence projects={projects} />
           </div>
 
           {grouped.map((group) => (
             <section key={group.status} className="mb-16">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="mb-8">
                 <ProjectStatusBadge status={group.status} />
-                <p className="text-sm text-muted">
+                <p className="mt-2 text-sm text-secondary max-w-reading">
                   {projectStatuses[group.status].shortExplanation}
                 </p>
               </div>
-              <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
-                {group.items.map((project) => (
-                  <ProjectCard key={project.slug} project={project} />
+              <div className="space-y-12 max-w-3xl">
+                {group.items.map((project, i) => (
+                  <ProjectIndexEntry key={project.slug} project={project} index={i} />
                 ))}
               </div>
             </section>
           ))}
 
-          <div className="text-center pt-8 border-t border-sand-dark/30">
+          <div className="pt-8 border-t border-border">
             <Link
               href="/releases"
-              className="text-sm font-medium text-tahoe hover:text-pine transition-colors"
+              className="text-sm font-medium text-water hover:text-moss transition-colors"
             >
               View public releases →
             </Link>
           </div>
-        </div>
+        </WideContainer>
       </main>
       <Footer />
     </>

@@ -1,24 +1,69 @@
 @import "tailwindcss";
 
+/* ── Living Field Atlas design tokens ── */
+
 :root {
-  --background: #f8f6f3;
-  --foreground: #1a2332;
-  --slate-deep: #1e2836;
-  --slate-surface: #e9edf2;
-  --tahoe-blue: #4a7c9b;
-  --tahoe-blue-light: #6b9bb8;
-  --pine: #2d5a47;
-  --pine-light: #3d7359;
-  --sand: #e8e2d9;
-  --sand-dark: #d4cdc3;
-  --stone: #8a8278;
-  --card: #ffffff;
-  --muted: #5c6670;
+  --color-field-paper: #f2efe6;
+  --color-soft-paper: #e7e1d4;
+  --color-ink: #17201d;
+  --color-deep-field: #102620;
+  --color-water: #2f6672;
+  --color-moss: #526b50;
+  --color-sediment: #9b6848;
+  --color-sun-marker: #d1a24f;
+  --color-fog: #cad2cc;
+
+  /* Semantic tokens */
+  --color-page: var(--color-field-paper);
+  --color-foreground: var(--color-ink);
+  --color-secondary: #3d4a45;
+  --color-quiet: #6b756f;
+  --color-border: rgba(23, 32, 29, 0.12);
+  --color-border-strong: rgba(23, 32, 29, 0.22);
+  --color-link: var(--color-water);
+  --color-focus: var(--color-water);
+  --color-on-dark: var(--color-field-paper);
+
+  /* Legacy aliases for gradual migration */
+  --background: var(--color-field-paper);
+  --foreground: var(--color-ink);
+  --slate-deep: var(--color-deep-field);
+  --slate-surface: var(--color-soft-paper);
+  --tahoe-blue: var(--color-water);
+  --tahoe-blue-light: #4a8490;
+  --pine: var(--color-moss);
+  --pine-light: #638060;
+  --sand: var(--color-soft-paper);
+  --sand-dark: #d5cec0;
+  --stone: var(--color-sediment);
+  --card: #faf8f3;
+  --muted: var(--color-secondary);
+
+  --section-y: clamp(4rem, 8vw, 7rem);
+  --reading-width: 45rem;
+  --wide-width: 82.5rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-page: var(--color-page);
+  --color-ink: var(--color-ink);
+  --color-secondary: var(--color-secondary);
+  --color-quiet: var(--color-quiet);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-link: var(--color-link);
+  --color-focus: var(--color-focus);
+  --color-on-dark: var(--color-on-dark);
+  --color-field-paper: var(--color-field-paper);
+  --color-soft-paper: var(--color-soft-paper);
+  --color-deep-field: var(--color-deep-field);
+  --color-water: var(--color-water);
+  --color-moss: var(--color-moss);
+  --color-sediment: var(--color-sediment);
+  --color-sun-marker: var(--color-sun-marker);
+  --color-fog: var(--color-fog);
   --color-slate-deep: var(--slate-deep);
   --color-slate-surface: var(--slate-surface);
   --color-tahoe: var(--tahoe-blue);
@@ -30,9 +75,14 @@
   --color-stone: var(--stone);
   --color-card: var(--card);
   --color-muted: var(--muted);
-  --font-sans: var(--font-geist-sans);
-  --font-serif: var(--font-instrument-serif);
-  --font-mono: var(--font-geist-mono);
+
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-newsreader);
+  --font-mono: var(--font-ibm-plex-mono);
+
+  --spacing-section-y: var(--section-y);
+  --width-reading: var(--reading-width);
+  --width-wide: var(--wide-width);
 }
 
 html {
@@ -40,9 +90,73 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* ── Typography roles ── */
+
+.font-serif {
+  font-family: var(--font-newsreader), Georgia, serif;
+}
+
+.font-mono {
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+}
+
+.text-display {
+  font-size: clamp(2.25rem, 4vw + 1rem, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.text-display-sm {
+  font-size: clamp(1.25rem, 2vw + 0.5rem, 1.75rem);
+  line-height: 1.2;
+}
+
+.text-page-title {
+  font-size: clamp(2rem, 3vw + 1rem, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.text-section-title {
+  font-size: clamp(1.25rem, 1.5vw + 0.75rem, 1.625rem);
+  line-height: 1.25;
+}
+
+.text-body-lg {
+  font-size: clamp(1.0625rem, 0.5vw + 1rem, 1.1875rem);
+  line-height: 1.65;
+}
+
+.text-body {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.text-caption {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.text-metadata {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.max-w-reading {
+  max-width: var(--reading-width);
+}
+
+.py-section-y {
+  padding-top: var(--section-y);
+  padding-bottom: var(--section-y);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -60,157 +174,81 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--tahoe-blue);
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
-/* ── Patterns ── */
+/* ── Textures (decorative, hidden from AT) ── */
+
+.texture-paper {
+  background-color: var(--color-page);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+.texture-grid {
+  background-image:
+    linear-gradient(rgba(47, 102, 114, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 102, 114, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.texture-contour {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(47, 102, 114, 0.06) 0%, transparent 60%);
+}
 
 .pattern-topo {
   background-image:
-    radial-gradient(circle at 20% 50%, rgba(74, 124, 155, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(45, 90, 71, 0.04) 0%, transparent 40%),
-    linear-gradient(rgba(26, 35, 50, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(26, 35, 50, 0.025) 1px, transparent 1px);
+    radial-gradient(circle at 20% 50%, rgba(47, 102, 114, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(82, 107, 80, 0.04) 0%, transparent 40%),
+    linear-gradient(rgba(23, 32, 29, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 32, 29, 0.02) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
 }
 
 .pattern-grid {
   background-image:
-    linear-gradient(rgba(74, 124, 155, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(74, 124, 155, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(47, 102, 114, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 102, 114, 0.04) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
 .pattern-map-texture {
   background-image:
-    linear-gradient(rgba(74, 124, 155, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(74, 124, 155, 0.04) 1px, transparent 1px),
-    radial-gradient(circle at 30% 40%, rgba(74, 124, 155, 0.07) 0%, transparent 35%),
-    radial-gradient(circle at 70% 60%, rgba(45, 90, 71, 0.05) 0%, transparent 30%);
-  background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%;
+    linear-gradient(rgba(47, 102, 114, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 102, 114, 0.04) 1px, transparent 1px),
+    radial-gradient(circle at 30% 40%, rgba(47, 102, 114, 0.06) 0%, transparent 35%);
+  background-size: 32px 32px, 32px 32px, 100% 100%;
 }
 
-/* ── Hero atmosphere ── */
-
-.hero-field-map {
-  background-color: #f4f1ec;
+.section-interface {
+  background-color: var(--color-soft-paper);
   background-image:
-    radial-gradient(ellipse 100% 80% at 70% 30%, rgba(74, 124, 155, 0.14) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 15% 85%, rgba(45, 90, 71, 0.09) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 40% at 90% 75%, rgba(30, 40, 54, 0.04) 0%, transparent 45%),
-    linear-gradient(168deg, #faf8f5 0%, #f0ece6 35%, #e8eef3 72%, #e4ebe8 100%);
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(47, 102, 114, 0.06) 0%, transparent 60%),
+    linear-gradient(rgba(47, 102, 114, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 102, 114, 0.025) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
 }
 
-.hero-glow {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(80px);
-  pointer-events: none;
+.section-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(23, 32, 29, 0.1) 20%,
+    rgba(47, 102, 114, 0.15) 50%,
+    rgba(23, 32, 29, 0.1) 80%,
+    transparent
+  );
 }
 
-@keyframes pin-pulse {
-  0%,
-  100% {
-    opacity: 0.45;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    opacity: 0.85;
-    transform: translate(-50%, -50%) scale(1.2);
-  }
-}
-
-.mission-pin {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 9999px;
-  transform: translate(-50%, -50%);
-}
-
-.mission-pin::after {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: 9999px;
-  border: 1px solid currentColor;
-  opacity: 0.35;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .mission-pin-pulse {
-    animation: pin-pulse 3.5s ease-in-out infinite;
-  }
-}
-
-/* ── Glass & premium panels ── */
-
-.glass-panel {
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 0 0 1px rgba(26, 35, 50, 0.04),
-    0 16px 48px rgba(26, 35, 50, 0.09),
-    0 4px 12px rgba(74, 124, 155, 0.06);
-}
-
-.glass-panel-dark {
-  background: rgba(30, 40, 54, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.06) inset,
-    0 16px 48px rgba(0, 0, 0, 0.25);
-}
-
-.card-premium {
-  border-radius: 1rem;
-  background: var(--card);
-  border: 1px solid rgba(212, 205, 195, 0.55);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.95) inset,
-    0 0 0 1px rgba(26, 35, 50, 0.03),
-    0 4px 20px rgba(26, 35, 50, 0.05);
-}
-
-.card-premium-inner {
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
-}
-
-/* ── Labels & markers ── */
+/* ── Legacy field-label (metadata role) ── */
 
 .field-label {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--stone);
-}
-
-.mission-marker {
-  position: relative;
-}
-
-.mission-marker::before {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: 9999px;
-  border: 1px solid rgba(74, 124, 155, 0.35);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .mission-marker:hover::before,
-  .mission-marker:focus-within::before {
-    opacity: 1;
-  }
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--color-quiet);
 }
 
 /* ── Interactions ── */
@@ -226,7 +264,7 @@ body {
 @media (prefers-reduced-motion: no-preference) {
   .btn-tactile:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(26, 35, 50, 0.1);
+    box-shadow: 0 4px 16px rgba(23, 32, 29, 0.08);
   }
 
   .btn-tactile:active {
@@ -235,64 +273,33 @@ body {
   }
 }
 
+.card-premium {
+  border-radius: 0.5rem;
+  background: var(--card);
+  border: 1px solid var(--color-border);
+}
+
 .card-lift {
-  transition:
-    transform 0.28s ease,
-    box-shadow 0.28s ease,
-    border-color 0.28s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .card-lift:hover {
-    transform: translateY(-4px);
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.9) inset,
-      0 20px 40px rgba(26, 35, 50, 0.09);
+    transform: translateY(-2px);
+    border-color: rgba(47, 102, 114, 0.25);
   }
-}
-
-.zone-card {
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease,
-    background-color 0.25s ease;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .zone-card:hover {
-    transform: translateY(-3px) scale(1.01);
-    box-shadow: 0 12px 36px rgba(26, 35, 50, 0.1);
-  }
-}
-
-/* ── Section rhythm ── */
-
-.section-divider {
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(212, 205, 195, 0.7) 20%,
-    rgba(74, 124, 155, 0.2) 50%,
-    rgba(212, 205, 195, 0.7) 80%,
-    transparent
-  );
-}
-
-.section-interface {
-  background-color: var(--slate-surface);
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74, 124, 155, 0.08) 0%, transparent 60%),
-    linear-gradient(rgba(74, 124, 155, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(74, 124, 155, 0.03) 1px, transparent 1px);
-  background-size: 100% 100%, 40px 40px, 40px 40px;
 }
 
 /* ── Content pages ── */
 
 .prose-content section h2 {
-  font-family: var(--font-instrument-serif), serif;
+  font-family: var(--font-newsreader), serif;
+}
+
+/* ── Field note specimen print ── */
+
+.field-note-specimen {
+  break-inside: avoid;
 }
 
 /* ── Print brief ── */
@@ -303,7 +310,7 @@ body {
 }
 
 .brief-heading {
-  font-family: var(--font-instrument-serif), serif;
+  font-family: var(--font-newsreader), serif;
   font-size: 1.25rem;
   color: var(--foreground);
   margin-bottom: 0.75rem;
@@ -333,15 +340,36 @@ body {
     display: none !important;
   }
 
+  .texture-paper,
+  .texture-grid,
+  .texture-contour,
+  .pattern-topo,
+  .pattern-grid,
+  .pattern-map-texture,
+  .section-interface {
+    background: white !important;
+    background-image: none !important;
+  }
+
   .owll-brief {
     max-width: 100% !important;
     padding: 0 !important;
   }
 
-  .brief-section {
+  .brief-section,
+  .field-note-specimen {
     break-inside: avoid;
     page-break-inside: avoid;
     margin-bottom: 1.25rem;
+  }
+
+  figure {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  figcaption {
+    color: #444 !important;
   }
 
   .brief-heading {
@@ -353,8 +381,7 @@ body {
     color: #333;
   }
 
-  .card-premium,
-  .glass-panel {
+  .card-premium {
     box-shadow: none !important;
     border: 1px solid #ccc !important;
   }

@@ -28,18 +28,12 @@ export default function PullQuote({
   }
 
   return (
-    <blockquote className="relative my-10 md:my-14 card-premium glass-panel px-8 md:px-10 py-8 md:py-10 border-l-4 border-l-tahoe/40">
-      <div
-        className="absolute top-4 right-6 text-5xl font-serif text-tahoe/15 leading-none select-none"
-        aria-hidden="true"
-      >
-        &ldquo;
-      </div>
-      <p className="relative font-serif text-xl md:text-2xl leading-snug text-foreground max-w-2xl">
+    <blockquote className="relative my-10 md:my-14 border-l-4 border-l-water/40 pl-6 md:pl-8 py-2">
+      <p className="font-serif text-xl md:text-2xl leading-snug text-ink max-w-reading">
         {children}
       </p>
       {attribution && (
-        <footer className="mt-5 text-sm text-stone">{attribution}</footer>
+        <footer className="mt-5 text-sm text-quiet">{attribution}</footer>
       )}
     </blockquote>
   );

@@ -4,74 +4,116 @@ Public website for [Open World Learning Lab](https://openworldlearninglab.com) �
 
 Built with Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS v4.
 
+## Art direction: The Living Field Atlas
+
+The site uses a place-based editorial identity — field research, systems thinking, and cumulative knowledge — rather than generic startup or dashboard styling.
+
+## Design tokens
+
+CSS variables live in `app/globals.css`:
+
+- **Palette:** `--color-field-paper`, `--color-water`, `--color-moss`, `--color-sediment`, etc.
+- **Semantic:** `--color-page`, `--color-ink`, `--color-secondary`, `--color-border`, `--color-link`
+- **Layout:** `--reading-width` (720px), `--wide-width` (1320px), `--section-y`
+
+Project accent tokens: `content/project-themes.ts`
+
+## Typography
+
+Loaded via `next/font` in `app/layout.tsx`:
+
+| Role | Font |
+|------|------|
+| Display / page titles | Newsreader (serif) |
+| Body / UI | Inter (sans) |
+| Metadata / captions | IBM Plex Mono |
+
+Utility classes: `.text-display`, `.text-page-title`, `.text-section-title`, `.text-body`, `.text-metadata`
+
+## Layout primitives
+
+`components/layout/`:
+
+- `PageShell`, `WideContainer`, `ReadingColumn`
+- `EditorialSection`, `SplitSection`, `VisualSection`
+- `MetadataRail`, `SectionDivider`
+
+## Visual components
+
+| Component | Purpose |
+|-----------|---------|
+| `VisualPlate` | Custom asset slot with code-native fallback |
+| `FieldAtlasFrame` | Figure numbering, scale, coordinates |
+| `ProjectMasthead` | Project dossier header |
+| `StatusBadge` | Type · status metadata |
+| `LearningLoopDiagram` | Seven-stage loop (single semantic source) |
+| `LocusSystemSpine` | LOCUS system diagram |
+| `FieldNoteSpecimen` | Illustrative field note |
+| `TechnologyHorizons` | Today → Emerging → Future |
+| `GuardrailIndex` | Editorial guardrail list |
+| `ReleaseCover` | Release cover system |
+
+## Visual manifest
+
+`content/visual-assets.ts` — asset keys, paths, alt text, dimensions, `placeholder` | `final` status.
+
+Asset documentation: `public/visuals/README.md`
+
+### Activate a final custom visual
+
+1. Add WebP to `public/visuals/<project>/`
+2. Set `desktopSrc` / `mobileSrc` in `content/visual-assets.ts`
+3. Set `status: "final"`
+4. Verify desktop/mobile crop and alt text
+
+Until activated, `VisualFallback` renders conceptual field plates (no broken images).
+
+## Fallback visuals
+
+Code-native SVG fallbacks in `components/visual/VisualFallback.tsx` — contour lines, routes, environmental layers. Public-safe until final art is added.
+
+## Project accents
+
+Add or edit themes in `content/project-themes.ts`. Map slugs in `slugToTheme`.
+
+## Release covers
+
+Use `ReleaseCover` with `releaseTypeToVariant()` for consistent compositions. See `components/ReleaseCover.tsx`.
+
 ## Route structure
 
 | Route | Description |
 |-------|-------------|
-| `/` | Homepage — thesis, current work, learning loop, guardrails, releases preview |
-| `/work` | Current work index with status groupings |
+| `/` | Homepage |
+| `/work` | Current work index |
 | `/work/first-landing` | First Landing pilot sketch |
-| `/work/locus` | LOCUS learning system prototype |
-| `/work/open-world-saturdays` | Open World Saturdays early concept |
-| `/work/open-world-tahoe` | Open World Tahoe origin study |
-| `/releases` | Public releases index |
-| `/releases/owll-at-a-glance` | Print-friendly OWLL brief |
-| `/about` | About the lab |
-| `/contact` | Contact and collaboration |
-| `/manifesto` | Redirects to `/#thesis` |
+| `/work/locus` | LOCUS prototype |
+| `/work/open-world-saturdays` | Saturdays early concept |
+| `/work/open-world-tahoe` | Tahoe origin study |
+| `/releases` | Public releases |
+| `/releases/owll-at-a-glance` | Print-friendly brief |
+| `/about`, `/contact` | Lab info |
 
 ## Content storage
 
-Content is data-driven via TypeScript modules in `content/`:
-
-- **`content/projects.ts`** — project cards, Tahoe zones, sample missions, development sequence
-- **`content/releases.ts`** — release metadata (type, status, version, dates, links)
-- **`content/statuses.ts`** — normalized status labels, badge styles, ordering
-- **`content/shared.ts`** — site config, nav links, guardrails, learning loop, technology horizons
-
-Page-specific long-form copy lives in route files under `app/work/` and `app/releases/`.
-
-## Adding a new project
-
-1. Add a project object to the `projects` array in `content/projects.ts`
-2. Create a page at `app/work/[slug]/page.tsx` using `ProjectPageLayout`
-3. Add metadata via `createPageMetadata()` in `lib/metadata.ts` pattern
-4. Optionally link related releases in `content/releases.ts`
-5. The homepage and `/work` index update automatically from the projects array
-
-## Adding a new release
-
-1. Add a release object to the `releases` array in `content/releases.ts`
-2. For standalone pages, create `app/releases/[slug]/page.tsx`
-3. Set `downloadHref` only when a real file exists in `public/`
-4. The `/releases` index and homepage releases section update automatically
-
-## Status labels
-
-Statuses are defined in `content/statuses.ts`:
-
-- `origin-study` → Origin Study
-- `early-concept` → Early Concept
-- `pilot-design` → Pilot Design
-- `product-prototype` → Product Prototype
-- `research-in-progress` → Research in Progress
-- `published` → Published Brief
-
-Each maps to a display label, short explanation, visual badge class, and sort order.
-
-## Social metadata
-
-Use `createPageMetadata()` from `lib/metadata.ts` on each route. Site-wide defaults are in `app/layout.tsx`. Set `metadataBase` to the production URL in `content/shared.ts`.
+- `content/projects.ts` — projects, Tahoe zones, missions
+- `content/releases.ts` — release metadata
+- `content/statuses.ts` — status labels
+- `content/shared.ts` — site config, guardrails, horizons
+- `content/learning-loop.ts` — loop stage data model
+- `content/visual-assets.ts` — visual manifest
 
 ## Print styles
 
-Print CSS lives in `app/globals.css` under `@media print`. The OWLL at a Glance brief (`/releases/owll-at-a-glance`) uses `.owll-brief`, `.brief-section`, and `.brief-heading` classes. Navigation and share controls use `print:hidden`.
+`@media print` in `app/globals.css`. Nav, footer, and `[data-print-hide="true"]` hidden. Use **Print / Save as PDF** on project/release pages.
 
-Use the **Print / Save as PDF** button to trigger the browser print dialog.
+Test: `/releases/owll-at-a-glance`, project pages, field note specimen.
 
-## Sharing
+## Diagram testing
 
-`ShareActions` component provides copy link, native share (with clipboard fallback), and optional print. Used on project and release pages.
+- Learning loop: `/#learning-loop` — desktop circle + mobile trail; one `sr-only` source list
+- LOCUS: `/work/locus` — horizontal spine (desktop), vertical (mobile)
+- Reduced motion: no essential hover-only information
 
 ## Local development
 
@@ -87,14 +129,14 @@ Open [http://localhost:3000](http://localhost:3000).
 ```bash
 npm run dev      # Development server
 npm run build    # Production build
-npm run start    # Start production server
+npm run start    # Production server
 npm run lint     # ESLint
 npx tsc --noEmit # Type-check
 ```
 
 ## Deployment
 
-Configured for standard Next.js deployment (e.g. Vercel). No database or environment variables required for static content.
+Standard Next.js (e.g. Vercel). No database or env vars required.
 
 ## Contact
 

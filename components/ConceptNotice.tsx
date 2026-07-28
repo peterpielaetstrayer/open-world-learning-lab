@@ -3,23 +3,25 @@ import type { ReactNode } from "react";
 interface ConceptNoticeProps {
   children: ReactNode;
   variant?: "default" | "warning";
+  className?: string;
 }
 
 export default function ConceptNotice({
   children,
   variant = "default",
+  className = "",
 }: ConceptNoticeProps) {
   return (
     <aside
-      className={`rounded-xl border p-5 md:p-6 ${
+      className={`rounded-lg border p-5 md:p-6 ${
         variant === "warning"
-          ? "border-stone/30 bg-stone/5"
-          : "border-tahoe/25 bg-tahoe/[0.04]"
-      }`}
+          ? "border-sediment/30 bg-sediment/5"
+          : "border-water/25 bg-water/[0.04]"
+      } ${className}`}
       role="note"
     >
-      <p className="field-label mb-2 text-tahoe/70">Status notice</p>
-      <p className="text-sm text-muted leading-relaxed">{children}</p>
+      <p className="font-mono text-metadata mb-2 text-water">Status notice</p>
+      <p className="text-sm text-secondary leading-relaxed">{children}</p>
     </aside>
   );
 }

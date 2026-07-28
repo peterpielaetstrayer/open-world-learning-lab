@@ -73,7 +73,7 @@ export default function ShareActions({
       <span
         role="status"
         aria-live="polite"
-        className={`text-sm text-pine transition-opacity ${copied ? "opacity-100" : "opacity-0 sr-only"}`}
+        className={`text-sm text-moss transition-opacity ${copied ? "opacity-100" : "opacity-0 sr-only"}`}
       >
         {copied ? "Link copied to clipboard" : ""}
       </span>

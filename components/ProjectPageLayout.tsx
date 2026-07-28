@@ -1,52 +1,43 @@
 import type { ReactNode } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import Breadcrumbs from "./Breadcrumbs";
-import ShareActions from "./ShareActions";
-import ConceptNotice from "./ConceptNotice";
+import WideContainer from "@/components/layout/WideContainer";
 
 interface ProjectPageLayoutProps {
-  title: string;
-  breadcrumbs: { label: string; href?: string }[];
-  metadata: ReactNode;
-  statusNotice: string;
+  masthead: ReactNode;
   children: ReactNode;
   related?: ReactNode;
 }
 
 export default function ProjectPageLayout({
-  title,
-  breadcrumbs,
-  metadata,
-  statusNotice,
+  masthead,
   children,
   related,
 }: ProjectPageLayoutProps) {
   return (
     <>
       <Header />
-      <main className="py-12 md:py-16 lg:py-20">
-        <div className="mx-auto max-w-3xl px-6">
-          <Breadcrumbs items={breadcrumbs} />
-
-          <header className="mt-8 mb-10">
-            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight text-foreground">
-              {title}
-            </h1>
-          </header>
-
-          <div className="mb-10">{metadata}</div>
-
-          <ShareActions showPrint className="mb-10" />
-
-          <ConceptNotice>{statusNotice}</ConceptNotice>
-
-          <div className="mt-12 prose-content space-y-10">{children}</div>
-
-          {related}
+      <main>
+        {masthead}
+        <div className="py-12 md:py-16 lg:py-20">
+          <WideContainer>
+            <div className="max-w-reading prose-content space-y-12">{children}</div>
+            {related && <div className="mt-16 max-w-3xl">{related}</div>}
+          </WideContainer>
         </div>
       </main>
       <Footer />
     </>
   );
 }
+
+function ContentSection({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section>
+      <h2 className="font-serif text-section-title text-ink mb-5">{title}</h2>
+      <div className="space-y-4 text-body text-secondary leading-relaxed">{children}</div>
+    </section>
+  );
+}
+
+export { ContentSection };

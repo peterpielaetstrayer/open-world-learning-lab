@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import ProjectPageLayout from "@/components/ProjectPageLayout";
-import ProjectMetadata from "@/components/ProjectMetadata";
+import ProjectPageLayout, { ContentSection } from "@/components/ProjectPageLayout";
+import ProjectMasthead from "@/components/ProjectMasthead";
+import SaturdaysJourney, { PartnerEcosystem } from "@/components/diagrams/SaturdaysJourney";
 import RelatedWork from "@/components/RelatedWork";
 import { createPageMetadata } from "@/lib/metadata";
 import { getReleasesForProject } from "@/content/releases";
@@ -12,15 +13,6 @@ export const metadata: Metadata = createPageMetadata({
     "A future mentor-supported Saturday learning experience designed to help learners rebuild motivation, self-awareness, confidence, and a relationship with learning through meaningful experiences in the world.",
   path: "/work/open-world-saturdays",
 });
-
-function ContentSection({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section>
-      <h2 className="font-serif text-2xl text-foreground mb-4">{title}</h2>
-      <div className="space-y-4 text-muted leading-relaxed">{children}</div>
-    </section>
-  );
-}
 
 const possibleStructure = [
   "Small cohort",
@@ -52,20 +44,22 @@ export default function OpenWorldSaturdaysPage() {
 
   return (
     <ProjectPageLayout
-      title="Open World Saturdays"
-      breadcrumbs={[
-        { label: "Home", href: "/" },
-        { label: "Current Work", href: "/work" },
-        { label: "Open World Saturdays" },
-      ]}
-      metadata={
-        <ProjectMetadata
+      masthead={
+        <ProjectMasthead
+          title="Open World Saturdays"
+          breadcrumbs={[
+            { label: "Home", href: "/" },
+            { label: "Current Work", href: "/work" },
+            { label: "Open World Saturdays" },
+          ]}
           projectType="Learner Reengagement Program"
           status="early-concept"
           summary="A future mentor-supported Saturday learning experience designed to help learners rebuild motivation, self-awareness, confidence, and a relationship with learning through meaningful experiences in the world."
+          statusNotice="Open World Saturdays is an early concept. No cohort, school partnership, or public enrollment is currently being announced."
+          visualAssetKey="saturdays-journey"
+          visualTheme="saturdays"
         />
       }
-      statusNotice="Open World Saturdays is an early concept. No cohort, school partnership, or public enrollment is currently being announced."
       related={<RelatedWork releases={relatedReleases} />}
     >
       <ContentSection title="Core premise">
@@ -86,30 +80,26 @@ export default function OpenWorldSaturdaysPage() {
         </ul>
       </ContentSection>
 
+      <ContentSection title="Reengagement pathway">
+        <SaturdaysJourney />
+      </ContentSection>
+
       <ContentSection title="Possible structure">
-        <p className="text-sm text-stone">The following is provisional and subject to change.</p>
-        <ul className="mt-4 space-y-2">
+        <p className="text-sm text-quiet italic">The following is provisional and subject to change.</p>
+        <ul className="mt-4 space-y-2 border-l border-border pl-4">
           {possibleStructure.map((item) => (
-            <li key={item} className="flex items-start gap-2 text-sm">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-tahoe" aria-hidden="true" />
-              {item}
-            </li>
+            <li key={item} className="text-sm list-none">{item}</li>
           ))}
         </ul>
       </ContentSection>
 
       <ContentSection title="Potential partners">
-        <p className="text-sm text-stone">
+        <p className="text-sm text-quiet italic">
           The following are possibilities under exploration, not commitments or confirmed partnerships.
         </p>
-        <ul className="mt-4 grid sm:grid-cols-2 gap-2">
-          {potentialPartners.map((partner) => (
-            <li key={partner} className="text-sm flex items-start gap-2">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-pine/60" aria-hidden="true" />
-              {partner}
-            </li>
-          ))}
-        </ul>
+        <div className="mt-4">
+          <PartnerEcosystem partners={potentialPartners} />
+        </div>
       </ContentSection>
 
       <ContentSection title="What currently exists">
@@ -124,8 +114,8 @@ export default function OpenWorldSaturdaysPage() {
         </p>
       </ContentSection>
 
-      <div className="pt-6">
-        <Link href="/work" className="text-sm font-medium text-tahoe hover:text-pine transition-colors">
+      <div className="pt-4">
+        <Link href="/work" className="text-sm font-medium text-water hover:text-moss transition-colors">
           ← View all current work
         </Link>
       </div>

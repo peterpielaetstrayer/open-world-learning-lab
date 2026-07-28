@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SectionHeader from "@/components/SectionHeader";
-import ReleaseCard from "@/components/ReleaseCard";
+import ReleaseCover, { releaseTypeToVariant } from "@/components/ReleaseCover";
+import WideContainer from "@/components/layout/WideContainer";
 import { createPageMetadata } from "@/lib/metadata";
 import { releases } from "@/content/releases";
 
@@ -17,24 +18,38 @@ export default function ReleasesPage() {
   return (
     <>
       <Header />
-      <main className="py-16 md:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <main className="py-section-y">
+        <WideContainer>
           <SectionHeader
             eyebrow="Public work"
             title="A growing record of ideas, systems, and prototypes."
             intro="Each release identifies what it is, its publication status, version, whether it is conceptual or tested, and its publication date. Specific licenses apply only when explicitly noted."
           />
 
-          <div className="grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {releases.map((release) => (
-              <ReleaseCard key={release.id} release={release} />
+              <div key={release.id} className="flex flex-col">
+                <ReleaseCover
+                  releaseId={release.subtitle}
+                  title={release.title}
+                  releaseType={release.releaseType}
+                  version={release.version}
+                  date={release.publishedAt}
+                  visualVariant={releaseTypeToVariant(release.releaseType)}
+                  href={release.href}
+                  className="flex-1"
+                />
+                <p className="mt-3 text-sm text-secondary leading-relaxed px-1">
+                  {release.summary}
+                </p>
+              </div>
             ))}
           </div>
 
-          <p className="mt-12 text-sm text-muted max-w-2xl">
+          <p className="mt-12 text-sm text-secondary max-w-reading">
             Additional releases will be published as the work develops. No download is offered unless a specific file has been deliberately released.
           </p>
-        </div>
+        </WideContainer>
       </main>
       <Footer />
     </>

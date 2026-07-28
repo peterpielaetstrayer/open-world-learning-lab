@@ -11,11 +11,11 @@ export default function Header() {
   const isHome = pathname === "/";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-sand-dark/40 bg-background/80 backdrop-blur-xl shadow-sm shadow-foreground/[0.03]" data-print-hide="true">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <header className="sticky top-0 z-50 border-b border-border bg-page/85 backdrop-blur-xl" data-print-hide="true">
+      <div className="mx-auto flex max-w-[1320px] items-center justify-between px-5 sm:px-6 lg:px-8 py-4">
         <Link
           href="/"
-          className="font-serif text-base leading-snug sm:text-lg md:text-xl text-foreground tracking-tight hover:text-tahoe transition-colors min-w-0 pr-3 sm:pr-0 focus-visible:rounded-sm"
+          className="font-serif text-base leading-snug sm:text-lg text-ink tracking-tight hover:text-water transition-colors min-w-0 pr-3 sm:pr-0 focus-visible:rounded-sm"
         >
           {siteConfig.name}
         </Link>
@@ -33,8 +33,8 @@ export default function Header() {
                 href={link.href}
                 className={`text-sm transition-colors focus-visible:rounded-sm ${
                   isActive
-                    ? "text-foreground font-medium"
-                    : "text-muted hover:text-foreground"
+                    ? "text-ink font-medium"
+                    : "text-secondary hover:text-ink"
                 }`}
               >
                 {link.label}
@@ -43,7 +43,7 @@ export default function Header() {
           })}
           <Link
             href={isHome ? "/work" : "/contact"}
-            className="btn-tactile rounded-full bg-pine px-5 py-2 text-sm font-medium text-white hover:bg-pine-light"
+            className="btn-tactile rounded-full bg-moss px-5 py-2 text-sm font-medium text-on-dark hover:bg-moss/90"
           >
             {isHome ? "Explore Current Work" : "Contact the Lab"}
           </Link>
@@ -70,7 +70,7 @@ export default function Header() {
 
       {menuOpen && (
         <nav
-          className="md:hidden border-t border-sand-dark/50 bg-background px-6 py-4"
+          className="md:hidden border-t border-border bg-page px-6 py-4"
           aria-label="Mobile navigation"
         >
           <ul className="flex flex-col gap-4">
@@ -78,7 +78,7 @@ export default function Header() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="block text-muted hover:text-foreground transition-colors py-1"
+                  className="block text-secondary hover:text-ink transition-colors py-1"
                   onClick={() => setMenuOpen(false)}
                 >
                   {link.label}
@@ -88,7 +88,7 @@ export default function Header() {
             <li>
               <Link
                 href="/work"
-                className="inline-block rounded-full bg-pine px-5 py-2.5 text-sm font-medium text-white"
+                className="inline-block rounded-full bg-moss px-5 py-2.5 text-sm font-medium text-on-dark"
                 onClick={() => setMenuOpen(false)}
               >
                 Explore Current Work

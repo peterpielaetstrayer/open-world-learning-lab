@@ -20,37 +20,37 @@ export const projectStatuses: Record<ProjectStatus, StatusConfig> = {
     label: "Origin Study",
     shortExplanation: "Foundational design concept that informed later work.",
     order: 1,
-    badgeClass: "bg-stone/15 text-stone border-stone/30",
+    badgeClass: "bg-sediment/15 text-sediment border-sediment/30",
   },
   "early-concept": {
     label: "Early Concept",
     shortExplanation: "Preliminary exploration, not yet in active design.",
     order: 2,
-    badgeClass: "bg-sand/60 text-foreground border-sand-dark/50",
+    badgeClass: "bg-soft-paper text-ink border-border",
   },
   "pilot-design": {
     label: "Pilot Design",
     shortExplanation: "Learning journey or pilot being designed for future testing.",
     order: 3,
-    badgeClass: "bg-tahoe/10 text-tahoe border-tahoe/25",
+    badgeClass: "bg-water/10 text-water border-water/25",
   },
   "product-prototype": {
     label: "Product Prototype",
     shortExplanation: "Emerging system or tool in active prototype development.",
     order: 4,
-    badgeClass: "bg-pine/10 text-pine border-pine/25",
+    badgeClass: "bg-moss/10 text-moss border-moss/25",
   },
   "research-in-progress": {
     label: "Research in Progress",
     shortExplanation: "Active research or system mapping underway.",
     order: 5,
-    badgeClass: "bg-tahoe/10 text-tahoe border-tahoe/25",
+    badgeClass: "bg-water/10 text-water border-water/25",
   },
   published: {
     label: "Published Brief",
     shortExplanation: "Publicly released document or overview.",
     order: 6,
-    badgeClass: "bg-pine/10 text-pine border-pine/25",
+    badgeClass: "bg-moss/10 text-moss border-moss/25",
   },
 };
 
