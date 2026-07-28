@@ -288,3 +288,83 @@ body {
     linear-gradient(90deg, rgba(74, 124, 155, 0.03) 1px, transparent 1px);
   background-size: 100% 100%, 40px 40px, 40px 40px;
 }
+
+/* ── Content pages ── */
+
+.prose-content section h2 {
+  font-family: var(--font-instrument-serif), serif;
+}
+
+/* ── Print brief ── */
+
+.brief-section {
+  margin-bottom: 2rem;
+  break-inside: avoid;
+}
+
+.brief-heading {
+  font-family: var(--font-instrument-serif), serif;
+  font-size: 1.25rem;
+  color: var(--foreground);
+  margin-bottom: 0.75rem;
+}
+
+.brief-body {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+@media print {
+  @page {
+    margin: 1.5cm;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+  }
+
+  header,
+  footer,
+  nav,
+  [data-print-hide="true"] {
+    display: none !important;
+  }
+
+  .owll-brief {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .brief-section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 1.25rem;
+  }
+
+  .brief-heading {
+    color: black;
+    font-size: 14pt;
+  }
+
+  .brief-body {
+    color: #333;
+  }
+
+  .card-premium,
+  .glass-panel {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  a[href]::after {
+    content: none;
+  }
+}

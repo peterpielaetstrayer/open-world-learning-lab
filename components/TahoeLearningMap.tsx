@@ -42,9 +42,9 @@ const accentStyles = {
 };
 
 const mapMeta = [
-  { label: "Status", value: "Pilot concept" },
-  { label: "Mode", value: "Place-based learning" },
-  { label: "Reach", value: "Global stream" },
+  { label: "Status", value: "Archived origin study" },
+  { label: "Mode", value: "Concept model" },
+  { label: "Type", value: "Origin study" },
 ];
 
 export default function TahoeLearningMap({ zones }: TahoeLearningMapProps) {
@@ -94,7 +94,7 @@ export default function TahoeLearningMap({ zones }: TahoeLearningMapProps) {
             <div>
               <p className="field-label mb-2">Expedition map</p>
               <h3 className="font-serif text-xl md:text-2xl text-foreground">
-                Tahoe learning map
+                Open World Tahoe learning map
               </h3>
             </div>
 
@@ -129,7 +129,7 @@ export default function TahoeLearningMap({ zones }: TahoeLearningMapProps) {
               <span className="mission-pin bg-tahoe/60 text-tahoe relative top-0 left-0 transform-none mb-3" />
               <p className="field-label text-tahoe/70">Center</p>
               <p className="font-serif text-lg text-tahoe mt-1">Tahoe Basin</p>
-              <p className="mt-1 font-mono text-[0.6rem] text-stone/60">open-world classroom</p>
+              <p className="mt-1 font-mono text-[0.6rem] text-stone/60">origin study zone</p>
             </div>
 
             {zones.map((zone, i) => {
@@ -187,7 +187,7 @@ export default function TahoeLearningMap({ zones }: TahoeLearningMapProps) {
           <p className="font-mono text-[0.6rem] text-stone/55 tracking-wider">
             39.0968° N · 120.0324° W
           </p>
-          <p className="field-label opacity-50">Meta Academy Tahoe · concept pilot</p>
+          <p className="field-label opacity-50">Open World Tahoe · origin study</p>
         </div>
       </div>
     </div>

@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Open World Learning Lab Website
 
-## Getting Started
+Public website for [Open World Learning Lab](https://openworldlearninglab.com) — an independent early-stage education design lab developing place-based learning journeys, mentor systems, and intelligent tools.
 
-First, run the development server:
+Built with Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS v4.
+
+## Route structure
+
+| Route | Description |
+|-------|-------------|
+| `/` | Homepage — thesis, current work, learning loop, guardrails, releases preview |
+| `/work` | Current work index with status groupings |
+| `/work/first-landing` | First Landing pilot sketch |
+| `/work/locus` | LOCUS learning system prototype |
+| `/work/open-world-saturdays` | Open World Saturdays early concept |
+| `/work/open-world-tahoe` | Open World Tahoe origin study |
+| `/releases` | Public releases index |
+| `/releases/owll-at-a-glance` | Print-friendly OWLL brief |
+| `/about` | About the lab |
+| `/contact` | Contact and collaboration |
+| `/manifesto` | Redirects to `/#thesis` |
+
+## Content storage
+
+Content is data-driven via TypeScript modules in `content/`:
+
+- **`content/projects.ts`** — project cards, Tahoe zones, sample missions, development sequence
+- **`content/releases.ts`** — release metadata (type, status, version, dates, links)
+- **`content/statuses.ts`** — normalized status labels, badge styles, ordering
+- **`content/shared.ts`** — site config, nav links, guardrails, learning loop, technology horizons
+
+Page-specific long-form copy lives in route files under `app/work/` and `app/releases/`.
+
+## Adding a new project
+
+1. Add a project object to the `projects` array in `content/projects.ts`
+2. Create a page at `app/work/[slug]/page.tsx` using `ProjectPageLayout`
+3. Add metadata via `createPageMetadata()` in `lib/metadata.ts` pattern
+4. Optionally link related releases in `content/releases.ts`
+5. The homepage and `/work` index update automatically from the projects array
+
+## Adding a new release
+
+1. Add a release object to the `releases` array in `content/releases.ts`
+2. For standalone pages, create `app/releases/[slug]/page.tsx`
+3. Set `downloadHref` only when a real file exists in `public/`
+4. The `/releases` index and homepage releases section update automatically
+
+## Status labels
+
+Statuses are defined in `content/statuses.ts`:
+
+- `origin-study` → Origin Study
+- `early-concept` → Early Concept
+- `pilot-design` → Pilot Design
+- `product-prototype` → Product Prototype
+- `research-in-progress` → Research in Progress
+- `published` → Published Brief
+
+Each maps to a display label, short explanation, visual badge class, and sort order.
+
+## Social metadata
+
+Use `createPageMetadata()` from `lib/metadata.ts` on each route. Site-wide defaults are in `app/layout.tsx`. Set `metadataBase` to the production URL in `content/shared.ts`.
+
+## Print styles
+
+Print CSS lives in `app/globals.css` under `@media print`. The OWLL at a Glance brief (`/releases/owll-at-a-glance`) uses `.owll-brief`, `.brief-section`, and `.brief-heading` classes. Navigation and share controls use `print:hidden`.
+
+Use the **Print / Save as PDF** button to trigger the browser print dialog.
+
+## Sharing
+
+`ShareActions` component provides copy link, native share (with clipboard fallback), and optional print. Used on project and release pages.
+
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev      # Development server
+npm run build    # Production build
+npm run start    # Start production server
+npm run lint     # ESLint
+npx tsc --noEmit # Type-check
+```
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+Configured for standard Next.js deployment (e.g. Vercel). No database or environment variables required for static content.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contact
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+hello@openworldlearninglab.com

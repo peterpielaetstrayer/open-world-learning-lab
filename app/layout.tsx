@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
+import { siteConfig } from "@/content/shared";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,22 +20,23 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Open World Learning Lab",
-  description:
-    "An open-source education design project exploring open-world learning, place-based education, AI glasses, human mentorship, and rigorous real-world learning environments.",
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
   openGraph: {
-    title: "Open World Learning Lab",
-    description:
-      "An open-source education design project exploring open-world learning, place-based education, AI glasses, human mentorship, and rigorous real-world learning environments.",
+    title: "Open World Learning Lab — Learning Should Begin With the World",
+    description: siteConfig.description,
     type: "website",
     locale: "en_US",
-    siteName: "Open World Learning Lab",
+    siteName: siteConfig.name,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Open World Learning Lab",
-    description:
-      "An open-source education design project exploring open-world learning, place-based education, AI glasses, human mentorship, and rigorous real-world learning environments.",
+    title: "Open World Learning Lab — Learning Should Begin With the World",
+    description: siteConfig.description,
   },
 };
 
