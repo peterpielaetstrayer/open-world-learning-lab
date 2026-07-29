@@ -28,8 +28,8 @@ export default function PullQuote({
   }
 
   return (
-    <blockquote className="relative my-10 md:my-14 border-l-4 border-l-water/40 pl-6 md:pl-8 py-2">
-      <p className="font-serif text-xl md:text-2xl leading-snug text-ink max-w-reading">
+    <blockquote className="relative my-8 md:my-14 border-l-4 border-l-water/40 pl-5 md:pl-8 py-1">
+      <p className="font-serif text-xl md:text-2xl leading-snug text-ink max-w-reading text-balance">
         {children}
       </p>
       {attribution && (

@@ -3,7 +3,7 @@ import { learningLoopStages } from "@/content/learning-loop";
 export default function LearningLoopDiagram() {
   return (
     <div className="relative">
-      <p className="mb-10 max-w-reading text-body text-secondary">
+      <p className="mb-6 md:mb-10 max-w-reading text-body text-secondary">
         The loop does not end with an answer. It changes what the learner is able to notice next.
       </p>
 
@@ -80,7 +80,7 @@ export default function LearningLoopDiagram() {
       {/* Mobile vertical trail */}
       <ol className="lg:hidden relative max-w-reading mx-auto space-y-0 list-none pl-6 border-l border-water/20" aria-hidden="true">
         {learningLoopStages.map((stage, i) => (
-          <li key={stage.id} className="relative pb-8 last:pb-0">
+          <li key={stage.id} className="relative pb-6 md:pb-8 last:pb-0">
             <span className="absolute -left-[calc(0.75rem+1px)] top-1 flex h-6 w-6 items-center justify-center rounded-full border border-water/30 bg-page font-mono text-[0.65rem] text-water">
               {stage.number}
             </span>

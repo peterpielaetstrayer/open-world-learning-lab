@@ -31,7 +31,7 @@ export default function ProjectPageLayout({
           </div>
         )}
         {figure}
-        <div className="py-12 md:py-16 lg:py-20">
+        <div className="py-10 md:py-16 lg:py-20">
           <WideContainer>
             <div className="max-w-reading prose-content space-y-12">{children}</div>
             {related && <div className="mt-16 max-w-3xl">{related}</div>}

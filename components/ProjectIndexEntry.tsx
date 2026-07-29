@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import type { Project } from "@/content/projects";
 import { getProjectTheme } from "@/content/project-themes";
 import { getVisualAsset } from "@/content/visual-assets";
+import { locusHomepageJourney } from "@/content/locus-journey";
 import StatusBadge from "@/components/StatusBadge";
 import VisualPlate from "@/components/visual/VisualPlate";
 import VisualFallback from "@/components/visual/VisualFallback";
@@ -20,6 +21,26 @@ const previewAssetKeys: Record<string, string> = {
   locus: "locus-system-spine",
 };
 
+function LocusJourneyStrip() {
+  return (
+    <div className="mt-4">
+      <p className="font-mono text-metadata text-quiet mb-2">One learner journey</p>
+      <ol className="flex flex-wrap gap-x-1 gap-y-1.5 list-none text-sm text-secondary leading-relaxed">
+        {locusHomepageJourney.map((step, index) => (
+          <li key={step} className="inline-flex items-center gap-1">
+            <span>{step}</span>
+            {index < locusHomepageJourney.length - 1 && (
+              <span aria-hidden="true" className="text-quiet">
+                →
+              </span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
 export default function ProjectIndexEntry({
   project,
   index = 0,
@@ -33,8 +54,11 @@ export default function ProjectIndexEntry({
   const hasPreviewImage = Boolean(previewAsset?.desktopSrc);
 
   if (layout === "featured") {
+    const journeyContent =
+      project.slug === "locus" && !supplementary ? <LocusJourneyStrip /> : supplementary;
+
     return (
-      <article className="group grid gap-6 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,0.58fr)] lg:gap-10 items-start">
+      <article className="group grid gap-5 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,0.58fr)] lg:gap-10 items-start">
         <Link
           href={project.href}
           className="block overflow-hidden rounded-lg border border-border focus-visible:rounded-lg"
@@ -64,20 +88,28 @@ export default function ProjectIndexEntry({
               />
             </div>
           )}
+          {hasPreviewImage && (
+            <p className="mt-2 font-mono text-[0.65rem] text-quiet px-0.5">
+              Conceptual preview — open project for full detail
+            </p>
+          )}
         </Link>
 
-        <div className="min-w-0 border-l-2 pl-6" style={{ borderColor: theme.accent }}>
-          <StatusBadge projectType={project.projectType} status={project.status} className="mb-3" />
-          <h3 className="font-serif text-2xl text-ink leading-snug group-hover:text-water transition-colors">
+        <div
+          className="min-w-0 border-t-2 pt-5 lg:border-t-0 lg:border-l-2 lg:pl-6 lg:pt-0"
+          style={{ borderColor: theme.accent }}
+        >
+          <StatusBadge projectType={project.projectType} status={project.status} layout="stacked" className="mb-3" />
+          <h3 className="font-serif text-xl sm:text-2xl text-ink leading-snug group-hover:text-water transition-colors">
             <Link href={project.href}>{project.title}</Link>
           </h3>
-          <p className="mt-3 max-w-reading text-body text-secondary leading-relaxed">
+          <p className="mt-2.5 max-w-reading text-body text-secondary leading-relaxed">
             {project.summary}
           </p>
-          {supplementary}
+          {journeyContent}
           <Link
             href={project.href}
-            className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-water hover:text-moss transition-colors"
+            className="mt-4 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-water hover:text-moss transition-colors"
           >
             {ctaLabel}
             <span aria-hidden="true">→</span>
@@ -106,7 +138,7 @@ export default function ProjectIndexEntry({
         </div>
 
         <div className="min-w-0">
-          <StatusBadge projectType={project.projectType} status={project.status} className="mb-2" />
+          <StatusBadge projectType={project.projectType} status={project.status} layout="stacked" className="mb-2" />
           <h3 className="font-serif text-xl text-ink leading-snug group-hover:text-water transition-colors">
             <Link href={project.href}>{project.title}</Link>
           </h3>
@@ -115,7 +147,7 @@ export default function ProjectIndexEntry({
           </p>
           <Link
             href={project.href}
-            className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-water hover:text-moss transition-colors"
+            className="mt-3 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-water hover:text-moss transition-colors"
           >
             View project
             <span aria-hidden="true">→</span>
@@ -129,7 +161,7 @@ export default function ProjectIndexEntry({
 
   return (
     <article
-      className={`group relative border-l-2 pl-6 py-2 ${stagger}`}
+      className={`group relative border-l-2 pl-5 sm:pl-6 py-1 ${stagger}`}
       style={{ borderColor: theme.accent }}
     >
       <div
@@ -138,7 +170,7 @@ export default function ProjectIndexEntry({
         aria-hidden="true"
       />
 
-      <StatusBadge projectType={project.projectType} status={project.status} className="mb-2" />
+      <StatusBadge projectType={project.projectType} status={project.status} layout="stacked" className="mb-2" />
 
       <h3 className="font-serif text-xl text-ink leading-snug group-hover:text-water transition-colors">
         <Link href={project.href}>{project.title}</Link>
@@ -150,7 +182,7 @@ export default function ProjectIndexEntry({
 
       <Link
         href={project.href}
-        className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-water hover:text-moss transition-colors"
+        className="mt-3 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-water hover:text-moss transition-colors"
       >
         View project
         <span aria-hidden="true">→</span>

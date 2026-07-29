@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 type ReleaseCoverVariant =
@@ -18,6 +19,11 @@ export type ReleaseCoverProps = {
   href?: string;
   className?: string;
   compact?: boolean;
+  summary?: string;
+  /** Optional future raster cover artwork */
+  coverSrc?: string | null;
+  coverAlt?: string;
+  coverFocalPosition?: string;
 };
 
 const variantAccent: Record<ReleaseCoverVariant, string> = {
@@ -28,7 +34,30 @@ const variantAccent: Record<ReleaseCoverVariant, string> = {
   "origin-study": "from-deep-field/20 to-water/10",
 };
 
-function CoverArt({ variant }: { variant: ReleaseCoverVariant }) {
+function CoverArt({
+  variant,
+  coverSrc,
+  coverAlt,
+  coverFocalPosition = "50% 50%",
+}: {
+  variant: ReleaseCoverVariant;
+  coverSrc?: string | null;
+  coverAlt?: string;
+  coverFocalPosition?: string;
+}) {
+  if (coverSrc) {
+    return (
+      <Image
+        src={coverSrc}
+        alt={coverAlt ?? "Release cover artwork"}
+        fill
+        className="object-cover"
+        style={{ objectPosition: coverFocalPosition }}
+        sizes="(max-width: 640px) 96px, (max-width: 1024px) 40vw, 320px"
+      />
+    );
+  }
+
   return (
     <div
       className={`relative h-full w-full bg-gradient-to-br ${variantAccent[variant]} texture-contour overflow-hidden`}
@@ -53,22 +82,66 @@ export default function ReleaseCover({
   href,
   className = "",
   compact = false,
+  summary,
+  coverSrc,
+  coverAlt,
+  coverFocalPosition,
 }: ReleaseCoverProps) {
+  const useCompactLayout = compact;
+
   const content = (
     <article
-      className={`group flex ${compact ? "flex-row gap-4" : "flex-col"} overflow-hidden rounded-lg border border-border bg-page hover:border-water/30 transition-colors ${className}`}
+      className={`group flex overflow-hidden rounded-lg border border-border bg-page hover:border-water/30 transition-colors ${
+        useCompactLayout ? "flex-row gap-0 min-h-[4.75rem]" : "flex-col"
+      } ${className}`}
     >
-      <div className={`relative shrink-0 ${compact ? "w-24 h-16" : "aspect-[5/3] w-full"}`}>
-        <CoverArt variant={visualVariant} />
-        <span className="absolute bottom-1.5 left-2 font-mono text-[0.55rem] text-ink/50">{releaseId}</span>
+      <div
+        className={`relative shrink-0 overflow-hidden ${
+          useCompactLayout
+            ? "w-[5.5rem] sm:w-28 self-stretch min-h-[4.75rem]"
+            : "aspect-[2/1] w-full sm:aspect-[5/3]"
+        }`}
+      >
+        <CoverArt
+          variant={visualVariant}
+          coverSrc={coverSrc}
+          coverAlt={coverAlt}
+          coverFocalPosition={coverFocalPosition}
+        />
+        <span
+          className={`absolute font-mono text-[0.55rem] text-ink/50 ${
+            useCompactLayout ? "bottom-1 left-1.5" : "bottom-1.5 left-2"
+          }`}
+        >
+          {releaseId}
+        </span>
       </div>
 
-      <div className={`flex flex-col ${compact ? "py-2 pr-3" : "p-5"}`}>
+      <div
+        className={`flex min-w-0 flex-1 flex-col ${
+          useCompactLayout ? "py-2.5 pr-3 pl-3 sm:py-3 sm:pr-4" : "p-4 sm:p-5"
+        }`}
+      >
         <p className="font-mono text-metadata text-quiet">{releaseType}</p>
-        <h3 className={`mt-1 font-serif text-ink leading-snug group-hover:text-water transition-colors ${compact ? "text-base" : "text-xl"}`}>
+        <h3
+          className={`mt-0.5 font-serif text-ink leading-snug group-hover:text-water transition-colors ${
+            useCompactLayout ? "text-base sm:text-lg" : "text-lg sm:text-xl"
+          }`}
+        >
           {title}
         </h3>
-        <div className="mt-auto pt-2 flex flex-wrap items-center gap-2 font-mono text-metadata text-quiet">
+        {summary && (
+          <p
+            className={`mt-1.5 text-secondary leading-relaxed ${
+              useCompactLayout
+                ? "text-xs sm:text-sm line-clamp-2 sm:line-clamp-3"
+                : "text-sm line-clamp-3 sm:line-clamp-none"
+            }`}
+          >
+            {summary}
+          </p>
+        )}
+        <div className="mt-auto pt-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 font-mono text-metadata text-quiet">
           <span>v{version}</span>
           {date && (
             <>
@@ -91,13 +164,13 @@ export default function ReleaseCover({
     const isAnchor = href.startsWith("/#");
     if (isAnchor) {
       return (
-        <a href={href} className="block focus-visible:rounded-lg">
+        <a href={href} className="block focus-visible:rounded-lg min-h-[44px]">
           {content}
         </a>
       );
     }
     return (
-      <Link href={href} className="block focus-visible:rounded-lg">
+      <Link href={href} className="block focus-visible:rounded-lg min-h-[44px]">
         {content}
       </Link>
     );

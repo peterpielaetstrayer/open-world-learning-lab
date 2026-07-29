@@ -18,9 +18,9 @@ export default function OwllAtAGlancePage() {
   return (
     <>
       <Header />
-      <main className="py-12 md:py-16">
-        <article className="owll-brief mx-auto max-w-3xl px-6">
-          <div className="mb-10" data-print-hide="true">
+      <main className="py-section-y-page">
+        <article className="owll-brief mx-auto max-w-3xl px-5 sm:px-6">
+          <div className="mb-8 md:mb-10" data-print-hide="true">
             <ShareActions showPrint />
           </div>
 

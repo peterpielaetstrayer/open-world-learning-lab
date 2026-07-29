@@ -13,7 +13,7 @@ export default function ConceptNotice({
 }: ConceptNoticeProps) {
   return (
     <aside
-      className={`rounded-lg border p-5 md:p-6 ${
+      className={`rounded-lg border p-4 md:p-6 ${
         variant === "warning"
           ? "border-sediment/30 bg-sediment/5"
           : "border-water/25 bg-water/[0.04]"

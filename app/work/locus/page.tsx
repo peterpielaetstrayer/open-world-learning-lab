@@ -49,13 +49,13 @@ export default function LocusPage() {
       </ContentSection>
 
       <ContentSection title="One complete learner journey">
-        <ol className="space-y-4 list-none">
+        <ol className="relative max-w-reading list-none pl-5 border-l border-water/20">
           {locusFullLearnerJourney.map((step) => (
-            <li key={step.step} className="flex items-start gap-3 text-sm">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-water/10 text-xs font-mono text-water border border-water/20">
+            <li key={step.step} className="relative pb-5 last:pb-0 pl-4">
+              <span className="absolute -left-[calc(0.75rem+1px)] top-0.5 flex h-6 w-6 items-center justify-center rounded-full border border-water/30 bg-page font-mono text-[0.65rem] text-water">
                 {step.step}
               </span>
-              {step.text}
+              <p className="text-sm text-secondary leading-relaxed">{step.text}</p>
             </li>
           ))}
         </ol>

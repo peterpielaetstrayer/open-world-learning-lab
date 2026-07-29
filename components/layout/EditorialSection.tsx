@@ -6,6 +6,7 @@ interface EditorialSectionProps {
   children: ReactNode;
   className?: string;
   variant?: "default" | "soft" | "dark" | "field";
+  spacing?: "major" | "compact";
 }
 
 const variants = {
@@ -15,16 +16,22 @@ const variants = {
   field: "bg-soft-paper/30 texture-contour",
 };
 
+const spacingClasses = {
+  major: "py-section-y",
+  compact: "py-section-y-compact",
+};
+
 export default function EditorialSection({
   id,
   children,
   className = "",
   variant = "default",
+  spacing = "major",
 }: EditorialSectionProps) {
   return (
     <section
       id={id}
-      className={`scroll-mt-28 md:scroll-mt-32 py-section-y ${variants[variant]} ${className}`}
+      className={`scroll-mt-[4.5rem] md:scroll-mt-32 ${spacingClasses[spacing]} ${variants[variant]} ${className}`}
     >
       <WideContainer>{children}</WideContainer>
     </section>

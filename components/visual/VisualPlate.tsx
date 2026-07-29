@@ -187,7 +187,7 @@ export default function VisualPlate({
       </div>
 
       {(showCaption && captionText) || shouldExpand ? (
-        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="mt-2.5 md:mt-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
           {showCaption && captionText && (
             <figcaption className="max-w-reading font-mono text-metadata text-quiet leading-relaxed">
               {captionText}

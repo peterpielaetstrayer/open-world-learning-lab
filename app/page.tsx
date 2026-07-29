@@ -15,7 +15,6 @@ import Link from "next/link";
 import { projects } from "@/content/projects";
 import { releases } from "@/content/releases";
 import { founderBio } from "@/content/shared";
-import { locusHomepageJourney } from "@/content/locus-journey";
 
 export { homeMetadata as metadata } from "@/lib/metadata";
 
@@ -50,7 +49,7 @@ export default function Home() {
           </ReadingColumn>
           <PullQuote>The goal is not less structure. It is structured freedom.</PullQuote>
 
-          <div className="mt-14 pt-14 border-t border-border" id="learning-loop">
+          <div className="mt-10 pt-10 md:mt-14 md:pt-14 border-t border-border" id="learning-loop">
             <SectionHeader
               eyebrow="How open-world learning works"
               title="Experience becomes learning through a designed loop."
@@ -78,7 +77,7 @@ export default function Home() {
             eyebrow="Primary prototypes"
             title="Two doors into the current work."
           />
-          <div className="space-y-16">
+          <div className="space-y-12 md:space-y-16">
             {primaryProjects.map((project) => (
               <ProjectIndexEntry
                 key={project.slug}
@@ -89,22 +88,10 @@ export default function Home() {
                     ? "Explore First Landing"
                     : "Explore LOCUS"
                 }
-                supplementary={
-                  project.slug === "locus" ? (
-                    <div className="mt-5">
-                      <p className="font-mono text-metadata text-quiet mb-2">
-                        One learner journey
-                      </p>
-                      <p className="text-sm text-secondary leading-relaxed">
-                        {locusHomepageJourney.join(" → ")}
-                      </p>
-                    </div>
-                  ) : undefined
-                }
               />
             ))}
           </div>
-          <div className="mt-12">
+          <div className="mt-8 md:mt-12">
             <Link
               href="/work"
               className="text-sm font-medium text-water hover:text-moss transition-colors"
@@ -127,7 +114,7 @@ export default function Home() {
 
         <SectionDivider />
 
-        <EditorialSection id="founder">
+        <EditorialSection id="founder" spacing="compact">
           <SectionHeader
             eyebrow="Who is developing this work"
             title="Founded through practice, not abstraction."
@@ -148,7 +135,7 @@ export default function Home() {
         {owllAtAGlance && (
           <>
             <SectionDivider />
-            <EditorialSection id="releases">
+            <EditorialSection id="releases" spacing="compact">
               <SectionHeader
                 eyebrow="Selected public work"
                 title="OWLL at a Glance"
@@ -163,6 +150,7 @@ export default function Home() {
                   date={owllAtAGlance.publishedAt}
                   visualVariant={releaseTypeToVariant(owllAtAGlance.releaseType)}
                   href={owllAtAGlance.href}
+                  summary={owllAtAGlance.summary}
                 />
               </div>
               <div className="mt-8">
@@ -185,19 +173,19 @@ export default function Home() {
             <h2 className="font-serif text-page-title text-on-dark leading-tight">
               Start a thoughtful conversation.
             </h2>
-            <p className="mt-8 text-body text-on-dark/70">
+            <p className="mt-5 md:mt-8 text-body text-on-dark/70">
               OWLL is interested in conversations with educators, mentors, learning designers, researchers, community organizations, technologists, and potential pilot collaborators.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="mt-7 md:mt-10 flex flex-col sm:flex-row gap-2.5 sm:gap-3 justify-center">
               <Link
                 href="/contact"
-                className="btn-tactile inline-flex items-center justify-center rounded-full bg-page px-7 py-3.5 text-sm font-medium text-ink hover:bg-soft-paper"
+                className="btn-tactile inline-flex min-h-11 items-center justify-center rounded-full bg-page px-7 py-3 text-sm font-medium text-ink hover:bg-soft-paper"
               >
                 Start a Conversation
               </Link>
               <Link
                 href="/work"
-                className="btn-tactile inline-flex items-center justify-center rounded-full border border-on-dark/30 px-7 py-3.5 text-sm font-medium text-on-dark hover:bg-on-dark/10"
+                className="btn-tactile inline-flex min-h-11 items-center justify-center rounded-full border border-on-dark/30 px-7 py-3 text-sm font-medium text-on-dark hover:bg-on-dark/10"
               >
                 Explore the Work
               </Link>

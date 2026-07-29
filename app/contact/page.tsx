@@ -25,8 +25,8 @@ export default function ContactPage() {
   return (
     <>
       <Header />
-      <main className="py-16 md:py-24">
-        <div className="mx-auto max-w-3xl px-6">
+      <main className="py-section-y-page">
+        <div className="mx-auto max-w-3xl px-5 sm:px-6">
           <SectionHeader
             title="Start a thoughtful conversation."
             intro="OWLL is interested in conversations with educators, mentors, learning designers, researchers, community organizations, technologists, and potential pilot collaborators."
@@ -56,7 +56,7 @@ export default function ContactPage() {
           <div className="mt-10">
             <a
               href={`mailto:${siteConfig.email}?subject=OWLL%20Conversation`}
-              className="btn-tactile inline-flex items-center justify-center rounded-full bg-pine px-8 py-3.5 text-sm font-medium text-white hover:bg-pine-light"
+              className="btn-tactile inline-flex min-h-11 items-center justify-center rounded-full bg-pine px-8 py-3 text-sm font-medium text-white hover:bg-pine-light"
             >
               Start a Conversation
             </a>

@@ -54,7 +54,7 @@ export default function VisualExpandDialog({
         ref={triggerRef}
         type="button"
         onClick={open}
-        className={`btn-tactile inline-flex items-center gap-2 rounded-full border border-border bg-page px-4 py-2 text-sm font-medium text-ink hover:border-water/40 ${className}`}
+        className={`btn-tactile inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-page px-4 py-2.5 text-sm font-medium text-ink hover:border-water/40 ${className}`}
         data-print-hide="true"
         aria-haspopup="dialog"
       >
@@ -66,22 +66,24 @@ export default function VisualExpandDialog({
         aria-labelledby={titleId}
         className="fixed inset-0 z-50 m-0 h-full max-h-none w-full max-w-none border-0 bg-deep-field/90 p-0 backdrop:bg-deep-field/90 open:flex open:flex-col"
       >
-        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-on-dark/15 px-4 py-3 sm:px-6">
-          <p id={titleId} className="font-mono text-metadata text-on-dark/80">
+        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-on-dark/15 px-4 py-3 sm:px-6 pt-[max(0.75rem,env(safe-area-inset-top))]">
+          <p id={titleId} className="font-mono text-metadata text-on-dark/80 truncate">
             {triggerLabel}
           </p>
           <button
             ref={closeRef}
             type="button"
             onClick={close}
-            className="btn-tactile inline-flex h-10 w-10 items-center justify-center rounded-full border border-on-dark/25 text-on-dark hover:bg-on-dark/10"
+            className="btn-tactile inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-on-dark/25 text-on-dark hover:bg-on-dark/10"
             aria-label="Close expanded visual"
           >
-            <span aria-hidden="true">×</span>
+            <span aria-hidden="true" className="text-xl leading-none">
+              ×
+            </span>
           </button>
         </div>
 
-        <div className="flex flex-1 items-start justify-center overflow-auto p-4 sm:p-8">
+        <div className="flex flex-1 items-start justify-center overflow-auto p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:p-8">
           <figure className="w-full max-w-[min(100%,96rem)]">
             <Image
               src={src}

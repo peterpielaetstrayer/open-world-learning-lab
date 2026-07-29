@@ -4,7 +4,7 @@ import { navLinks, siteConfig } from "@/content/shared";
 export default function Footer() {
   return (
     <footer className="border-t border-border bg-deep-field text-on-dark" data-print-hide="true">
-      <div className="mx-auto max-w-[1320px] px-5 sm:px-6 lg:px-8 py-16">
+      <div className="mx-auto max-w-[1320px] px-5 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid md:grid-cols-2 gap-10">
           <div>
             <p className="font-serif text-xl">{siteConfig.name}</p>

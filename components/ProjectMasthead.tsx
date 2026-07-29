@@ -29,21 +29,21 @@ export default function ProjectMasthead({
 }: ProjectMastheadProps) {
   return (
     <header className="border-b border-border bg-soft-paper/20 texture-paper">
-      <WideContainer className="py-10 md:py-14 lg:py-16">
+      <WideContainer className="py-8 md:py-14 lg:py-16">
         <Breadcrumbs items={breadcrumbs} />
 
-        <div className="mt-8 max-w-reading">
-          <StatusBadge projectType={projectType} status={status} className="mb-4" />
-          <h1 className="font-serif text-page-title text-ink leading-tight tracking-tight">
+        <div className="mt-6 md:mt-8 max-w-reading">
+          <StatusBadge projectType={projectType} status={status} layout="stacked" className="mb-3 md:mb-4" />
+          <h1 className="font-serif text-page-title text-ink leading-tight tracking-tight text-balance">
             {title}
           </h1>
-          <p className="mt-5 text-body-lg text-secondary leading-relaxed">
+          <p className="mt-4 md:mt-5 text-body-lg text-secondary leading-relaxed">
             {summary}
           </p>
 
-          <ShareActions showPrint className="mt-8" />
+          <ShareActions showPrint className="mt-6 md:mt-8" />
 
-          <ConceptNotice className="mt-6">{statusNotice}</ConceptNotice>
+          <ConceptNotice className="mt-5 md:mt-6">{statusNotice}</ConceptNotice>
 
           {metadataRail && <div className="mt-8">{metadataRail}</div>}
         </div>

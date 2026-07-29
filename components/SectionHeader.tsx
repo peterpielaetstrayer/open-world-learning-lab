@@ -14,14 +14,14 @@ export default function SectionHeader({
   dark = false,
 }: SectionHeaderProps) {
   return (
-    <header className={`mb-12 md:mb-16 max-w-3xl ${className}`}>
+    <header className={`mb-heading-gap max-w-3xl ${className}`}>
       {eyebrow && (
-        <p className={`font-mono text-metadata mb-3 ${dark ? "text-on-dark/60" : "text-quiet"}`}>
+        <p className={`font-mono text-metadata mb-2 md:mb-3 ${dark ? "text-on-dark/60" : "text-quiet"}`}>
           {eyebrow}
         </p>
       )}
       <h2
-        className={`font-serif text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.15] tracking-tight ${
+        className={`font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.15] tracking-tight text-balance ${
           dark ? "text-on-dark" : "text-ink"
         }`}
       >
@@ -29,7 +29,7 @@ export default function SectionHeader({
       </h2>
       {intro && (
         <p
-          className={`mt-6 text-base md:text-lg leading-relaxed max-w-reading ${
+          className={`mt-4 md:mt-6 text-base md:text-lg leading-relaxed max-w-reading ${
             dark ? "text-on-dark/80" : "text-secondary"
           }`}
         >

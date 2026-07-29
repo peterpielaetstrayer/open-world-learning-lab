@@ -11,7 +11,7 @@ export default function ProjectFigureSection({
   className = "",
 }: ProjectFigureSectionProps) {
   return (
-    <section className={`border-y border-border bg-soft-paper/30 py-10 md:py-14 ${className}`}>
+    <section className={`border-y border-border bg-soft-paper/30 py-section-y-figure ${className}`}>
       <WideContainer>
         <div className="mx-auto w-full max-w-[min(100%,96rem)]">{children}</div>
       </WideContainer>
