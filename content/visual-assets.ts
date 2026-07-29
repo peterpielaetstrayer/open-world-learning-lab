@@ -7,6 +7,8 @@ export type VisualTheme =
   | "saturdays"
   | "tahoe";
 
+export type VisualVariant = "hero" | "infographic" | "project-preview";
+
 export type VisualAsset = {
   key: string;
   desktopSrc: string | null;
@@ -17,59 +19,75 @@ export type VisualAsset = {
   height: number;
   focalPosition?: string;
   mobileFocalPosition?: string;
+  previewFocalPosition?: string;
   status: VisualAssetStatus;
   theme: VisualTheme;
+  containsEmbeddedText?: boolean;
+  title?: string;
 };
 
 export const visualAssets: Record<string, VisualAsset> = {
   "homepage-learning-landscape": {
     key: "homepage-learning-landscape",
-    desktopSrc: null,
+    desktopSrc: "/visuals/owll/homepage-learning-landscape.png",
     mobileSrc: null,
-    alt: "Conceptual field atlas showing place, inquiry, mentorship, and return across an open learning landscape.",
+    title: "A Place Becomes a Learning System",
+    alt: "A learner follows an annotated coastal path where field observations, questions, notes, and returning routes transform the landscape into a learning system.",
     caption: "The living field — where attention, questions, and practice connect.",
-    width: 1600,
-    height: 900,
-    focalPosition: "60% 40%",
-    mobileFocalPosition: "50% 35%",
-    status: "placeholder",
+    width: 1536,
+    height: 1024,
+    focalPosition: "58% 45%",
+    mobileFocalPosition: "55% 40%",
+    status: "final",
     theme: "owll",
+    containsEmbeddedText: false,
   },
-  "first-landing-coastal": {
-    key: "first-landing-coastal",
-    desktopSrc: null,
+  "first-landing-coastal-systems": {
+    key: "first-landing-coastal-systems",
+    desktopSrc: "/visuals/first-landing/coastal-systems-field-plate.png",
     mobileSrc: null,
-    alt: "Conceptual coastal systems field plate for the First Landing learning journey.",
-    caption: "Coastal systems — shoreline, estuary, history, and future.",
-    width: 1400,
-    height: 875,
-    focalPosition: "55% 50%",
-    mobileFocalPosition: "50% 40%",
-    status: "placeholder",
-    theme: "first-landing",
-  },
-  "locus-backdrop": {
-    key: "locus-backdrop",
-    desktopSrc: null,
-    mobileSrc: null,
-    alt: "Environmental backdrop suggesting layers of a learning system.",
-    width: 1400,
-    height: 700,
+    title: "Water Shapes the Journey",
+    alt: "Conceptual field-atlas plate showing a six-week coastal learning journey across shoreline, dunes, wetlands, human history, coastal risk, and learner synthesis.",
+    caption:
+      "Conceptual field-atlas plate showing the proposed six-week First Landing learning journey across shoreline, dunes, wetlands, human history, coastal risk, and learner-created synthesis.",
+    width: 1536,
+    height: 1024,
     focalPosition: "50% 50%",
-    status: "placeholder",
+    mobileFocalPosition: "50% 45%",
+    previewFocalPosition: "52% 62%",
+    status: "final",
+    theme: "first-landing",
+    containsEmbeddedText: true,
+  },
+  "locus-system-spine": {
+    key: "locus-system-spine",
+    desktopSrc: "/visuals/locus/locus-system-spine.png",
+    mobileSrc: null,
+    title: "From Experience to Cumulative Growth",
+    alt: "Conceptual system plate showing how LOCUS connects real-world experience, Field Notes, guided inquiry, mentorship, creation, feedback, and cumulative learning.",
+    caption:
+      "Conceptual system plate showing how LOCUS connects real-world experience, Field Notes, guided inquiry, mentorship, creation, feedback, and cumulative learning.",
+    width: 1536,
+    height: 1024,
+    focalPosition: "50% 50%",
+    mobileFocalPosition: "50% 45%",
+    previewFocalPosition: "28% 50%",
+    status: "final",
     theme: "locus",
+    containsEmbeddedText: true,
   },
   "saturdays-journey": {
     key: "saturdays-journey",
     desktopSrc: null,
     mobileSrc: null,
     alt: "Conceptual reengagement journey from arrival through practice and continuation.",
-    width: 1400,
-    height: 875,
+    width: 1536,
+    height: 1024,
     focalPosition: "50% 45%",
     mobileFocalPosition: "50% 35%",
     status: "placeholder",
     theme: "saturdays",
+    containsEmbeddedText: false,
   },
   "tahoe-origin-atlas": {
     key: "tahoe-origin-atlas",
@@ -83,11 +101,19 @@ export const visualAssets: Record<string, VisualAsset> = {
     mobileFocalPosition: "50% 40%",
     status: "placeholder",
     theme: "tahoe",
+    containsEmbeddedText: false,
   },
 };
 
+/** @deprecated Use first-landing-coastal-systems */
+export const LEGACY_ASSET_ALIASES: Record<string, string> = {
+  "first-landing-coastal": "first-landing-coastal-systems",
+  "locus-backdrop": "locus-system-spine",
+};
+
 export function getVisualAsset(key: string): VisualAsset | undefined {
-  return visualAssets[key];
+  const resolvedKey = LEGACY_ASSET_ALIASES[key] ?? key;
+  return visualAssets[resolvedKey];
 }
 
 export function resolveVisualSrc(

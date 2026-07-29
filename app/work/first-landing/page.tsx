@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ProjectPageLayout, { ContentSection } from "@/components/ProjectPageLayout";
 import ProjectMasthead from "@/components/ProjectMasthead";
+import ProjectFigureSection from "@/components/layout/ProjectFigureSection";
+import VisualPlate from "@/components/visual/VisualPlate";
 import CoastalJourney from "@/components/diagrams/CoastalJourney";
 import FieldNoteSpecimen from "@/components/FieldNoteSpecimen";
 import RelatedWork from "@/components/RelatedWork";
@@ -32,25 +34,38 @@ export default function FirstLandingPage() {
           status="pilot-design"
           summary="A proposed six-week learning journey that uses First Landing and the surrounding coastal environment as a living systems classroom."
           statusNotice="This project is in pilot design. Enrollment is not currently open, and the public sketch may change as the curriculum, partnerships, safety plan, and learner-support model are refined."
-          visualAssetKey="first-landing-coastal"
-          visualTheme="first-landing"
         />
+      }
+      lead={
+        <div>
+          <p className="font-mono text-metadata text-water">Central inquiry</p>
+          <p className="mt-2 font-medium text-ink text-body-lg">
+            How does water shape land, life, history, and the future of Virginia Beach?
+          </p>
+        </div>
+      }
+      figure={
+        <ProjectFigureSection>
+          <VisualPlate
+            assetKey="first-landing-coastal-systems"
+            theme="first-landing"
+            variant="infographic"
+            title="Water Shapes the Journey"
+          />
+        </ProjectFigureSection>
       }
       related={<RelatedWork releases={relatedReleases} />}
     >
-      <ContentSection title="Central inquiry">
-        <p className="font-medium text-ink text-body-lg">
-          How does water shape land, life, history, and the future of Virginia Beach?
-        </p>
-      </ContentSection>
-
       <ContentSection title="Educational premise">
         <p>
-          First Landing and the surrounding coastal environment can function as a living systems classroom. A six-week journey would move learners from observation to inquiry to creation, using the place itself as the primary text.
+          First Landing and the surrounding coastal environment can function as a living systems classroom. A six-week journey moves learners from observation to inquiry to creation, using the place itself as the primary text.
         </p>
       </ContentSection>
 
-      <ContentSection title="Public learner arc">
+      <ContentSection title="Six-week learner arc">
+        <p className="mb-6 text-sm text-secondary italic">
+          Accessible summary of the journey shown in the field plate above. Provisional public sketch — not a finalized curriculum.
+        </p>
         <CoastalJourney />
       </ContentSection>
 

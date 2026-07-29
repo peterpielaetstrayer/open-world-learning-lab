@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ProjectPageLayout, { ContentSection } from "@/components/ProjectPageLayout";
 import ProjectMasthead from "@/components/ProjectMasthead";
-import LocusSystemSpine from "@/components/diagrams/LocusSystemSpine";
+import ProjectFigureSection from "@/components/layout/ProjectFigureSection";
+import VisualPlate from "@/components/visual/VisualPlate";
+import LocusCoreLayers from "@/components/diagrams/LocusCoreLayers";
 import FieldNoteSpecimen from "@/components/FieldNoteSpecimen";
 import RelatedWork from "@/components/RelatedWork";
 import { createPageMetadata } from "@/lib/metadata";
@@ -44,9 +46,17 @@ export default function LocusPage() {
           status="product-prototype"
           summary="LOCUS is an emerging learning system designed to help learners turn curiosity, places, questions, practice, mentorship, reflection, and creation into cumulative growth."
           statusNotice="LOCUS is in product and learning-experience design. The public page describes the educational system from the learner's perspective and does not represent a complete production platform."
-          visualAssetKey="locus-backdrop"
-          visualTheme="locus"
         />
+      }
+      figure={
+        <ProjectFigureSection>
+          <VisualPlate
+            assetKey="locus-system-spine"
+            theme="locus"
+            variant="infographic"
+            title="From Experience to Cumulative Growth"
+          />
+        </ProjectFigureSection>
       }
       related={<RelatedWork projects={relatedProjects} />}
     >
@@ -59,24 +69,24 @@ export default function LocusPage() {
         </p>
       </ContentSection>
 
-      <ContentSection title="System spine">
-        <LocusSystemSpine />
+      <ContentSection title="What LOCUS is not">
+        <ul className="space-y-2 border-l-2 border-sediment/30 pl-5">
+          <li>Not an AI tutor or chatbot with educational branding</li>
+          <li>Not a replacement for teachers</li>
+          <li>Not a screen-first learning platform</li>
+          <li>Not a points-and-badges layer</li>
+          <li>Not a system designed to automate every human decision</li>
+        </ul>
+      </ContentSection>
+
+      <ContentSection title="Core layers">
+        <p className="mb-6 text-sm text-secondary">
+          A responsive summary of the system plate above. Labels remain conceptual — not live system data.
+        </p>
+        <LocusCoreLayers />
       </ContentSection>
 
       <FieldNoteSpecimen />
-
-      <ContentSection title="What LOCUS is not">
-        <aside className="rounded-lg border border-border bg-soft-paper/40 p-5 not-prose">
-          <p className="font-mono text-metadata text-quiet mb-3">Contrast panel</p>
-          <ul className="space-y-2 text-sm text-secondary">
-            <li>Not an AI tutor or chatbot with educational branding</li>
-            <li>Not a replacement for teachers</li>
-            <li>Not a screen-first learning platform</li>
-            <li>Not a points-and-badges layer</li>
-            <li>Not a system designed to automate every human decision</li>
-          </ul>
-        </aside>
-      </ContentSection>
 
       <ContentSection title="The current prototype">
         <p>

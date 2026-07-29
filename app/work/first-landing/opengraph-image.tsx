@@ -3,7 +3,7 @@ import { siteConfig } from "@/content/shared";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Open World Learning Lab — learning should begin with the world.";
+export const alt = "First Landing Prototype — Water Shapes the Journey";
 
 export default async function OpenGraphImage() {
   return new ImageResponse(
@@ -21,7 +21,7 @@ export default async function OpenGraphImage() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={`${siteConfig.url}/visuals/owll/homepage-learning-landscape.png`}
+          src={`${siteConfig.url}/visuals/first-landing/coastal-systems-field-plate.png`}
           alt=""
           width={1200}
           height={630}
@@ -31,33 +31,31 @@ export default async function OpenGraphImage() {
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            objectPosition: "62% 45%",
-            opacity: 0.92,
+            objectPosition: "52% 58%",
+            opacity: 0.35,
           }}
         />
         <div
           style={{
-            position: "absolute",
-            inset: 0,
-            background: "linear-gradient(105deg, rgba(242,239,230,0.94) 0%, rgba(242,239,230,0.78) 42%, rgba(242,239,230,0.2) 100%)",
+            position: "relative",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            width: "100%",
             padding: "56px 64px",
+            background: "linear-gradient(180deg, rgba(242,239,230,0.96) 0%, rgba(242,239,230,0.88) 100%)",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 720 }}>
-            <div style={{ fontSize: 16, letterSpacing: "0.12em", textTransform: "uppercase", color: "#2f6672" }}>
-              Independent education design lab
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ fontSize: 16, letterSpacing: "0.1em", textTransform: "uppercase", color: "#2f6672" }}>
+              Learning Journey · Pilot Design
             </div>
-            <div style={{ fontSize: 54, lineHeight: 1.08 }}>
-              Learning should begin with the world.
+            <div style={{ fontSize: 52, lineHeight: 1.08, maxWidth: 900 }}>First Landing Prototype</div>
+            <div style={{ fontSize: 24, color: "#3d4a45", maxWidth: 820 }}>
+              Water shapes the journey across Virginia Beach coastal systems.
             </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-            <div style={{ fontSize: 28, color: "#2f6672" }}>Open World Learning Lab</div>
-            <div style={{ fontSize: 16, color: "#6b756f" }}>openworldlearninglab.com</div>
-          </div>
+          <div style={{ fontSize: 22, color: "#2f6672" }}>{siteConfig.name}</div>
         </div>
       </div>
     ),

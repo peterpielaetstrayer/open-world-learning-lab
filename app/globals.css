@@ -178,6 +178,29 @@ body {
   outline-offset: 2px;
 }
 
+dialog::backdrop {
+  background: rgba(16, 38, 32, 0.88);
+}
+
+dialog[open] {
+  animation: dialog-in 0.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog[open] {
+    animation: none;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* ── Textures (decorative, hidden from AT) ── */
 
 .texture-paper {
@@ -393,5 +416,16 @@ body {
 
   a[href]::after {
     content: none;
+  }
+
+  dialog,
+  dialog::backdrop,
+  [data-print-hide="true"] {
+    display: none !important;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
   }
 }

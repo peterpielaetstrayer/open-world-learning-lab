@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ProjectPageLayout, { ContentSection } from "@/components/ProjectPageLayout";
 import ProjectMasthead from "@/components/ProjectMasthead";
+import ProjectFigureSection from "@/components/layout/ProjectFigureSection";
+import VisualPlate from "@/components/visual/VisualPlate";
 import SaturdaysJourney, { PartnerEcosystem } from "@/components/diagrams/SaturdaysJourney";
 import RelatedWork from "@/components/RelatedWork";
 import { createPageMetadata } from "@/lib/metadata";
@@ -56,9 +58,17 @@ export default function OpenWorldSaturdaysPage() {
           status="early-concept"
           summary="A future mentor-supported Saturday learning experience designed to help learners rebuild motivation, self-awareness, confidence, and a relationship with learning through meaningful experiences in the world."
           statusNotice="Open World Saturdays is an early concept. No cohort, school partnership, or public enrollment is currently being announced."
-          visualAssetKey="saturdays-journey"
-          visualTheme="saturdays"
         />
+      }
+      figure={
+        <ProjectFigureSection>
+          <VisualPlate
+            assetKey="saturdays-journey"
+            theme="saturdays"
+            variant="hero"
+            showCaption={false}
+          />
+        </ProjectFigureSection>
       }
       related={<RelatedWork releases={relatedReleases} />}
     >

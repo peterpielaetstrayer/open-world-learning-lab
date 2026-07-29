@@ -5,7 +5,7 @@ import ProjectMasthead from "@/components/ProjectMasthead";
 import MissionDossier from "@/components/MissionDossier";
 import PullQuote from "@/components/PullQuote";
 import RelatedWork from "@/components/RelatedWork";
-import FieldAtlasFrame from "@/components/visual/FieldAtlasFrame";
+import ProjectFigureSection from "@/components/layout/ProjectFigureSection";
 import VisualPlate from "@/components/visual/VisualPlate";
 import { createPageMetadata } from "@/lib/metadata";
 import { tahoeZones, sampleMissions, projects } from "@/content/projects";
@@ -36,9 +36,17 @@ export default function OpenWorldTahoePage() {
           status="origin-study"
           summary="The original thought experiment behind Open World Learning Lab: what might education become if Tahoe itself functioned as an interconnected learning environment?"
           statusNotice="Open World Tahoe is an origin study and design concept. It is not currently operating as a school, academy, or enrolled program."
-          visualAssetKey="tahoe-origin-atlas"
-          visualTheme="tahoe"
         />
+      }
+      figure={
+        <ProjectFigureSection>
+          <VisualPlate
+            assetKey="tahoe-origin-atlas"
+            theme="tahoe"
+            variant="hero"
+            caption="Four zones — lake, mountain, trail, and campfire."
+          />
+        </ProjectFigureSection>
       }
       related={
         <RelatedWork projects={otherProjects} releases={relatedReleases} />
@@ -70,30 +78,16 @@ export default function OpenWorldTahoePage() {
         <p>
           The Tahoe origin study imagined four interconnected zones where real environments become rigorous learning contexts.
         </p>
-        <div className="not-prose mt-6 -mx-0">
-          <FieldAtlasFrame
-            figureNumber="1"
-            projectId="OWL-001"
-            caption="Four zones — conceptual origin atlas, not a navigable map."
-            coordinates="39.0968° N · 120.0324° W"
-          >
-            <VisualPlate
-              assetKey="tahoe-origin-atlas"
-              theme="tahoe"
-              aspect="landscape"
-            />
-          </FieldAtlasFrame>
-          <ul className="mt-8 space-y-4">
-            {tahoeZones.map((zone) => (
-              <li key={zone.name} className="border-l-2 border-water/30 pl-4">
-                <h3 className="font-serif text-lg text-ink">{zone.name}</h3>
-                <p className="mt-1 text-sm text-secondary">
-                  {zone.concepts.join(" · ")}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul className="mt-6 space-y-4">
+          {tahoeZones.map((zone) => (
+            <li key={zone.name} className="border-l-2 border-water/30 pl-4">
+              <h3 className="font-serif text-lg text-ink">{zone.name}</h3>
+              <p className="mt-1 text-sm text-secondary">
+                {zone.concepts.join(" · ")}
+              </p>
+            </li>
+          ))}
+        </ul>
       </ContentSection>
 
       <ContentSection title="The original learning sequence">
@@ -127,7 +121,7 @@ export default function OpenWorldTahoePage() {
         </ul>
       </ContentSection>
 
-      <section className="rounded-lg border border-deep-field/20 bg-deep-field/5 p-6 md:p-8">
+      <section className="border-l-2 border-deep-field/25 pl-5">
         <h2 className="font-serif text-section-title text-ink mb-4">What Changed After Tahoe</h2>
         <div className="space-y-4 text-body text-secondary leading-relaxed">
           <p>

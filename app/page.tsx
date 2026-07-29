@@ -78,10 +78,22 @@ export default function Home() {
             eyebrow="Now being developed"
             title="The work is moving from philosophy into prototypes."
           />
-          <div className="space-y-12 max-w-3xl">
-            {projects.map((project, i) => (
-              <ProjectIndexEntry key={project.slug} project={project} index={i} />
-            ))}
+          <div className="space-y-14">
+            <div className="space-y-16">
+              {projects
+                .filter((project) => project.featured && ["first-landing", "locus"].includes(project.slug))
+                .map((project) => (
+                  <ProjectIndexEntry key={project.slug} project={project} layout="featured" />
+                ))}
+            </div>
+
+            <div className="grid gap-10 sm:grid-cols-2 max-w-4xl pt-4 border-t border-border">
+              {projects
+                .filter((project) => ["open-world-saturdays", "open-world-tahoe"].includes(project.slug))
+                .map((project) => (
+                  <ProjectIndexEntry key={project.slug} project={project} layout="compact" />
+                ))}
+            </div>
           </div>
           <div className="mt-12">
             <Link
@@ -147,7 +159,7 @@ export default function Home() {
             <VisualPlate
               assetKey="tahoe-origin-atlas"
               theme="tahoe"
-              aspect="wide"
+              variant="hero"
               caption="Four zones — lake, mountain, trail, and campfire."
             />
           </div>

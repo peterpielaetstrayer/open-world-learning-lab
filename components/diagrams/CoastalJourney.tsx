@@ -47,10 +47,6 @@ const coastalArc: CoastalWeek[] = [
 export default function CoastalJourney() {
   return (
     <div>
-      <p className="mb-6 text-sm text-secondary italic max-w-reading">
-        Provisional public sketch — not a finalized curriculum.
-      </p>
-
       <ol className="sr-only">
         {coastalArc.map((w) => (
           <li key={w.week}>
@@ -68,7 +64,7 @@ export default function CoastalJourney() {
                 W{week.week}
               </span>
               <div
-                className="rounded-r-lg border border-l-0 border-border py-4 pr-4 pl-5"
+                className="rounded-r-lg border border-l-0 border-border/60 py-4 pr-4 pl-5"
                 style={{
                   background: `linear-gradient(90deg, rgba(47,102,114,${0.03 + i * 0.015}) 0%, transparent 100%)`,
                 }}

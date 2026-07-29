@@ -2,7 +2,7 @@ import Link from "next/link";
 import VisualPlate from "@/components/visual/VisualPlate";
 import WideContainer from "@/components/layout/WideContainer";
 
-const heroLabels = ["Place", "Field Notes", "Inquiry", "Mentorship", "Creation", "Return"];
+const heroLabels = ["Place", "Field Notes", "Inquiry", "Creation", "Return"];
 
 export default function Hero() {
   return (
@@ -10,7 +10,7 @@ export default function Hero() {
       <div className="pointer-events-none absolute inset-0 texture-contour" aria-hidden="true" />
 
       <WideContainer className="relative py-14 md:py-20 lg:py-24">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.44fr)_minmax(0,0.56fr)] lg:gap-12 xl:gap-16 items-center">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,0.58fr)] lg:gap-12 xl:gap-16 items-center">
           <div className="max-w-reading">
             <p className="font-mono text-metadata text-water">
               Independent education design lab
@@ -47,10 +47,10 @@ export default function Hero() {
           <VisualPlate
             assetKey="homepage-learning-landscape"
             theme="owll"
-            aspect="hero"
+            variant="hero"
             priority
             overlayLabels={heroLabels}
-            caption="The living field — where attention, questions, and practice connect."
+            showCaption={false}
           />
         </div>
       </WideContainer>
