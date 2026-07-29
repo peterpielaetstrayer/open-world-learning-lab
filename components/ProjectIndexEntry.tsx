@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import type { Project } from "@/content/projects";
 import { getProjectTheme } from "@/content/project-themes";
 import { getVisualAsset } from "@/content/visual-assets";
@@ -10,6 +11,8 @@ interface ProjectIndexEntryProps {
   project: Project;
   index?: number;
   layout?: "editorial" | "featured" | "compact";
+  ctaLabel?: string;
+  supplementary?: ReactNode;
 }
 
 const previewAssetKeys: Record<string, string> = {
@@ -21,6 +24,8 @@ export default function ProjectIndexEntry({
   project,
   index = 0,
   layout = "editorial",
+  ctaLabel = "View project",
+  supplementary,
 }: ProjectIndexEntryProps) {
   const theme = getProjectTheme(project.slug);
   const previewKey = previewAssetKeys[project.slug];
@@ -69,11 +74,12 @@ export default function ProjectIndexEntry({
           <p className="mt-3 max-w-reading text-body text-secondary leading-relaxed">
             {project.summary}
           </p>
+          {supplementary}
           <Link
             href={project.href}
             className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-water hover:text-moss transition-colors"
           >
-            View project
+            {ctaLabel}
             <span aria-hidden="true">→</span>
           </Link>
         </div>

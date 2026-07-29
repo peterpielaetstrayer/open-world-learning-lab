@@ -17,8 +17,8 @@ export interface StatusConfig {
 
 export const projectStatuses: Record<ProjectStatus, StatusConfig> = {
   "origin-study": {
-    label: "Origin Study",
-    shortExplanation: "Foundational design concept that informed later work.",
+    label: "Archived Origin Study",
+    shortExplanation: "Foundational design concept that informed later work. Not an active program.",
     order: 1,
     badgeClass: "bg-sediment/15 text-sediment border-sediment/30",
   },

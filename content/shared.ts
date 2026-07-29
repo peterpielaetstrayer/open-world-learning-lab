@@ -1,10 +1,16 @@
+export const founderBio = {
+  name: "Peter Pielaet-Strayer",
+  short:
+    "Open World Learning Lab was founded by Peter Pielaet-Strayer, an educator and learning designer whose experience spans student mentorship, teaching, program design, hospitality, and place-based learning. He is currently completing an M.S. in Learning Design and Technology while developing OWLL's first learning journeys and the early LOCUS prototype.",
+};
+
 export const siteConfig = {
   name: "Open World Learning Lab",
   shortName: "OWLL",
   url: "https://openworldlearninglab.com",
   email: "hello@openworldlearninglab.com",
   description:
-    "Open World Learning Lab is an independent education design lab developing place-based learning journeys, mentor systems, and intelligent tools for more connected, cumulative learning.",
+    "An independent early-stage education design lab developing real-world learning journeys and the emerging infrastructure needed to make those journeys structured, supported, and cumulative.",
   disclaimer:
     "Open World Learning Lab is an independent early-stage research and design project. It is not currently operating as a school or accredited educational program.",
   copyright: "© 2026 Open World Learning Lab. All rights reserved.",
@@ -49,19 +55,19 @@ export const guardrails = [
 
 export const workLabCards = [
   {
-    title: "Research Lab",
+    title: "Research",
     description:
-      "Investigating how learning can become more embodied, cumulative, self-aware, rigorous, and connected to real life.",
+      "Investigates the principles, questions, and conditions behind more connected learning.",
   },
   {
-    title: "Prototype Studio",
+    title: "Prototype",
     description:
-      "Designing and testing learning journeys, mentor systems, field tools, learner-support models, and public artifacts.",
+      "Designs and tests learning journeys, mentor systems, field tools, and support models.",
   },
   {
-    title: "Infrastructure Lab",
+    title: "Infrastructure",
     description:
-      "Developing LOCUS—the emerging learning and creator infrastructure behind open-world education.",
+      "Develops LOCUS and related creator systems that may eventually make these approaches repeatable and cumulative.",
   },
 ];
 

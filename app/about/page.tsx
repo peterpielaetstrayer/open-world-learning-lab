@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SectionHeader from "@/components/SectionHeader";
 import { createPageMetadata } from "@/lib/metadata";
-import { siteConfig } from "@/content/shared";
+import { founderBio, siteConfig } from "@/content/shared";
 
 export const metadata: Metadata = createPageMetadata({
   title: "About — Open World Learning Lab",
@@ -38,6 +38,18 @@ export default function AboutPage() {
 
           <section className="mt-16">
             <h2 className="font-serif text-2xl text-foreground mb-6">
+              Founded through practice, not abstraction.
+            </h2>
+            <div className="space-y-5 text-muted leading-relaxed">
+              <p>{founderBio.short}</p>
+              <p>
+                His background spans student mentorship and teaching, program and experience design, hospitality, and place-based learning. He is currently completing an M.S. in Learning Design and Technology while developing First Landing, LOCUS, and the broader OWLL research and design program.
+              </p>
+            </div>
+          </section>
+
+          <section className="mt-16">
+            <h2 className="font-serif text-2xl text-foreground mb-6">
               Creator Before the Platform
             </h2>
             <div className="space-y-5 text-muted leading-relaxed">
@@ -56,13 +68,13 @@ export default function AboutPage() {
               href="/work"
               className="btn-tactile inline-flex items-center justify-center rounded-full bg-pine px-6 py-3 text-sm font-medium text-white hover:bg-pine-light"
             >
-              Explore current work
+              Explore the Work
             </Link>
             <Link
               href="/contact"
               className="btn-tactile inline-flex items-center justify-center rounded-full border border-sand-dark/80 px-6 py-3 text-sm font-medium text-foreground hover:border-tahoe/40"
             >
-              Contact the lab
+              Start a Conversation
             </Link>
           </div>
 

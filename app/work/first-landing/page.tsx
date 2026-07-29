@@ -9,6 +9,7 @@ import FieldNoteSpecimen from "@/components/FieldNoteSpecimen";
 import RelatedWork from "@/components/RelatedWork";
 import { createPageMetadata } from "@/lib/metadata";
 import { getReleasesForProject } from "@/content/releases";
+import { siteConfig } from "@/content/shared";
 
 export const metadata: Metadata = createPageMetadata({
   title: "First Landing Prototype — Pilot Sketch",
@@ -32,8 +33,8 @@ export default function FirstLandingPage() {
           ]}
           projectType="Learning Journey"
           status="pilot-design"
-          summary="A proposed six-week learning journey that uses First Landing and the surrounding coastal environment as a living systems classroom."
-          statusNotice="This project is in pilot design. Enrollment is not currently open, and the public sketch may change as the curriculum, partnerships, safety plan, and learner-support model are refined."
+          summary="A proposed six-week place-based learning journey exploring how water shapes land, life, history, and the future of Virginia Beach."
+          statusNotice="This is a proposed learning journey currently in design. Enrollment, partners, cohort dates, and operating arrangements have not been finalized."
         />
       }
       lead={
@@ -51,6 +52,7 @@ export default function FirstLandingPage() {
             theme="first-landing"
             variant="infographic"
             title="Water Shapes the Journey"
+            expandLabel="Expand field plate"
           />
         </ProjectFigureSection>
       }
@@ -115,6 +117,20 @@ export default function FirstLandingPage() {
         <p>
           Facilitator guides, detailed session plans, partnership agreements, safeguarding procedures, Field Notes tooling integration, and pilot evaluation methods.
         </p>
+      </ContentSection>
+
+      <ContentSection title="What kind of conversation is appropriate now">
+        <p>
+          OWLL is interested in thoughtful conversations about potential pilot environments, curriculum design, mentorship models, and community partnerships — not enrollment applications.
+        </p>
+        <div className="mt-6">
+          <a
+            href={`mailto:${siteConfig.email}?subject=First%20Landing%20Conversation`}
+            className="btn-tactile inline-flex items-center justify-center rounded-full bg-moss px-7 py-3.5 text-sm font-medium text-on-dark hover:bg-moss/90"
+          >
+            Start a First Landing Conversation
+          </a>
+        </div>
       </ContentSection>
 
       <div className="pt-4">

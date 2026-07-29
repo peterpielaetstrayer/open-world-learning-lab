@@ -8,7 +8,6 @@ import { navLinks, siteConfig } from "@/content/shared";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const isHome = pathname === "/";
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-page/85 backdrop-blur-xl" data-print-hide="true">
@@ -42,10 +41,10 @@ export default function Header() {
             );
           })}
           <Link
-            href={isHome ? "/work" : "/contact"}
+            href="/contact"
             className="btn-tactile rounded-full bg-moss px-5 py-2 text-sm font-medium text-on-dark hover:bg-moss/90"
           >
-            {isHome ? "Explore Current Work" : "Contact the Lab"}
+            Start a Conversation
           </Link>
         </nav>
 
@@ -87,11 +86,11 @@ export default function Header() {
             ))}
             <li>
               <Link
-                href="/work"
+                href="/contact"
                 className="inline-block rounded-full bg-moss px-5 py-2.5 text-sm font-medium text-on-dark"
                 onClick={() => setMenuOpen(false)}
               >
-                Explore Current Work
+                Start a Conversation
               </Link>
             </li>
           </ul>

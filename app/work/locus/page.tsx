@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ProjectPageLayout, { ContentSection } from "@/components/ProjectPageLayout";
 import ProjectMasthead from "@/components/ProjectMasthead";
-import ProjectFigureSection from "@/components/layout/ProjectFigureSection";
 import VisualPlate from "@/components/visual/VisualPlate";
 import LocusCoreLayers from "@/components/diagrams/LocusCoreLayers";
 import FieldNoteSpecimen from "@/components/FieldNoteSpecimen";
 import RelatedWork from "@/components/RelatedWork";
 import { createPageMetadata } from "@/lib/metadata";
 import { projects } from "@/content/projects";
+import { locusFullLearnerJourney } from "@/content/locus-journey";
+import { siteConfig } from "@/content/shared";
 
 export const metadata: Metadata = createPageMetadata({
   title: "LOCUS — Learning System Prototype",
@@ -16,18 +17,6 @@ export const metadata: Metadata = createPageMetadata({
     "LOCUS is an emerging learning system designed to help learners turn curiosity, places, questions, practice, mentorship, reflection, and creation into cumulative growth.",
   path: "/work/locus",
 });
-
-const prototypeLoop = [
-  "A learner encountering a place or prompt",
-  "Capturing a Field Note",
-  "Developing a question",
-  "Receiving structured guidance",
-  "Investigating and practicing",
-  "Creating an artifact",
-  "Explaining the work",
-  "Receiving mentor feedback",
-  "Adding the experience to a cumulative record",
-];
 
 export default function LocusPage() {
   const relatedProjects = projects.filter((p) => p.slug !== "locus").slice(0, 2);
@@ -44,30 +33,47 @@ export default function LocusPage() {
           ]}
           projectType="Learning Infrastructure"
           status="product-prototype"
-          summary="LOCUS is an emerging learning system designed to help learners turn curiosity, places, questions, practice, mentorship, reflection, and creation into cumulative growth."
-          statusNotice="LOCUS is in product and learning-experience design. The public page describes the educational system from the learner's perspective and does not represent a complete production platform."
+          summary="LOCUS helps connect real-world experience, Field Notes, guided inquiry, practice, mentorship, creation, reflection, and cumulative growth."
+          statusNotice="LOCUS is in product and learning-experience design. Early functions may be manually facilitated, rule-based, or simulated. The public page describes the educational system from the learner's perspective and does not represent a complete production platform."
         />
-      }
-      figure={
-        <ProjectFigureSection>
-          <VisualPlate
-            assetKey="locus-system-spine"
-            theme="locus"
-            variant="infographic"
-            title="From Experience to Cumulative Growth"
-          />
-        </ProjectFigureSection>
       }
       related={<RelatedWork projects={relatedProjects} />}
     >
       <ContentSection title="What LOCUS is">
         <p>
-          LOCUS is intended to help learners, mentors, families, and learning designers connect curiosity, places, Field Notes, guided inquiry, practice, feedback, reflection, and artifacts into cumulative growth.
+          LOCUS helps connect real-world experience, Field Notes, guided inquiry, practice, mentorship, creation, reflection, and cumulative growth.
         </p>
         <p>
           It is not simply an AI tutor. It is the emerging learning and creator infrastructure behind open-world education.
         </p>
       </ContentSection>
+
+      <ContentSection title="One complete learner journey">
+        <ol className="space-y-4 list-none">
+          {locusFullLearnerJourney.map((step) => (
+            <li key={step.step} className="flex items-start gap-3 text-sm">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-water/10 text-xs font-mono text-water border border-water/20">
+                {step.step}
+              </span>
+              {step.text}
+            </li>
+          ))}
+        </ol>
+      </ContentSection>
+
+      <section aria-labelledby="locus-system-view">
+        <h2 id="locus-system-view" className="font-serif text-section-title text-ink mb-5">
+          LOCUS in One View
+        </h2>
+        <VisualPlate
+          assetKey="locus-system-spine"
+          theme="locus"
+          variant="infographic"
+          title="LOCUS in One View"
+          expandLabel="Expand system view"
+          caption="Conceptual system plate — supporting visual after the learner journey above."
+        />
+      </section>
 
       <ContentSection title="What LOCUS is not">
         <ul className="space-y-2 border-l-2 border-sediment/30 pl-5">
@@ -81,28 +87,12 @@ export default function LocusPage() {
 
       <ContentSection title="Core layers">
         <p className="mb-6 text-sm text-secondary">
-          A responsive summary of the system plate above. Labels remain conceptual — not live system data.
+          After one learner journey, the wider system can be understood as connected layers.
         </p>
         <LocusCoreLayers />
       </ContentSection>
 
       <FieldNoteSpecimen />
-
-      <ContentSection title="The current prototype">
-        <p>
-          The first prototype should demonstrate one complete learning loop rather than attempting to build the entire future platform.
-        </p>
-        <ol className="space-y-2 mt-4">
-          {prototypeLoop.map((step, i) => (
-            <li key={step} className="flex items-start gap-3 text-sm list-none">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-water/10 text-xs font-mono text-water border border-water/20">
-                {i + 1}
-              </span>
-              {step}
-            </li>
-          ))}
-        </ol>
-      </ContentSection>
 
       <ContentSection title="Intelligence—real and simulated">
         <p>
@@ -123,6 +113,20 @@ export default function LocusPage() {
         <p>
           Full platform development, automated Field Notes tooling, creator workflows, mentor dashboards, Learning Atlas visualization, and validated learning-loop prototypes in real educational contexts.
         </p>
+      </ContentSection>
+
+      <ContentSection title="Start a product conversation">
+        <p>
+          OWLL is interested in conversations about product design, learning infrastructure, and technology collaboration — not procurement or enrollment.
+        </p>
+        <div className="mt-6">
+          <a
+            href={`mailto:${siteConfig.email}?subject=LOCUS%20Conversation`}
+            className="btn-tactile inline-flex items-center justify-center rounded-full bg-moss px-7 py-3.5 text-sm font-medium text-on-dark hover:bg-moss/90"
+          >
+            Discuss LOCUS
+          </a>
+        </div>
       </ContentSection>
 
       <div className="pt-4">

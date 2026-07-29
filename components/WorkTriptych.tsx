@@ -16,13 +16,13 @@ export default function WorkTriptych() {
             <h3 className="font-serif text-section-title text-ink">{card.title}</h3>
             <p className="mt-3 text-body text-secondary leading-relaxed">{card.description}</p>
             {i === 0 && (
-              <p className="mt-3 font-mono text-metadata text-quiet">Creates questions & principles</p>
+              <p className="mt-3 font-mono text-metadata text-quiet">Studies the problem</p>
             )}
             {i === 1 && (
               <p className="mt-3 font-mono text-metadata text-quiet">Tests ideas in the world</p>
             )}
             {i === 2 && (
-              <p className="mt-3 font-mono text-metadata text-quiet">Supports repeatable systems</p>
+              <p className="mt-3 font-mono text-metadata text-quiet">Builds supporting infrastructure</p>
             )}
           </li>
         ))}

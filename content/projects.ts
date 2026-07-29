@@ -27,7 +27,7 @@ export const projects: Project[] = [
     projectType: "Learning Infrastructure",
     status: "product-prototype",
     summary:
-      "An emerging system connecting Field Notes, guided inquiry, mentorship, practice, reflection, and meaningful creation into cumulative learning.",
+      "An emerging learning system connecting real-world experience, Field Notes, guided inquiry, mentorship, practice, creation, reflection, and cumulative growth.",
     href: "/work/locus",
     featured: true,
   },

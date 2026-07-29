@@ -1,28 +1,28 @@
 const coreLayers = [
   {
     number: 1,
-    title: "Experience",
-    description: "The learner and the world — real places, practices, and encounters that begin the loop.",
+    title: "Field Notes",
+    description: "Observations, questions, media, and evidence gathered in context from real-world experience.",
   },
   {
     number: 2,
-    title: "Capture",
-    description: "Field Notes — observations, questions, media, and evidence gathered in context.",
+    title: "Journey Layer",
+    description: "Structured pathways that turn curiosity into guided inquiry, practice, and creation.",
   },
   {
     number: 3,
-    title: "Structure",
-    description: "Journey design and guided inquiry — enough form to turn curiosity into investigation.",
+    title: "Mentor Layer",
+    description: "Human feedback, facilitation, and judgment that remain central to the learning process.",
   },
   {
     number: 4,
-    title: "Human judgment",
-    description: "Mentor and creator layers — feedback, facilitation, and design work that stay human-led.",
+    title: "Learning Atlas",
+    description: "A cumulative record of artifacts, reflection, and growth that sharpens future perception.",
   },
   {
     number: 5,
-    title: "Cumulative record",
-    description: "Learning Atlas and return — artifacts, reflection, and growth that sharpen the next encounter.",
+    title: "Creator Layer",
+    description: "Tools and workflows that help learning designers build, test, and revise journeys.",
   },
 ];
 

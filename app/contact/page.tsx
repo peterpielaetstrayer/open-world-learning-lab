@@ -13,13 +13,12 @@ export const metadata: Metadata = createPageMetadata({
 });
 
 const inquiryCategories = [
-  "Education and curriculum",
+  "Learning and curriculum",
+  "Potential pilot environments",
   "Mentorship and learner support",
-  "Pilot partnerships",
   "Product and technology",
-  "Research",
-  "Design collaboration",
-  "General conversation",
+  "Research and design",
+  "General collaboration",
 ];
 
 export default function ContactPage() {
@@ -30,7 +29,7 @@ export default function ContactPage() {
         <div className="mx-auto max-w-3xl px-6">
           <SectionHeader
             title="Start a thoughtful conversation."
-            intro="OWLL is interested in hearing from educators, mentors, researchers, families, designers, technologists, community organizations, and potential pilot partners."
+            intro="OWLL is interested in conversations with educators, mentors, learning designers, researchers, community organizations, technologists, and potential pilot collaborators."
           />
 
           <div className="space-y-5 text-muted leading-relaxed">
@@ -56,10 +55,10 @@ export default function ContactPage() {
 
           <div className="mt-10">
             <a
-              href={`mailto:${siteConfig.email}?subject=OWLL%20Collaboration%20Inquiry`}
+              href={`mailto:${siteConfig.email}?subject=OWLL%20Conversation`}
               className="btn-tactile inline-flex items-center justify-center rounded-full bg-pine px-8 py-3.5 text-sm font-medium text-white hover:bg-pine-light"
             >
-              Email the lab
+              Start a Conversation
             </a>
             <p className="mt-4 text-sm text-stone">
               {siteConfig.email}

@@ -35,7 +35,7 @@ export default function OpenWorldTahoePage() {
           projectType="Origin Study"
           status="origin-study"
           summary="The original thought experiment behind Open World Learning Lab: what might education become if Tahoe itself functioned as an interconnected learning environment?"
-          statusNotice="Open World Tahoe is an origin study and design concept. It is not currently operating as a school, academy, or enrolled program."
+          statusNotice="Open World Tahoe is an archived origin study and design concept. It is not currently operating as a school, academy, or enrolled program."
         />
       }
       figure={

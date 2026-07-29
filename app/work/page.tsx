@@ -4,12 +4,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SectionHeader from "@/components/SectionHeader";
 import ProjectIndexEntry from "@/components/ProjectIndexEntry";
-import DevelopmentSequence from "@/components/DevelopmentSequence";
-import ProjectStatusBadge from "@/components/ProjectStatusBadge";
 import WideContainer from "@/components/layout/WideContainer";
 import { createPageMetadata } from "@/lib/metadata";
 import { projects } from "@/content/projects";
-import { projectStatuses, type ProjectStatus } from "@/content/statuses";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Current Work — Open World Learning Lab",
@@ -18,18 +15,14 @@ export const metadata: Metadata = createPageMetadata({
   path: "/work",
 });
 
-const statusOrder = Object.entries(projectStatuses)
-  .sort(([, a], [, b]) => a.order - b.order)
-  .map(([key]) => key as ProjectStatus);
+const currentFocus = projects.filter((p) =>
+  ["first-landing", "locus"].includes(p.slug)
+);
+const exploratoryWork = projects.filter((p) =>
+  ["open-world-saturdays", "open-world-tahoe"].includes(p.slug)
+);
 
 export default function WorkPage() {
-  const grouped = statusOrder
-    .map((status) => ({
-      status,
-      items: projects.filter((p) => p.status === status),
-    }))
-    .filter((group) => group.items.length > 0);
-
   return (
     <>
       <Header />
@@ -38,28 +31,43 @@ export default function WorkPage() {
           <SectionHeader
             eyebrow="Current work"
             title="From questions to prototypes."
-            intro="OWLL develops learning journeys, mentor systems, field tools, and infrastructure through a sequence of research, design, testing, and release. Not every project moves through the same path—but each begins with a genuine question about how learning can become more connected to the real world."
+            intro="OWLL develops learning journeys, mentor systems, field tools, and infrastructure through research, design, testing, and release. Not every project is at the same stage of maturity."
           />
 
-          <div className="mb-16">
-            <DevelopmentSequence projects={projects} />
-          </div>
+          <section className="mb-16">
+            <h2 className="font-serif text-section-title text-ink mb-2">Current focus</h2>
+            <p className="mb-8 text-sm text-secondary max-w-reading">
+              The clearest public expressions of work underway now.
+            </p>
+            <div className="space-y-12 max-w-3xl">
+              {currentFocus.map((project, i) => (
+                <ProjectIndexEntry
+                  key={project.slug}
+                  project={project}
+                  index={i}
+                  ctaLabel={
+                    project.slug === "first-landing"
+                      ? "Explore First Landing"
+                      : "Explore LOCUS"
+                  }
+                />
+              ))}
+            </div>
+          </section>
 
-          {grouped.map((group) => (
-            <section key={group.status} className="mb-16">
-              <div className="mb-8">
-                <ProjectStatusBadge status={group.status} />
-                <p className="mt-2 text-sm text-secondary max-w-reading">
-                  {projectStatuses[group.status].shortExplanation}
-                </p>
-              </div>
-              <div className="space-y-12 max-w-3xl">
-                {group.items.map((project, i) => (
-                  <ProjectIndexEntry key={project.slug} project={project} index={i} />
-                ))}
-              </div>
-            </section>
-          ))}
+          <section className="mb-16 pt-8 border-t border-border">
+            <h2 className="font-serif text-section-title text-ink mb-2">
+              Exploratory and origin work
+            </h2>
+            <p className="mb-8 text-sm text-secondary max-w-reading">
+              Earlier concepts and origin studies that inform the lab but are not equally mature.
+            </p>
+            <div className="space-y-12 max-w-3xl">
+              {exploratoryWork.map((project, i) => (
+                <ProjectIndexEntry key={project.slug} project={project} index={i} />
+              ))}
+            </div>
+          </section>
 
           <div className="pt-8 border-t border-border">
             <Link

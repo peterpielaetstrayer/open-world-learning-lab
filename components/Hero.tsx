@@ -13,7 +13,7 @@ export default function Hero() {
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,0.58fr)] lg:gap-12 xl:gap-16 items-center">
           <div className="max-w-reading">
             <p className="font-mono text-metadata text-water">
-              Independent education design lab
+              Independent early-stage education research, design, and prototype development.
             </p>
 
             <h1 className="mt-5 font-serif text-display text-ink">
@@ -21,26 +21,22 @@ export default function Hero() {
             </h1>
 
             <p className="mt-6 text-body-lg text-secondary leading-relaxed">
-              Open World Learning Lab designs place-based learning journeys, mentor systems, and intelligent tools that help learners turn curiosity and lived experience into knowledge, skill, self-awareness, and meaningful work.
-            </p>
-
-            <p className="mt-5 border-l-2 border-water/30 pl-4 text-caption text-quiet">
-              Independent early-stage research and prototype development.
+              Open World Learning Lab develops place-based learning journeys, mentor-supported structures, intelligent tools, and cumulative learning systems that help learners turn curiosity and lived experience into knowledge, skill, and meaningful work.
             </p>
 
             <div className="mt-9 flex flex-col sm:flex-row gap-3">
               <Link
-                href="/work"
+                href="/contact"
                 className="btn-tactile inline-flex w-full sm:w-auto items-center justify-center rounded-full bg-moss px-7 py-3.5 text-sm font-medium text-on-dark hover:bg-moss/90"
               >
-                Explore Current Work
+                Start a Conversation
               </Link>
-              <a
-                href="#thesis"
+              <Link
+                href="/work"
                 className="btn-tactile inline-flex w-full sm:w-auto items-center justify-center rounded-full border border-border bg-page/80 px-7 py-3.5 text-sm font-medium text-ink hover:border-water/40"
               >
-                Read the Open-World Thesis
-              </a>
+                Explore the Work
+              </Link>
             </div>
           </div>
 
