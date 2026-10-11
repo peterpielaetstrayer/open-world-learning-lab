@@ -34,8 +34,8 @@ export default function LearningEnvironmentsPage() {
               environments and digital tools might work together to support human agency.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
-              <Link href="/lab/space-designer" className="inline-flex min-h-12 items-center rounded-full bg-field-paper px-6 font-medium text-ink hover:bg-soft-paper">
-                Explore Space Designer prototype <span aria-hidden="true" className="ml-2">↗</span>
+              <Link href="/lab/space-designer/studio" className="inline-flex min-h-12 items-center rounded-full bg-field-paper px-6 font-medium text-ink hover:bg-soft-paper">
+                Explore Space Designer Studio v0.2 <span aria-hidden="true" className="ml-2">↗</span>
               </Link>
               <span className="text-sm text-on-dark/60">Private concept explorer · no purchasing</span>
             </div>
@@ -66,7 +66,7 @@ export default function LearningEnvironmentsPage() {
                 <p className="font-mono text-xs uppercase tracking-widest text-quiet">Research status</p>
                 <h3 className="mt-3 font-serif text-2xl">Prototype, not a service launch.</h3>
                 <p className="mt-3 text-sm text-secondary">This page presents a potential direction. OWLL is not currently offering a turnkey learning-room installation service, taking orders, or making outcome guarantees.</p>
-                <Link href="/lab/space-designer" className="mt-6 inline-block text-sm font-medium text-water hover:text-moss">Open the concept explorer →</Link>
+                <Link href="/lab/space-designer/studio" className="mt-6 inline-block text-sm font-medium text-water hover:text-moss">Open Space Designer Studio →</Link>
               </div>
             </div>
           </div>
