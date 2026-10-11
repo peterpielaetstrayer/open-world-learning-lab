@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       type: "input_text",
       text: "Learner and room brief (user-provided; may be incomplete):\n" + JSON.stringify(body.brief),
     }];
-    if (body.photo) message.push({ type: "input_image", image_url: body.photo, detail: "low" });
+    if (validPhoto(body.photo)) message.push({ type: "input_image", image_url: body.photo, detail: "low" });
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: { Authorization: "Bearer " + process.env.OPENAI_API_KEY, "Content-Type": "application/json" },
