@@ -115,6 +115,11 @@ Test: `/releases/owll-at-a-glance`, project pages, field note specimen.
 - LOCUS: `/work/locus` — horizontal spine (desktop), vertical (mobile)
 - Reduced motion: no essential hover-only information
 
+
+## Experimental learning environments prototype
+
+The \`feature/space-designer-v0\` branch explores a separate, rule-based learning-space planning experience. It is not an AI service or commercial offering. Proposed routes: \`/learning-environments\` and \`/lab/space-designer\`. See \`features/space-designer/README.md\` for scope, privacy boundaries, and manual checks.
+
 ## Local development
 
 ```bash
