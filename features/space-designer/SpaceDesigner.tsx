@@ -266,6 +266,7 @@ export default function SpaceDesigner() {
             <div className="mb-6 flex items-center justify-between gap-3 lg:hidden" data-print-hide="true">
               <span className="font-mono text-xs text-water">STEP {stage + 1} / 05</span>
               <span className="text-xs text-secondary">{stages[stage].label}</span>
+              <button type="button" onClick={reset} className="text-xs text-water underline underline-offset-4">Reset</button>
             </div>
             <div className={styles.panel}>
               {stage === 0 && (
