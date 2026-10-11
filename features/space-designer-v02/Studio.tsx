@@ -379,7 +379,7 @@ export default function Studio() {
               <ul>{concept.tradeoffs.map((f,i) => <li key={i}><span>↗</span>{f}</li>)}</ul>
             </div>
             <div className={styles.insightCard}>
-              <span className={styles.eyebrow}>WHAT WE STILL DON'T KNOW</span>
+              <span className={styles.eyebrow}>WHAT WE STILL DO NOT KNOW</span>
               <ul>{plan.uncertain.slice(0,3).map((f,i) => <li key={i}><span>?</span>{f}</li>)}</ul>
             </div>
           </div>
@@ -414,7 +414,7 @@ export default function Studio() {
           <div>
             <span className={styles.eyebrow}>THE DELIVERABLE</span>
             <h2>A Learning Environment Blueprint</h2>
-            <p>Save the learner's intention, room constraints, two design alternatives, uncertainties, and next planning steps. This is a concept brief, not an installation quote.</p>
+            <p>Save the learner&apos;s intention, room constraints, two design alternatives, uncertainties, and next planning steps. This is a concept brief, not an installation quote.</p>
           </div>
           <div className={styles.blueprintActions}>
             <button onClick={downloadBlueprint}>↓ Download blueprint</button>

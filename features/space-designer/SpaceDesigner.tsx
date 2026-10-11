@@ -302,7 +302,7 @@ export default function SpaceDesigner() {
                 <section aria-labelledby="room-heading" className={styles.panelContent}>
                   <p className={styles.eyebrow}>02 / The existing environment</p>
                   <h2 id="room-heading" className={styles.heading}>Every space has possibilities.</h2>
-                  <p className={styles.intro}>A photograph can help start a conversation. Real planning requires measurements and a human review of the room's constraints.</p>
+                  <p className={styles.intro}>A photograph can help start a conversation. Real planning requires measurements and a human review of the room&apos;s constraints.</p>
                   <div className="mt-8 grid gap-6 md:grid-cols-2">
                     <div>
                       <p className={styles.legend}>Room photograph <span className="font-normal text-quiet">(optional)</span></p>
