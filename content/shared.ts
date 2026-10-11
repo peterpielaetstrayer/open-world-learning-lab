@@ -10,7 +10,7 @@ export const siteConfig = {
   url: "https://openworldlearninglab.com",
   email: "hello@openworldlearninglab.com",
   description:
-    "An independent early-stage education design lab developing real-world learning journeys and the emerging infrastructure needed to make those journeys structured, supported, and cumulative.",
+    "An independent learning design lab exploring real-world learning journeys, learner-support systems, and environments that connect curiosity with meaningful work.",
   disclaimer:
     "Open World Learning Lab is an independent early-stage research and design project. It is not currently operating as a school or accredited educational program.",
   copyright: "© 2026 Open World Learning Lab. All rights reserved.",

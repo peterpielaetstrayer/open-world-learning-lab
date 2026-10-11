@@ -86,6 +86,7 @@ Use `ReleaseCover` with `releaseTypeToVariant()` for consistent compositions. Se
 |-------|-------------|
 | `/` | Homepage |
 | `/work` | Current work index |
+| `/learning-environments` | Public exploratory learning-environment research page |
 | `/work/first-landing` | First Landing pilot sketch |
 | `/work/locus` | LOCUS prototype |
 | `/work/open-world-saturdays` | Saturdays early concept |

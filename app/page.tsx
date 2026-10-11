@@ -103,6 +103,40 @@ export default function Home() {
 
         <SectionDivider />
 
+        {/* EXPANDING RESEARCH DIRECTION */}
+        <EditorialSection id="learning-environments" variant="soft" spacing="compact">
+          <div className="grid gap-8 md:grid-cols-[1.25fr_.75fr] md:items-center">
+            <div>
+              <p className="font-mono text-metadata uppercase tracking-widest text-water">
+                New research direction / Early concept
+              </p>
+              <h2 className="mt-4 max-w-2xl font-serif text-page-title text-ink">
+                What if the places we inhabit helped us become more capable learners?
+              </h2>
+              <p className="mt-5 max-w-reading text-body text-secondary">
+                OWLL Learning Environments explores how people, rooms, resources, and
+                learning activities might be designed together. The investigation begins
+                with a personal learning-space pilot, not a commercial installation offer.
+              </p>
+              <Link href="/learning-environments" className="mt-6 inline-flex min-h-11 items-center text-sm font-medium text-water hover:text-moss">
+                Explore Learning Environments →
+              </Link>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-6">
+              <p className="font-mono text-metadata uppercase tracking-widest text-quiet">Learning is situated</p>
+              <div className="mt-5 grid grid-cols-2 gap-2 text-sm">
+                <div className="rounded-md bg-soft-paper p-4"><span className="font-serif text-xl">Focus</span><p className="mt-1 text-xs text-secondary">Space for attention</p></div>
+                <div className="rounded-md bg-[#dce8e4] p-4"><span className="font-serif text-xl">Explore</span><p className="mt-1 text-xs text-secondary">Space for inquiry</p></div>
+                <div className="rounded-md bg-[#e5decd] p-4"><span className="font-serif text-xl">Make</span><p className="mt-1 text-xs text-secondary">Space for creation</p></div>
+                <div className="rounded-md bg-[#e0e7d9] p-4"><span className="font-serif text-xl">Reflect</span><p className="mt-1 text-xs text-secondary">Space for growth</p></div>
+              </div>
+              <p className="mt-4 text-xs text-quiet">Conceptual learning zones, not a completed room.</p>
+            </div>
+          </div>
+        </EditorialSection>
+
+        <SectionDivider />
+
         {/* PRINCIPLES, FOUNDER, INVITATION */}
         <EditorialSection id="guardrails" variant="soft">
           <SectionHeader

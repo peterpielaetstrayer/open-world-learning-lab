@@ -32,6 +32,15 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    slug: "learning-environments",
+    title: "OWLL Learning Environments",
+    projectType: "Learning Environment Research",
+    status: "early-concept",
+    summary:
+      "Exploring how physical spaces, learner goals, human support, and thoughtful technology might combine into personalized places for inquiry, creation, and lifelong learning.",
+    href: "/learning-environments",
+  },
+  {
     slug: "open-world-saturdays",
     title: "Open World Saturdays",
     projectType: "Learner Reengagement Program",
