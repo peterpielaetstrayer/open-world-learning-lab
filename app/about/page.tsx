@@ -32,9 +32,21 @@ export default function AboutPage() {
               OWLL begins with prototypes rather than declarations. The goal is to design, test, document, and revise specific learning experiences before attempting to build a complete platform or institution around them.
             </p>
             <p>
-              The work currently includes place-based learning journeys, learner-support models, Field Notes, creator workflows, public system maps, and the early development of LOCUS.
+              The work currently includes place-based learning journeys, learner-support models, Field Notes, creator workflows, public system maps, the early LOCUS prototype, and exploratory research into personalized physical learning environments.
             </p>
           </div>
+
+          <section className="mt-12 rounded-lg border border-border bg-soft-paper p-6">
+            <h2 className="font-serif text-2xl text-ink">Learning environments, not just learning content.</h2>
+            <p className="mt-3 text-sm leading-relaxed text-secondary">
+              A new early-stage research direction considers how rooms, tools, and daily routines
+              could support independent inquiry and learner agency. It remains exploratory,
+              and no room installation service has launched.
+            </p>
+            <Link href="/learning-environments" className="mt-4 inline-block text-sm font-medium text-water hover:text-moss">
+              Explore Learning Environments →
+            </Link>
+          </section>
 
           <section className="mt-16">
             <h2 className="font-serif text-2xl text-foreground mb-6">

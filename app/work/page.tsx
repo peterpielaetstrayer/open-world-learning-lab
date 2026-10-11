@@ -19,7 +19,7 @@ const currentFocus = projects.filter((p) =>
   ["first-landing", "locus"].includes(p.slug)
 );
 const exploratoryWork = projects.filter((p) =>
-  ["open-world-saturdays", "open-world-tahoe"].includes(p.slug)
+  !["first-landing", "locus"].includes(p.slug)
 );
 
 export default function WorkPage() {
@@ -60,7 +60,7 @@ export default function WorkPage() {
               Exploratory and origin work
             </h2>
             <p className="mb-6 md:mb-8 text-sm text-secondary max-w-reading">
-              Earlier concepts and origin studies that inform the lab but are not equally mature.
+              Research directions, early concepts, and origin studies that inform the lab but are not equally mature.
             </p>
             <div className="space-y-12 max-w-3xl">
               {exploratoryWork.map((project, i) => (
