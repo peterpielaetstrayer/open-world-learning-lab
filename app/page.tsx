@@ -94,6 +94,55 @@ export default function Home() {
 
         <SectionDivider />
 
+        {/* FIRST USEFUL PUBLIC LEARNING EXPERIENCE */}
+        <EditorialSection id="start-learning" variant="soft" spacing="compact">
+          <div className="grid gap-7 md:grid-cols-[minmax(0,1fr)_minmax(0,.85fr)] md:items-center md:gap-14">
+            <div className="max-w-reading">
+              <p className="font-mono text-metadata uppercase tracking-widest text-water">
+                Start learning / Free field inquiry
+              </p>
+              <h2 className="mt-4 font-serif text-page-title text-ink">
+                Ten minutes. One real question. Your world.
+              </h2>
+              <p className="mt-4 text-body text-secondary leading-relaxed">
+                Try a small learning experience using something already around you.
+                Notice, ask, investigate, explain, and return. No registration, AI,
+                travel, or expensive equipment required.
+              </p>
+              <Link
+                href="/start"
+                className="btn-tactile mt-6 inline-flex min-h-11 items-center rounded-full bg-moss px-7 py-3 text-sm font-medium text-on-dark hover:bg-moss/90"
+              >
+                Try the free inquiry →
+              </Link>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-6 sm:p-8">
+              <p className="font-mono text-metadata uppercase tracking-widest text-water">
+                A field note starts here
+              </p>
+              <dl className="mt-5 space-y-4">
+                <div className="border-l-2 border-water/40 pl-4">
+                  <dt className="font-serif text-xl text-ink">Notice</dt>
+                  <dd className="mt-1 text-sm text-secondary">What is happening right in front of you?</dd>
+                </div>
+                <div className="border-l-2 border-water/40 pl-4">
+                  <dt className="font-serif text-xl text-ink">Question</dt>
+                  <dd className="mt-1 text-sm text-secondary">What would you like to understand?</dd>
+                </div>
+                <div className="border-l-2 border-water/40 pl-4">
+                  <dt className="font-serif text-xl text-ink">Explore</dt>
+                  <dd className="mt-1 text-sm text-secondary">What evidence could change your explanation?</dd>
+                </div>
+              </dl>
+              <p className="mt-6 text-xs text-quiet">
+                An introductory activity, not a validated learning program.
+              </p>
+            </div>
+          </div>
+        </EditorialSection>
+
+        <SectionDivider />
+
         <EditorialSection id="learning-loop">
           <SectionHeader
             eyebrow="How open-world learning works"
