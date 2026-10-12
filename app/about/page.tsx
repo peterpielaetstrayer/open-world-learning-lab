@@ -29,7 +29,7 @@ export default function AboutPage() {
               Our premise is that learning happens through places, families, communities, work, books, conversation, practice, and meaningful projects. We study how those experiences can become sustained knowledge, skills, better questions, and greater agency.
             </p>
             <p>
-              OWLL pursues educational sovereignty: the practical capacity to shape one's learning and development with meaningful opportunity, sound judgment, and human support. For children, that agency develops alongside adults' responsibilities for care, safety, and exposure to diverse ideas.
+              OWLL pursues educational sovereignty: the practical capacity to shape one&apos;s learning and development with meaningful opportunity, sound judgment, and human support. For children, that agency develops alongside adults&apos; responsibilities for care, safety, and exposure to diverse ideas.
             </p>
             <p>
               The current public work includes place-based learning journey designs, learner-support ideas, system maps, the early LOCUS prototype, and exploratory physical Learning Environments research. Adult and family learning resources are under editorial development, not yet a public program.
