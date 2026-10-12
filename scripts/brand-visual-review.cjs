@@ -1,4 +1,5 @@
 /* One-time review utility. Not a production app dependency. */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { chromium } = require("playwright");
 const fs = require("node:fs");
 const crypto = require("node:crypto");
@@ -33,6 +34,15 @@ async function main() {
     if (errors.length) failures++;
     if (!data.audience || !data.h1 || data.main !== 1) failures++;
 
+    if(profile.name==="mobile"){
+      await page.getByRole("button",{name:"Open menu"}).click();
+      const open = await page.getByRole("button",{name:"Close menu"}).getAttribute("aria-expanded");
+      await page.keyboard.press("Escape");
+      const closed = await page.getByRole("button",{name:"Open menu"}).getAttribute("aria-expanded");
+      console.log("QA_MOBILE_NAV",JSON.stringify({open,closed}));
+      if(open!=="true" || closed!=="false")failures++;
+    }
+
     await page.addScriptTag({path:axePath});
     const a11y = await page.evaluate(async () => {
       const r = await window.axe.run(document, {runOnly:{type:"tag",values:["wcag2a","wcag2aa","wcag21aa","wcag22aa"]}});
@@ -40,6 +50,20 @@ async function main() {
     });
     console.log("QA_AXE", profile.name, JSON.stringify(a11y));
     failures += a11y.filter(x=>["critical","serious"].includes(x.impact)).length;
+
+    // Scroll through once to trigger lazy-loaded project images before the full-page capture.
+    await page.evaluate(async () => {
+      for(let y=0;y<document.body.scrollHeight;y+=600){
+        window.scrollTo(0,y);
+        await new Promise(resolve => setTimeout(resolve,55));
+      }
+      window.scrollTo(0,0);
+    });
+    await page.waitForTimeout(1100);
+    const visuals = await page.locator("img").evaluateAll(imgs =>
+      imgs.map(img=>({alt:img.alt.slice(0,55),loaded:img.complete && img.naturalWidth>0})));
+    console.log("QA_IMAGE_LOAD",profile.name,JSON.stringify(visuals));
+    if(visuals.some(x=>!x.loaded))failures++;
 
     const path = "/tmp/owll-"+profile.name+".jpg";
     await page.screenshot({path, type:"jpeg",quality:58, fullPage:true, animations:"disabled"});
