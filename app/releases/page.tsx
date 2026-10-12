@@ -23,6 +23,7 @@ export default function ReleasesPage() {
       <main className="py-section-y-page">
         <WideContainer>
           <SectionHeader
+            level={1}
             eyebrow="Public work"
             title="A growing record of ideas, systems, and prototypes."
             intro="Each release identifies what it is, its publication status, version, whether it is conceptual or tested, and its publication date. Specific licenses apply only when explicitly noted."
