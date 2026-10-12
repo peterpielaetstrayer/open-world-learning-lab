@@ -14,7 +14,7 @@ export default function WorkTriptych() {
         aria-hidden="true"
       />
 
-      <div className="-mx-5 overflow-x-auto px-5 md:mx-0 md:overflow-visible md:px-0 pb-1 md:pb-0 snap-x snap-mandatory md:snap-none">
+      <div className="-mx-5 overflow-x-auto px-5 md:mx-0 md:overflow-visible md:px-0 pb-1 md:pb-0 snap-x snap-mandatory md:snap-none" role="region" aria-label="OWLL research, prototype, and infrastructure stages" tabIndex={0}>
         <ol className="relative flex md:grid md:grid-cols-3 gap-4 md:gap-8 list-none min-w-max md:min-w-0 md:w-full">
           {workLabCards.map((card, i) => (
             <li
