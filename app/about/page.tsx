@@ -9,7 +9,7 @@ import { founderBio, siteConfig } from "@/content/shared";
 export const metadata: Metadata = createPageMetadata({
   title: "About — Open World Learning Lab",
   description:
-    "Open World Learning Lab is an independent early-stage education research, design, and experimentation project exploring place-based learning.",
+    "Learn about Open World Learning Lab, an independent research and design initiative for lifelong learning, educational agency, and learning through the world.",
   path: "/about",
 });
 
@@ -23,18 +23,32 @@ export default function AboutPage() {
 
           <div className="space-y-5 text-muted leading-relaxed">
             <p>
-              Open World Learning Lab is an independent early-stage education research, design, and experimentation project.
+              Open World Learning Lab is an independent, early-stage research and design initiative exploring how people can take greater ownership of learning throughout life.
             </p>
             <p>
-              The lab explores how real places, human mentorship, learner agency, intelligent tools, creative work, and cumulative reflection might form a more connected learning environment.
+              Our premise is that learning happens through places, families, communities, work, books, conversation, practice, and meaningful projects. We study how those experiences can become sustained knowledge, skills, better questions, and greater agency.
             </p>
             <p>
-              OWLL begins with prototypes rather than declarations. The goal is to design, test, document, and revise specific learning experiences before attempting to build a complete platform or institution around them.
+              OWLL pursues educational sovereignty: the practical capacity to shape one's learning and development with meaningful opportunity, sound judgment, and human support. For children, that agency develops alongside adults' responsibilities for care, safety, and exposure to diverse ideas.
             </p>
             <p>
-              The work currently includes place-based learning journeys, learner-support models, Field Notes, creator workflows, public system maps, the early LOCUS prototype, and exploratory research into personalized physical learning environments.
+              The current public work includes place-based learning journey designs, learner-support ideas, system maps, the early LOCUS prototype, and exploratory physical Learning Environments research. Adult and family learning resources are under editorial development, not yet a public program.
             </p>
           </div>
+
+          <section className="mt-12 max-w-reading">
+            <h2 className="font-serif text-2xl text-ink">Who can learn here?</h2>
+            <p className="mt-4 text-muted leading-relaxed">
+              Self-directed adults, parents and children, educators, mentors, community groups,
+              and researchers all have a place in the long-term vision. Parents are learners, too.
+              Supporting access means creating useful low-cost entry points and adaptable guidance
+              without limiting how far an ambitious learner may progress.
+            </p>
+            <p className="mt-4 text-muted leading-relaxed">
+              These are intended audiences, not a claim that all corresponding programs,
+              resources, partnerships, or services are already operating.
+            </p>
+          </section>
 
           <section className="mt-12 rounded-lg border border-border bg-soft-paper p-6">
             <h2 className="font-serif text-2xl text-ink">Learning environments, not just learning content.</h2>
