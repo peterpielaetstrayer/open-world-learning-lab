@@ -9,7 +9,7 @@ export default function Footer() {
           <div>
             <p className="font-serif text-xl">{siteConfig.name}</p>
             <p className="mt-3 text-sm text-on-dark/70 leading-relaxed max-w-sm">
-              An independent early-stage education design lab developing real-world learning journeys and emerging infrastructure for cumulative learning.
+              An independent early-stage learning research and design lab exploring curiosity, lifelong education, human agency, and meaningful learning across the world.
             </p>
           </div>
 
