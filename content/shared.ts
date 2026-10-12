@@ -105,7 +105,7 @@ export const technologyHorizons = {
 export const navLinks = [
   { href: "/#thesis", label: "Approach" },
   { href: "/work", label: "Current Work" },
-  { href: "/#learning-loop", label: "Learning Loop" },
+  { href: "/start", label: "Start Learning" },
   { href: "/releases", label: "Releases" },
   { href: "/#guardrails", label: "Principles" },
   { href: "/about", label: "About" },
