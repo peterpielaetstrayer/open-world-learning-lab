@@ -28,6 +28,7 @@ export default function ContactPage() {
       <main className="py-section-y-page">
         <div className="mx-auto max-w-3xl px-5 sm:px-6">
           <SectionHeader
+            level={1}
             title="Start a thoughtful conversation."
             intro="OWLL is interested in conversations with educators, mentors, learning designers, researchers, community organizations, technologists, and potential pilot collaborators."
           />
