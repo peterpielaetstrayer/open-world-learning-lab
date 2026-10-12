@@ -68,24 +68,7 @@ export default function Home() {
           </ReadingColumn>
           <PullQuote>The world is the curriculum. Human agency is the purpose.</PullQuote>
 
-          <div className="mt-10 pt-10 md:mt-14 md:pt-14 border-t border-border" id="learning-loop">
-            <SectionHeader
-              eyebrow="How open-world learning works"
-              title="Experience becomes learning through a designed loop."
-            />
-            <LearningLoopDiagram />
-          </div>
-        </EditorialSection>
 
-        <SectionDivider />
-
-        {/* WHAT OWLL DOES */}
-        <EditorialSection id="what-owll-is" variant="soft">
-          <SectionHeader
-            eyebrow="What OWLL does"
-            title="OWLL studies learning, designs experiences, and builds toward supporting infrastructure."
-          />
-          <WorkTriptych />
         </EditorialSection>
 
         <SectionDivider />
@@ -109,6 +92,27 @@ export default function Home() {
               </article>
             ))}
           </div>
+        </EditorialSection>
+
+        <SectionDivider />
+
+        <EditorialSection id="learning-loop" variant="soft">
+          <SectionHeader
+            eyebrow="How open-world learning works"
+            title="Experience becomes learning through a designed loop."
+          />
+          <LearningLoopDiagram />
+        </EditorialSection>
+
+        <SectionDivider />
+
+        {/* WHAT OWLL DOES */}
+        <EditorialSection id="what-owll-is" variant="soft">
+          <SectionHeader
+            eyebrow="What OWLL does"
+            title="OWLL studies learning, designs experiences, and builds toward supporting infrastructure."
+          />
+          <WorkTriptych />
         </EditorialSection>
 
         <SectionDivider />
