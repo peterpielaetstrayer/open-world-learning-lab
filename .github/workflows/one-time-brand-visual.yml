@@ -7,7 +7,7 @@ permissions:
   contents: read
 jobs:
   visual:
-    if: github.event.head_commit.message == 'Run final brand visual QA'
+    if: github.event.head_commit.message == 'Run confirmed brand visual QA'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
