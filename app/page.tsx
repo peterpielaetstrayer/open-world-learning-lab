@@ -52,7 +52,7 @@ export default function Home() {
 
         <SectionDivider />
 
-        {/* THESIS + LEARNING LOOP */}
+        {/* PURPOSE */}
         <EditorialSection id="thesis">
           <SectionHeader
             eyebrow="The purpose"
@@ -67,8 +67,6 @@ export default function Home() {
             </p>
           </ReadingColumn>
           <PullQuote>The world is the curriculum. Human agency is the purpose.</PullQuote>
-
-
         </EditorialSection>
 
         <SectionDivider />
@@ -96,7 +94,7 @@ export default function Home() {
 
         <SectionDivider />
 
-        <EditorialSection id="learning-loop" variant="soft">
+        <EditorialSection id="learning-loop">
           <SectionHeader
             eyebrow="How open-world learning works"
             title="Experience becomes learning through a designed loop."
