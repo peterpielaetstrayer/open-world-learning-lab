@@ -10,7 +10,7 @@ export const siteConfig = {
   url: "https://openworldlearninglab.com",
   email: "hello@openworldlearninglab.com",
   description:
-    "An independent learning design lab exploring real-world learning journeys, learner-support systems, and environments that connect curiosity with meaningful work.",
+    "An independent learning research and design lab exploring lifelong learning, educational agency, real-world learning experiences, and human-centered tools.",
   disclaimer:
     "Open World Learning Lab is an independent early-stage research and design project. It is not currently operating as a school or accredited educational program.",
   copyright: "© 2026 Open World Learning Lab. All rights reserved.",
@@ -49,7 +49,7 @@ export const guardrails = [
   {
     title: "Equity by Design",
     description:
-      "Open-world education must not become luxury education for learners who already have access to transportation, technology, safe environments, knowledgeable adults, and flexible schedules.",
+      "Design accessible starting points, adaptable support, and opportunities for advanced learning. Raise the floor without limiting ambition; never assume families have the same time, resources, or support.",
   },
 ];
 
