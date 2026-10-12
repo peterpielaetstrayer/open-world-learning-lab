@@ -89,3 +89,18 @@ The review team ran the **branch's production build** locally on a GitHub Action
 4. The standalone [Next.js security PR #3](https://github.com/peterpielaetstrayer/open-world-learning-lab/pull/3) updates vulnerable Next.js 16.2.9 to patched 16.3.8; normal website checks pass and the security audit drops from **1 critical** to **0 critical**, with **10 high and 2 moderate** remaining and not yet fully triaged. Main still uses the older framework until explicitly merged/deployed.
 
 **Decision remains: hold PR #2 as draft.** CI and local homepage QA are meaningful progress, not hosted-release approval.
+
+
+## 2026-10-11 cross-route local browser release audit
+
+The review branch was retested in a locally served Next.js production build with Playwright and axe-core, **nine public routes at 390px and 1440px** (18 view combinations).
+
+The first run discovered two genuine source-level defects:
+- /about, /work, /releases, and /contact lacked a top-level H1 because the reusable SectionHeader always emitted H2. Added optional `level={1}` support and used it on top-level standalone pages.
+- /learning-environments used an insufficient-contrast `text-quiet` zone index on a light-colored MAKE panel. Changed the small label to `text-ink`.
+
+**Passing follow-up:** [GitHub Actions cross-route run 38193315880](https://github.com/peterpielaetstrayer/open-world-learning-lab/actions/runs/38193315880). The log reports `QA_SUMMARY {"routes":18,"failures":0,"axeViolations":0}`: all routes HTTP 200, exactly one H1, exactly one main landmark, no horizontal overflow; and no automated WCAG 2/2.1/2.2 A/AA axe findings at these tested sizes. The separate earlier homepage test confirmed mobile navigation opened and closed by keyboard and image assets visibly loaded. These findings do **not** certify full accessibility, actual hosted-preview behavior, security, or real-user understanding.
+
+**Production/security state:** Security [PR #3](https://github.com/peterpielaetstrayer/open-world-learning-lab/pull/3) was merged to `main` as `4105c246` to update Next.js to 16.3.8; GitHub post-merge checks passed. The most recent Vercel *production* deployment still reported commit `b9944dc`, so the security update is **not yet verified live**. Vercel API-created deployment hit daily free-tier quota, and protected preview SSO remains enabled. Do not imply the hosting issue is resolved or that the brand PR has been published.
+
+**Open gates:** Exact-head hosted Vercel preview, production patch release confirmation, wider real-device/screen-reader and manual checks, and founder editorial approval. **Keep brand PR #2 draft and unmerged.**
