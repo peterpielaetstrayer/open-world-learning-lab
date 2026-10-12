@@ -24,6 +24,25 @@ const primaryProjects = projects.filter((p) =>
 
 const owllAtAGlance = releases.find((r) => r.slug === "owll-at-a-glance");
 
+const audiencePaths = [
+  {
+    title: "Individuals",
+    description: "Develop the questions, practices, and confidence to direct your own learning throughout life.",
+  },
+  {
+    title: "Families",
+    description: "Discover how adults and children can learn alongside one another. Parents are learners, too.",
+  },
+  {
+    title: "Educators & Mentors",
+    description: "Explore learning experiences built around real questions, meaningful practice, and human support.",
+  },
+  {
+    title: "Communities & Researchers",
+    description: "Investigate the conditions that make learning more accessible, rigorous, and connected.",
+  },
+];
+
 export default function Home() {
   return (
     <>
@@ -36,18 +55,18 @@ export default function Home() {
         {/* THESIS + LEARNING LOOP */}
         <EditorialSection id="thesis">
           <SectionHeader
-            eyebrow="The starting question"
-            title="Maybe students do not hate knowledge. Maybe they hate knowledge removed from reality."
+            eyebrow="The purpose"
+            title="Education is bigger than school, and learning lasts a lifetime."
           />
           <ReadingColumn className="space-y-5 text-body text-secondary">
             <p>
-              Modern schooling often separates knowledge from the living contexts that make it matter. Open-world education begins with a different proposition: the world is already full of curriculum.
+              Learning takes place through family, work, neighborhoods, books, places, conversations, and the questions we choose to pursue. The world is already full of opportunities to learn.
             </p>
             <p>
-              The challenge is not simply to send learners outside. It is to design enough structure, support, inquiry, practice, and reflection for experience to become durable learning.
+              OWLL studies how curiosity can become understanding people can explain, practice, apply, and revisit. The goal is not less guidance or weaker foundations. It is structured freedom: meaningful support that helps people become increasingly capable of directing their own learning.
             </p>
           </ReadingColumn>
-          <PullQuote>The goal is not less structure. It is structured freedom.</PullQuote>
+          <PullQuote>The world is the curriculum. Human agency is the purpose.</PullQuote>
 
           <div className="mt-10 pt-10 md:mt-14 md:pt-14 border-t border-border" id="learning-loop">
             <SectionHeader
@@ -64,9 +83,32 @@ export default function Home() {
         <EditorialSection id="what-owll-is" variant="soft">
           <SectionHeader
             eyebrow="What OWLL does"
-            title="OWLL studies the problem, prototypes the experience, and builds toward supporting infrastructure."
+            title="OWLL studies learning, designs experiences, and builds toward supporting infrastructure."
           />
           <WorkTriptych />
+        </EditorialSection>
+
+        <SectionDivider />
+
+        {/* HUMAN ENTRY POINTS — not a claim that every program exists today */}
+        <EditorialSection id="who-its-for" spacing="compact">
+          <SectionHeader
+            eyebrow="Who this work includes"
+            title="A learning life belongs to more than one institution."
+            intro="Our work is for people who want learning to be more connected, self-directed, and human. The pathways below describe who OWLL intends to serve, not programs that are currently open for enrollment."
+          />
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            {audiencePaths.map((audience) => (
+              <article key={audience.title} className="border-t border-border-strong pt-5">
+                <h3 className="font-serif text-section-title text-ink">
+                  {audience.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-secondary">
+                  {audience.description}
+                </p>
+              </article>
+            ))}
+          </div>
         </EditorialSection>
 
         <SectionDivider />
@@ -208,7 +250,7 @@ export default function Home() {
               Start a thoughtful conversation.
             </h2>
             <p className="mt-5 md:mt-8 text-body text-on-dark/70">
-              OWLL is interested in conversations with educators, mentors, learning designers, researchers, community organizations, technologists, and potential pilot collaborators.
+              We welcome thoughtful questions from adult learners, families, educators, researchers, designers, and community organizations. Current work is early-stage, and this is not a program enrollment or service booking channel.
             </p>
             <div className="mt-7 md:mt-10 flex flex-col sm:flex-row gap-2.5 sm:gap-3 justify-center">
               <Link
