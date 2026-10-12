@@ -157,8 +157,8 @@ export default function Home() {
               </h2>
               <p className="mt-5 max-w-reading text-body text-secondary">
                 OWLL Learning Environments explores how people, rooms, resources, and
-                learning activities might be designed together. The investigation begins
-                with a personal learning-space pilot, not a commercial installation offer.
+                learning activities might be designed together. One proposed starting point
+                is a personal learning-space case study, not a commercial installation offer.
               </p>
               <Link href="/learning-environments" className="mt-6 inline-flex min-h-11 items-center text-sm font-medium text-water hover:text-moss">
                 Explore Learning Environments →
@@ -215,7 +215,7 @@ export default function Home() {
               <SectionHeader
                 eyebrow="Selected public work"
                 title="OWLL at a Glance"
-                intro="A concise leave-behind introduction to the lab, its thesis, and its current work."
+                intro="A July 2026 snapshot of the lab’s earlier focus, preserved as the research and design direction evolves."
               />
               <div className="max-w-md">
                 <ReleaseCover
