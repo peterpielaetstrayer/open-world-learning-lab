@@ -65,3 +65,27 @@ Open the Vercel draft preview and compare to production:
 - Founder approves final copy, imagery and scope. Merge/promotion is a **separate** decision.
 
 **Decision:** **HOLD DRAFT** until rendered/functional/accessibility review and founder editorial signoff. Automated build readiness is not release approval.
+
+
+## 2026-10-11 follow-up: actual locally rendered browser QA
+
+The review team ran the **branch's production build** locally on a GitHub Actions Ubuntu runner using headless Chromium, at **390 × 844 mobile** and **1440 × 900 desktop**. This is screenshot-based and script-based QA of the GitHub source, **not an authenticated render of the final Vercel deployment**. Source screenshots were emitted to private-to-the-run GitHub Actions logs as encoded images; avoid reproducing them as participant evidence or program imagery.
+
+### Observed
+- Both homepage requests returned HTTP **200**, the expected single H1 and `main` landmark were found, and the four audience categories rendered.
+- No document horizontal overflow at either viewport; no browser page exceptions.
+- The mobile navigation opened with `aria-expanded=true` and closed on Escape with `aria-expanded=false`.
+- Automated axe-core WCAG 2 A/AA, 2.1 AA, and 2.2 AA homepage scans returned **zero violations** at these two viewports on the corrected branch. This does **not** establish WCAG compliance across all routes, devices, assistive technologies or manual criteria.
+- The original automated scan surfaced a **serious** `scrollable-region-focusable` violation in the mobile process carousel. The branch now gives the scroll region an accessible label, region semantics and a keyboard focus target; the follow-up scan passed.
+- After scrolling to trigger image loading, homepage hero and both conceptual project image assets had a visible loaded instance. Invisible breakpoint-specific `<img>` copies can remain intentionally lazy; the test was corrected to distinguish them rather than reporting false failures.
+- The visuals preserve the Living Field Atlas editorial identity, readable paper/ink contrast and clear structure. The mobile page is long and text-dense; the next design evolution should add useful hands-on examples and meaningful visitor actions rather than more abstract copy.
+
+**Final local browser QA:** [GitHub Actions run 38192680832](https://github.com/peterpielaetstrayer/open-world-learning-lab/actions/runs/38192680832), **SUCCESS, failures=0**, on the review branch with the accessible process strip fix. The one-time test scripts were intended solely for this review and must not be treated as permanent production features.
+
+### Outstanding before a public brand release
+1. Exact-head Vercel preview could not be reproduced using the API because the project hit its daily deployment creation quota (HTTP 402, try again in 24 hours). Preview protection also has SSO enabled; do not weaken protection to bypass this.
+2. User/founder editorial signoff and practical mobile/desktop review on the *actual hosted preview* remain distinct from successful local QA.
+3. Manual keyboard/screen-reader and non-homepage checks (About, Work, First Landing, LOCUS, Releases and Learning Environments) are still open.
+4. The standalone [Next.js security PR #3](https://github.com/peterpielaetstrayer/open-world-learning-lab/pull/3) updates vulnerable Next.js 16.2.9 to patched 16.3.8; normal website checks pass and the security audit drops from **1 critical** to **0 critical**, with **10 high and 2 moderate** remaining and not yet fully triaged. Main still uses the older framework until explicitly merged/deployed.
+
+**Decision remains: hold PR #2 as draft.** CI and local homepage QA are meaningful progress, not hosted-release approval.
