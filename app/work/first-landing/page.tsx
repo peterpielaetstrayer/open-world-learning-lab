@@ -14,7 +14,7 @@ import { siteConfig } from "@/content/shared";
 export const metadata: Metadata = createPageMetadata({
   title: "First Landing Prototype — Pilot Sketch",
   description:
-    "A proposed six-week place-based learning journey exploring how water shapes land, life, history, and the future of Virginia Beach.",
+    "The original six-week First Landing inquiry concept and a related eight-stop Journey Studio prototype about how water shapes the landscape.",
   path: "/work/first-landing",
 });
 
@@ -33,8 +33,8 @@ export default function FirstLandingPage() {
           ]}
           projectType="Learning Journey"
           status="pilot-design"
-          summary="A proposed six-week place-based learning journey exploring how water shapes land, life, history, and the future of Virginia Beach."
-          statusNotice="This is a proposed learning journey currently in design. Enrollment, partners, cohort dates, and operating arrangements have not been finalized."
+          summary="The original six-week First Landing inquiry concept and a related eight-stop Journey Studio prototype about how water shapes the landscape."
+          statusNotice="This page preserves an original six-week design sketch. Journey Studio also contains an eight-stop Water Writes the Landscape prototype. Neither represents a validated field pilot; no enrollment, partner, or cohort is announced."
         />
       }
       lead={
@@ -109,7 +109,7 @@ export default function FirstLandingPage() {
 
       <ContentSection title="What currently exists">
         <p>
-          A public design sketch, learner arc outline, and pilot inquiry framework. Curriculum materials, partnerships, safety plans, and learner-support models remain in development.
+          This page documents the original six-week concept, its learner arc, and pilot questions. A newer eight-stop <em>Water Writes the Landscape</em> learner route exists as a technical prototype in LOCUS Journey Studio. The two represent different stages of the same investigation, not two completed or field-tested educational programs.
         </p>
       </ContentSection>
 
