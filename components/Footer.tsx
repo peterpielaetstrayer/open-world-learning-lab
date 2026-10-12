@@ -9,7 +9,7 @@ export default function Footer() {
           <div>
             <p className="font-serif text-xl">{siteConfig.name}</p>
             <p className="mt-3 text-sm text-on-dark/70 leading-relaxed max-w-sm">
-              An independent early-stage education design lab developing real-world learning journeys and emerging infrastructure for cumulative learning.
+              An independent early-stage learning research and design lab exploring curiosity, lifelong education, human agency, and meaningful learning across the world.
             </p>
           </div>
 
@@ -38,9 +38,9 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-on-dark/10 space-y-3">
-          <p className="text-xs text-on-dark/50">{siteConfig.copyright}</p>
-          <p className="text-xs text-on-dark/50">{siteConfig.licensingNote}</p>
-          <p className="text-xs text-on-dark/50 max-w-2xl">{siteConfig.disclaimer}</p>
+          <p className="text-xs text-on-dark/65">{siteConfig.copyright}</p>
+          <p className="text-xs text-on-dark/65">{siteConfig.licensingNote}</p>
+          <p className="text-xs text-on-dark/65 max-w-2xl">{siteConfig.disclaimer}</p>
         </div>
       </div>
     </footer>

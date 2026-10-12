@@ -32,6 +32,12 @@ export default function OwllAtAGlancePage() {
             </h1>
           </header>
 
+          <p className="mb-8 border-l-2 border-water/40 pl-4 text-sm text-secondary">
+            Historical publication: this July 2026 brief reflects OWLL&apos;s earlier
+            public framing. The current homepage expresses a broader lifelong-learning
+            and educational-agency direction. This version is preserved for provenance.
+          </p>
+
           <section className="brief-section">
             <h2 className="brief-heading">Summary</h2>
             <p className="brief-body">
