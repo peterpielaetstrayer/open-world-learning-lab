@@ -29,6 +29,7 @@ export default function WorkPage() {
       <main className="py-section-y-page">
         <WideContainer>
           <SectionHeader
+            level={1}
             eyebrow="Current work"
             title="From questions to prototypes."
             intro="OWLL develops learning journeys, mentor systems, field tools, and infrastructure through research, design, testing, and release. Not every project is at the same stage of maturity."
