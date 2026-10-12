@@ -19,7 +19,7 @@ export default function AboutPage() {
       <Header />
       <main className="py-section-y-page">
         <div className="mx-auto max-w-3xl px-5 sm:px-6">
-          <SectionHeader title="Designing toward a more alive learning future." />
+          <SectionHeader level={1} title="Designing toward a more alive learning future." />
 
           <div className="space-y-5 text-muted leading-relaxed">
             <p>
