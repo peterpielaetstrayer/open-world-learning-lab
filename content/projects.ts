@@ -17,7 +17,7 @@ export const projects: Project[] = [
     projectType: "Learning Journey",
     status: "pilot-design",
     summary:
-      "A proposed six-week place-based learning journey exploring how water shapes land, life, history, and the future of Virginia Beach.",
+      "The original six-week First Landing inquiry concept, now informing an eight-stop Water Writes the Landscape prototype in Journey Studio. No field pilot has been validated.",
     href: "/work/first-landing",
     featured: true,
   },
