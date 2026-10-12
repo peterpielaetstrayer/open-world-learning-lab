@@ -60,7 +60,7 @@ export default function LearningEnvironmentsPage() {
               <div className="mx-auto mt-7 grid aspect-[1.12] max-w-md grid-cols-2 grid-rows-2 gap-2 border-[6px] border-[#8da898] bg-[#c7d6cb] p-2 shadow-[16px_18px_0_rgba(0,0,0,0.12)] sm:gap-3 sm:p-3">
                 {zones.map((zone,i) => (
                   <div key={zone.name} className={"flex min-w-0 flex-col justify-between gap-3 p-3 text-ink sm:p-5 " + zone.color}>
-                    <span className="font-mono text-[.55rem] tracking-widest text-quiet">0{i+1}</span>
+                    <span className="font-mono text-[.55rem] tracking-widest text-ink">0{i+1}</span>
                     <div>
                       <strong className="block font-serif text-[clamp(1.15rem,2vw,1.7rem)] font-normal leading-tight">{zone.name}</strong>
                       <span className="mt-1 block text-[.65rem] text-secondary">{zone.purpose}</span>
