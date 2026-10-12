@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticRoutes = [
     "",
+    "/start",
     "/work",
     "/releases",
     "/releases/owll-at-a-glance",

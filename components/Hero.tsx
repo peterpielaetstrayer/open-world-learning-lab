@@ -26,10 +26,10 @@ export default function Hero() {
 
             <div className="mt-7 flex flex-col gap-2.5 sm:flex-row sm:gap-3">
               <Link
-                href="/#thesis"
+                href="/start"
                 className="btn-tactile inline-flex min-h-11 w-full sm:w-auto items-center justify-center rounded-full bg-moss px-7 py-3 text-sm font-medium text-on-dark hover:bg-moss/90"
               >
-                Explore the Approach
+                Try a Learning Inquiry
               </Link>
               <Link
                 href="/work"
