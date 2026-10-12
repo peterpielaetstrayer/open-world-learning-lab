@@ -166,7 +166,7 @@ The October 11 adult-first Educational Sovereignty Framework v0.1 and `Your Worl
 - Avoid false promises about behavior change or structural barriers solved by self-help alone.
 
 ## 10. Technical, accessibility and QA
-Aim for WCAG 2.2 AA as a design target, without claiming certification. Review contrast (including #6B756F metadata against field paper), 200% zoom, mobile around 320/375/390/768/1280px, screen-reader headings/landmarks, link purposes, keyboard navigation, visible focus, reduced motion and image/dialog behavior. Existing responsive source code is not a substitute for browser testing.
+Aim for WCAG 2.2 AA as a design target, without claiming certification. Token contrast review: original muted metadata #6B756F on #F2EFE6 measured ~4.15:1, below the 4.5:1 normal-text target. A proposed #59655E revision measures ~5.30:1 on field paper and ~4.67:1 on soft paper. This is a limited palette check, **not** a full WCAG audit. Review remaining opacity-based text, actual rendered image overlays, 200% zoom, mobile around 320/375/390/768/1280px, screen-reader headings/landmarks, link purposes, keyboard navigation, visible focus, reduced motion and image/dialog behavior. Existing responsive source code is not a substitute for browser testing.
 
 Check: every route and internal link, metadata/social share, sitemap/canonical URL, data safety, typography, media crop, loading speed and Lighthouse/real-user performance where measurable. Protect natural proportions and caption legibility on mobile; don't rely on tiny embedded words in raster diagrams.
 
