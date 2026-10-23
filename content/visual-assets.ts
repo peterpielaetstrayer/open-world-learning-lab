@@ -91,7 +91,7 @@ export const visualAssets: Record<string, VisualAsset> = {
   },
   "tahoe-origin-atlas": {
     key: "tahoe-origin-atlas",
-    desktopSrc: null,
+    desktopSrc: "/visuals/open-world-tahoe/tahoe-living-atlas.svg",
     mobileSrc: null,
     alt: "Four-zone origin atlas for Open World Tahoe — lake, mountain, trail, and campfire.",
     caption: "Origin study — four interconnected learning zones.",
@@ -99,7 +99,7 @@ export const visualAssets: Record<string, VisualAsset> = {
     height: 900,
     focalPosition: "50% 50%",
     mobileFocalPosition: "50% 40%",
-    status: "placeholder",
+    status: "final",
     theme: "tahoe",
     containsEmbeddedText: false,
   },
