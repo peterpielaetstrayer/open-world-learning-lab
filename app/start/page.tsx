@@ -3,6 +3,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WideContainer from "@/components/layout/WideContainer";
+import FieldInquiryNotebook from "@/components/FieldInquiryNotebook";
 import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
@@ -162,6 +163,10 @@ export default function StartPage() {
               ))}
             </ol>
           </WideContainer>
+        </section>
+
+        <section id="field-notebook" className="scroll-mt-28 py-section-y-compact">
+          <WideContainer><FieldInquiryNotebook /></WideContainer>
         </section>
 
         <section className="bg-soft-paper/40 py-section-y-compact">

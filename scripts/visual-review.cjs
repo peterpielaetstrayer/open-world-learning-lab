@@ -156,6 +156,67 @@ async function run() {
     }
     await context.close();
   }
+  // Functional checks for the new v3 public visitor pathway, independent of screenshots.
+  const interactionIssues = [];
+  const interactionContext = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    acceptDownloads: true,
+    reducedMotion: "reduce",
+  });
+  const interactionPage = await interactionContext.newPage();
+  try {
+    await interactionPage.goto(baseUrl + "/", { waitUntil: "networkidle", timeout: 60000 });
+    const kitchen = interactionPage.getByRole("button", { name: /A familiar kitchen/ });
+    await kitchen.click();
+    if ((await kitchen.getAttribute("aria-pressed")) !== "true") {
+      interactionIssues.push("Atlas selection did not update pressed state");
+    }
+    if (!(await interactionPage.getByText("Where does that water come from?").isVisible())) {
+      interactionIssues.push("Atlas selection did not reveal its inquiry");
+    }
+    await interactionPage.goto(baseUrl + "/start", { waitUntil: "networkidle", timeout: 60000 });
+    const note = interactionPage.locator("#field-notice");
+    const downloadButton = interactionPage.getByRole("button", { name: /Download my field note/ });
+    if (await downloadButton.isEnabled()) {
+      interactionIssues.push("Blank notebook should not be exportable");
+    }
+    const example = "Clues on my street\nNew question";
+    await note.fill(example);
+    const [download] = await Promise.all([
+      interactionPage.waitForEvent("download", { timeout: 10000 }),
+      downloadButton.click(),
+    ]);
+    const downloaded = fs.readFileSync(await download.path(), "utf8");
+    if (!downloaded.includes(example) || !downloaded.includes("05 / Return")) {
+      interactionIssues.push("Plain-text export did not preserve notes and prompts");
+    }
+    await interactionPage.reload({ waitUntil: "networkidle" });
+    if ((await interactionPage.locator("#field-notice").inputValue()) !== "") {
+      interactionIssues.push("Notebook unexpectedly persisted content after reload");
+    }
+    await interactionPage.locator("#field-notice").fill("Clear me");
+    await interactionPage.getByRole("button", { name: "Clear this tab" }).click();
+    if ((await interactionPage.locator("#field-notice").inputValue()) !== "") {
+      interactionIssues.push("Clear action did not reset notes");
+    }
+  } catch (error) {
+    interactionIssues.push("Interaction test: " + String(error).slice(0, 250));
+  } finally {
+    await interactionContext.close();
+  }
+  results.push({
+    route: "/start",
+    name: "Atlas and notebook interaction",
+    profile: "mobile",
+    issues: interactionIssues,
+    screenshot: null,
+    violations: [],
+  });
+  console.log("OWLL_INTERACTION_AUDIT", JSON.stringify({
+    passed: interactionIssues.length === 0,
+    issues: interactionIssues,
+  }));
+
   await browser.close();
   const failed = results.filter(r => r.issues.length);
   const summary = {
