@@ -43,6 +43,10 @@ export default function FirstLandingPage() {
           <p className="mt-2 font-medium text-ink text-body-lg">
             How does water shape land, life, history, and the future of Virginia Beach?
           </p>
+          <Link href="/work/first-landing/field-experience" className="mt-6 inline-flex min-h-12 items-center rounded-full bg-moss px-7 py-3 text-sm font-medium text-on-dark hover:bg-deep-field">
+            Try the illustrated Water Fingerprints inquiry ↗
+          </Link>
+          <p className="mt-3 text-xs leading-relaxed text-quiet">Free, no account. An independent OWLL learning demonstration, not a validated field pilot.</p>
         </div>
       }
       figure={
@@ -60,7 +64,16 @@ export default function FirstLandingPage() {
     >
       <ContentSection title="Educational premise">
         <p>
-          First Landing and the surrounding coastal environment can function as a living systems classroom. A six-week journey moves learners from observation to inquiry to creation, using the place itself as the primary text.
+          First Landing and the surrounding coastal environment can function as a living systems classroom. The proposed six-week journey would move learners from observation to inquiry to creation, using the place itself as the primary text.
+        </p>
+      </ContentSection>
+
+      <ContentSection title="Try one small encounter">
+        <p>
+          The <Link href="/work/first-landing/field-experience" className="font-semibold text-water hover:underline">Water Fingerprints illustrated inquiry</Link> invites visitors
+          to observe a shoreline clue, propose explanations, examine contrary possibilities,
+          and reconstruct an explanation from memory. This is a public demonstration of the
+          inquiry method, not an actual First Landing field observation or integrated LOCUS session.
         </p>
       </ContentSection>
 
@@ -129,7 +142,7 @@ export default function FirstLandingPage() {
 
       <ContentSection title="What currently exists">
         <p>
-          This page documents the original six-week concept, its learner arc, and pilot questions. A newer eight-stop <em>Water Writes the Landscape</em> learner route exists as a technical prototype in LOCUS Journey Studio. The two represent different stages of the same investigation, not two completed or field-tested educational programs.
+          This page documents the original six-week concept, its learner arc, and pilot questions. A newer eight-stop <em>Water Writes the Landscape</em> creator/journey prototype exists in LOCUS Journey Studio. A separate adult LOCUS v0.1.1 learner app implements one bounded Water Fingerprints encounter. These are different stages of one investigation, not completed or field-validated educational programs.
         </p>
       </ContentSection>
 

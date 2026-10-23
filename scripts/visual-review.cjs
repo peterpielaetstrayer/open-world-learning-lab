@@ -14,6 +14,7 @@ const routes = [
   ["/about", "About"],
   ["/work", "Current Work"],
   ["/work/first-landing", "First Landing"],
+  ["/work/first-landing/field-experience", "Water Fingerprints"],
   ["/work/locus", "LOCUS"],
   ["/releases", "Releases"],
   ["/learning-environments", "Learning Environments"],
@@ -204,6 +205,71 @@ async function run() {
   } finally {
     await interactionContext.close();
   }
+  // First Landing visitor flow: change evidence lens, state a hypothesis,
+  // compare an alternative, recall independently, and export only on user action.
+  const coastalIssues = [];
+  try {
+    await interactionPage.goto(baseUrl + "/work/first-landing/field-experience", {
+      waitUntil: "networkidle", timeout: 60000,
+    });
+    const ridges = interactionPage.getByRole("button", { name: "Select clue: Patterns in the sand" });
+    await ridges.click();
+    if ((await ridges.getAttribute("aria-pressed")) !== "true") {
+      coastalIssues.push("Clue selection did not update aria-pressed");
+    }
+    const observed = "The ridges look repeated\nand have a similar direction";
+    await interactionPage.getByLabel("What do you notice in this illustration?").fill(observed);
+    await interactionPage.getByRole("button", { name: /Move to explanations/ }).click();
+    await interactionPage.getByRole("radio", { name: "Wind moved or sorted the sand and debris." }).check();
+    await interactionPage.getByLabel("What is one alternative explanation you should not ignore?").fill(
+      "Water may have shaped the ridges as well."
+    );
+    await interactionPage.getByRole("button", { name: /Compare evidence/ }).click();
+    if (!(await interactionPage.getByText("Moving water and moving air can both create ripples.", { exact: false }).isVisible())) {
+      coastalIssues.push("Evidence did not match the selected clue");
+    }
+    await interactionPage.getByLabel("What does this evidence support, and what remains unresolved?").fill(
+      "The illustration cannot identify the cause by itself."
+    );
+    await interactionPage.getByRole("button", { name: /Explain from memory/ }).click();
+    if (await interactionPage.getByText(observed).count()) {
+      coastalIssues.push("Prior notes exposed before recall step reveal");
+    }
+    await interactionPage.getByLabel("Reconstruct your explanation before you look back").fill(
+      "Water or wind could make ripples; I need repeated field observations."
+    );
+    await interactionPage.getByRole("button", { name: "Reveal original notes" }).click();
+    if (!(await interactionPage.getByText(observed).isVisible())) {
+      coastalIssues.push("Prior observation did not appear after reveal");
+    }
+    const [record] = await Promise.all([
+      interactionPage.waitForEvent("download", { timeout: 10000 }),
+      interactionPage.getByRole("button", { name: "Download inquiry record" }).click(),
+    ]);
+    const recordText = fs.readFileSync(await record.path(), "utf8");
+    if (!recordText.includes(observed) || !recordText.includes("Patterns in the sand") ||
+        !recordText.includes("Water or wind could make ripples")) {
+      coastalIssues.push("First Landing field-note text export incomplete");
+    }
+    await interactionPage.reload({ waitUntil: "networkidle" });
+    if ((await interactionPage.getByLabel("What do you notice in this illustration?").inputValue()) !== "") {
+      coastalIssues.push("First Landing response unexpectedly persisted after reload");
+    }
+  } catch (error) {
+    coastalIssues.push("First Landing interaction: " + String(error).slice(0, 250));
+  }
+  results.push({
+    route: "/work/first-landing/field-experience",
+    name: "Water Fingerprints full inquiry",
+    profile: "mobile",
+    issues: coastalIssues,
+    screenshot: null,
+    violations: [],
+  });
+  console.log("OWLL_FIRST_LANDING_AUDIT", JSON.stringify({
+    passed: coastalIssues.length === 0, issues: coastalIssues,
+  }));
+
   results.push({
     route: "/start",
     name: "Atlas and notebook interaction",
