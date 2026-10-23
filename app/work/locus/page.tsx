@@ -4,6 +4,7 @@ import ProjectPageLayout, { ContentSection } from "@/components/ProjectPageLayou
 import ProjectMasthead from "@/components/ProjectMasthead";
 import VisualPlate from "@/components/visual/VisualPlate";
 import LocusCoreLayers from "@/components/diagrams/LocusCoreLayers";
+import LocusProductProof from "@/components/LocusProductProof";
 import FieldNoteSpecimen from "@/components/FieldNoteSpecimen";
 import RelatedWork from "@/components/RelatedWork";
 import { createPageMetadata } from "@/lib/metadata";
@@ -47,6 +48,8 @@ export default function LocusPage() {
           It is not simply an AI tutor. It is the emerging learning and creator infrastructure behind open-world education.
         </p>
       </ContentSection>
+
+      <LocusProductProof />
 
       <ContentSection title="One complete learner journey">
         <ol className="relative max-w-reading list-none pl-5 border-l border-water/20">
@@ -131,9 +134,9 @@ export default function LocusPage() {
             className="inline-flex min-h-11 items-center rounded-full bg-moss px-6 py-3 text-sm font-medium text-on-dark hover:bg-deep-field">
             Open adult field-test app ↗
           </a>
-          <a href="https://github.com/peterpielaetstrayer/locus" target="_blank" rel="noopener noreferrer"
+          <a href="https://locus-blond.vercel.app/field/" target="_blank" rel="noopener noreferrer"
             className="inline-flex min-h-11 items-center text-sm font-medium text-water hover:text-moss">
-            Read code and test limitations ↗
+            Open the field encounter ↗
           </a>
         </div>
         <p className="mt-3 text-xs leading-relaxed text-quiet">
