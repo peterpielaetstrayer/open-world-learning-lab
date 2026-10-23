@@ -3,7 +3,7 @@
 .tahoe-page *{box-sizing:border-box}
 .tahoe-container{width:min(100% - clamp(40px,8vw,150px),1260px);margin-inline:auto}
 .tahoe-section{padding-block:clamp(78px,10vw,150px)}
-.tahoe-kicker{text-transform:uppercase;letter-spacing:.16em;font:600 11px/1.5 var(--font-ibm-plex-mono),monospace;color:#58736b}
+.tahoe-kicker{text-transform:uppercase;letter-spacing:.16em;font:600 11px/1.5 var(--font-ibm-plex-mono),monospace;color:#3c6254}
 .tahoe-page h1,.tahoe-page h2,.tahoe-page h3,.tahoe-page blockquote{font-family:var(--font-newsreader),Georgia,serif;font-weight:400}
 .tahoe-page h2{font-size:clamp(43px,5.2vw,78px);line-height:1.08;letter-spacing:-.048em;text-wrap:balance}
 .tahoe-page h2 em,.tahoe-page h1 em{font-weight:400}
@@ -82,6 +82,7 @@
 .tahoe-scrub input{flex:1;min-width:20px;accent-color:#e0c080;cursor:pointer;min-height:24px}
 .tahoe-motion-panel .tahoe-motion-disclaimer{margin:18px 0 0;color:#abc7b6;font:10px/1.6 var(--font-ibm-plex-mono),monospace}
 .tahoe-sequence{background:#1b3830;color:#f0f1e6;padding:clamp(70px,8vw,110px) 0}
+.tahoe-sequence .tahoe-kicker{color:#c9d2b8}
 .tahoe-sequence h2{margin:15px 0 17px}.tahoe-sequence h2 em{color:#c3ddcb}
 .tahoe-sequence>.tahoe-container>p{max-width:750px;color:#c8d8ca;font-size:16px}
 .tahoe-sequence-list{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));padding:0;margin:50px 0 0;list-style:none;border-top:1px solid #9ebbaa76}
@@ -104,9 +105,9 @@
 .tahoe-mission-topics{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto;padding-bottom:20px}
 .tahoe-mission-topics span{font:9px var(--font-ibm-plex-mono),monospace;color:#52685c;border:1px solid #ccd4c7;border-radius:99px;padding:4px 6px}
 .tahoe-mission-artifact{border-top:1px solid #d3d8ce;padding-top:17px;display:flex;flex-direction:column;gap:5px}
-.tahoe-mission-artifact span{font:10px var(--font-ibm-plex-mono),monospace;color:#698074;text-transform:uppercase}
+.tahoe-mission-artifact span{font:10px var(--font-ibm-plex-mono),monospace;color:#466057;text-transform:uppercase}
 .tahoe-mission-artifact strong{font:400 17px/1.35 var(--font-newsreader),Georgia,serif;color:#28695c}
-.tahoe-mission-note{color:#66796b}
+.tahoe-mission-note{color:#465d52}
 .tahoe-closing{background:#102620;color:#f1f2e8}
 .tahoe-closing-grid{display:grid;grid-template-columns:1fr .9fr;gap:clamp(55px,9vw,160px)}
 .tahoe-closing h2{margin:18px 0 0}.tahoe-closing h2 em{color:#b7e3d3}
