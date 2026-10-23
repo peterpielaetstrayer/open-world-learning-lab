@@ -93,7 +93,7 @@ export const visualAssets: Record<string, VisualAsset> = {
     key: "tahoe-origin-atlas",
     desktopSrc: "/visuals/open-world-tahoe/tahoe-living-atlas.svg",
     mobileSrc: null,
-    alt: "Four-zone origin atlas for Open World Tahoe — lake, mountain, trail, and campfire.",
+    alt: "Illustrated Tahoe alpine landscape showing the lake, mountain ranges, forests, and conceptual field observation routes.",
     caption: "Origin study — four interconnected learning zones.",
     width: 1600,
     height: 900,
