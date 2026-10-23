@@ -1,0 +1,146 @@
+/* Open World Tahoe: living field atlas / scoped visual system */
+.tahoe-page{--tahoe-paper:#f2efe6;--tahoe-ink:#17201d;--tahoe-deep:#102620;--tahoe-gold:#d9b475;--tahoe-water:#8fd1c4;color:var(--tahoe-ink);background:var(--tahoe-paper);overflow:hidden}
+.tahoe-page *{box-sizing:border-box}
+.tahoe-container{width:min(100% - clamp(40px,8vw,150px),1260px);margin-inline:auto}
+.tahoe-section{padding-block:clamp(78px,10vw,150px)}
+.tahoe-kicker{text-transform:uppercase;letter-spacing:.16em;font:600 11px/1.5 var(--font-ibm-plex-mono),monospace;color:#3c6254}
+.tahoe-page h1,.tahoe-page h2,.tahoe-page h3,.tahoe-page blockquote{font-family:var(--font-newsreader),Georgia,serif;font-weight:400}
+.tahoe-page h2{font-size:clamp(43px,5.2vw,78px);line-height:1.08;letter-spacing:-.048em;text-wrap:balance}
+.tahoe-page h2 em,.tahoe-page h1 em{font-weight:400}
+.tahoe-page p{line-height:1.77}
+.tahoe-page a:focus-visible,.tahoe-page button:focus-visible,.tahoe-page input:focus-visible{outline:3px solid #ecc47d;outline-offset:5px}
+.tahoe-hero{min-height:min(820px,calc(100svh - 65px));min-height:clamp(660px,83svh,890px);position:relative;display:flex;align-items:flex-end;color:#f4f0e4;background:#102620;isolation:isolate}
+.tahoe-vista{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:saturate(.9)}
+.tahoe-hero-vignette{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,29,26,.90) 0%,rgba(9,31,27,.62) 33%,rgba(11,32,27,.10) 85%),linear-gradient(0deg,rgba(5,22,21,.85),transparent 55%,rgba(5,22,21,.1));z-index:-1}
+.tahoe-hero-content{padding-block:140px 105px;position:relative}
+.tahoe-hero-eyebrow{display:flex;gap:16px;align-items:center;text-transform:uppercase;font:600 11px/1.5 var(--font-ibm-plex-mono),monospace;letter-spacing:.16em;color:#f2dfb7}
+.tahoe-hero-eyebrow span{display:block;width:38px;height:1px;background:var(--tahoe-gold)}
+.tahoe-hero h1{font-size:clamp(76px,10.8vw,160px);line-height:.86;letter-spacing:-.06em;margin:30px 0 30px;max-width:880px;text-wrap:balance}
+.tahoe-hero h1 em{color:#b7e4d6}
+.tahoe-hero-content>p{font:400 clamp(20px,2vw,27px)/1.45 var(--font-newsreader),Georgia,serif;max-width:530px;color:#e3e9dc;margin:0 0 34px}
+.tahoe-hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+.tahoe-hero-button{display:inline-flex;align-items:center;gap:22px;border:1px solid rgba(250,250,239,.65);border-radius:99px;padding:14px 21px;letter-spacing:.06em;text-transform:uppercase;font:600 11px/1.3 var(--font-ibm-plex-mono),monospace;color:#faf9f1;text-decoration:none;transition:transform .2s,background .2s,color .2s}
+.tahoe-hero-button-primary{background:#f5f0df;border-color:#f5f0df;color:#163128}
+.tahoe-hero-button:hover{transform:translateY(-3px);background:#f5f0df;color:#163128}
+.tahoe-hero-side{position:absolute;right:5vw;top:8%;font:10px var(--font-ibm-plex-mono),monospace;letter-spacing:.12em;writing-mode:vertical-rl;color:#e0ddc3;border-right:1px solid #cfd8c86b;padding-right:12px}
+.tahoe-hero-foot{position:absolute;bottom:22px;right:5vw;font:10px var(--font-ibm-plex-mono),monospace;letter-spacing:.12em;text-transform:uppercase;color:#e4e9d6b9}
+.tahoe-concept-strip{background:#e7e3d8;border-bottom:1px solid #c7cec2;padding:19px 0}
+.tahoe-concept-strip .tahoe-container{display:flex;align-items:center;gap:28px}
+.tahoe-concept-strip span{white-space:nowrap;text-transform:uppercase;letter-spacing:.08em;font:600 10px var(--font-ibm-plex-mono),monospace;color:#2e695b}
+.tahoe-concept-strip p{font-size:13px;line-height:1.5;color:#526359;margin:0}
+.tahoe-story-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(55px,8vw,140px)}
+.tahoe-story h2{margin:20px 0 22px}
+.tahoe-story h2 em{color:#427969}
+.tahoe-story-line{width:50px;height:2px;background:#4e8075;margin:32px 0}
+.tahoe-story-lead{font:400 clamp(20px,2.1vw,28px)/1.52 var(--font-newsreader),Georgia,serif;color:#283c34}
+.tahoe-story-grid>div:last-child>p{color:#4c5b52;font-size:16px;margin:0 0 21px}
+.tahoe-story blockquote{font-size:clamp(27px,3vw,38px);line-height:1.24;color:#27665b;font-style:italic;border-top:1px solid #bfcbbd;border-bottom:1px solid #bfcbbd;padding:32px 0;margin:37px 0}
+.tahoe-atlas{background:#102620;color:#eef3e7;position:relative;isolation:isolate}
+.tahoe-atlas:before{position:absolute;content:"";inset:0;z-index:-1;opacity:.28;background:repeating-radial-gradient(ellipse at 50% 48%,transparent 0 64px,rgba(142,188,170,.15) 65px,transparent 67px)}
+.tahoe-section-heading{display:flex;align-items:end;justify-content:space-between;gap:40px;margin-bottom:52px}
+.tahoe-section-heading h2{margin:18px 0 0}
+.tahoe-section-heading>p{max-width:350px;font-size:15px;color:#586a60;margin:0}
+.tahoe-atlas-heading h2 em{color:#bfe0cc}
+.tahoe-atlas-heading>p{color:#b4cabe}
+.tahoe-atlas .tahoe-kicker{color:#b6ba9e}
+.tahoe-atlas-ui{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(315px,.75fr);min-height:590px;border:1px solid #769a8152;box-shadow:0 32px 85px #07171080}
+.tahoe-map{position:relative;min-height:590px;background:#16372f;isolation:isolate;overflow:hidden}
+.tahoe-contours{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+.tahoe-map-label{position:absolute;top:26px;left:26px;font:10px var(--font-ibm-plex-mono),monospace;letter-spacing:.13em;text-transform:uppercase;color:#aecabb}
+.tahoe-compass{position:absolute;right:24px;top:25px;color:#dfcd99;font:11px var(--font-ibm-plex-mono),monospace}
+.tahoe-map-bottom{position:absolute;bottom:24px;left:26px;right:16px;text-transform:uppercase;letter-spacing:.08em;color:#a5c5b5;font:10px/1.4 var(--font-ibm-plex-mono),monospace}
+.tahoe-zone-pin{display:flex;align-items:center;gap:9px;position:absolute;z-index:1;border:1px solid #a4c0ab99;border-radius:99px;padding:10px 13px;background:#173a32ed;backdrop-filter:blur(12px);color:#f0f3e5;text-transform:uppercase;letter-spacing:.07em;font:600 11px var(--font-ibm-plex-mono),monospace;white-space:nowrap;cursor:pointer;transition:background .2s,transform .2s,color .2s}
+.tahoe-zone-pin:hover,.tahoe-zone-pin.is-active{background:#e8f0df;color:#193a31;transform:translateY(-3px);border-color:#d1e7d8}
+.tahoe-pin-mark{width:8px;height:8px;border-radius:99px;background:#98d5c7;box-shadow:0 0 0 4px #98d5c729}
+.tahoe-zone-pin.is-active .tahoe-pin-mark{background:#316f64}
+.tahoe-pin-mountain{top:23%;left:46%}.tahoe-pin-lake{top:55%;left:45%}.tahoe-pin-trail{top:44%;left:10%}.tahoe-pin-fire{top:81%;left:44%}
+.tahoe-atlas-details{padding:37px 34px;background:linear-gradient(145deg,#183a32,#0b211d);border-left:1px solid #789c883e;display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+.tahoe-detail-overline{font:11px var(--font-ibm-plex-mono),monospace;letter-spacing:.17em;text-transform:uppercase;color:#e1cf9f}
+.tahoe-detail-symbol{font-size:43px;line-height:1;color:#d9b475;display:block;margin-bottom:20px}
+.tahoe-atlas-details h3{font-size:clamp(34px,4vw,57px);line-height:1.02;letter-spacing:-.042em;margin:0 0 20px}
+.tahoe-atlas-details p{font-size:14px;color:#c5d5c8;margin:0}
+.tahoe-topics{display:flex;flex-wrap:wrap;gap:6px;margin:23px 0}
+.tahoe-topics span{border:1px solid #748e7e8c;border-radius:99px;padding:5px 8px;font:10px var(--font-ibm-plex-mono),monospace;color:#e1ebdf}
+.tahoe-detail-foot{border-top:1px solid #789c8859;padding-top:22px}
+.tahoe-detail-foot>span{display:block;font:10px var(--font-ibm-plex-mono),monospace;letter-spacing:.1em;text-transform:uppercase;color:#e0bf80;margin-bottom:8px}
+.tahoe-detail-foot strong{display:block;font:400 18px/1.35 var(--font-newsreader),Georgia,serif;color:#e7efe1}
+.tahoe-detail-foot p{font-size:11px;color:#e3c888;margin-top:18px}
+.tahoe-map-note,.tahoe-mission-note{font:11px/1.6 var(--font-ibm-plex-mono),monospace;letter-spacing:.01em;color:#a7c1b1;margin:20px 0 0}
+.tahoe-flip{background:#dedbd2}
+.tahoe-flip-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.2fr);gap:clamp(45px,7vw,110px);align-items:center}
+.tahoe-flip-copy h2{margin:20px 0 30px}.tahoe-flip-copy h2 em{color:#337468}
+.tahoe-flip-copy p{font-size:16px;line-height:1.75;color:#4d5c53;margin:0 0 23px}
+.tahoe-ink-rule{height:2px;width:50px;background:#326c64;margin:30px 0}
+.tahoe-flip-copy p.tahoe-flip-emphasis{font:400 22px/1.45 var(--font-newsreader),Georgia,serif;color:#22483d}
+.tahoe-motion-panel{background:#102620;color:#f2f4e7;padding:27px;box-shadow:19px 22px 0 #253c3319;min-width:0}
+.tahoe-motion-top{display:flex;justify-content:space-between;gap:12px;text-transform:uppercase;letter-spacing:.1em;font:10px/1.5 var(--font-ibm-plex-mono),monospace;color:#b5c9b9}
+.tahoe-motion-svg{width:100%;height:auto;display:block;margin:25px 0 0}
+.tahoe-motion-stats{display:grid;grid-template-columns:.8fr .8fr 1.4fr;border-top:1px solid #759b8559;padding-block:20px;gap:12px}
+.tahoe-motion-stats span{display:block;text-transform:uppercase;font:10px var(--font-ibm-plex-mono),monospace;color:#98b7a7}
+.tahoe-motion-stats strong{display:block;margin-top:6px;font:400 clamp(15px,2vw,24px) var(--font-newsreader),Georgia,serif;color:#f4f3e8}
+.tahoe-scrub{display:flex;align-items:center;gap:14px;color:#e6e8d9;font:10px var(--font-ibm-plex-mono),monospace;letter-spacing:.07em;text-transform:uppercase}
+.tahoe-scrub input{flex:1;min-width:20px;accent-color:#e0c080;cursor:pointer;min-height:24px}
+.tahoe-motion-panel .tahoe-motion-disclaimer{margin:18px 0 0;color:#abc7b6;font:10px/1.6 var(--font-ibm-plex-mono),monospace}
+.tahoe-sequence{background:#1b3830;color:#f0f1e6;padding:clamp(70px,8vw,110px) 0}
+.tahoe-sequence .tahoe-kicker{color:#c9d2b8}
+.tahoe-sequence h2{margin:15px 0 17px}.tahoe-sequence h2 em{color:#c3ddcb}
+.tahoe-sequence>.tahoe-container>p{max-width:750px;color:#c8d8ca;font-size:16px}
+.tahoe-sequence-list{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));padding:0;margin:50px 0 0;list-style:none;border-top:1px solid #9ebbaa76}
+.tahoe-sequence-list li{position:relative;padding:18px 6px 0 0;display:flex;flex-direction:column;gap:14px}
+.tahoe-sequence-list li:before{content:"";position:absolute;left:0;top:-5px;width:9px;height:9px;background:#e0bd7a;border-radius:99px}
+.tahoe-sequence-list li span{font:10px var(--font-ibm-plex-mono),monospace;color:#d3b983}
+.tahoe-sequence-list li strong{font:400 clamp(15px,1.5vw,19px)/1.35 var(--font-newsreader),Georgia,serif;max-width:115px}
+.tahoe-missions{background:#f2efe6}
+.tahoe-missions h2 em{color:#376e61}
+.tahoe-mission-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.tahoe-mission{border:1px solid #c9d0c3;min-width:0;background:#fcfaf5;display:flex;flex-direction:column;transition:transform .22s,box-shadow .22s}
+.tahoe-mission:hover{transform:translateY(-4px);box-shadow:0 13px 30px #283c2b12}
+.tahoe-mission-illustration{height:180px;display:flex;align-items:center;justify-content:center;background:#e3ebe1;color:#376758;border-bottom:1px solid #cad1c4;padding:15px}
+.tahoe-mission-illustration svg{width:100%;height:100%;max-width:220px}
+.tahoe-mission-ill-1{background:#d8e6e5;color:#316c6e}.tahoe-mission-ill-2{background:#e9e4d4;color:#82765a}.tahoe-mission-ill-3{background:#f0e2ca;color:#9c6d3a}
+.tahoe-mission-body{padding:25px 20px 20px;display:flex;flex-direction:column;flex:1}
+.tahoe-mission-index{font:10px var(--font-ibm-plex-mono),monospace;text-transform:uppercase;letter-spacing:.08em;color:#527367;margin:0 0 15px}
+.tahoe-mission h3{font-size:clamp(25px,2.3vw,34px);line-height:1.1;letter-spacing:-.03em;min-height:78px;margin:0 0 14px}
+.tahoe-mission-body>p:not(.tahoe-mission-index){font-size:13px;line-height:1.7;color:#546358;margin:0 0 20px}
+.tahoe-mission-topics{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto;padding-bottom:20px}
+.tahoe-mission-topics span{font:9px var(--font-ibm-plex-mono),monospace;color:#52685c;border:1px solid #ccd4c7;border-radius:99px;padding:4px 6px}
+.tahoe-mission-artifact{border-top:1px solid #d3d8ce;padding-top:17px;display:flex;flex-direction:column;gap:5px}
+.tahoe-mission-artifact span{font:10px var(--font-ibm-plex-mono),monospace;color:#466057;text-transform:uppercase}
+.tahoe-mission-artifact strong{font:400 17px/1.35 var(--font-newsreader),Georgia,serif;color:#28695c}
+.tahoe-mission-note{color:#465d52}
+.tahoe-closing{background:#102620;color:#f1f2e8}
+.tahoe-closing-grid{display:grid;grid-template-columns:1fr .9fr;gap:clamp(55px,9vw,160px)}
+.tahoe-closing h2{margin:18px 0 0}.tahoe-closing h2 em{color:#b7e3d3}
+.tahoe-closing p{color:#cad8cb;font-size:16px;margin:0 0 20px}
+.tahoe-closing .tahoe-kicker{color:#c7bc96}
+.tahoe-closing-link{display:inline-flex;margin-top:20px;padding:14px 22px;border:1px solid #cdd9c8;border-radius:99px;color:#f5f5e8;text-decoration:none;font:600 11px var(--font-ibm-plex-mono),monospace;text-transform:uppercase;letter-spacing:.08em;gap:20px}
+.tahoe-closing-link:hover{background:#f5f5e8;color:#18352e}
+.tahoe-related{background:#f2efe6;border-top:1px solid #bec8bb;padding:45px 0 70px}
+@media(max-width:1050px){.tahoe-mission-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tahoe-atlas-ui{grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr)}.tahoe-flip-grid{gap:35px}}
+@media(max-width:760px){.tahoe-container{width:calc(100% - 42px)}.tahoe-section{padding-block:75px}.tahoe-hero{min-height:680px;align-items:end}.tahoe-hero-content{padding-block:120px 105px}.tahoe-hero h1{font-size:clamp(68px,14vw,108px)}.tahoe-hero-side{display:none}.tahoe-hero-foot{left:21px;right:auto;bottom:20px}.tahoe-hero-vignette{background:linear-gradient(90deg,#071f1de5,#071f1d78),linear-gradient(0deg,#071d1cef,transparent 80%)}.tahoe-concept-strip .tahoe-container{align-items:flex-start;flex-direction:column;gap:5px}.tahoe-story-grid,.tahoe-flip-grid,.tahoe-closing-grid{grid-template-columns:1fr;gap:32px}.tahoe-section-heading{display:block;margin-bottom:30px}.tahoe-section-heading>p{max-width:600px;margin-top:25px}.tahoe-atlas-ui{grid-template-columns:1fr}.tahoe-map{min-height:460px}.tahoe-atlas-details{border-left:0;border-top:1px solid #789c883e;min-height:430px}.tahoe-atlas-details h3{font-size:45px}.tahoe-sequence-list{grid-template-columns:repeat(4,1fr);row-gap:26px}.tahoe-mission h3{min-height:auto}.tahoe-motion-panel{padding:18px}}
+@media(max-width:470px){.tahoe-hero{min-height:650px}.tahoe-hero h1{font-size:68px}.tahoe-hero-eyebrow{font-size:9px}.tahoe-hero-content>p{font-size:20px}.tahoe-hero-actions{align-items:flex-start;flex-direction:column}.tahoe-page h2{font-size:45px}.tahoe-map{min-height:395px}.tahoe-map-label{font-size:8px;left:15px}.tahoe-map-bottom{font-size:8px;left:15px}.tahoe-zone-pin{font-size:9px;padding:9px 10px;gap:6px}.tahoe-pin-trail{left:3%}.tahoe-pin-lake{left:39%}.tahoe-pin-mountain{left:37%}.tahoe-pin-fire{left:36%;top:77%}.tahoe-mission-grid{grid-template-columns:1fr}.tahoe-mission-illustration{height:160px}.tahoe-sequence-list{grid-template-columns:repeat(2,1fr)}.tahoe-motion-stats{gap:7px}.tahoe-motion-stats span{font-size:8px}.tahoe-motion-stats strong{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.tahoe-page *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+@media print{.tahoe-page{background:#fff;color:#111}.tahoe-hero{min-height:340px}.tahoe-hero-content{padding-block:60px}.tahoe-atlas,.tahoe-closing,.tahoe-sequence{print-color-adjust:exact}.tahoe-zone-pin{border:1px solid #ddd}.tahoe-missions,.tahoe-story{break-inside:avoid}.tahoe-motion-panel{break-inside:avoid}}
+
+/* A little motion in the field, without tying information to animation. */
+@media (prefers-reduced-motion: no-preference) {
+  .tahoe-vista { animation: tahoe-horizon-drift 28s ease-in-out infinite alternate; transform-origin: 58% 55%; }
+  .tahoe-zone-pin:not(.is-active) .tahoe-pin-mark { animation: tahoe-field-beacon 4s ease-in-out infinite; }
+  .tahoe-zone-pin:nth-of-type(2) .tahoe-pin-mark { animation-delay: .75s; }
+  .tahoe-zone-pin:nth-of-type(3) .tahoe-pin-mark { animation-delay: 1.5s; }
+  .tahoe-zone-pin:nth-of-type(4) .tahoe-pin-mark { animation-delay: 2.25s; }
+}
+@keyframes tahoe-horizon-drift {
+  from { transform: scale(1.015) translate3d(0,0,0); }
+  to { transform: scale(1.07) translate3d(-.6%,.3%,0); }
+}
+@keyframes tahoe-field-beacon {
+  0%,100% { box-shadow: 0 0 0 4px #98d5c729; }
+  50% { box-shadow: 0 0 0 9px #98d5c712; }
+}
+
+.tahoe-share-bar{background:#e9e5da;border-top:1px solid #bbc9bc;padding:22px 0}
+.tahoe-share-bar .tahoe-container{display:flex;justify-content:flex-end}
+
+.tahoe-hero .tahoe-vista{object-position:54% 49%;filter:saturate(.91) contrast(1.02)}
+@media(max-width:760px){.tahoe-hero .tahoe-vista{object-position:59% center}}

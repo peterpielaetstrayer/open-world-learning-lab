@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="t d">
+<title id="t">Open World Tahoe, an illustrated living field atlas</title>
+<desc id="d">Illustrated Tahoe basin landscape with alpine mountains, lake, forest, routes, and interconnected field observation markers.</desc>
+<defs>
+<linearGradient id="sky" x2="0" y2="1"><stop stop-color="#bdba9d"/><stop offset=".52" stop-color="#5f8387"/><stop offset="1" stop-color="#234b51"/></linearGradient>
+<linearGradient id="water" x2="0" y2="1"><stop stop-color="#72adab"/><stop offset=".45" stop-color="#327780"/><stop offset="1" stop-color="#0d3d48"/></linearGradient>
+<linearGradient id="ridge" x2="0" y2="1"><stop stop-color="#768c84"/><stop offset="1" stop-color="#1f4a46"/></linearGradient>
+<radialGradient id="sun"><stop stop-color="#ffeebc" stop-opacity=".9"/><stop offset=".37" stop-color="#f4cd83" stop-opacity=".25"/><stop offset="1" stop-color="#ffdb83" stop-opacity="0"/></radialGradient>
+<pattern id="tree" width="72" height="118" patternUnits="userSpaceOnUse"><path d="M35 108V16 M5 78L35 17L65 78M10 61L35 12L60 61" fill="none" stroke="#092b2b" stroke-width="8" stroke-linejoin="round" opacity=".45"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#sky)"/>
+<ellipse cx="1230" cy="170" rx="470" ry="350" fill="url(#sun)"/>
+<path d="M0 448L125 362L268 385L420 248L493 325L610 211L695 286L810 157L910 270L1047 142L1157 255L1278 159L1429 267L1538 174L1600 225V610H0Z" fill="#a4b5aa" opacity=".58"/>
+<path d="M0 482L125 397L280 407L421 274L498 358L609 224L692 312L811 177L909 284L1047 158L1160 293L1278 182L1419 289L1533 194L1600 251V630H0Z" fill="url(#ridge)"/>
+<g fill="#e4e9dc" opacity=".94"><path d="M361 331L421 274L485 351L444 328L424 297L398 320Z"/><path d="M750 234L811 177L859 233L829 218L813 194L787 214Z"/><path d="M994 218L1047 158L1105 228L1070 210L1047 181L1024 206Z"/><path d="M1240 223L1278 182L1328 238L1296 217L1278 201L1264 216Z"/><path d="M1490 231L1533 194L1578 257L1543 238L1530 219Z"/></g>
+<path d="M0 481Q235 465 392 485T806 486Q1050 458 1227 482T1600 475V900H0Z" fill="url(#water)"/>
+<g fill="none" stroke="#e8f0da" stroke-width="2" opacity=".3"><path d="M120 546Q440 526 740 548T1510 539"/><path d="M0 586Q450 562 850 585T1600 574"/><path d="M80 650Q610 626 1170 647T1600 632"/><path d="M0 745Q680 720 1530 748"/></g>
+<path d="M0 506Q102 468 193 505L350 510L381 610L285 665L0 645ZM1216 496Q1325 457 1422 499L1600 471V693L1484 682L1300 584Z" fill="#254942"/>
+<path d="M0 562L280 534L479 747L388 900H0ZM1600 550L1370 542L1159 780L1247 900H1600Z" fill="#113a34"/>
+<path d="M0 562L280 534L479 747L388 900H0ZM1600 550L1370 542L1159 780L1247 900H1600Z" fill="url(#tree)"/>
+<path d="M0 776Q278 643 490 747T1036 798V900H0Z M1600 750Q1477 676 1335 704T1101 900H1600Z" fill="#0c322f"/>
+<g fill="none" stroke="#efc77e" stroke-width="1.5" opacity=".55"><path d="M70 706C220 631 330 661 430 718S690 823 836 730S1032 628 1222 700"/><path d="M72 730C225 655 326 684 430 745S685 842 849 752S1035 652 1233 723"/><path d="M850 173Q1000 45 1255 100Q1441 125 1505 278" stroke-dasharray="4 10"/><circle cx="1228" cy="215" r="96" stroke-dasharray="4 10"/></g>
+<g fill="#f6d491" stroke="#153a36" stroke-width="3"><circle cx="435" cy="720" r="7"/><circle cx="838" cy="732" r="7"/><circle cx="1220" cy="700" r="7"/></g>
+<g stroke="#f2d596" fill="none" opacity=".5"><circle cx="435" cy="720" r="17"/><circle cx="838" cy="732" r="17"/><circle cx="1220" cy="700" r="17"/></g>
+</svg>
