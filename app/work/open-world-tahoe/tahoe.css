@@ -141,3 +141,6 @@
 
 .tahoe-share-bar{background:#e9e5da;border-top:1px solid #bbc9bc;padding:22px 0}
 .tahoe-share-bar .tahoe-container{display:flex;justify-content:flex-end}
+
+.tahoe-hero .tahoe-vista{object-position:54% 49%;filter:saturate(.91) contrast(1.02)}
+@media(max-width:760px){.tahoe-hero .tahoe-vista{object-position:59% center}}
