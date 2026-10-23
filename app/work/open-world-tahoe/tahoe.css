@@ -137,3 +137,6 @@
   0%,100% { box-shadow: 0 0 0 4px #98d5c729; }
   50% { box-shadow: 0 0 0 9px #98d5c712; }
 }
+
+.tahoe-share-bar{background:#e9e5da;border-top:1px solid #bbc9bc;padding:22px 0}
+.tahoe-share-bar .tahoe-container{display:flex;justify-content:flex-end}
