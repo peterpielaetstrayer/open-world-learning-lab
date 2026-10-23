@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import WorldQuestionsAtlas from "@/components/WorldQuestionsAtlas";
 import Footer from "@/components/Footer";
 import SectionHeader from "@/components/SectionHeader";
 import PullQuote from "@/components/PullQuote";
@@ -139,6 +140,13 @@ export default function Home() {
               </p>
             </div>
           </div>
+        </EditorialSection>
+
+        <SectionDivider />
+
+        {/* INTERACTIVE WORLD-AS-CLASSROOM DEMONSTRATION */}
+        <EditorialSection id="living-atlas" spacing="compact">
+          <WorldQuestionsAtlas />
         </EditorialSection>
 
         <SectionDivider />
