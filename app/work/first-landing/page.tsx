@@ -107,6 +107,26 @@ export default function FirstLandingPage() {
         </ol>
       </ContentSection>
 
+      <ContentSection title="Three related stages, not one finished program">
+        <div className="grid gap-4 sm:grid-cols-3">
+          {[
+            { stage: "01 / Origin", title: "Six-week learning design", reality: "The proposed multidisciplinary learning experience and the questions a pilot would test." },
+            { stage: "02 / Creator", title: "Water Writes the Landscape", reality: "An eight-stop Journey Studio prototype. Not an implemented or validated field pilot." },
+            { stage: "03 / Learner", title: "Water Fingerprints", reality: "A bounded adult LOCUS v0.1.1 field-test encounter for observing, evidencing, and returning." },
+          ].map((stage) => (
+            <article key={stage.stage} className="rounded-lg border border-border bg-soft-paper/40 p-5">
+              <p className="font-mono text-metadata uppercase tracking-widest text-water">{stage.stage}</p>
+              <h3 className="mt-3 font-serif text-xl text-ink">{stage.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-secondary">{stage.reality}</p>
+            </article>
+          ))}
+        </div>
+        <p className="mt-5 text-sm text-secondary">
+          These are increasingly concrete answers to a shared research question, not three completed programs.
+          A working prototype does not establish an educational outcome.
+        </p>
+      </ContentSection>
+
       <ContentSection title="What currently exists">
         <p>
           This page documents the original six-week concept, its learner arc, and pilot questions. A newer eight-stop <em>Water Writes the Landscape</em> learner route exists as a technical prototype in LOCUS Journey Studio. The two represent different stages of the same investigation, not two completed or field-tested educational programs.

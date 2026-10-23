@@ -34,7 +34,7 @@ export default function LocusPage() {
           projectType="Learning Infrastructure"
           status="product-prototype"
           summary="LOCUS helps connect real-world experience, Field Notes, guided inquiry, practice, mentorship, creation, reflection, and cumulative growth."
-          statusNotice="LOCUS is in product and learning-experience design. Early functions may be manually facilitated, rule-based, or simulated. The public page describes the educational system from the learner's perspective and does not represent a complete production platform."
+          statusNotice="A narrow adult field-test prototype is working in a separate LOCUS learner app. Creator integration, adaptive intelligence, validated learning outcomes, and youth-ready infrastructure remain future work. This is not a complete production learning platform."
         />
       }
       related={<RelatedWork projects={relatedProjects} />}
@@ -103,15 +103,59 @@ export default function LocusPage() {
         </p>
       </ContentSection>
 
-      <ContentSection title="What currently exists">
+      <ContentSection title="What exists now / What is still experimental">
         <p>
-          A public system description, educational architecture outline, and early prototype design direction. Production platform, creator methodology, and internal systems remain in development.
+          LOCUS v0.1.1 is a bounded adult founder field-test application. Its Water Fingerprints encounter supports
+          attention and observation, three quick captures, a distinct evidence step, explanation from memory,
+          reflection, later retrieval, and export of an individual field-test record.
+        </p>
+        <p>
+          The current learner app uses browser-local storage, with offline use possible after an initial online load.
+          It does not have account sync, a live-AI assistant, a full Learner Atlas, or production youth safeguards.
+          A working app is not, by itself, evidence of improved learning outcomes.
+        </p>
+        <div className="mt-7 grid gap-3 sm:grid-cols-3">
+          {[
+            { label: "Working", detail: "One adult field inquiry: notice, capture, examine evidence, articulate, reflect, and return." },
+            { label: "In development", detail: "Creator workflows, portable journey handoff, and future continuity infrastructure." },
+            { label: "Not established", detail: "Measured learning benefits, youth readiness, cloud sync, or a unified adaptive platform." },
+          ].map((item) => (
+            <article key={item.label} className="rounded-lg border border-border bg-soft-paper/40 p-5">
+              <h3 className="font-serif text-xl text-ink">{item.label}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-secondary">{item.detail}</p>
+            </article>
+          ))}
+        </div>
+        <div className="mt-6 flex flex-wrap gap-4">
+          <a href="https://locus-blond.vercel.app/" target="_blank" rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center rounded-full bg-moss px-6 py-3 text-sm font-medium text-on-dark hover:bg-deep-field">
+            Open adult field-test app ↗
+          </a>
+          <a href="https://github.com/peterpielaetstrayer/locus" target="_blank" rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center text-sm font-medium text-water hover:text-moss">
+            Read code and test limitations ↗
+          </a>
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-quiet">
+          Adult experimental prototype. Work is stored in the browser used for testing and can be lost if its
+          local data is cleared; export your record to preserve it. The field-test deployment may change during development.
         </p>
       </ContentSection>
 
-      <ContentSection title="What remains future work">
+      <ContentSection title="How the product pieces relate">
         <p>
-          Full platform development, automated Field Notes tooling, creator workflows, mentor dashboards, Learning Atlas visualization, and validated learning-loop prototypes in real educational contexts.
+          OWLL studies and communicates the educational approach. First Landing is a proposed place-based
+          learning journey. The LOCUS learner app implements one narrow real-world encounter.
+          Journey Studio develops separate creator and facilitator workflows; LOCUS Core remains a reference
+          learner-surface prototype. They are not yet one seamlessly integrated system.
+        </p>
+      </ContentSection>
+
+      <ContentSection title="Next evidence gates">
+        <p>
+          Confirm the creator-to-learner handoff against real artifacts, test usability in actual field conditions,
+          examine the quality of learner evidence and later recall, and complete appropriate privacy and
+          safeguarding reviews before expanding public access or adaptive functionality.
         </p>
       </ContentSection>
 
