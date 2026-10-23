@@ -50,7 +50,7 @@ export default function Header() {
         </Link>
 
         <nav
-          className="hidden md:flex items-center gap-5 lg:gap-6"
+          className="hidden xl:flex items-center gap-5 lg:gap-6"
           aria-label="Main navigation"
         >
           {navLinks.map((link) => {
@@ -81,7 +81,7 @@ export default function Header() {
         <button
           ref={menuButtonRef}
           type="button"
-          className="md:hidden inline-flex min-h-11 min-w-11 items-center justify-center rounded-md -mr-1"
+          className="xl:hidden inline-flex min-h-11 min-w-11 items-center justify-center rounded-md -mr-1"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           aria-controls={menuId}
@@ -105,7 +105,7 @@ export default function Header() {
         <nav
           ref={menuRef}
           id={menuId}
-          className="md:hidden border-t border-border bg-page px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+          className="xl:hidden border-t border-border bg-page px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
           aria-label="Mobile navigation"
         >
           <ul className="flex flex-col gap-1">
