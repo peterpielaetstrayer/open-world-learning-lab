@@ -220,8 +220,11 @@ export default function StartPage() {
                 <Link href="/#learning-loop" className="inline-flex min-h-11 items-center font-medium text-water hover:text-moss">
                   Explore the learning approach →
                 </Link>
-                <Link href="/work" className="inline-flex min-h-11 items-center font-medium text-water hover:text-moss">
-                  See current projects →
+                <Link href="/work/first-landing/field-experience" className="inline-flex min-h-11 items-center font-medium text-water hover:text-moss">
+                  Try an illustrated coastal inquiry →
+                </Link>
+                <Link href="/work/locus" className="inline-flex min-h-11 items-center font-medium text-water hover:text-moss">
+                  See how LOCUS preserves field evidence →
                 </Link>
               </div>
             </div>

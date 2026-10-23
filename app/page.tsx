@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import WorldQuestionsAtlas from "@/components/WorldQuestionsAtlas";
+import VisitorLearningPath from "@/components/VisitorLearningPath";
 import Footer from "@/components/Footer";
 import SectionHeader from "@/components/SectionHeader";
 import PullQuote from "@/components/PullQuote";
@@ -147,6 +148,13 @@ export default function Home() {
         {/* INTERACTIVE WORLD-AS-CLASSROOM DEMONSTRATION */}
         <EditorialSection id="living-atlas" spacing="compact">
           <WorldQuestionsAtlas />
+        </EditorialSection>
+
+        <SectionDivider />
+
+        {/* An actual, non-mandatory visitor route through working experiments */}
+        <EditorialSection id="explore-the-inquiries" variant="soft" spacing="compact">
+          <VisitorLearningPath />
         </EditorialSection>
 
         <SectionDivider />

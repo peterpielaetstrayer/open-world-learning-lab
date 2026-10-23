@@ -84,9 +84,19 @@ export default function FieldExperiencePage() {
                   These two interfaces are not connected. LOCUS does not yet provide a production-ready
                   learning platform, cloud account syncing, or independently validated learning outcomes.
                 </p>
-                <Link href="/work/locus" className="mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-water hover:text-moss">
-                  Explore the working LOCUS prototype →
-                </Link>
+                <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
+                  <Link href="/work/locus" className="inline-flex min-h-11 items-center text-sm font-semibold text-water hover:text-moss">
+                    Understand the LOCUS product →
+                  </Link>
+                  <a href="https://locus-blond.vercel.app/" target="_blank" rel="noopener noreferrer"
+                    className="inline-flex min-h-11 items-center text-sm font-semibold text-water hover:text-moss">
+                    Open the separate adult field-test app ↗
+                  </a>
+                </div>
+                <p className="mt-3 text-xs leading-relaxed text-quiet">
+                  Starting LOCUS creates a new session in that application. It does not import
+                  the notes or decisions from this illustrative experience.
+                </p>
               </div>
             </div>
           </WideContainer>
