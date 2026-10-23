@@ -14,6 +14,7 @@ const routes = [
   ["/about", "About"],
   ["/work", "Current Work"],
   ["/work/first-landing", "First Landing"],
+  ["/work/first-landing/field-experience", "Water Fingerprints"],
   ["/work/locus", "LOCUS"],
   ["/releases", "Releases"],
   ["/learning-environments", "Learning Environments"],
@@ -204,6 +205,75 @@ async function run() {
   } finally {
     await interactionContext.close();
   }
+  // First Landing visitor flow: change evidence lens, state a hypothesis,
+  // compare an alternative, recall independently, and export only on user action.
+  const coastalIssues = [];
+  const coastalContext = await browser.newContext({ viewport: { width: 390, height: 844 }, acceptDownloads: true, reducedMotion: "reduce" });
+  const coastalPage = await coastalContext.newPage();
+  try {
+    await coastalPage.goto(baseUrl + "/work/first-landing/field-experience", {
+      waitUntil: "networkidle", timeout: 60000,
+    });
+    const ridges = coastalPage.getByRole("button", { name: "Select clue: Patterns in the sand" });
+    await ridges.click();
+    if ((await ridges.getAttribute("aria-pressed")) !== "true") {
+      coastalIssues.push("Clue selection did not update aria-pressed");
+    }
+    const observed = "The ridges look repeated\nand have a similar direction";
+    await coastalPage.getByLabel("What do you notice in this illustration?").fill(observed);
+    await coastalPage.getByRole("button", { name: /Move to explanations/ }).click();
+    await coastalPage.getByRole("radio", { name: "Wind moved or sorted the sand and debris." }).check();
+    await coastalPage.getByLabel("What is one alternative explanation you should not ignore?").fill(
+      "Water may have shaped the ridges as well."
+    );
+    await coastalPage.getByRole("button", { name: /Compare evidence/ }).click();
+    if (!(await coastalPage.getByText("Moving water and moving air can both create ripples.", { exact: false }).isVisible())) {
+      coastalIssues.push("Evidence did not match the selected clue");
+    }
+    await coastalPage.getByLabel("What does this evidence support, and what remains unresolved?").fill(
+      "The illustration cannot identify the cause by itself."
+    );
+    await coastalPage.getByRole("button", { name: /Explain from memory/ }).click();
+    if (await coastalPage.getByText(observed).count()) {
+      coastalIssues.push("Prior notes exposed before recall step reveal");
+    }
+    await coastalPage.getByLabel("Reconstruct your explanation before you look back").fill(
+      "Water or wind could make ripples; I need repeated field observations."
+    );
+    await coastalPage.getByRole("button", { name: "Reveal original notes" }).click();
+    if (!(await coastalPage.getByText(observed).isVisible())) {
+      coastalIssues.push("Prior observation did not appear after reveal");
+    }
+    const [record] = await Promise.all([
+      coastalPage.waitForEvent("download", { timeout: 10000 }),
+      coastalPage.getByRole("button", { name: "Download inquiry record" }).click(),
+    ]);
+    const recordText = fs.readFileSync(await record.path(), "utf8");
+    if (!recordText.includes(observed) || !recordText.includes("Patterns in the sand") ||
+        !recordText.includes("Water or wind could make ripples")) {
+      coastalIssues.push("First Landing field-note text export incomplete");
+    }
+    await coastalPage.reload({ waitUntil: "networkidle" });
+    if ((await coastalPage.getByLabel("What do you notice in this illustration?").inputValue()) !== "") {
+      coastalIssues.push("First Landing response unexpectedly persisted after reload");
+    }
+  } catch (error) {
+    coastalIssues.push("First Landing interaction: " + String(error).slice(0, 250));
+  } finally {
+    await coastalContext.close();
+  }
+  results.push({
+    route: "/work/first-landing/field-experience",
+    name: "Water Fingerprints full inquiry",
+    profile: "mobile",
+    issues: coastalIssues,
+    screenshot: null,
+    violations: [],
+  });
+  console.log("OWLL_FIRST_LANDING_AUDIT", JSON.stringify({
+    passed: coastalIssues.length === 0, issues: coastalIssues,
+  }));
+
   results.push({
     route: "/start",
     name: "Atlas and notebook interaction",
