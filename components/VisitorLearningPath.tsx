@@ -55,8 +55,6 @@ export default function VisitorLearningPath() {
             <article className={"relative flex h-full flex-col overflow-hidden rounded-xl border border-border-strong p-6 sm:p-7 " +
               (item.tone === "forest" ? "bg-[#18382d] text-[#f3f0e6]" :
                item.tone === "water" ? "bg-[#e5ede8] text-ink" : "bg-card text-ink")}>
-              <div aria-hidden="true" className={"absolute -right-8 -top-14 font-serif text-[11rem] leading-none opacity-[.065] " +
-                (item.tone === "forest" ? "text-white" : "text-deep-field")}>{item.number}</div>
               <div className={"relative flex items-center justify-between gap-3 border-b pb-4 font-mono text-[11px] uppercase tracking-widest " +
                 (item.tone === "forest" ? "border-[#8eaa91]/35 text-[#dfd1a5]" : "border-border-strong text-water")}>
                 <span>{item.number} / Waypoint</span>
