@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import ShareActions from "@/components/ShareActions";
 import { tahoeZones, sampleMissions } from "@/content/projects";
 
@@ -133,7 +134,7 @@ function MissionGallery(){
 export default function TahoeExperience(){
   return <main className="tahoe-page">
     <section className="tahoe-hero" aria-labelledby="tahoe-title">
-      <TahoeVista/><div className="tahoe-hero-vignette" aria-hidden="true"/><div className="tahoe-hero-side">39° N / SIERRA NEVADA / ORIGIN STUDY</div>
+      <Image src="/visuals/open-world-tahoe/tahoe-cinematic-hero.png" alt="Sunlit alpine Lake Tahoe panorama with pine forests, mountains, a hiker, distant campfire, and subtle illustrated field-atlas routes." className="tahoe-vista" fill priority sizes="100vw" quality={82}/><div className="tahoe-hero-vignette" aria-hidden="true"/><div className="tahoe-hero-side">39° N / SIERRA NEVADA / ORIGIN STUDY</div>
       <div className="tahoe-container tahoe-hero-content"><div className="tahoe-hero-eyebrow"><span/>Open World Learning Lab · Origin 001</div><h1 id="tahoe-title">Open World<br/><em>Tahoe.</em></h1>
         <p>What if the world itself could become an interconnected learning environment?</p>
         <div className="tahoe-hero-actions"><a href="#story" className="tahoe-hero-button tahoe-hero-button-primary">Discover the origin <span aria-hidden="true">↓</span></a><a href="#atlas" className="tahoe-hero-button">Explore the atlas <span aria-hidden="true">↗</span></a></div>
