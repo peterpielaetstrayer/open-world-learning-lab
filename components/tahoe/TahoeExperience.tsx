@@ -20,34 +20,6 @@ const missionSymbols = [
   <svg key="fire" viewBox="0 0 200 128" aria-hidden="true"><path d="M54 107Q63 75 76 52Q77 90 93 61Q102 26 107 17Q130 55 121 73Q151 53 141 90Q142 117 113 118H81Q53 117 54 107Z" fill="currentColor" opacity=".7"/><path d="M23 120L175 121M38 126L159 99M45 98L173 126" stroke="currentColor" strokeLinecap="round" strokeWidth="6"/></svg>
 ];
 
-function TahoeVista() {
-  return <svg className="tahoe-vista" viewBox="0 0 1600 850" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <defs>
-      <linearGradient id="tahoeSky" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#b5ad88"/><stop offset=".42" stopColor="#677d80"/><stop offset="1" stopColor="#142f37"/></linearGradient>
-      <linearGradient id="tahoeWater" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#729f98"/><stop offset=".34" stopColor="#2e6872"/><stop offset="1" stopColor="#082b36"/></linearGradient>
-      <linearGradient id="tahoeRidge" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#68807a"/><stop offset="1" stopColor="#243d3a"/></linearGradient>
-      <radialGradient id="tahoeGlow"><stop stopColor="#fff2b3" stopOpacity=".85"/><stop offset=".4" stopColor="#f5c87e" stopOpacity=".28"/><stop offset="1" stopColor="#f7d08c" stopOpacity="0"/></radialGradient>
-      <filter id="tahoeSoft"><feGaussianBlur stdDeviation="22"/></filter>
-      <pattern id="tahoeTrees" width="59" height="100" patternUnits="userSpaceOnUse"><path d="M25 95V19M2 72L25 20L48 72M7 58L25 14L45 59" fill="none" stroke="#081f21" strokeWidth="8" strokeLinejoin="round" opacity=".46"/></pattern>
-    </defs>
-    <rect width="1600" height="850" fill="url(#tahoeSky)"/>
-    <ellipse cx="1255" cy="187" rx="390" ry="310" fill="url(#tahoeGlow)"/>
-    <ellipse cx="1300" cy="207" rx="290" ry="22" fill="#fff1c2" opacity=".15" filter="url(#tahoeSoft)"/>
-    <path d="M0 420L135 358L244 386L389 253L471 325L588 209L674 283L790 173L881 266L1030 146L1148 273L1284 157L1407 267L1515 186L1600 250V625H0Z" fill="#8c9d99" opacity=".58"/>
-    <path d="M0 470L120 381L274 410L412 263L484 339L596 218L690 299L795 181L882 272L1031 159L1140 280L1279 170L1398 280L1515 199L1600 286V618H0Z" fill="url(#tahoeRidge)"/>
-    <path d="M360 321L412 263L468 338L436 324L420 306L410 289L394 319Z M750 226L795 181L847 236L818 220L800 202L781 221Z M986 201L1031 159L1104 247L1057 219L1034 189L1017 205Z M1240 211L1279 170L1337 241L1305 223L1284 194L1269 208Z M1481 235L1515 199L1555 254L1528 243L1516 218Z" fill="#e4e4da" opacity=".87"/>
-    <path d="M0 483Q220 452 353 488T708 472Q918 454 1104 478T1600 475V850H0Z" fill="url(#tahoeWater)"/>
-    <g fill="none" stroke="#c1d9ce" opacity=".3" strokeWidth="2"><path d="M165 528Q420 509 725 523T1490 525"/><path d="M100 566Q540 541 880 560T1570 551"/><path d="M240 622Q820 595 1420 624"/><path d="M0 718Q590 692 1260 709T1600 708"/><path d="M400 754Q870 738 1520 759"/></g>
-    <path d="M0 500Q102 461 177 491Q273 513 335 506L379 567L320 631L215 656L0 622Z" fill="#1e423d"/>
-    <path d="M1204 497Q1315 462 1403 489L1600 481V695L1458 660L1320 579Z" fill="#173932"/>
-    <path d="M0 556L295 530L452 675L382 850H0ZM1600 564L1380 540L1210 754L1237 850H1600Z" fill="#123029"/>
-    <path d="M0 565L295 530L452 675L382 850H0ZM1600 564L1380 540L1210 754L1237 850H1600Z" fill="url(#tahoeTrees)" opacity=".78"/>
-    <path d="M0 752Q250 629 489 736Q694 832 861 764L1007 850H0Z" fill="#102a25"/><path d="M1600 724Q1460 636 1310 704Q1200 747 1158 850H1600Z" fill="#102a25"/>
-    <g fill="none" stroke="#dec48b" strokeWidth="1.3" opacity=".42"><path d="M67 664C219 618 313 622 393 683S590 768 756 700S1026 637 1223 693"/><path d="M86 687C234 640 332 649 416 707S603 787 768 725S1042 659 1229 715"/><path d="M1090 150Q1265 47 1468 119" strokeDasharray="4 9"/><circle cx="1260" cy="168" r="102" strokeDasharray="3 9"/></g>
-    <g fill="#e7c98d"><circle cx="393" cy="683" r="4"/><circle cx="756" cy="700" r="4"/><circle cx="1223" cy="693" r="4"/></g>
-  </svg>;
-}
-
 function AtlasMap() {
   const [active, setActive] = useState(0);
   const zone = zoneDetails[active];
