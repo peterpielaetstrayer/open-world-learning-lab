@@ -217,6 +217,46 @@ async function run() {
     issues: interactionIssues,
   }));
 
+  // Product-proof presentation gate: keep the editorial flagship in a wide
+  // slot, and keep the envisioned nine-step journey labeled as conceptual.
+  for (const profile of [
+    {name:"mobile",width:390},
+    {name:"desktop",width:1440},
+  ]) {
+    const context = await browser.newContext({
+      viewport: {width:profile.width,height:860}, reducedMotion:"reduce",
+    });
+    const page = await context.newPage();
+    const issues = [];
+    try {
+      await page.goto(baseUrl + "/work/locus", {waitUntil:"networkidle",timeout:60000});
+      const spotlight = page.locator("#locus-product-proof");
+      const wideBox = await spotlight.boundingBox();
+      const mainBox = await page.locator("main").boundingBox();
+      if (!wideBox || !mainBox) issues.push("Missing product proof landmark");
+      else {
+        if (profile.name === "desktop" && wideBox.width < 900)
+          issues.push("Flagship was constrained to article width");
+        if (wideBox.width > profile.width - 12)
+          issues.push("Flagship exceeds viewport width");
+      }
+      if (!await page.getByRole("heading",{name:"The longer-term learner journey"}).isVisible())
+        issues.push("Future learner journey is not transparently labeled");
+      const live = spotlight.getByRole("link",{name:/Open working LOCUS/});
+      if (await live.getAttribute("href") !== "https://locus-blond.vercel.app/")
+        issues.push("Live product CTA has wrong URL");
+      const stages = spotlight.locator("ol > li");
+      if (await stages.count() !== 4)
+        issues.push("Expected four implemented learning moments");
+    } catch (error) {
+      issues.push("Proof layout: " + String(error).slice(0,220));
+    } finally {await context.close();}
+    results.push({
+      route:"/work/locus",name:"LOCUS proof hierarchy",
+      profile:profile.name,issues,screenshot:null,violations:[],
+    });
+  }
+
   await browser.close();
   const failed = results.filter(r => r.issues.length);
   const summary = {

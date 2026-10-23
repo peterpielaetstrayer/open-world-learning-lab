@@ -38,20 +38,27 @@ export default function LocusPage() {
           statusNotice="A narrow adult field-test prototype is working in a separate LOCUS learner app. Creator integration, adaptive intelligence, validated learning outcomes, and youth-ready infrastructure remain future work. This is not a complete production learning platform."
         />
       }
+      spotlight={<LocusProductProof />}
       related={<RelatedWork projects={relatedProjects} />}
     >
-      <ContentSection title="What LOCUS is">
+      <ContentSection title="What LOCUS is becoming">
         <p>
-          LOCUS helps connect real-world experience, Field Notes, guided inquiry, practice, mentorship, creation, reflection, and cumulative growth.
+          LOCUS is being designed as a learner-owned continuity layer for curiosity, experience, evidence,
+          reflection, and meaningful return. It aims to support learning without replacing a person&apos;s own
+          attention, judgment, practice, or relationships.
         </p>
         <p>
-          It is not simply an AI tutor. It is the emerging learning and creator infrastructure behind open-world education.
+          The functioning adult prototype deliberately tests a narrower cycle.
+          The surrounding infrastructure for mentorship, creator-authored journeys, and a cumulative Learning Atlas
+          is a product direction, not a completed system.
         </p>
       </ContentSection>
 
-      <LocusProductProof />
-
-      <ContentSection title="One complete learner journey">
+      <ContentSection title="The longer-term learner journey">
+        <p className="mb-6 text-sm text-secondary">
+          The nine stages below describe the envisioned wider ecosystem, not nine integrated features in the current app.
+          For the working adult encounter, see the four-stage product proof above.
+        </p>
         <ol className="relative max-w-reading list-none pl-5 border-l border-water/20">
           {locusFullLearnerJourney.map((step) => (
             <li key={step.step} className="relative pb-5 last:pb-0 pl-4">
@@ -88,60 +95,46 @@ export default function LocusPage() {
         </ul>
       </ContentSection>
 
-      <ContentSection title="Core layers">
+      <ContentSection title="Proposed system layers">
         <p className="mb-6 text-sm text-secondary">
-          After one learner journey, the wider system can be understood as connected layers.
+          These five layers are an architectural direction. Only a narrow portion is implemented by the current adult field-test app.
         </p>
         <LocusCoreLayers />
       </ContentSection>
 
       <FieldNoteSpecimen />
 
-      <ContentSection title="Intelligence—real and simulated">
+      <ContentSection title="Where future intelligence may help">
         <p>
-          Some early prototype functions may initially be manually facilitated, rule-based, or simulated in order to understand what the product genuinely needs before automating it.
+          Later experiments may use manual facilitation, simple rules, or clearly labeled simulations to learn where AI would genuinely support inquiry rather than replace it.
         </p>
         <p>
           The purpose of the prototype is not to pretend that complete artificial intelligence already exists. It is to identify where intelligence adds educational value, where human judgment remains necessary, and how the complete learning loop should function.
         </p>
       </ContentSection>
 
-      <ContentSection title="What exists now / What is still experimental">
+      <ContentSection title="What the current build can and cannot demonstrate">
         <p>
-          LOCUS v0.1.1 is a bounded adult founder field-test application. Its Water Fingerprints encounter supports
-          attention and observation, three quick captures, a distinct evidence step, explanation from memory,
-          reflection, later retrieval, and export of an individual field-test record.
+          LOCUS v0.1.1 implements one bounded adult field-test loop: three quick observations,
+          promotion of one Capture into reasoned Evidence, independent articulation, reflection,
+          local draft preservation, later retrieval, and a user-initiated JSON export.
+          The current experience runs in the learner&apos;s browser.
         </p>
         <p>
-          The current learner app uses browser-local storage, with offline use possible after an initial online load.
-          It does not have account sync, a live-AI assistant, a full Learner Atlas, or production youth safeguards.
-          A working app is not, by itself, evidence of improved learning outcomes.
+          The linked application has no live AI, account syncing, integrated creator delivery,
+          full Learner Atlas, or production youth safeguards. A working loop also does not establish
+          improved educational outcomes. A local backup restore feature is under review separately,
+          and is not available in the current live build.
         </p>
-        <div className="mt-7 grid gap-3 sm:grid-cols-3">
-          {[
-            { label: "Working", detail: "One adult field inquiry: notice, capture, examine evidence, articulate, reflect, and return." },
-            { label: "In development", detail: "Creator workflows, portable journey handoff, and future continuity infrastructure." },
-            { label: "Not established", detail: "Measured learning benefits, youth readiness, cloud sync, or a unified adaptive platform." },
-          ].map((item) => (
-            <article key={item.label} className="rounded-lg border border-border bg-soft-paper/40 p-5">
-              <h3 className="font-serif text-xl text-ink">{item.label}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-secondary">{item.detail}</p>
-            </article>
-          ))}
-        </div>
         <div className="mt-6 flex flex-wrap gap-4">
           <a href="https://locus-blond.vercel.app/" target="_blank" rel="noopener noreferrer"
             className="inline-flex min-h-11 items-center rounded-full bg-moss px-6 py-3 text-sm font-medium text-on-dark hover:bg-deep-field">
-            Open adult field-test app ↗
-          </a>
-          <a href="https://locus-blond.vercel.app/field/" target="_blank" rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center text-sm font-medium text-water hover:text-moss">
-            Open the field encounter ↗
+            Test the current adult prototype ↗
           </a>
         </div>
         <p className="mt-3 text-xs leading-relaxed text-quiet">
-          Adult experimental prototype. Work is stored in the browser used for testing and can be lost if its
-          local data is cleared; export your record to preserve it. The field-test deployment may change during development.
+          Your field record stays on the browser used for testing. Export it before clearing that browser.
+          The app can evolve during development.
         </p>
       </ContentSection>
 

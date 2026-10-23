@@ -9,12 +9,12 @@ const stages = [
 
 export default function LocusProductProof() {
   return (
-    <section aria-labelledby="locus-proof-title" className="overflow-hidden rounded-2xl border border-border bg-[#112e25] text-[#f1f0e4] shadow-[0_20px_52px_rgba(20,42,31,.12)]">
+    <section id="locus-product-proof" aria-labelledby="locus-proof-title" className="overflow-hidden rounded-2xl border border-border bg-[#112e25] text-[#f1f0e4] shadow-[0_20px_52px_rgba(20,42,31,.12)]">
       <div className="p-6 sm:p-9 lg:p-10">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#98b19a]/30 pb-5 font-mono text-[11px] uppercase tracking-widest text-[#cbd8c8]">
           <span>Product evidence / v0.1.1</span><span>Adult field-test app</span>
         </div>
-        <div className="mt-8 grid gap-8 md:grid-cols-[1fr_.7fr]">
+        <div className="mt-8 grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,.72fr)] md:items-end">
           <div>
             <h2 id="locus-proof-title" className="font-serif text-[clamp(2.4rem,4vw,4.2rem)] leading-[1.04] tracking-[-.04em]">
               The learning loop <em className="text-[#dbc894]">is real.</em>
@@ -41,7 +41,7 @@ export default function LocusProductProof() {
           <h3 className="font-serif text-2xl text-[#f4f2e8]">Four moments you can verify</h3>
           <span className="font-mono text-[10px] uppercase tracking-widest text-[#ccdccc]">Guided walkthrough / Actual implemented stages</span>
         </div>
-        <ol className="mt-5 grid gap-3 sm:grid-cols-2">
+        <ol className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {stages.map(stage=>(
             <li key={stage.n} className="rounded-xl border border-[#90ab92]/40 bg-[#284738]/55 p-5">
               <p className="border-b border-[#acc2a8]/25 pb-3 font-mono text-[11px] uppercase tracking-wider text-[#dccb98]">{stage.n} / {stage.phase}</p>
