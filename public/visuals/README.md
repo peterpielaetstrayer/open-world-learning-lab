@@ -10,7 +10,7 @@ Custom visuals for the Open World Learning Lab site. Production PNG masters live
 | `first-landing-coastal-systems` | `first-landing/coastal-systems-field-plate.png` | 1536 × 1024 | Yes | **final** |
 | `locus-system-spine` | `locus/locus-system-spine.png` | 1536 × 1024 | Yes | **final** |
 | `saturdays-journey` | `open-world-saturdays/reengagement-journey.png` | — | — | placeholder |
-| `tahoe-origin-atlas` | `open-world-tahoe/four-zones-origin-atlas.png` | — | — | placeholder |
+| `tahoe-origin-atlas` | `open-world-tahoe/tahoe-living-atlas.svg` | 1600 × 900 viewBox | No | **final** |
 
 Manifest: `content/visual-assets.ts`  
 Component: `components/visual/VisualPlate.tsx`
@@ -70,6 +70,6 @@ Add optional `mobileSrc` and `mobileFocalPosition` in the manifest. `VisualPlate
 When ready, add:
 
 - `open-world-saturdays/reengagement-journey.png`
-- `open-world-tahoe/four-zones-origin-atlas.png`
+- Optional photographic Tahoe hero derivative to complement the scalable illustrated field atlas
 
 Until then, code-native fallbacks remain intentional.
