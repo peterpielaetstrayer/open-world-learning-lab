@@ -15,6 +15,7 @@ const routes = [
   ["/work", "Current Work"],
   ["/work/first-landing", "First Landing"],
   ["/work/locus", "LOCUS"],
+  ["/work/open-world-tahoe", "Open World Tahoe"],
   ["/releases", "Releases"],
   ["/learning-environments", "Learning Environments"],
   ["/contact", "Contact"],
@@ -125,6 +126,27 @@ async function run() {
         });
         printPreviewImage(safeName(route) + "-" + profile.label, image);
       }
+      if (route === "/work/open-world-tahoe") {
+        try {
+          const mountain = page.getByRole("button", { name: "Mountain", exact: true });
+          await mountain.click();
+          const selected = await mountain.getAttribute("aria-pressed");
+          const heading = await page.locator("#tahoe-zone-details h3").innerText();
+          if (selected !== "true" || heading !== "Mountain as Lab") {
+            issues.push("Tahoe atlas zone switching failed");
+          }
+          const slider = page.locator("#tahoe-motion-slider");
+          await slider.focus();
+          await slider.press("End");
+          const replay = await page.locator(".tahoe-motion-stats strong").first().innerText();
+          if (replay.trim() !== "100%") {
+            issues.push("Tahoe motion scrubber failed: " + replay);
+          }
+        } catch (error) {
+          issues.push("Tahoe interaction: " + String(error).slice(0, 200));
+        }
+      }
+
       const row = {
         route, name, profile: profile.label, http: response.status(),
         title: structure.title, h1: structure.h1Count, main: structure.mainCount,
