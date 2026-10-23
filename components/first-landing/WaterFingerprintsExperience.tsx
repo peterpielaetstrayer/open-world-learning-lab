@@ -197,9 +197,6 @@ export default function WaterFingerprintsExperience() {
           <div className="absolute left-4 top-4 z-10 rounded-md border border-[#e5e5d2]/40 bg-[#102620]/85 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-[#f2efe6] sm:left-7 sm:top-6">
             Chesapeake Bay / Conceptual cross-section
           </div>
-          <div className="absolute bottom-4 left-4 z-10 max-w-[55%] text-[10px] leading-relaxed text-[#123229] sm:bottom-6 sm:left-7 sm:max-w-xs">
-            Stylized composite, not a photograph, site map, elevation survey, or record of field measurements.
-          </div>
           {clues.map((item) => (
             <button
               key={item.id}
@@ -217,6 +214,9 @@ export default function WaterFingerprintsExperience() {
           ))}
         </div>
       </div>
+      <p className="border-b border-[#c4cebd] bg-[#eee8d9] px-5 py-3 font-mono text-[11px] leading-relaxed text-[#435b4c] sm:px-10">
+        Scene is an illustrated composite, not a park photograph, geographic map, elevation survey, or recorded field measurements.
+      </p>
 
       <div className="grid border-b border-[#ced3c6] bg-[#e7e4d7] sm:grid-cols-3">
         {clues.map((item)=>(
