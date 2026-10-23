@@ -344,10 +344,15 @@ export default function WaterFingerprintsExperience() {
                   Download inquiry record ↓
                 </button>
                 <Link href="/work/locus" className="inline-flex min-h-11 items-center text-sm font-semibold text-[#2b685c] hover:underline">
-                  How LOCUS preserves learning ↗
+                  Understand what LOCUS adds ↗
                 </Link>
               </div>
-              <p className="mt-4 text-xs leading-relaxed text-[#526355]">Your responses remain in this browser tab only. OWLL does not collect these answers; download before leaving if you want to keep them. This immediate exercise is not evidence of durable learning or spaced retrieval.</p>
+              <p className="mt-4 text-xs leading-relaxed text-[#526355]">
+                Your responses remain in this browser tab only. OWLL does not collect these
+                answers. Download before navigating away if you want to keep them. Opening
+                LOCUS starts a separate experience; no notes are transferred. This immediate
+                exercise is not evidence of durable learning or spaced retrieval.
+              </p>
             </>}
           </div>
 

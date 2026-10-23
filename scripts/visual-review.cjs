@@ -287,6 +287,53 @@ async function run() {
     issues: interactionIssues,
   }));
 
+  // Visitor navigation audit: each atlas scene must link to a real, correct
+  // destination, and First Landing must keep the app boundary transparent.
+  const journeyIssues = [];
+  const journeyContext = await browser.newContext({ viewport:{width:390,height:844}, reducedMotion:"reduce" });
+  const journeyPage = await journeyContext.newPage();
+  try {
+    await journeyPage.goto(baseUrl + "/", {waitUntil:"networkidle",timeout:60000});
+    const coastalCTA = journeyPage.getByRole("link",{name:/Try a coastal investigation/});
+    if (await coastalCTA.getAttribute("href") !== "/work/first-landing/field-experience") {
+      journeyIssues.push("Coastal atlas link misses illustrated experience");
+    }
+    await journeyPage.getByRole("button",{name:/A familiar kitchen/}).click();
+    const homeCTA = journeyPage.getByRole("link",{name:/Investigate something around you/});
+    if (await homeCTA.getAttribute("href") !== "/start") {
+      journeyIssues.push("Kitchen atlas link misses real-world inquiry");
+    }
+    await journeyPage.getByRole("button",{name:/A changing shoreline/}).click();
+    await journeyPage.getByRole("link",{name:/Try a coastal investigation/}).click();
+    await journeyPage.waitForURL("**/work/first-landing/field-experience", {timeout:15000});
+    if (!await journeyPage.getByRole("heading",{name:/A place becomes/}).isVisible()) {
+      journeyIssues.push("Coastal atlas click did not reach the correct inquiry");
+    }
+    const product = journeyPage.getByRole("link",{name:/Understand the LOCUS product/});
+    if (await product.getAttribute("href") !== "/work/locus") {
+      journeyIssues.push("First Landing not linked to LOCUS explanatory page");
+    }
+    const external = journeyPage.getByRole("link",{name:/Open the separate adult field-test app/});
+    if (await external.getAttribute("href") !== "https://locus-blond.vercel.app/") {
+      journeyIssues.push("Live LOCUS destination differs from verified field-test URL");
+    }
+    if (!await journeyPage.getByText("It does not import the notes or decisions", {exact:false}).isVisible()) {
+      journeyIssues.push("Missing visible no-import disclosure");
+    }
+    await product.click();
+    await journeyPage.waitForURL("**/work/locus",{timeout:15000});
+    if (!await journeyPage.getByRole("heading",{name:"LOCUS",exact:true}).isVisible()) {
+      journeyIssues.push("LOCUS project navigation failed");
+    }
+  } catch(e) {
+    journeyIssues.push("Visitor path interaction: "+String(e).slice(0,250));
+  } finally {
+    await journeyContext.close();
+  }
+  results.push({route:"/work/first-landing/field-experience",name:"Visitor path navigation",profile:"mobile",
+    issues:journeyIssues,screenshot:null,violations:[]});
+  console.log("OWLL_VISITOR_PATH_AUDIT",JSON.stringify({passed:journeyIssues.length===0,issues:journeyIssues}));
+
   await browser.close();
   const failed = results.filter(r => r.issues.length);
   const summary = {

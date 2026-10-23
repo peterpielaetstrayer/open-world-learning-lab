@@ -10,6 +10,9 @@ const scenes = [
     question: "How can we tell water shaped a place, even when it is not moving?",
     investigate: "Compare two visible surfaces. What differs, and what else could explain those patterns?",
     make: "An annotated field sketch separating observation from interpretation.",
+    next: "Try a coastal investigation",
+    href: "/work/first-landing/field-experience",
+    nextContext: "Opens a fictional illustrated shoreline inquiry; no travel required.",
   },
   {
     title: "A familiar kitchen", place: "HOME / SCIENCE", symbol: "◌",
@@ -17,6 +20,9 @@ const scenes = [
     question: "Where does that water come from?",
     investigate: "Observe a cold glass over time. Compare your prediction with what happens and consider an alternative.",
     make: "A short explanation that identifies the evidence and its limits.",
+    next: "Investigate something around you",
+    href: "/start",
+    nextContext: "Use the same approach with a real question from home.",
   },
   {
     title: "A moving shadow", place: "EVERYWHERE / PATTERNS", symbol: "✳",
@@ -24,6 +30,9 @@ const scenes = [
     question: "What does its shape tell us about the light source?",
     investigate: "Compare a shadow at different times or use a lamp. Never look directly at the sun.",
     make: "A simple diagram and one new question to revisit.",
+    next: "Explore your own shadow question",
+    href: "/start",
+    nextContext: "Use the free five-move field guide, no equipment required.",
   },
 ] as const;
 
@@ -85,9 +94,12 @@ export default function WorldQuestionsAtlas() {
               <p className="mt-2 text-sm leading-relaxed text-[#d5e2d9]">{scene.make}</p>
             </div>
           </div>
-          <Link href="/start" className="mt-8 inline-flex min-h-11 w-fit items-center rounded-full bg-[#f2efe6] px-6 py-3 text-sm font-semibold text-[#17201d] hover:bg-[#e2dfcc]">
-            Investigate your own world <span className="ml-2" aria-hidden="true">↗</span>
-          </Link>
+          <div className="mt-8 flex flex-col items-start gap-3">
+            <Link href={scene.href} className="inline-flex min-h-11 items-center rounded-full bg-[#f2efe6] px-6 py-3 text-sm font-semibold text-[#17201d] hover:bg-[#e2dfcc] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e2cb91]">
+              {scene.next} <span className="ml-2" aria-hidden="true">↗</span>
+            </Link>
+            <p className="text-xs leading-relaxed text-[#bed5c5]">{scene.nextContext}</p>
+          </div>
         </div>
       </div>
     </div>
