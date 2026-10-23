@@ -120,3 +120,20 @@
 @media(max-width:470px){.tahoe-hero{min-height:650px}.tahoe-hero h1{font-size:68px}.tahoe-hero-eyebrow{font-size:9px}.tahoe-hero-content>p{font-size:20px}.tahoe-hero-actions{align-items:flex-start;flex-direction:column}.tahoe-page h2{font-size:45px}.tahoe-map{min-height:395px}.tahoe-map-label{font-size:8px;left:15px}.tahoe-map-bottom{font-size:8px;left:15px}.tahoe-zone-pin{font-size:9px;padding:9px 10px;gap:6px}.tahoe-pin-trail{left:3%}.tahoe-pin-lake{left:39%}.tahoe-pin-mountain{left:37%}.tahoe-pin-fire{left:36%;top:77%}.tahoe-mission-grid{grid-template-columns:1fr}.tahoe-mission-illustration{height:160px}.tahoe-sequence-list{grid-template-columns:repeat(2,1fr)}.tahoe-motion-stats{gap:7px}.tahoe-motion-stats span{font-size:8px}.tahoe-motion-stats strong{font-size:16px}}
 @media(prefers-reduced-motion:reduce){.tahoe-page *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 @media print{.tahoe-page{background:#fff;color:#111}.tahoe-hero{min-height:340px}.tahoe-hero-content{padding-block:60px}.tahoe-atlas,.tahoe-closing,.tahoe-sequence{print-color-adjust:exact}.tahoe-zone-pin{border:1px solid #ddd}.tahoe-missions,.tahoe-story{break-inside:avoid}.tahoe-motion-panel{break-inside:avoid}}
+
+/* A little motion in the field, without tying information to animation. */
+@media (prefers-reduced-motion: no-preference) {
+  .tahoe-vista { animation: tahoe-horizon-drift 28s ease-in-out infinite alternate; transform-origin: 58% 55%; }
+  .tahoe-zone-pin:not(.is-active) .tahoe-pin-mark { animation: tahoe-field-beacon 4s ease-in-out infinite; }
+  .tahoe-zone-pin:nth-of-type(2) .tahoe-pin-mark { animation-delay: .75s; }
+  .tahoe-zone-pin:nth-of-type(3) .tahoe-pin-mark { animation-delay: 1.5s; }
+  .tahoe-zone-pin:nth-of-type(4) .tahoe-pin-mark { animation-delay: 2.25s; }
+}
+@keyframes tahoe-horizon-drift {
+  from { transform: scale(1.015) translate3d(0,0,0); }
+  to { transform: scale(1.07) translate3d(-.6%,.3%,0); }
+}
+@keyframes tahoe-field-beacon {
+  0%,100% { box-shadow: 0 0 0 4px #98d5c729; }
+  50% { box-shadow: 0 0 0 9px #98d5c712; }
+}
