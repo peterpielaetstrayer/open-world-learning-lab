@@ -46,7 +46,7 @@ export default function WorldQuestionsAtlas() {
             {scenes.map((item, index) => (
               <button key={item.title} type="button" onClick={() => setSelected(index)}
                 aria-pressed={selected === index}
-                className={"flex min-h-14 items-center gap-4 rounded-lg border px-4 py-3 text-left transition-colors focus-visible:outline-offset-4 " +
+                className={"flex min-h-14 items-center gap-4 rounded-lg border px-4 py-3 text-left transition-colors focus-visible:outline-[3px] focus-visible:outline-[#e2cb91] focus-visible:outline-offset-4 " +
                   (selected === index
                     ? "border-[#e2cb91] bg-[#f2efe6] text-[#17201d]"
                     : "border-white/25 bg-white/[.04] text-[#f2efe6] hover:border-white/65 hover:bg-white/10")}>
