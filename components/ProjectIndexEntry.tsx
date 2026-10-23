@@ -24,7 +24,7 @@ const previewAssetKeys: Record<string, string> = {
 function LocusJourneyStrip() {
   return (
     <div className="mt-4">
-      <p className="font-mono text-metadata text-quiet mb-2">One learner journey</p>
+      <p className="font-mono text-metadata text-quiet mb-2">Long-term product direction · Conceptual</p>
       <ol className="flex flex-wrap gap-x-1 gap-y-1.5 list-none text-sm text-secondary leading-relaxed">
         {locusHomepageJourney.map((step, index) => (
           <li key={step} className="inline-flex items-center gap-1">
@@ -37,6 +37,9 @@ function LocusJourneyStrip() {
           </li>
         ))}
       </ol>
+      <p className="mt-2 text-xs leading-relaxed text-quiet">
+        The currently working LOCUS app is narrower than this vision.
+      </p>
     </div>
   );
 }

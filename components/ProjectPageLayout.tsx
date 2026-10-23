@@ -7,6 +7,7 @@ interface ProjectPageLayoutProps {
   masthead: ReactNode;
   lead?: ReactNode;
   figure?: ReactNode;
+  spotlight?: ReactNode;
   children: ReactNode;
   related?: ReactNode;
 }
@@ -15,6 +16,7 @@ export default function ProjectPageLayout({
   masthead,
   lead,
   figure,
+  spotlight,
   children,
   related,
 }: ProjectPageLayoutProps) {
@@ -31,6 +33,13 @@ export default function ProjectPageLayout({
           </div>
         )}
         {figure}
+        {spotlight && (
+          <div className="border-b border-border bg-page py-10 md:py-14 lg:py-16">
+            <WideContainer>
+              <div className="mx-auto w-full max-w-[78rem]">{spotlight}</div>
+            </WideContainer>
+          </div>
+        )}
         <div className="py-10 md:py-16 lg:py-20">
           <WideContainer>
             <div className="max-w-reading prose-content space-y-12">{children}</div>
