@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import ShareActions from "@/components/ShareActions";
 import { tahoeZones, sampleMissions } from "@/content/projects";
 
 const zoneDetails = [
@@ -149,5 +150,6 @@ export default function TahoeExperience(){
     <section className="tahoe-sequence" aria-labelledby="tahoe-sequence-heading"><div className="tahoe-container"><span className="tahoe-kicker">The learning architecture</span><h2 id="tahoe-sequence-heading">Freedom needs <em>good structure.</em></h2><p>Open-world learning does not mean sending learners out and hoping learning happens. It means designing intentional pathways with mentors, tools, constraints, practice, feedback, and meaningful demonstrations of understanding.</p><ol className="tahoe-sequence-list">{["Experience","Curiosity","Guided inquiry","Knowledge","Practice","Artifact","Reflection"].map((s,i)=><li key={s}><span>{String(i+1).padStart(2,"0")}</span><strong>{s}</strong></li>)}</ol></div></section>
     <MissionGallery/>
     <section className="tahoe-closing tahoe-section" aria-labelledby="tahoe-closing-heading"><div className="tahoe-container tahoe-closing-grid"><div><span className="tahoe-kicker">05 / What survived the origin</span><h2 id="tahoe-closing-heading">Learning begins<br/>with <em>attention.</em></h2></div><div><p>Tahoe began with ambitious ideas about spatial technology, live exploration, and globally connected learners. OWLL has since become broader and more grounded.</p><p>The ideas that endured are simpler and more demanding: places matter, mentorship matters, meaningful artifacts matter, and reflection changes how we see the world. Technology should follow demonstrated educational needs, not lead the work by default.</p><p>Every environment also has history, ecology, community, and limits to respect. A responsible learning design accounts for them.</p><Link href="/work" className="tahoe-closing-link">Explore current OWLL work <span aria-hidden="true">↗</span></Link></div></div></section>
+    <div className="tahoe-share-bar"><div className="tahoe-container"><ShareActions title="Open World Tahoe" showPrint /></div></div>
   </main>;
 }
