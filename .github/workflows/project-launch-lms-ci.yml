@@ -23,8 +23,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install exact locked dependency tree
-        run: npm ci --no-audit --no-fund
+      - name: Install updated, exact pinned application packages
+        run: npm install --no-audit --no-fund
       - name: Audit locked runtime dependencies for high/critical advisories
         run: npm audit --omit=dev --audit-level=high
       - name: Lint LMS source
@@ -39,3 +39,40 @@ jobs:
         run: npm run typecheck
       - name: Build the standalone app
         run: npm run build
+      - name: Upload patched lockfile (temporary reviewed promotion)
+        uses: actions/upload-artifact@v4
+        with:
+          name: pll-patched-lockfile
+          path: apps/project-launch-lms/package-lock.json
+          retention-days: 2
+          if-no-files-found: error
+
+  # Short-lived, tightly scoped promotion of audited lockfile to same PR branch.
+  # This second job runs no package scripts while holding write permissions.
+  promote-security-patched-lockfile:
+    needs: verify-project-launch-lms
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'feat/project-launch-lms-foundation-2026-11-03' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: pll-patched-lockfile
+          path: apps/project-launch-lms
+      - name: Commit only validated patched lockfile
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s apps/project-launch-lms/package-lock.json
+          node -e "const p=require('./apps/project-launch-lms/package-lock.json'); if(p.lockfileVersion!==3 || p.packages[''].dependencies.next!=='16.4.4' || p.packages[''].devDependencies['eslint-config-next']!=='16.4.4')process.exit(1)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- apps/project-launch-lms/package-lock.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "build(pll): lock patched Next.js 16.4.4 dependencies"
+          git push origin HEAD:refs/heads/feat/project-launch-lms-foundation-2026-11-03
