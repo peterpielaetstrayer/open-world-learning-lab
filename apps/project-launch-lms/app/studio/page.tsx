@@ -94,7 +94,11 @@ export default function StudioPage() {
     }
   }, [supabase]);
 
-  useEffect(() => { void refresh(); }, [refresh]);
+  useEffect(() => {
+    let cancelled = false;
+    queueMicrotask(() => { if (!cancelled) void refresh(); });
+    return () => { cancelled = true; };
+  }, [refresh]);
 
   const activeActivity = activities.find((activity) => activity.id === selectedActivity);
   const activeDraft = drafts.find((draft) => draft.activity_id === activeActivity?.id && draft.learner_id === identity);
@@ -216,7 +220,7 @@ export default function StudioPage() {
   if (loadState === "loading") return <StudioFrame><p>Opening your studio…</p></StudioFrame>;
   if (loadState === "unconfigured") return <StudioFrame><p role="alert">The secure LMS is not yet configured for this deployment. Set the public Supabase URL and publishable key.</p></StudioFrame>;
   if (loadState === "signed-out") return <StudioFrame><h1>Welcome back.</h1><p>Sign in to see your course and feedback.</p><Link href="/login" className="primary-link">Sign in <span aria-hidden="true">↗</span></Link></StudioFrame>;
-  if (loadState === "unenrolled") return <StudioFrame><h1>Enrollment pending.</h1><p>Your account is signed in but hasn't been enrolled in this course. Contact the facilitator. Learners cannot enroll themselves.</p><button type="button" onClick={signOut} className="text-button">Sign out</button></StudioFrame>;
+  if (loadState === "unenrolled") return <StudioFrame><h1>Enrollment pending.</h1><p>Your account is signed in but hasn&apos;t been enrolled in this course. Contact the facilitator. Learners cannot enroll themselves.</p><button type="button" onClick={signOut} className="text-button">Sign out</button></StudioFrame>;
   if (loadState === "error") return <StudioFrame><p role="alert" className="form-error">{error}</p><button type="button" onClick={() => void refresh()} className="feedback-button">Try again</button></StudioFrame>;
   if (!membership) return null;
 
