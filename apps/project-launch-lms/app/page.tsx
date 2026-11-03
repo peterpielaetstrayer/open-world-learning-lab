@@ -48,7 +48,7 @@ export default function Home() {
             <p className="eyebrow">A learning studio for your next idea</p>
             <h1 id="hero-title">Curiosity is a beginning.<br /><em>What will you do with it?</em></h1>
             <p className="lead">
-              You don't need a perfect idea or a grand plan. Start with a question that matters,
+              You don&apos;t need a perfect idea or a grand plan. Start with a question that matters,
               examine what is possible, and take one meaningful step.
             </p>
             <a className="primary-link" href="#pathway">
@@ -102,7 +102,7 @@ export default function Home() {
           <div className="section-intro">
             <p className="eyebrow">Try one decision</p>
             <h2>A good first step gives you something to learn from.</h2>
-            <p>Here is a short example of the decision-making practice we're designing into the course.</p>
+            <p>Here is a short example of the decision-making practice we&apos;re designing into the course.</p>
           </div>
           <DecisionLab />
         </section>
@@ -111,11 +111,11 @@ export default function Home() {
           <div className="page-wrap endnote-grid">
             <div>
               <p className="eyebrow">The principle</p>
-              <h2>Build the learner's judgment,<br />not just the artifact.</h2>
+              <h2>Build the learner&apos;s judgment,<br />not just the artifact.</h2>
             </div>
             <p>
               Project Launch Lab is a proposed introductory experience within Open World Learning
-              Lab's Studio Pathway. The complete course will include original instructional media,
+              Lab&apos;s Studio Pathway. The complete course will include original instructional media,
               accessible readings, peer discussion, facilitator feedback, graded assignments,
               and a documented first-action attempt. This preview is not the completed LMS.
             </p>
