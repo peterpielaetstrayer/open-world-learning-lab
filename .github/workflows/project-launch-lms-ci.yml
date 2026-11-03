@@ -25,6 +25,10 @@ jobs:
           node-version: '22'
       - name: Install pinned application packages
         run: npm install --no-audit --no-fund
+      - name: Lint LMS source
+        run: npm run lint
+      - name: Validate synthetic role-test harness syntax
+        run: node --check scripts/smoke-roles.mjs
       - name: Check TypeScript
         run: npm run typecheck
       - name: Build the standalone app
