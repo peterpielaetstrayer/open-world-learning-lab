@@ -2,6 +2,26 @@
 
 **Status: source code ready for configuration, not yet a live end-to-end Auth test.** Applies to dedicated Supabase project `wjormscrikzocelbjxvc` in the OWLL Free organization. Never store credentials, invitation links, user emails, student work, or screenshots of authenticated pages in the public repository.
 
+## Verified preview configuration and remaining operator actions (November 3, 2026)
+
+**Latest verified Vercel deployment:** The dedicated `project-launch-lms` project, separate from the OWLL website, successfully built the feature branch. For Auth configuration, use the **branch-stable hostname** below, not an immutable deployment URL that changes on each push:
+
+`https://project-launch-lms-git-f-3c42e5-peter-pielaet-strayers-projects.vercel.app`
+
+Vercel project ID: `prj_GYl06IyFCEXH0gbgiCgefliQBvUy`. Preview-only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` variable names are configured in Vercel, but their values and actual browser connectivity have **not** been tested. The current preview is gated behind **Vercel SSO**. It is suitable for owner/team testing, not yet a peer/faculty-accessible invitation experience. Do not disable preview protection or publish a production class merely to make a test link accessible.
+
+**Supabase dashboard configuration checklist (not yet verified or performed):**
+
+1. In the **dedicated** Supabase project's Authentication → URL Configuration, set **Site URL** to the exact HTTPS branch-stable origin above. Add only the exact necessary callback paths on that same origin to the Redirect URLs list: `/auth/confirm`, `/auth/callback`, and `/set-password`. Avoid unbounded preview wildcards. Supabase documentation notes that an unallowlisted `redirectTo` may silently fall back to the Site URL.
+2. In Authentication → Email Templates → **Invite user**, use an explicit invitation link targeting this server handler: `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite`. Do **not** place a real token, password or invitation URL in GitHub, logs or chat. Ensure the hyperlink's `href` uses the expression, not merely visible link text. Check any existing template before replacing it.
+3. In Authentication's configuration/provider settings, turn **Allow new users to sign up** off, ensure anonymous sign-ins are disabled, and preserve email confirmation for actual invited users. The app has no public sign-up page, but that alone does not disable provider-level registration.
+4. Check rate limits, email delivery/OTP expiry and Vercel preview authorization before the first adult invite. Email scanners can prefetch and consume single-use link tokens; if encountered, implement a confirm-then-POST acceptance flow or OTP rather than repeatedly exposing invitation hashes.
+5. Keep `SUPABASE_SERVICE_ROLE_KEY` / newer Supabase server-side secret credentials only in a trusted administrator's local secret store or ephemeral controlled test runner. **Do not** add them to Vercel's browser public variables, the GitHub repository, unsecured CI, or this document.
+6. Only after the above, execute `smoke-roles.mjs` against this exact Supabase project with the required opt-in flags. Verify all three live Auth sessions, RLS denials, final-submission immutability, rubric feedback and post-test cleanup. The script requires access not currently exposed by the connected Supabase management tools, and **has not been run**.
+7. Subsequently, test the invitation email and password setup with one explicitly approved consenting adult account, then repeat learner A/B/facilitator tasks in separate browsers. Test invalid/expired links and sign-out. Do not use real minors or professor/peer accounts until faculty/platform approval.
+
+The canonical readme and PeterOS handoff distinguish **source built and deployed to a protected preview** from **actual user login verified**. Supabase references: [redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls), [email templates](https://supabase.com/docs/guides/auth/auth-email-templates), [general configuration](https://supabase.com/docs/guides/auth/general-configuration), and [inviting users](https://supabase.com/docs/guides/auth/users).
+
 ## What exists
 
 - `/login`: email/password sign-in for invited users; **no public signup route**.
