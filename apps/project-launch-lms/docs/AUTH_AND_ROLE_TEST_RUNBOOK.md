@@ -26,6 +26,10 @@ The email templates and Auth redirect settings MUST match the exact deployed dom
 7. Before allowing actual visitors, replace placeholder assignment instructions with reviewed course material and publish only the relevant content using privileged, audited admin action.
 8. Confirm email delivery, link expiration and password setup using disposable consenting *adult* accounts. No real minor accounts or student data during this Capstone test.
 
+## Invitation helper (manual, no email sent during development)
+
+`scripts/invite-member.mjs` is an approval-guarded administrator CLI helper. It uses the supported Supabase Auth Admin invitation API, then grants the specified role through an administrative membership write. It requires **a specific approved recipient**, `--send`, a trusted server-only service key, `PLL_DEPLOYED_APP_ORIGIN`, and `PLL_CONFIRM_INVITE_PROJECT_REF=wjormscrikzocelbjxvc`. Never run it with a real student address during the Capstone demonstration. The script has **not been executed** and no invitations have been sent. Validate one synthetic consenting adult invite and confirmed enrollment before faculty access.
+
 ## Manual integration test (not yet executed)
 
 ```bash
