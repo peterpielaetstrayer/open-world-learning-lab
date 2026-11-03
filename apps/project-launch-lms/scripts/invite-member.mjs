@@ -31,7 +31,7 @@ if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !["learner", "facilit
   throw new Error("A valid email and role (learner|facilitator) are required.");
 if (!baseUrl?.startsWith("https://") || new URL(baseUrl).pathname !== "/")
   throw new Error("Configure a production/preview HTTPS app origin with no path (PLL_DEPLOYED_APP_ORIGIN).");
-if (!url?.includes(expectedRef) || process.env.PLL_CONFIRM_INVITE_PROJECT_REF !== expectedRef || !key)
+if (![ `https://${expectedRef}.supabase.co`, `https://${expectedRef}.supabase.co/` ].includes(url) || process.env.PLL_CONFIRM_INVITE_PROJECT_REF !== expectedRef || !key)
   throw new Error("Correct project ref and privileged server-only credentials are required.");
 
 const admin = createClient(url, key, {
