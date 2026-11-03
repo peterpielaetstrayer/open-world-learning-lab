@@ -17,7 +17,7 @@ const confirmRef = process.env.PLL_CONFIRM_TEST_PROJECT_REF;
 
 if (process.env.PLL_ALLOW_SYNTHETIC_ROLE_TEST !== "yes" ||
     confirmRef !== expectedRef ||
-    !url || !url.includes(expectedRef) ||
+    ![`https://${expectedRef}.supabase.co`, `https://${expectedRef}.supabase.co/`].includes(url) ||
     !publishableKey || !serviceKey) {
   throw new Error("Role test refused: requires explicit project confirmation, enabled flag, publishable key and server-only service key.");
 }
@@ -32,6 +32,7 @@ let activity = null;
 let originalPublished = false;
 let originalModulePublished = false;
 let courseModule = null;
+let cleanupFailed = false;
 
 function expect(ok, text) {
   if (!ok) throw new Error("TEST FAILED: " + text);
@@ -191,15 +192,19 @@ try {
   if (activity) {
     const r = await admin.from("pll_activities")
       .update({is_published: originalPublished}).eq("id",activity.id);
-    if (r.error) console.error("CLEANUP WARNING: activity publication state requires review.");
+    if (r.error) { cleanupFailed = true; console.error("CLEANUP WARNING: activity publication state requires review."); }
   }
   if (courseModule) {
     const r = await admin.from("pll_modules")
       .update({is_published: originalModulePublished}).eq("id",courseModule.id);
-    if (r.error) console.error("CLEANUP WARNING: module publication state requires review.");
+    if (r.error) { cleanupFailed = true; console.error("CLEANUP WARNING: module publication state requires review."); }
   }
   for (const userId of ids) {
     const r = await admin.auth.admin.deleteUser(userId);
-    if (r.error) console.error("CLEANUP WARNING: synthetic Auth user requires review.");
+    if (r.error) { cleanupFailed = true; console.error("CLEANUP WARNING: synthetic Auth user requires review."); }
+  }
+  if (cleanupFailed) {
+    console.error('ROLE SMOKE TEST FAILED CLEANUP: check synthetic accounts and publication flags before another run.');
+    process.exitCode = 1;
   }
 }
