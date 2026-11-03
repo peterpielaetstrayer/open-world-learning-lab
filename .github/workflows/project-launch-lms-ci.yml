@@ -1,0 +1,39 @@
+name: Project Launch LMS — CI
+
+on:
+  pull_request:
+    paths:
+      - 'apps/project-launch-lms/**'
+      - '.github/workflows/project-launch-lms-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-project-launch-lms:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/project-launch-lms
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned application packages
+        run: npm install --no-audit --no-fund
+      - name: Check TypeScript
+        run: npm run typecheck
+      - name: Build the standalone app
+        run: npm run build
+      - name: Upload generated lockfile for explicit review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-launch-lms-lockfile
+          path: apps/project-launch-lms/package-lock.json
+          if-no-files-found: ignore
+          retention-days: 7
