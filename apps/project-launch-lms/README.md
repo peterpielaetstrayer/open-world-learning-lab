@@ -19,7 +19,7 @@ Current source includes course-shell and non-persistent decision example **plus 
 
 ```bash
 cd apps/project-launch-lms
-npm install
+npm ci
 npm run dev
 ```
 
@@ -56,5 +56,5 @@ See [Architecture](docs/ARCHITECTURE.md) and [Supabase data model](docs/DATA_MOD
 
 - Invited-user session callback, token-hash invite confirmation, authenticated password setup, and session-aware browser clients are committed in this draft branch. The invitation path requires explicit Auth email-template and redirect URL configuration before it can operate.
 - The guarded synthetic-role harness `scripts/smoke-roles.mjs` creates a pair of synthetic learners plus a facilitator through official Auth-admin APIs, then validates cross-user record isolation, draft persistence, immutable final submission and facilitator feedback. **It has not run** because it requires an admin-only credential that is not exposed by the connected project tools. It must not be confused with completed role tests. The test restores publication flags and deletes synthetic accounts where possible.
-- Build and static quality checks use separate GitHub Actions jobs, while the OWLL production site's source and original Gauntlet remain unmodified.
-- **Open engineering gaps:** project-specific reproducible lockfile not yet committed; provider invitation email template/redirect and invitation-only settings; 3-account E2E; reviewer workflow; two complete modules, original media, discussion forums, ten-item LMS-graded quiz and Level 1 survey. Vercel preview has been built with both preview-scoped `NEXT_PUBLIC_SUPABASE_*` variables configured, but their runtime correctness and browser-level Auth have not yet been verified. See the canonical Peter OS handoff for academic priorities.
+- **Reproducible builds:** a committed app-specific `package-lock.json` pins the verified tree; LMS GitHub Actions now uses `npm ci --no-audit --no-fund`, and tests both admin scripts fail closed without approval. The separate OWLL public-site CI and original Gauntlet remain isolated. A targeted security/dependency audit is still pending.
+- **Open engineering gaps:** provider invitation email template/redirect and invitation-only settings; 3-account E2E; reviewer workflow; two complete modules, original media, discussion forums, ten-item LMS-graded quiz and Level 1 survey. Vercel preview has been built with both preview-scoped `NEXT_PUBLIC_SUPABASE_*` variables configured, but their runtime correctness and browser-level Auth have not yet been verified. See the canonical Peter OS handoff for academic priorities.
