@@ -23,57 +23,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install pinned application packages
-        run: npm install --no-audit --no-fund
+      - name: Install exact locked dependency tree
+        run: npm ci --no-audit --no-fund
       - name: Lint LMS source
         run: npm run lint
-      - name: Validate synthetic role-test harness syntax
-        run: node --check scripts/smoke-roles.mjs
+      - name: Validate admin and synthetic-role harness syntax
+        run: node --check scripts/smoke-roles.mjs && node --check scripts/invite-member.mjs
+      - name: Assert admin tools fail closed without explicit approval
+        run: |
+          if node scripts/smoke-roles.mjs; then echo 'Unsafe: role test ran without authorization'; exit 1; fi
+          if node scripts/invite-member.mjs; then echo 'Unsafe: invite tool ran without --send'; exit 1; fi
       - name: Check TypeScript
         run: npm run typecheck
       - name: Build the standalone app
         run: npm run build
-      - name: Upload generated lockfile for explicit review
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: project-launch-lms-lockfile
-          path: apps/project-launch-lms/package-lock.json
-          if-no-files-found: ignore
-          retention-days: 7
-
-  # Temporary one-time artifact promotion: this job NEVER installs or executes
-  # PR packages while holding contents:write. Restrict it to this same-repo,
-  # specifically named feature branch. Remove after the lockfile is committed.
-  commit-lockfile-once:
-    needs: verify-project-launch-lms
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'feat/project-launch-lms-foundation-2026-11-03' }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Check out exact PR commit (no package scripts)
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          persist-credentials: true
-      - name: Retrieve reviewed lockfile from this same CI run
-        uses: actions/download-artifact@v4
-        with:
-          name: project-launch-lms-lockfile
-          path: apps/project-launch-lms
-      - name: Commit only generated LMS package-lock.json
-        shell: bash
-        run: |
-          set -euo pipefail
-          test -s apps/project-launch-lms/package-lock.json
-          node -e "const p=require('./apps/project-launch-lms/package-lock.json'); if(p.lockfileVersion!==3 || p.name!=='project-launch-lms')process.exit(1)"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- apps/project-launch-lms/package-lock.json
-          if git diff --cached --quiet; then
-            echo "LMS lockfile already present and unchanged."
-            exit 0
-          fi
-          git commit -m "build(pll): pin standalone app dependency lockfile"
-          git push origin HEAD:refs/heads/feat/project-launch-lms-foundation-2026-11-03
