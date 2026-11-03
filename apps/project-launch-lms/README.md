@@ -39,3 +39,15 @@ Source-of-truth design crosswalk: Peter OS draft PR #6 / `LMS_Course_Requirement
 See [Architecture](docs/ARCHITECTURE.md) and [Supabase data model](docs/DATA_MODEL.md).
 
 **Quality standard:** Every piece of the course should have a clear reason to exist, contribute to something learners actually do, and work reliably for its intended audience.
+
+
+## Dedicated Supabase project — November 3, 2026
+
+- Supabase organization: **OWLL** (Free). Project: **project-launch-lab**; ref: `wjormscrikzocelbjxvc`; region: `us-east-1`.
+- Direct provider quote before creation: **$0/month**. Project creation returned `ACTIVE_HEALTHY`; a separate read-only SQL query succeeded; security and performance advisors returned no findings on the **empty initial database**.
+- [Project dashboard](https://supabase.com/dashboard/project/wjormscrikzocelbjxvc). Do **not** put secret/service-role keys into Git or browser bundles.
+- **Database remains empty**; no RLS schema, migrations, authentication users, data tables, application credentials or production deployment have been added. The UI is not yet connected to this Supabase backend.
+- A separate recurring `Project Launch DB Watch` condition-watch automation checks project status and runs read-only SQL every eight hours; enabled Nov 3. This is an **unverified future schedule** until the first successful run and does **not guarantee** Supabase free-tier uptime.
+- Official documentation: [free-project pausing](https://supabase.com/docs/guides/platform/free-project-pausing) — seven-day low-activity pause possible, even with some usage; paid plans are exempt. Vercel Hobby [Cron Jobs](https://vercel.com/docs/cron-jobs/usage-and-pricing) run no more than once daily; do not assume a daily Vercel Cron alone prevents Supabase pausing.
+- Engineering gate: implement a server-side health-check path (actual low-cost SQL read, **never a public privileged endpoint**), reserve a secured daily Vercel Cron for production deployment if useful, add explicit failure notifications and verify from a separate session before Nov 27 reviewer access. Prefer independently monitor *status* and actual learner workflows, not solely a synthetic heartbeat.
+- Never claim a robust availability SLA on Supabase Free. If uninterrupted external evaluation is essential, consider a bounded paid plan **only with new cost approval**; preserve a student-facing fallback/read-only route.
