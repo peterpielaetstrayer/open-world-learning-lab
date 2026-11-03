@@ -39,6 +39,7 @@ export default function Home() {
           <a href="#pathway">Learning path</a>
           <a href="#decision-lab">Practice</a>
           <a href="#about">About</a>
+          <a href="/login">Enter studio</a>
         </nav>
       </header>
       <main id="main">
