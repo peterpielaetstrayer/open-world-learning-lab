@@ -7,9 +7,9 @@ export async function GET(request: NextRequest) {
 
   // Never forward an external redirect supplied by a login link.
   const rawNext = url.searchParams.get("next") ?? "/studio";
-  const next = rawNext.startsWith("/") && !rawNext.startsWith("//")
-    ? rawNext
-    : "/studio";
+  // Accept only explicitly supported local destinations (reject protocol-relative
+  // URLs, backslash normalization, encoded redirects and arbitrary paths).
+  const next = rawNext === "/set-password" ? "/set-password" : "/studio";
 
   if (!code) {
     return NextResponse.redirect(new URL("/login?error=missing-code", url.origin));
