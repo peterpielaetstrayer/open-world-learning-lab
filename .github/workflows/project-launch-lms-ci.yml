@@ -1,0 +1,41 @@
+name: Project Launch LMS — CI
+
+on:
+  pull_request:
+    paths:
+      - 'apps/project-launch-lms/**'
+      - '.github/workflows/project-launch-lms-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-project-launch-lms:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/project-launch-lms
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install exact locked dependency tree
+        run: npm ci --no-audit --no-fund
+      - name: Audit locked runtime dependencies for high/critical advisories
+        run: npm audit --omit=dev --audit-level=high
+      - name: Lint LMS source
+        run: npm run lint
+      - name: Validate admin and synthetic-role harness syntax
+        run: node --check scripts/smoke-roles.mjs && node --check scripts/invite-member.mjs
+      - name: Assert admin tools fail closed without explicit approval
+        run: |
+          if node scripts/smoke-roles.mjs; then echo 'Unsafe: role test ran without authorization'; exit 1; fi
+          if node scripts/invite-member.mjs; then echo 'Unsafe: invite tool ran without --send'; exit 1; fi
+      - name: Check TypeScript
+        run: npm run typecheck
+      - name: Build the standalone app
+        run: npm run build
