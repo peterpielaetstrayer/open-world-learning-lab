@@ -120,9 +120,20 @@ try {
   }).select("id").single(), "Learner A submit");
   expect(Boolean(submission?.id), "Final submission persisted");
 
+  // A denied PostgREST UPDATE can return either an RLS/permission error
+  // or a successful HTTP response that affected zero rows. Check both cases,
+  // then re-read the record to prove that the response was not altered.
   const illicitChange = await alice.login.from("pll_submissions")
-    .update({response_text:"Edited after submission"}).eq("id", submission.id);
-  expect(Boolean(illicitChange.error), "Learner cannot edit immutable final submission");
+    .update({response_text:"Edited after submission"}).eq("id", submission.id)
+    .select("id");
+  expect(Boolean(illicitChange.error) || (illicitChange.data ?? []).length === 0,
+    "Learner cannot update an immutable final submission");
+  const unchanged = assertNoError(await alice.login.from("pll_submissions")
+    .select("response_text").eq("id", submission.id).single(),
+    "Re-read final submission after unauthorized edit attempt");
+  expect(unchanged.response_text ===
+    "I will conduct a permission-based observation and revise my project scope.",
+    "Original final submission remains unchanged");
 
   const otherSubmissions = assertNoError(await bob.login.from("pll_submissions").select("id")
     .eq("id", submission.id), "Learner B submission query");
