@@ -1,6 +1,6 @@
 # Project Launch Lab — custom LMS foundation
 
-**Stage:** pre-backend course-shell prototype; **not a completed LMS**, not a substitute for Canvas until accepted and independently tested.
+**Stage:** database-backed source implementation, awaiting actual Auth-user end-to-end tests, deployment and instructor acceptance. **Not a completed LMS** or an authorized replacement for Canvas Lite yet.
 
 A self-contained Next.js application under the OWLL monorepo, maintained on a feature branch. Future hosting can use a separate Vercel project with `apps/project-launch-lms` as its root directory. Neither the OWLL production site nor the existing Gauntlet repo is modified.
 
@@ -13,7 +13,7 @@ A self-contained Next.js application under the OWLL monorepo, maintained on a fe
 - Distinct learner and facilitator experiences, with persistent draft/submission/review feedback rather than simulated gradebook records.
 - The instructor's full 24-point LMS requirements checklist.
 
-Current app: accessible learner-course shell plus a **non-persistent** interactive example. It is a UI/interaction foundation only. No real accounts, submissions, quiz grades, peer discussions or database storage exist yet.
+Current source includes course-shell and non-persistent decision example **plus real Supabase-backed login, saved draft, immutable submission, criterion scoring and facilitator feedback UIs**. The corresponding data schema is deployed, but there are **no Auth users or course memberships**, so these are unverified integration pathways. Peer forums, quiz and survey are not built.
 
 ## Local development
 
@@ -23,13 +23,13 @@ npm install
 npm run dev
 ```
 
-Node.js 22+ is recommended. This is an isolated application package, not yet connected to Supabase or Vercel.
+Node.js 22+ is recommended. Configure the public Supabase URL/publishable key from `.env.example` **locally** or in protected Vercel project settings. All learner data access must pass Supabase Auth and RLS. No service-role key in the browser or Git history. Standalone app TypeScript and build checks passed in GitHub CI; no running preview or live Auth test is yet confirmed.
 
 ## Production gates
 
-1. Instructor acceptance of a self-built LMS for the formal Capstone submission.
-2. Dedicated Supabase organization/project and confirmed cost; never reuse unrelated project data.
-3. Approved database/RLS schema; private role-aware accounts; server-side quiz scoring; protected media uploads; synthetic demo learner accounts.
+1. Instructor acceptance of a self-built LMS for the formal Capstone submission (**pending**).
+2. Dedicated Supabase project created under OWLL at quoted $0/month (**done**).
+3. Baseline database/RLS and atomic rubric migration (**done**); real synthetic Auth-account role isolation, server-side quiz scoring and protected media uploads (**pending**).
 4. End-to-end vertical slice: learner authenticates → submits a project judgment → facilitator reviews and scores against a rubric → learner reads feedback; verified isolation across accounts.
 5. Distinct functioning forums, graded 10-question quiz with right/wrong explanations, module-specific assignments, Level 1 survey, original multimedia, welcome and orientation, accessible student-view testing, reviewer login.
 6. Decision by Nov 6–7 if feasible; fallback to Canvas Lite course administration if instructor or security/function tests fail. Full course Nov 30; reviewer/instructor access Nov 27 (check live Canvas).
@@ -46,8 +46,15 @@ See [Architecture](docs/ARCHITECTURE.md) and [Supabase data model](docs/DATA_MOD
 - Supabase organization: **OWLL** (Free). Project: **project-launch-lab**; ref: `wjormscrikzocelbjxvc`; region: `us-east-1`.
 - Direct provider quote before creation: **$0/month**. Project creation returned `ACTIVE_HEALTHY`; a separate read-only SQL query succeeded; security and performance advisors returned no findings on the **empty initial database**.
 - [Project dashboard](https://supabase.com/dashboard/project/wjormscrikzocelbjxvc). Do **not** put secret/service-role keys into Git or browser bundles.
-- **Foundational database schema is now deployed:** eight RLS-protected `pll_*` tables; one draft course, two unpublished modules and two unpublished assignment placeholders. Two migrations applied (remote versions `20261103142336` and `20261103142420`); negative-access permission tests passed; zero security advisor findings. No Auth users, memberships, learner records, protected storage bucket, connected application credentials, successful production build or deployment. See [DB verification](docs/DB_VERIFICATION_2026-11-03.md).
+- **Verified database schema:** nine RLS-protected `pll_*` tables (including criterion scores); one draft course, two unpublished modules, two unpublished assignments and six draft rubric criteria. Three migrations applied (`20261103142336`, `20261103142420`, `20261103145717`). Anonymous/nonmember SQL role denials and unauthorized review denial passed; Supabase security advisor found zero findings. **No Auth users, memberships, learner submissions or actual grading**, and no public deployment. CI app build and typecheck passed. See [DB verification](docs/DB_VERIFICATION_2026-11-03.md) and the [Auth role-testing runbook](docs/AUTH_AND_ROLE_TEST_RUNBOOK.md).
 - A separate recurring `Project Launch DB Watch` condition-watch automation checks project status and runs read-only SQL every eight hours; enabled Nov 3. This is an **unverified future schedule** until the first successful run and does **not guarantee** Supabase free-tier uptime.
 - Official documentation: [free-project pausing](https://supabase.com/docs/guides/platform/free-project-pausing) — seven-day low-activity pause possible, even with some usage; paid plans are exempt. Vercel Hobby [Cron Jobs](https://vercel.com/docs/cron-jobs/usage-and-pricing) run no more than once daily; do not assume a daily Vercel Cron alone prevents Supabase pausing.
 - Engineering gate: implement a server-side health-check path (actual low-cost SQL read, **never a public privileged endpoint**), reserve a secured daily Vercel Cron for production deployment if useful, add explicit failure notifications and verify from a separate session before Nov 27 reviewer access. Prefer independently monitor *status* and actual learner workflows, not solely a synthetic heartbeat.
 - Never claim a robust availability SLA on Supabase Free. If uninterrupted external evaluation is essential, consider a bounded paid plan **only with new cost approval**; preserve a student-facing fallback/read-only route.
+
+## Development continuation — November 3
+
+- Invited-user session callback, token-hash invite confirmation, authenticated password setup, and session-aware browser clients are committed in this draft branch. The invitation path requires explicit Auth email-template and redirect URL configuration before it can operate.
+- The guarded synthetic-role harness `scripts/smoke-roles.mjs` creates a pair of synthetic learners plus a facilitator through official Auth-admin APIs, then validates cross-user record isolation, draft persistence, immutable final submission and facilitator feedback. **It has not run** because it requires an admin-only credential that is not exposed by the connected project tools. It must not be confused with completed role tests. The test restores publication flags and deletes synthetic accounts where possible.
+- Build and static quality checks use separate GitHub Actions jobs, while the OWLL production site's source and original Gauntlet remain unmodified.
+- **Open engineering gaps:** project-specific reproducible lockfile not yet committed; actual Vercel preview and protected env config; provider invitation email template/redirect config; 3-account E2E; reviewer workflow; two complete modules, original media, discussion forums, ten-item LMS-graded quiz and Level 1 survey. See the canonical Peter OS handoff for academic priorities.
