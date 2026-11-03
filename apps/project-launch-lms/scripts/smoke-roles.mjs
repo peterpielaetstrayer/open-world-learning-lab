@@ -31,7 +31,7 @@ const courseSlug = "project-launch-lab";
 let activity = null;
 let originalPublished = false;
 let originalModulePublished = false;
-let module = null;
+let courseModule = null;
 
 function expect(ok, text) {
   if (!ok) throw new Error("TEST FAILED: " + text);
@@ -62,7 +62,7 @@ try {
     await admin.from("pll_courses").select("id").eq("slug", courseSlug).single(),
     "Find dedicated course"
   );
-  module = assertNoError(
+  courseModule = assertNoError(
     await admin.from("pll_modules").select("id,is_published").eq("course_id", course.id)
       .eq("module_number", 1).single(),
     "Find module"
@@ -75,7 +75,7 @@ try {
   );
   activity = a;
   originalPublished = a.is_published;
-  originalModulePublished = module.is_published;
+  originalModulePublished = courseModule.is_published;
 
   const alice = await makeClient("learner-a");
   const bob = await makeClient("learner-b");
@@ -87,7 +87,7 @@ try {
     { course_id: course.id, user_id: facilitator.user.id, member_role: "facilitator" },
   ]), "Enroll synthetic accounts");
 
-  assertNoError(await admin.from("pll_modules").update({ is_published: true }).eq("id", module.id),
+  assertNoError(await admin.from("pll_modules").update({ is_published: true }).eq("id", courseModule.id),
     "Temporarily publish module for synthetic test");
   assertNoError(await admin.from("pll_activities").update({ is_published: true }).eq("id", activity.id),
     "Temporarily publish assignment for synthetic test");
@@ -182,12 +182,12 @@ try {
       .update({is_published: originalPublished}).eq("id",activity.id);
     if (r.error) console.error("CLEANUP WARNING: activity publication state requires review.");
   }
-  if (module) {
+  if (courseModule) {
     const r = await admin.from("pll_modules")
-      .update({is_published: originalModulePublished}).eq("id",module.id);
+      .update({is_published: originalModulePublished}).eq("id",courseModule.id);
     if (r.error) console.error("CLEANUP WARNING: module publication state requires review.");
   }
-  for (const userId of ids.reverse()) {
+  for (const userId of ids) {
     const r = await admin.auth.admin.deleteUser(userId);
     if (r.error) console.error("CLEANUP WARNING: synthetic Auth user requires review.");
   }
