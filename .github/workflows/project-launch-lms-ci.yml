@@ -25,6 +25,8 @@ jobs:
           node-version: '22'
       - name: Install exact locked dependency tree
         run: npm ci --no-audit --no-fund
+      - name: Audit locked runtime dependencies for high/critical advisories
+        run: npm audit --omit=dev --audit-level=high
       - name: Lint LMS source
         run: npm run lint
       - name: Validate admin and synthetic-role harness syntax
