@@ -18,7 +18,16 @@ export function createPageMetadata({
 }): Metadata {
   const url = `${baseUrl}${path}`;
   const images = openGraphImage
-    ? [{ url: openGraphImage.startsWith("http") ? openGraphImage : openGraphImage, width: 1200, height: 630, alt: title }]
+    ? [
+        {
+          url: openGraphImage.startsWith("http")
+            ? openGraphImage
+            : openGraphImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ]
     : undefined;
 
   return {
@@ -43,9 +52,16 @@ export function createPageMetadata({
   };
 }
 
-export const homeMetadata = createPageMetadata({
-  title: "Open World Learning Lab — Learning Should Begin With the World",
-  description: siteConfig.description,
-  path: "/",
-  openGraphImage: "/visuals/owll/homepage-learning-landscape.png",
-});
+export const homeMetadata: Metadata = {
+  ...createPageMetadata({
+    title:
+      "Open World Learning Lab — Research & Design for the Future of Learning",
+    description: siteConfig.description,
+    path: "/",
+    openGraphImage: "/visuals/owll/homepage-learning-landscape.png",
+  }),
+  title: {
+    absolute:
+      "Open World Learning Lab — Research & Design for the Future of Learning",
+  },
+};

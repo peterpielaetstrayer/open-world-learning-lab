@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   openGraph: {
-    title: "Open World Learning Lab — Learning Should Begin With the World",
+    title: "Open World Learning Lab — Research & Design for the Future of Learning",
     description: siteConfig.description,
     type: "website",
     locale: "en_US",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Open World Learning Lab — Learning Should Begin With the World",
+    title: "Open World Learning Lab — Research & Design for the Future of Learning",
     description: siteConfig.description,
   },
 };

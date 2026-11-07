@@ -3,13 +3,18 @@ import { navLinks, siteConfig } from "@/content/shared";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border bg-deep-field text-on-dark" data-print-hide="true">
+    <footer
+      className="border-t border-border bg-deep-field text-on-dark"
+      data-print-hide="true"
+    >
       <div className="mx-auto max-w-[1320px] px-5 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid md:grid-cols-2 gap-10">
           <div>
             <p className="font-serif text-xl">{siteConfig.name}</p>
             <p className="mt-3 text-sm text-on-dark/70 leading-relaxed max-w-sm">
-              An independent early-stage learning research and design lab exploring curiosity, lifelong education, human agency, and meaningful learning across the world.
+              An independent early-stage learning research and design lab
+              exploring curiosity, lifelong education, human agency, and
+              meaningful learning across the world.
             </p>
           </div>
 
@@ -27,6 +32,30 @@ export default function Footer() {
               ))}
               <li>
                 <Link
+                  href="/releases"
+                  className="text-sm text-on-dark/70 hover:text-on-dark"
+                >
+                  Public releases
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#guardrails"
+                  className="text-sm text-on-dark/70 hover:text-on-dark"
+                >
+                  Principles
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/start"
+                  className="text-sm text-on-dark/70 hover:text-on-dark"
+                >
+                  Try a field inquiry
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/contact"
                   className="text-sm text-on-dark/70 hover:text-on-dark transition-colors"
                 >
@@ -40,7 +69,9 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-on-dark/10 space-y-3">
           <p className="text-xs text-on-dark/65">{siteConfig.copyright}</p>
           <p className="text-xs text-on-dark/65">{siteConfig.licensingNote}</p>
-          <p className="text-xs text-on-dark/65 max-w-2xl">{siteConfig.disclaimer}</p>
+          <p className="text-xs text-on-dark/65 max-w-2xl">
+            {siteConfig.disclaimer}
+          </p>
         </div>
       </div>
     </footer>

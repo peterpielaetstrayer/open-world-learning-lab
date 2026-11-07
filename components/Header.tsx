@@ -20,8 +20,6 @@ export default function Header() {
   useEffect(() => {
     if (!menuOpen) return;
 
-    document.body.style.overflow = "hidden";
-
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         closeMenu();
@@ -30,7 +28,6 @@ export default function Header() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.body.style.overflow = "";
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [menuOpen, closeMenu]);
@@ -45,12 +42,14 @@ export default function Header() {
           href="/"
           className="font-serif text-[0.9375rem] leading-snug sm:text-lg text-ink tracking-tight hover:text-water transition-colors min-w-0 shrink focus-visible:rounded-sm"
         >
-          <span className="sm:hidden">{siteConfig.shortName}</span>
-          <span className="hidden sm:inline">{siteConfig.name}</span>
+          <span className="block text-3xl">{siteConfig.shortName}</span>
+          <span className="block mt-1 font-mono text-[9px] uppercase tracking-widest">
+            {siteConfig.name}
+          </span>
         </Link>
 
         <nav
-          className="hidden md:flex items-center gap-5 lg:gap-6"
+          className="hidden lg:flex items-center gap-5 xl:gap-6"
           aria-label="Main navigation"
         >
           {navLinks.map((link) => {
@@ -60,6 +59,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={isActive ? "page" : undefined}
                 className={`text-sm transition-colors focus-visible:rounded-sm ${
                   isActive
                     ? "text-ink font-medium"
@@ -74,20 +74,23 @@ export default function Header() {
             href="/contact"
             className="btn-tactile inline-flex min-h-11 items-center rounded-full bg-moss px-5 py-2.5 text-sm font-medium text-on-dark hover:bg-moss/90"
           >
-            Start a Conversation
+            Connect
           </Link>
         </nav>
 
         <button
           ref={menuButtonRef}
           type="button"
-          className="md:hidden inline-flex min-h-11 min-w-11 items-center justify-center rounded-md -mr-1"
+          className="lg:hidden inline-flex min-h-11 min-w-11 items-center justify-center rounded-md -mr-1"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           aria-controls={menuId}
           onClick={() => setMenuOpen((open) => !open)}
         >
-          <span className="relative flex h-3.5 w-6 flex-col justify-between" aria-hidden="true">
+          <span
+            className="relative flex h-3.5 w-6 flex-col justify-between"
+            aria-hidden="true"
+          >
             <span
               className={`block h-0.5 w-full bg-foreground transition-transform origin-center ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`}
             />
@@ -105,7 +108,7 @@ export default function Header() {
         <nav
           ref={menuRef}
           id={menuId}
-          className="md:hidden border-t border-border bg-page px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+          className="lg:hidden border-t border-border bg-page px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] max-h-[70dvh] overflow-y-auto"
           aria-label="Mobile navigation"
         >
           <ul className="flex flex-col gap-1">

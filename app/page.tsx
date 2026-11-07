@@ -1,324 +1,479 @@
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import Footer from "@/components/Footer";
-import SectionHeader from "@/components/SectionHeader";
-import PullQuote from "@/components/PullQuote";
-import WorkTriptych from "@/components/WorkTriptych";
-import ProjectIndexEntry from "@/components/ProjectIndexEntry";
-import LearningLoopDiagram from "@/components/diagrams/LearningLoopDiagram";
-import GuardrailIndex from "@/components/diagrams/GuardrailIndex";
-import ReleaseCover, { releaseTypeToVariant } from "@/components/ReleaseCover";
-import EditorialSection from "@/components/layout/EditorialSection";
-import ReadingColumn from "@/components/layout/ReadingColumn";
-import SectionDivider from "@/components/layout/SectionDivider";
+import Image from "next/image";
 import Link from "next/link";
-import { projects } from "@/content/projects";
-import { releases } from "@/content/releases";
-import { founderBio } from "@/content/shared";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import LearningExample from "@/components/home/LearningExample";
+import LearningLoopDiagram from "@/components/diagrams/LearningLoopDiagram";
+import { guardrails } from "@/content/shared";
+import "./home.css";
 
 export { homeMetadata as metadata } from "@/lib/metadata";
-
-const primaryProjects = projects.filter((p) =>
-  ["first-landing", "locus"].includes(p.slug)
-);
-
-const owllAtAGlance = releases.find((r) => r.slug === "owll-at-a-glance");
-
-const audiencePaths = [
-  {
-    title: "Individuals",
-    description: "Develop the questions, practices, and confidence to direct your own learning throughout life.",
-  },
-  {
-    title: "Families",
-    description: "Discover how adults and children can learn alongside one another. Parents are learners, too.",
-  },
-  {
-    title: "Educators & Mentors",
-    description: "Explore learning experiences built around real questions, meaningful practice, and human support.",
-  },
-  {
-    title: "Communities & Researchers",
-    description: "Investigate the conditions that make learning more accessible, rigorous, and connected.",
-  },
-];
 
 export default function Home() {
   return (
     <>
+      <a className="owll-skip" href="#main">
+        Skip to content
+      </a>
       <Header />
-      <main>
-        <Hero />
-
-        <SectionDivider />
-
-        {/* PURPOSE */}
-        <EditorialSection id="thesis">
-          <SectionHeader
-            eyebrow="The purpose"
-            title="Education is bigger than school, and learning lasts a lifetime."
-          />
-          <ReadingColumn className="space-y-5 text-body text-secondary">
-            <p>
-              Learning takes place through family, work, neighborhoods, books, places, conversations, and the questions we choose to pursue. The world is already full of opportunities to learn.
+      <main id="main" className="owll-home" tabIndex={-1}>
+        <section className="hero" aria-labelledby="hero-title">
+          <div className="hero-copy">
+            <p className="eyebrow">
+              Independent research &amp; design for the future of learning
             </p>
-            <p>
-              OWLL studies how curiosity can become understanding people can explain, practice, apply, and revisit. The goal is not less guidance or weaker foundations. It is structured freedom: meaningful support that helps people become increasingly capable of directing their own learning.
+            <h1 id="hero-title">
+              What if the world
+              <br />
+              helped us become
+              <br />
+              <em>more capable?</em>
+            </h1>
+            <p className="hero-intro">
+              Open World Learning Lab explores how people learn, develop agency,
+              and make meaning through the world around them.
             </p>
-          </ReadingColumn>
-          <PullQuote>The world is the curriculum. Human agency is the purpose.</PullQuote>
-        </EditorialSection>
+            <p className="hero-detail">
+              An early-stage initiative bringing research, learning experiences
+              and emerging technology into conversation.
+            </p>
+            <div className="actions">
+              <Link className="button" href="#research">
+                Explore the lab <span aria-hidden="true">↓</span>
+              </Link>
+              <Link className="text-action" href="#experience">
+                Begin with a question <span aria-hidden="true">↗</span>
+              </Link>
+            </div>
+          </div>
+          <figure className="hero-art">
+            <Image
+              src="/visuals/owll/homepage-learning-landscape.png"
+              width={1536}
+              height={1024}
+              sizes="(max-width: 760px) 100vw, 55vw"
+              fetchPriority="high"
+              alt="Conceptual field atlas showing a learner on a coastal path, with observations and returning routes connecting the landscape."
+            />
+            <figcaption>
+              <span>FIELD ATLAS / 001</span>
+              <span>Experience becomes an opening for inquiry.</span>
+            </figcaption>
+          </figure>
+        </section>
 
-        <SectionDivider />
+        <div id="thesis" className="thesis-band">
+          <p>
+            The world is the curriculum.
+            <br />
+            <span>Human agency is the purpose.</span>
+          </p>
+          <p>
+            From an everyday question to a lifelong pursuit.
+            <br />
+            From a first observation to something worth understanding.
+          </p>
+        </div>
 
-        {/* HUMAN ENTRY POINTS — not a claim that every program exists today */}
-        <EditorialSection id="who-its-for" spacing="compact">
-          <SectionHeader
-            eyebrow="Who this work includes"
-            title="A learning life belongs to more than one institution."
-            intro="Our work is for people who want learning to be more connected, self-directed, and human. The pathways below describe who OWLL intends to serve, not programs that are currently open for enrollment."
-          />
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            {audiencePaths.map((audience) => (
-              <article key={audience.title} className="border-t border-border-strong pt-5">
-                <h3 className="font-serif text-section-title text-ink">
-                  {audience.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-secondary">
-                  {audience.description}
+        <section
+          id="research"
+          className="section shell"
+          aria-labelledby="research-title"
+        >
+          <div className="section-heading">
+            <p className="eyebrow">
+              <span className="index">01</span> The questions behind the work
+            </p>
+            <div>
+              <h2 id="research-title">
+                A lab begins
+                <br />
+                with an open question.
+              </h2>
+              <p>
+                Learning reaches across minds, relationships, places and
+                technologies. OWLL is developing a research and design practice
+                around the conditions that help people become thoughtful,
+                capable and increasingly self-directed.
+              </p>
+            </div>
+          </div>
+          <div className="questions">
+            <article>
+              <span className="topic">AGENCY &amp; INTELLIGENCE</span>
+              <h3>When does help make us more independent?</h3>
+              <p>
+                Explore how human and AI guidance can support judgment,
+                productive effort and learning that lasts.
+              </p>
+              <Link href="#work">
+                See the questions in practice <span aria-hidden="true">↗</span>
+              </Link>
+            </article>
+            <article>
+              <span className="topic">ENVIRONMENTS &amp; EXPERIENCE</span>
+              <h3>What can a place invite us to notice?</h3>
+              <p>
+                Investigate how the settings we inhabit can open routes into
+                knowledge, practice and meaningful creation.
+              </p>
+              <Link href="#experience">
+                Explore a learning example <span aria-hidden="true">↗</span>
+              </Link>
+            </article>
+            <article>
+              <span className="topic">CONTINUITY &amp; OWNERSHIP</span>
+              <h3>How can learning travel with a person?</h3>
+              <p>
+                Design ways to keep questions, evidence and understanding
+                connected across experiences and institutions.
+              </p>
+              <Link href="#locus">
+                Meet the LOCUS initiative <span aria-hidden="true">↗</span>
+              </Link>
+            </article>
+          </div>
+        </section>
+
+        <LearningExample />
+
+        <section
+          id="learning-loop"
+          className="shell learning-model"
+          aria-label="The Open-World Learning Loop"
+        >
+          <details>
+            <summary>Explore the full learning model</summary>
+            <p>
+              A design model connecting experience, inquiry, practice,
+              mentorship, creation, reflection and return.
+            </p>
+            <LearningLoopDiagram />
+          </details>
+        </section>
+
+        <section
+          id="work"
+          className="section shell"
+          aria-labelledby="work-title"
+        >
+          <div className="section-heading">
+            <p className="eyebrow">
+              <span className="index">03</span> Work in the open
+            </p>
+            <div>
+              <h2 id="work-title">
+                From possibility
+                <br />
+                to something we can examine.
+              </h2>
+              <p>
+                Questions become designs. Designs become prototypes. What
+                happens next should inform what we build. This is a growing
+                record of the work and its open questions.
+              </p>
+            </div>
+          </div>
+          <div className="work-ledger">
+            <article className="work-entry">
+              <div className="work-type">
+                <span>TECHNOLOGY &amp; LEARNING</span>
+                <span className="status">Prototype</span>
+              </div>
+              <div className="work-body">
+                <h3>LOCUS</h3>
+                <p>
+                  A learner-owned system for connecting questions, experiences,
+                  evidence and future learning.
                 </p>
+                <details>
+                  <summary>Examine the work</summary>
+                  <dl>
+                    <dt>Question</dt>
+                    <dd>
+                      What helps a person return to an inquiry with
+                      understanding they can use?
+                    </dd>
+                    <dt>Documented basis</dt>
+                    <dd>
+                      The early learner field-test implementation supports a
+                      small learning loop, records in the same browser, later
+                      re-entry and export. This describes prototype
+                      functionality.
+                    </dd>
+                    <dt>Still open</dt>
+                    <dd>
+                      Whether the approach improves durable learning, how it
+                      serves different learners, and how continuity works across
+                      contexts and devices.
+                    </dd>
+                  </dl>
+                </details>
+                <Link href="#locus">
+                  Explore the initiative <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+              <span className="work-id">OWLL / 01</span>
+            </article>
+            <article className="work-entry">
+              <div className="work-type">
+                <span>PLACE &amp; INQUIRY</span>
+                <span className="status">Design + prototype</span>
+              </div>
+              <div className="work-body">
+                <h3>Water Writes the Landscape</h3>
+                <p>
+                  First Landing and coastal Virginia provide a setting to
+                  investigate how water shapes land, life and human choices.
+                </p>
+                <details>
+                  <summary>Examine the work</summary>
+                  <dl>
+                    <dt>Question</dt>
+                    <dd>
+                      How can an encounter with a place become sustained inquiry
+                      and an explanation grounded in evidence?
+                    </dd>
+                    <dt>Documented basis</dt>
+                    <dd>
+                      The First Landing dossier preserves a six-week design
+                      sketch and describes a related eight-stop Journey Studio
+                      prototype.
+                    </dd>
+                    <dt>Still open</dt>
+                    <dd>
+                      Field usability, learner outcomes, facilitation needs and
+                      transfer to other places.
+                    </dd>
+                  </dl>
+                  <p>
+                    A small Coastal Inquiry Lab is being considered for summer
+                    2027. Its host, site, participation model, funding and
+                    readiness remain in planning.
+                  </p>
+                </details>
+                <Link href="/work/first-landing">
+                  Read the current dossier <span aria-hidden="true">↗</span>
+                </Link>
+              </div>
+              <span className="work-id">OWLL / 02</span>
+            </article>
+            <article className="work-entry">
+              <div className="work-type">
+                <span>ENVIRONMENTS &amp; DESIGN</span>
+                <span className="status">Early concept</span>
+              </div>
+              <div className="work-body">
+                <h3>Places for learning</h3>
+                <p>
+                  Exploring how physical spaces, human support and thoughtful
+                  technology could make room for attention, inquiry and
+                  creation.
+                </p>
+                <details>
+                  <summary>Examine the work</summary>
+                  <dl>
+                    <dt>Question</dt>
+                    <dd>
+                      What changes when a learning environment is designed
+                      around the person and the activity?
+                    </dd>
+                    <dt>Documented basis</dt>
+                    <dd>
+                      An early public research direction and conceptual learning
+                      zones.
+                    </dd>
+                    <dt>Still open</dt>
+                    <dd>
+                      Which changes are useful, accessible and sustainable in
+                      everyday settings.
+                    </dd>
+                  </dl>
+                </details>
+                <Link href="/learning-environments">
+                  Explore the concept <span aria-hidden="true">↗</span>
+                </Link>
+              </div>
+              <span className="work-id">OWLL / 03</span>
+            </article>
+          </div>
+          <div className="evidence-foot">
+            <p>
+              <strong>Evidence matters.</strong> A prototype shows what can be
+              built. Observing use and studying learning are further steps.
+            </p>
+            <Link href="/releases">Browse public releases ↗</Link>
+          </div>
+        </section>
+
+        <section
+          id="locus"
+          className="locus-section"
+          aria-labelledby="locus-title"
+        >
+          <div className="shell locus-grid">
+            <div>
+              <p className="eyebrow">
+                <span className="index">04</span> An initiative within OWLL
+              </p>
+              <h2 id="locus-title">
+                A learning life
+                <br />
+                with continuity.
+              </h2>
+              <p className="large-copy">
+                LOCUS is being developed to help people carry meaningful
+                learning across experiences, people and time.
+              </p>
+              <p>
+                A structured Journey can offer guidance. Open Explore can begin
+                with a question of your own. Both should leave you with
+                something to return to, examine and build upon.
+              </p>
+              <Link className="text-action" href="/work/locus">
+                Read the LOCUS initiative dossier ↗
+              </Link>
+            </div>
+            <div className="continuity-plate">
+              <p className="plate-top">OWLL / LEARNING SYSTEMS</p>
+              <div className="mode-pair">
+                <div>
+                  Structured Journeys<small>A designed path</small>
+                </div>
+                <div>
+                  Open Explore<small>Your own starting point</small>
+                </div>
+              </div>
+              <div className="converge" aria-hidden="true">
+                <span></span>
+                <span></span>
+              </div>
+              <div className="thread-center">
+                <span className="eyebrow">A shared learning thread</span>
+                <strong>Question · evidence · understanding</strong>
+                <p>With people, practice and reflection along the way.</p>
+              </div>
+              <div className="thread-return">
+                <span aria-hidden="true">↳</span> Return, recall, revise{" "}
+                <span aria-hidden="true">↗</span>
+              </div>
+              <p className="plate-caption">
+                Conceptual relationship · The long-term aim is a record the
+                learner can inspect, correct and control.
+              </p>
+            </div>
+          </div>
+          <div className="shell locus-bottom">
+            <p>
+              Future product experiences may have their own home. Here, the
+              focus is the purpose, research questions and progress behind the
+              initiative.
+            </p>
+            <details>
+              <summary>On the horizon</summary>
+              <p>
+                An inspectable Learner Atlas, a Family Learning Navigator,
+                creator tools and spatial interfaces could extend this work.
+                Their scope and value remain questions for design and testing.
+              </p>
+            </details>
+          </div>
+        </section>
+
+        <section
+          id="about"
+          className="section shell about-grid"
+          aria-labelledby="about-title"
+        >
+          <div>
+            <p className="eyebrow">
+              <span className="index">05</span> An enduring home for inquiry
+            </p>
+            <h2 id="about-title">
+              Rooted in the world.
+              <br />
+              Open to what comes next.
+            </h2>
+          </div>
+          <div>
+            <p className="large-copy">
+              OWLL began with a possibility in Tahoe. What if the mountain,
+              lake, trail and community could form a connected learning
+              environment?
+            </p>
+            <p>
+              That question has grown into a wider ambition for an independent
+              research and design institute, with the creative and
+              entrepreneurial capacity to develop tools, experiences and new
+              educational models.
+            </p>
+            <p>
+              Today, OWLL is an early-stage initiative founded by Peter
+              Pielaet-Strayer. Its organizational form is still evolving. Human
+              agency, mentorship, intellectual openness and evidence guide the
+              direction.
+            </p>
+            <div className="actions">
+              <Link href="/about">About the lab and its founder ↗</Link>
+              <Link href="/work/open-world-tahoe">The Tahoe origin ↗</Link>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="guardrails"
+          className="section shell"
+          aria-labelledby="guardrails-title"
+        >
+          <p className="eyebrow">The conditions for responsible exploration</p>
+          <h2 id="guardrails-title">
+            More possibility. Human judgment at the center.
+          </h2>
+          <div className="questions">
+            {guardrails.map((principle) => (
+              <article key={principle.title}>
+                <h3>{principle.title}</h3>
+                <p>{principle.description}</p>
               </article>
             ))}
           </div>
-        </EditorialSection>
+        </section>
 
-        <SectionDivider />
-
-        {/* FIRST USEFUL PUBLIC LEARNING EXPERIENCE */}
-        <EditorialSection id="start-learning" variant="soft" spacing="compact">
-          <div className="grid gap-7 md:grid-cols-[minmax(0,1fr)_minmax(0,.85fr)] md:items-center md:gap-14">
-            <div className="max-w-reading">
-              <p className="font-mono text-metadata uppercase tracking-widest text-water">
-                Start learning / Free field inquiry
-              </p>
-              <h2 className="mt-4 font-serif text-page-title text-ink">
-                Ten minutes. One real question. Your world.
-              </h2>
-              <p className="mt-4 text-body text-secondary leading-relaxed">
-                Try a small learning experience using something already around you.
-                Notice, ask, investigate, explain, and return. No registration, AI,
-                travel, or expensive equipment required.
-              </p>
-              <Link
-                href="/start"
-                className="btn-tactile mt-6 inline-flex min-h-11 items-center rounded-full bg-moss px-7 py-3 text-sm font-medium text-on-dark hover:bg-moss/90"
-              >
-                Try the free inquiry →
-              </Link>
-            </div>
-            <div className="rounded-xl border border-border bg-card p-6 sm:p-8">
-              <p className="font-mono text-metadata uppercase tracking-widest text-water">
-                A field note starts here
-              </p>
-              <dl className="mt-5 space-y-4">
-                <div className="border-l-2 border-water/40 pl-4">
-                  <dt className="font-serif text-xl text-ink">Notice</dt>
-                  <dd className="mt-1 text-sm text-secondary">What is happening right in front of you?</dd>
-                </div>
-                <div className="border-l-2 border-water/40 pl-4">
-                  <dt className="font-serif text-xl text-ink">Question</dt>
-                  <dd className="mt-1 text-sm text-secondary">What would you like to understand?</dd>
-                </div>
-                <div className="border-l-2 border-water/40 pl-4">
-                  <dt className="font-serif text-xl text-ink">Explore</dt>
-                  <dd className="mt-1 text-sm text-secondary">What evidence could change your explanation?</dd>
-                </div>
-              </dl>
-              <p className="mt-6 text-xs text-quiet">
-                An introductory activity, not a validated learning program.
-              </p>
-            </div>
-          </div>
-        </EditorialSection>
-
-        <SectionDivider />
-
-        <EditorialSection id="learning-loop">
-          <SectionHeader
-            eyebrow="How open-world learning works"
-            title="Experience becomes learning through a designed loop."
-          />
-          <LearningLoopDiagram />
-        </EditorialSection>
-
-        <SectionDivider />
-
-        {/* WHAT OWLL DOES */}
-        <EditorialSection id="what-owll-is" variant="soft">
-          <SectionHeader
-            eyebrow="What OWLL does"
-            title="OWLL studies learning, designs experiences, and builds toward supporting infrastructure."
-          />
-          <WorkTriptych />
-        </EditorialSection>
-
-        <SectionDivider />
-
-        {/* TWO PRIMARY DOORS */}
-        <EditorialSection id="current-work">
-          <SectionHeader
-            eyebrow="Primary prototypes"
-            title="Two doors into the current work."
-          />
-          <div className="space-y-12 md:space-y-16">
-            {primaryProjects.map((project) => (
-              <ProjectIndexEntry
-                key={project.slug}
-                project={project}
-                layout="featured"
-                ctaLabel={
-                  project.slug === "first-landing"
-                    ? "Explore First Landing"
-                    : "Explore LOCUS"
-                }
-              />
-            ))}
-          </div>
-          <div className="mt-8 md:mt-12">
-            <Link
-              href="/work"
-              className="text-sm font-medium text-water hover:text-moss transition-colors"
-            >
-              View all current and exploratory work →
-            </Link>
-          </div>
-        </EditorialSection>
-
-        <SectionDivider />
-
-        {/* EXPANDING RESEARCH DIRECTION */}
-        <EditorialSection id="learning-environments" variant="soft" spacing="compact">
-          <div className="grid gap-8 md:grid-cols-[1.25fr_.75fr] md:items-center">
-            <div>
-              <p className="font-mono text-metadata uppercase tracking-widest text-water">
-                New research direction / Early concept
-              </p>
-              <h2 className="mt-4 max-w-2xl font-serif text-page-title text-ink">
-                What if the places we inhabit helped us become more capable learners?
-              </h2>
-              <p className="mt-5 max-w-reading text-body text-secondary">
-                OWLL Learning Environments explores how people, rooms, resources, and
-                learning activities might be designed together. One proposed starting point
-                is a personal learning-space case study, not a commercial installation offer.
-              </p>
-              <Link href="/learning-environments" className="mt-6 inline-flex min-h-11 items-center text-sm font-medium text-water hover:text-moss">
-                Explore Learning Environments →
-              </Link>
-            </div>
-            <div className="rounded-xl border border-border bg-card p-6">
-              <p className="font-mono text-metadata uppercase tracking-widest text-quiet">Learning is situated</p>
-              <div className="mt-5 grid grid-cols-2 gap-2 text-sm">
-                <div className="rounded-md bg-soft-paper p-4"><span className="font-serif text-xl">Focus</span><p className="mt-1 text-xs text-secondary">Space for attention</p></div>
-                <div className="rounded-md bg-[#dce8e4] p-4"><span className="font-serif text-xl">Explore</span><p className="mt-1 text-xs text-secondary">Space for inquiry</p></div>
-                <div className="rounded-md bg-[#e5decd] p-4"><span className="font-serif text-xl">Make</span><p className="mt-1 text-xs text-secondary">Space for creation</p></div>
-                <div className="rounded-md bg-[#e0e7d9] p-4"><span className="font-serif text-xl">Reflect</span><p className="mt-1 text-xs text-secondary">Space for growth</p></div>
-              </div>
-              <p className="mt-4 text-xs text-quiet">Conceptual learning zones, not a completed room.</p>
-            </div>
-          </div>
-        </EditorialSection>
-
-        <SectionDivider />
-
-        {/* PRINCIPLES, FOUNDER, INVITATION */}
-        <EditorialSection id="guardrails" variant="soft">
-          <SectionHeader
-            eyebrow="What must remain true"
-            title="A more powerful learning environment also requires stronger boundaries."
-          />
-          <GuardrailIndex />
-        </EditorialSection>
-
-        <SectionDivider />
-
-        <EditorialSection id="founder" spacing="compact">
-          <SectionHeader
-            eyebrow="Who is developing this work"
-            title="Founded through practice, not abstraction."
-          />
-          <ReadingColumn className="text-body text-secondary leading-relaxed">
-            <p>{founderBio.short}</p>
-            <p className="mt-4">
-              <Link
-                href="/about"
-                className="text-sm font-medium text-water hover:text-moss transition-colors"
-              >
-                Read more about OWLL →
-              </Link>
-            </p>
-          </ReadingColumn>
-        </EditorialSection>
-
-        {owllAtAGlance && (
-          <>
-            <SectionDivider />
-            <EditorialSection id="releases" spacing="compact">
-              <SectionHeader
-                eyebrow="Selected public work"
-                title="OWLL at a Glance"
-                intro="A July 2026 snapshot of the lab’s earlier focus, preserved as the research and design direction evolves."
-              />
-              <div className="max-w-md">
-                <ReleaseCover
-                  releaseId={owllAtAGlance.subtitle}
-                  title={owllAtAGlance.title}
-                  releaseType={owllAtAGlance.releaseType}
-                  version={owllAtAGlance.version}
-                  date={owllAtAGlance.publishedAt}
-                  visualVariant={releaseTypeToVariant(owllAtAGlance.releaseType)}
-                  href={owllAtAGlance.href}
-                  summary={owllAtAGlance.summary}
-                />
-              </div>
-              <div className="mt-8">
-                <Link
-                  href="/releases"
-                  className="text-sm font-medium text-water hover:text-moss transition-colors"
-                >
-                  View all releases →
-                </Link>
-              </div>
-            </EditorialSection>
-          </>
-        )}
-
-        <SectionDivider />
-
-        {/* FINAL INVITATION */}
-        <EditorialSection id="contact" variant="dark" className="pattern-topo">
-          <ReadingColumn className="mx-auto text-center">
-            <h2 className="font-serif text-page-title text-on-dark leading-tight">
-              Start a thoughtful conversation.
+        <section id="participate" className="participate">
+          <div className="shell">
+            <p className="eyebrow">There is more than one way into the work</p>
+            <h2>
+              Bring a question.
+              <br />
+              <em>Find a connection.</em>
             </h2>
-            <p className="mt-5 md:mt-8 text-body text-on-dark/70">
-              We welcome thoughtful questions from adult learners, families, educators, researchers, designers, and community organizations. Current work is early-stage, and this is not a program enrollment or service booking channel.
-            </p>
-            <div className="mt-7 md:mt-10 flex flex-col sm:flex-row gap-2.5 sm:gap-3 justify-center">
-              <Link
-                href="/contact"
-                className="btn-tactile inline-flex min-h-11 items-center justify-center rounded-full bg-page px-7 py-3 text-sm font-medium text-ink hover:bg-soft-paper"
-              >
-                Start a Conversation
+            <div className="participation-paths">
+              <Link href="/start">
+                <span>FOR THE CURIOUS</span>
+                <strong>Try a learning experience</strong>
+                <p>
+                  Start alone, with family, or alongside someone you learn with.
+                </p>
+                <b aria-hidden="true">↗</b>
               </Link>
-              <Link
-                href="/work"
-                className="btn-tactile inline-flex min-h-11 items-center justify-center rounded-full border border-on-dark/30 px-7 py-3 text-sm font-medium text-on-dark hover:bg-on-dark/10"
-              >
-                Explore the Work
+              <Link href="#work">
+                <span>FOR THOSE WHO WANT TO LOOK CLOSER</span>
+                <strong>Examine the work</strong>
+                <p>Explore a question, prototype or emerging direction.</p>
+                <b aria-hidden="true">↗</b>
+              </Link>
+              <Link href="/contact">
+                <span>FOR POSSIBLE COLLABORATORS</span>
+                <strong>Start a conversation</strong>
+                <p>
+                  Bring an educational, research, community or technology
+                  perspective.
+                </p>
+                <b aria-hidden="true">↗</b>
               </Link>
             </div>
-          </ReadingColumn>
-        </EditorialSection>
+          </div>
+        </section>
       </main>
       <Footer />
     </>

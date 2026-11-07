@@ -10,7 +10,7 @@ export const siteConfig = {
   url: "https://openworldlearninglab.com",
   email: "hello@openworldlearninglab.com",
   description:
-    "An independent learning research and design lab exploring lifelong learning, educational agency, real-world learning experiences, and human-centered tools.",
+    "An independent, early-stage research and design initiative exploring the future of learning, human agency, real-world experiences, and learner-owned tools.",
   disclaimer:
     "Open World Learning Lab is an independent early-stage research and design project. It is not currently operating as a school or accredited educational program.",
   copyright: "© 2026 Open World Learning Lab. All rights reserved.",
@@ -103,10 +103,9 @@ export const technologyHorizons = {
 };
 
 export const navLinks = [
-  { href: "/#thesis", label: "Approach" },
+  { href: "/#research", label: "Research" },
+  { href: "/#experience", label: "Learning" },
+  { href: "/work/locus", label: "LOCUS" },
   { href: "/work", label: "Current Work" },
-  { href: "/start", label: "Start Learning" },
-  { href: "/releases", label: "Releases" },
-  { href: "/#guardrails", label: "Principles" },
   { href: "/about", label: "About" },
 ];

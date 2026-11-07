@@ -1,0 +1,937 @@
+.owll-home {
+  --paper: #f2efe6;
+  --pale: #e7e3d7;
+  --ink: #17201d;
+  --quiet: #46564e;
+  --water: #2f6672;
+  --moss: #526b50;
+  --dark: #132d25;
+  --line: #b9bdb0;
+  --accent: #c7a454;
+}
+.owll-home * {
+  box-sizing: border-box;
+}
+.owll-home {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font:
+    16px/1.65 var(--font-inter),
+    system-ui,
+    sans-serif;
+}
+.owll-home [hidden] {
+  display: none !important;
+}
+.owll-home a {
+  color: var(--water);
+  text-underline-offset: 5px;
+}
+.owll-home a,
+.owll-home button,
+.owll-home summary {
+  -webkit-tap-highlight-color: transparent;
+}
+.owll-home a:focus-visible,
+.owll-home button:focus-visible,
+.owll-home summary:focus-visible {
+  outline: 3px solid #a76b2e;
+  outline-offset: 5px;
+}
+.owll-home button {
+  font: inherit;
+  cursor: pointer;
+}
+.owll-home img,
+.owll-home svg {
+  display: block;
+  max-width: 100%;
+}
+.owll-home figure {
+  margin: 0;
+}
+.owll-home p {
+  margin: 0 0 20px;
+}
+.owll-home h1,
+.owll-home h2,
+.owll-home h3,
+.owll-home h4 {
+  margin: 0;
+  font-weight: 400;
+}
+.owll-home h1,
+.owll-home h2,
+.owll-home h3 {
+  font-family: var(--font-newsreader), Georgia, serif;
+}
+.owll-home h1 {
+  font-size: clamp(44px, 4.7vw, 73px);
+  line-height: 1.05;
+  letter-spacing: -2.5px;
+}
+.owll-home h1 em,
+.owll-home h2 em {
+  color: var(--water);
+  font-weight: 400;
+}
+.owll-home h2 {
+  font-size: clamp(33px, 3.8vw, 53px);
+  line-height: 1.12;
+  letter-spacing: -1.4px;
+  margin-bottom: 26px;
+}
+.owll-home h3 {
+  font-size: 27px;
+  line-height: 1.2;
+  margin-bottom: 18px;
+}
+.owll-home .shell {
+  width: min(1240px, calc(100% - 96px));
+  margin-inline: auto;
+}
+.owll-home .section {
+  padding-block: 96px;
+}
+.owll-home .eyebrow,
+.owll-home .topic,
+.owll-home .sample-label,
+.owll-home .plate-top {
+  font:
+    11px/1.6 var(--font-ibm-plex-mono),
+    monospace;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--water);
+}
+.owll-home .eyebrow {
+  margin-bottom: 27px;
+}
+.owll-home .index {
+  display: inline-block;
+  margin-right: 15px;
+  opacity: 1;
+}
+.owll-home .hero {
+  width: min(1440px, 100%);
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 1.08fr;
+  min-height: 650px;
+  align-items: center;
+}
+.owll-home .hero-copy {
+  padding: 66px 24px 66px max(48px, calc((100vw - 1240px) / 2));
+  position: relative;
+  z-index: 1;
+}
+.owll-home .hero .eyebrow {
+  max-width: 42ch;
+}
+.owll-home .hero-intro {
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 45ch;
+  margin-top: 30px;
+}
+.owll-home .hero-detail {
+  font-size: 14px;
+  color: var(--quiet);
+  max-width: 48ch;
+}
+.owll-home .hero-art {
+  align-self: stretch;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+.owll-home .hero-art img {
+  width: 100%;
+  height: 570px;
+  object-fit: cover;
+  object-position: 73% center;
+}
+.owll-home .hero-art figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 28px;
+  font:
+    10px/1.6 var(--font-ibm-plex-mono),
+    monospace;
+  color: var(--quiet);
+}
+.owll-home .hero-art figcaption span:first-child {
+  white-space: nowrap;
+}
+.owll-home .actions {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+.owll-home .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 27px;
+  background: var(--dark);
+  color: var(--paper);
+  padding: 13px 20px;
+  min-height: 48px;
+  text-decoration: none;
+  font-size: 13px;
+}
+.owll-home .button:hover {
+  background: var(--water);
+}
+.owll-home .text-action {
+  font-size: 13px;
+}
+.owll-home .thesis-band {
+  padding: 30px max(48px, calc((100vw - 1240px) / 2));
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  border-block: 1px solid var(--line);
+}
+.owll-home .thesis-band p {
+  margin: 0;
+}
+.owll-home .thesis-band p:first-child {
+  font:
+    24px/1.45 var(--font-newsreader),
+    Georgia,
+    serif;
+}
+.owll-home .thesis-band span {
+  color: var(--water);
+}
+.owll-home .thesis-band p:last-child {
+  font-size: 13px;
+  color: var(--quiet);
+  align-self: center;
+}
+.owll-home .section-heading {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 55px;
+  margin-bottom: 54px;
+}
+.owll-home .section-heading > div {
+  max-width: 700px;
+}
+.owll-home .section-heading > .eyebrow {
+  padding-top: 8px;
+}
+.owll-home .section-heading p:last-child {
+  color: var(--quiet);
+  max-width: 64ch;
+  margin-bottom: 0;
+}
+.owll-home .questions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 42px;
+}
+.owll-home .questions article {
+  border-top: 1px solid var(--water);
+  padding-top: 22px;
+}
+.owll-home .questions h3 {
+  margin-top: 21px;
+  max-width: 20ch;
+}
+.owll-home .questions p {
+  font-size: 14px;
+  color: var(--quiet);
+}
+.owll-home .questions a {
+  font-size: 12px;
+}
+.owll-home .experience-section {
+  background: var(--dark);
+  color: var(--paper);
+  padding: 80px 0 0;
+}
+.owll-home .experience-section .eyebrow {
+  color: #bdcbbf;
+}
+.owll-home .experience-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  align-items: end;
+  margin-bottom: 28px;
+}
+.owll-home .experience-heading > p {
+  font-size: 14px;
+  color: #c0cec4;
+}
+.owll-home .example-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  border-top: 1px solid #607469;
+  padding-top: 35px;
+  padding-bottom: 45px;
+}
+.owll-home .context-controls {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 23px;
+}
+.owll-home .context-controls button {
+  border: 1px solid #899b8e;
+  background: transparent;
+  color: var(--paper);
+  padding: 9px 18px;
+  font-size: 13px;
+  min-height: 44px;
+}
+.owll-home .context-controls button[aria-pressed="true"] {
+  background: var(--paper);
+  color: var(--dark);
+}
+.owll-home .scene {
+  background: #dce0d3;
+  position: relative;
+}
+.owll-home .scene svg {
+  width: 100%;
+  height: auto;
+}
+.owll-home .scene-number {
+  position: absolute;
+  left: 18px;
+  top: 14px;
+  color: var(--dark);
+  font:
+    10px var(--font-ibm-plex-mono),
+    monospace;
+  letter-spacing: 1.5px;
+}
+.owll-home .sample-label {
+  color: #c7d2c9;
+  font-size: 9px;
+  margin-top: 18px;
+  margin-bottom: 14px;
+}
+.owll-home .example-context h3 {
+  font-size: 28px;
+}
+.owll-home .example-context > p {
+  font-size: 14px;
+  color: #d4ded6;
+}
+.owll-home .example-context .origin-note {
+  font-size: 12px;
+  color: #b9cabd;
+  border-top: 1px solid #607469;
+  padding-top: 17px;
+}
+.owll-home .inquiry {
+  padding-top: 5px;
+}
+.owll-home .inquiry ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.owll-home .inquiry li {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 15px;
+  padding-bottom: 24px;
+}
+.owll-home .step-no {
+  font:
+    11px var(--font-ibm-plex-mono),
+    monospace;
+  color: #c7a454;
+  padding-top: 5px;
+}
+.owll-home .inquiry h4 {
+  font:
+    22px var(--font-newsreader),
+    Georgia,
+    serif;
+  margin-bottom: 10px;
+}
+.owll-home .inquiry li p {
+  color: #d2dcd4;
+  font-size: 14px;
+  margin: 0;
+  max-width: 49ch;
+}
+.owll-home .knowledge-link {
+  border-block: 1px solid #607469;
+  padding: 16px 0;
+}
+.owll-home .knowledge-link span {
+  font:
+    9px var(--font-ibm-plex-mono),
+    monospace;
+  letter-spacing: 1.5px;
+  color: #bdcbbf;
+}
+.owll-home .knowledge-link p {
+  margin: 5px 0 0;
+  font-size: 13px;
+}
+.owll-home .example-boundary {
+  font-size: 11px;
+  color: #bdcbbf;
+  margin-top: 19px;
+}
+.owll-home .try-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 28px 0;
+  border-top: 1px solid #607469;
+}
+.owll-home .try-strip strong {
+  font:
+    23px var(--font-newsreader),
+    Georgia,
+    serif;
+}
+.owll-home .try-strip p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: #bdcbbf;
+}
+.owll-home .button.light {
+  background: var(--paper);
+  color: var(--dark);
+}
+.owll-home .work-entry {
+  display: grid;
+  grid-template-columns: 1fr 2fr 90px;
+  gap: 40px;
+  border-top: 1px solid var(--line);
+  padding: 30px 0;
+}
+.owll-home .work-type {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: start;
+  font:
+    10px/1.6 var(--font-ibm-plex-mono),
+    monospace;
+  color: var(--quiet);
+  letter-spacing: 1px;
+}
+.owll-home .status {
+  display: inline-block;
+  border: 1px solid var(--line);
+  padding: 5px 8px;
+  color: var(--water);
+  font:
+    10px/1.5 var(--font-ibm-plex-mono),
+    monospace;
+  letter-spacing: 0;
+}
+.owll-home .work-body h3 {
+  font-size: 31px;
+}
+.owll-home .work-body > p {
+  font-size: 15px;
+  color: var(--quiet);
+  max-width: 61ch;
+}
+.owll-home .work-body > a {
+  font-size: 12px;
+}
+.owll-home .work-id {
+  font:
+    10px/1.8 var(--font-ibm-plex-mono),
+    monospace;
+  color: var(--quiet);
+  text-align: right;
+}
+.owll-home details {
+  margin-bottom: 20px;
+  border-top: 1px solid var(--line);
+}
+.owll-home summary {
+  cursor: pointer;
+  padding: 13px 0;
+  font-size: 13px;
+}
+.owll-home details dl {
+  display: grid;
+  grid-template-columns: 115px 1fr;
+  font-size: 13px;
+  gap: 12px 20px;
+  margin: 10px 0 20px;
+}
+.owll-home dt {
+  color: var(--water);
+}
+.owll-home dd {
+  margin: 0;
+}
+.owll-home details > p {
+  font-size: 13px;
+}
+.owll-home .evidence-foot {
+  border-top: 1px solid var(--line);
+  padding-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  font-size: 12px;
+  color: var(--quiet);
+}
+.owll-home .evidence-foot p {
+  max-width: 70ch;
+  margin: 0;
+}
+.owll-home .evidence-foot a {
+  white-space: nowrap;
+  align-self: start;
+}
+.owll-home .locus-section {
+  background: var(--pale);
+  padding: 80px 0 35px;
+}
+.owll-home .locus-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 75px;
+  align-items: center;
+}
+.owll-home .large-copy {
+  font:
+    22px/1.55 var(--font-newsreader),
+    Georgia,
+    serif;
+}
+.owll-home .locus-grid > div > p:not(.eyebrow) {
+  max-width: 49ch;
+}
+.owll-home .continuity-plate {
+  border: 1px solid #8c9d8d;
+  padding: 28px;
+}
+.owll-home .plate-top {
+  font-size: 9px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 15px;
+}
+.owll-home .mode-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  text-align: center;
+  font:
+    19px var(--font-newsreader),
+    Georgia,
+    serif;
+  padding-top: 14px;
+}
+.owll-home .mode-pair small {
+  display: block;
+  font: 11px/1.5 system-ui;
+  margin-top: 9px;
+  color: var(--quiet);
+}
+.owll-home .converge {
+  display: flex;
+  justify-content: center;
+  height: 46px;
+  margin-inline: 21%;
+}
+.owll-home .converge span {
+  width: 50%;
+  border-bottom: 1px solid var(--water);
+}
+.owll-home .converge span:first-child {
+  border-left: 1px solid var(--water);
+}
+.owll-home .converge span:last-child {
+  border-right: 1px solid var(--water);
+}
+.owll-home .thread-center {
+  text-align: center;
+  border: 1px solid var(--water);
+  margin-top: 20px;
+  padding: 25px 15px;
+}
+.owll-home .thread-center strong {
+  display: block;
+  font:
+    22px/1.4 var(--font-newsreader),
+    Georgia;
+}
+.owll-home .thread-center .eyebrow {
+  display: block;
+  font-size: 9px;
+  margin-bottom: 12px;
+}
+.owll-home .thread-center p {
+  font-size: 12px;
+  margin: 14px 0 0;
+}
+.owll-home .thread-return {
+  text-align: center;
+  margin: 18px 0;
+  font:
+    16px var(--font-newsreader),
+    Georgia;
+  color: var(--water);
+}
+.owll-home .thread-return span {
+  padding-inline: 12px;
+}
+.owll-home .plate-caption {
+  font:
+    10px/1.8 var(--font-ibm-plex-mono),
+    monospace;
+  color: var(--quiet);
+  margin: 24px 0 0;
+}
+.owll-home .locus-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 75px;
+  margin-top: 45px;
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+}
+.owll-home .locus-bottom > p {
+  font-size: 12px;
+  color: var(--quiet);
+  max-width: 61ch;
+}
+.owll-home .locus-bottom details {
+  border: 0;
+  margin: 0;
+}
+.owll-home .locus-bottom summary {
+  padding-top: 0;
+}
+.owll-home .about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 75px;
+}
+.owll-home .about-grid .actions a {
+  font-size: 12px;
+}
+.owll-home .participate {
+  padding: 70px 0;
+  border-block: 1px solid var(--line);
+}
+.owll-home .participate h2 {
+  font-size: clamp(40px, 5vw, 66px);
+}
+.owll-home .participation-paths {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 45px;
+}
+.owll-home .participation-paths > a {
+  position: relative;
+  padding: 23px 25px 15px 0;
+  border-top: 1px solid var(--water);
+  color: var(--ink);
+  text-decoration: none;
+}
+.owll-home .participation-paths > a:hover strong {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.owll-home .participation-paths span {
+  display: block;
+  font:
+    9px/1.6 var(--font-ibm-plex-mono),
+    monospace;
+  letter-spacing: 1px;
+  color: var(--water);
+}
+.owll-home .participation-paths strong {
+  display: block;
+  font:
+    23px/1.3 var(--font-newsreader),
+    Georgia;
+  margin-top: 15px;
+}
+.owll-home .participation-paths p {
+  font-size: 13px;
+  color: var(--quiet);
+  margin-top: 12px;
+}
+.owll-home .participation-paths b {
+  position: absolute;
+  right: 0;
+  top: 20px;
+  color: var(--water);
+  font-weight: 400;
+}
+@media (min-width: 1441px) {
+  .owll-home .hero-copy {
+    padding-left: 100px;
+  }
+}
+@media (max-width: 1050px) {
+  .owll-home .hero {
+    grid-template-columns: 1.05fr 1fr;
+    min-height: 580px;
+  }
+  .owll-home .hero-art img {
+    height: 520px;
+  }
+  .owll-home .hero-copy {
+    padding-left: 40px;
+  }
+  .owll-home .hero-art figcaption {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .owll-home .section-heading {
+    grid-template-columns: 1fr 2fr;
+    gap: 25px;
+  }
+  .owll-home .questions {
+    gap: 25px;
+  }
+  .owll-home .example-layout,
+  .owll-home .locus-grid,
+  .owll-home .locus-bottom,
+  .owll-home .about-grid {
+    gap: 35px;
+  }
+  .owll-home .work-entry {
+    grid-template-columns: 170px 1fr;
+    gap: 25px;
+  }
+  .owll-home .work-id {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .owll-home .shell {
+    width: calc(100% - 40px);
+  }
+  .owll-home .hero {
+    grid-template-columns: 1fr;
+  }
+  .owll-home .hero-copy {
+    padding: 45px 20px 20px;
+  }
+  .owll-home h1 {
+    font-size: clamp(42px, 9vw, 66px);
+    letter-spacing: -1.8px;
+  }
+  .owll-home .hero-intro {
+    font-size: 17px;
+    margin-top: 24px;
+  }
+  .owll-home .hero-art {
+    margin: 10px 20px 25px;
+  }
+  .owll-home .hero-art img {
+    height: 300px;
+    object-position: 70% 64%;
+  }
+  .owll-home .hero-art figcaption {
+    padding: 12px 0 0;
+    flex-direction: row;
+    font-size: 9px;
+    gap: 20px;
+  }
+  .owll-home .hero-art figcaption span:last-child {
+    text-align: right;
+  }
+  .owll-home .thesis-band {
+    padding: 25px 20px;
+    flex-direction: column;
+    gap: 13px;
+  }
+  .owll-home .thesis-band p:last-child {
+    align-self: start;
+  }
+  .owll-home .section {
+    padding-block: 55px;
+  }
+  .owll-home .section-heading {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 35px;
+  }
+  .owll-home .section-heading > .eyebrow {
+    padding: 0;
+  }
+  .owll-home .questions {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .owll-home .questions h3 {
+    max-width: 30ch;
+  }
+  .owll-home .experience-section {
+    padding-top: 48px;
+  }
+  .owll-home .experience-heading {
+    flex-direction: column;
+    align-items: start;
+    gap: 0;
+  }
+  .owll-home .example-layout {
+    grid-template-columns: 1fr;
+    gap: 35px;
+    padding-top: 25px;
+  }
+  .owll-home .scene svg {
+    max-height: 280px;
+  }
+  .owll-home .inquiry {
+    border-top: 1px solid #607469;
+    padding-top: 28px;
+  }
+  .owll-home .try-strip {
+    align-items: start;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .owll-home .work-entry {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .owll-home .work-type {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .owll-home details dl {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .owll-home dd {
+    margin-bottom: 15px;
+  }
+  .owll-home .evidence-foot {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .owll-home .locus-section {
+    padding: 50px 0 25px;
+  }
+  .owll-home .locus-grid,
+  .owll-home .locus-bottom,
+  .owll-home .about-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  .owll-home .continuity-plate {
+    padding: 22px 15px;
+  }
+  .owll-home .mode-pair {
+    font-size: 17px;
+  }
+  .owll-home .thread-center strong {
+    font-size: 20px;
+  }
+  .owll-home .locus-bottom {
+    margin-top: 30px;
+    gap: 0;
+  }
+  .owll-home .participate {
+    padding: 50px 0;
+  }
+  .owll-home .participation-paths {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 30px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+}
+@media print {
+  .owll-home .context-controls {
+    display: none;
+  }
+  .owll-home .section,
+  .owll-home .experience-section,
+  .owll-home .locus-section,
+  .owll-home .participate {
+    padding-block: 25px;
+  }
+  .owll-home .hero {
+    min-height: 0;
+  }
+  .owll-home h1 {
+    font-size: 40px;
+  }
+  .owll-home .hero-art img {
+    height: 300px;
+  }
+  .owll-home details {
+    break-inside: avoid;
+  }
+}
+
+.owll-home [id] {
+  scroll-margin-top: 110px;
+}
+.owll-home h4 {
+  font-family: var(--font-newsreader), Georgia, serif;
+}
+.owll-home .questions {
+  row-gap: 36px;
+}
+.owll-home .example-layout ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.owll-home .work-entry dd {
+  margin-left: 0;
+}
+.owll-home .learning-model {
+  padding-top: 28px;
+}
+.owll-home .learning-model details {
+  border-bottom: 1px solid var(--line);
+}
+.owll-home .learning-model .relative p {
+  margin: 0;
+}
+.owll-home a:not(.button):not(.participation-paths > a) {
+  text-decoration: underline;
+}
+.owll-skip {
+  position: fixed;
+  top: -100px;
+  left: 12px;
+  padding: 12px;
+  background: #f2efe6;
+  color: #17201d;
+  z-index: 100;
+}
+.owll-skip:focus {
+  top: 8px;
+}
+@media (max-width: 380px) {
+  .owll-home h1 {
+    font-size: 38px;
+  }
+  .owll-home .context-controls {
+    gap: 5px;
+  }
+  .owll-home .context-controls button {
+    padding-inline: 12px;
+  }
+}
