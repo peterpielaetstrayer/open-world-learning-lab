@@ -99,7 +99,7 @@
 .owll-home .sample-label,
 .owll-home .plate-top {
   font:
-    11px/1.6 var(--font-ibm-plex-mono),
+    12px/1.6 var(--font-ibm-plex-mono),
     monospace;
   letter-spacing: 1.6px;
   text-transform: uppercase;
@@ -160,7 +160,7 @@
   gap: 20px;
   padding: 15px 28px;
   font:
-    10px/1.6 var(--font-ibm-plex-mono),
+    12px/1.6 var(--font-ibm-plex-mono),
     monospace;
   color: var(--quiet);
 }
@@ -290,7 +290,7 @@
   border: 1px solid #899b8e;
   background: transparent;
   color: var(--paper);
-  padding: 9px 18px;
+  padding: 12px 18px;
   font-size: 13px;
   min-height: 44px;
 }
@@ -312,13 +312,13 @@
   top: 14px;
   color: var(--dark);
   font:
-    10px var(--font-ibm-plex-mono),
+    12px var(--font-ibm-plex-mono),
     monospace;
   letter-spacing: 1.5px;
 }
 .owll-home .sample-label {
   color: #c7d2c9;
-  font-size: 9px;
+  font-size: 12px;
   margin-top: 18px;
   margin-bottom: 14px;
 }
@@ -351,7 +351,7 @@
 }
 .owll-home .step-no {
   font:
-    11px var(--font-ibm-plex-mono),
+    12px var(--font-ibm-plex-mono),
     monospace;
   color: #c7a454;
   padding-top: 5px;
@@ -361,7 +361,7 @@
     22px var(--font-newsreader),
     Georgia,
     serif;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .owll-home .inquiry li p {
   color: #d2dcd4;
@@ -375,7 +375,7 @@
 }
 .owll-home .knowledge-link span {
   font:
-    9px var(--font-ibm-plex-mono),
+    12px var(--font-ibm-plex-mono),
     monospace;
   letter-spacing: 1.5px;
   color: #bdcbbf;
@@ -385,7 +385,7 @@
   font-size: 13px;
 }
 .owll-home .example-boundary {
-  font-size: 11px;
+  font-size: 12px;
   color: #bdcbbf;
   margin-top: 19px;
 }
@@ -425,7 +425,7 @@
   gap: 15px;
   align-items: start;
   font:
-    10px/1.6 var(--font-ibm-plex-mono),
+    12px/1.6 var(--font-ibm-plex-mono),
     monospace;
   color: var(--quiet);
   letter-spacing: 1px;
@@ -436,7 +436,7 @@
   padding: 5px 8px;
   color: var(--water);
   font:
-    10px/1.5 var(--font-ibm-plex-mono),
+    12px/1.5 var(--font-ibm-plex-mono),
     monospace;
   letter-spacing: 0;
 }
@@ -453,7 +453,7 @@
 }
 .owll-home .work-id {
   font:
-    10px/1.8 var(--font-ibm-plex-mono),
+    12px/1.8 var(--font-ibm-plex-mono),
     monospace;
   color: var(--quiet);
   text-align: right;
@@ -472,7 +472,7 @@
   grid-template-columns: 115px 1fr;
   font-size: 13px;
   gap: 12px 20px;
-  margin: 10px 0 20px;
+  margin: 12px 0 20px;
 }
 .owll-home dt {
   color: var(--water);
@@ -524,7 +524,7 @@
   padding: 28px;
 }
 .owll-home .plate-top {
-  font-size: 9px;
+  font-size: 12px;
   border-bottom: 1px solid var(--line);
   padding-bottom: 15px;
 }
@@ -541,8 +541,8 @@
 }
 .owll-home .mode-pair small {
   display: block;
-  font: 11px/1.5 system-ui;
-  margin-top: 9px;
+  font: 12px/1.5 system-ui;
+  margin-top: 12px;
   color: var(--quiet);
 }
 .owll-home .converge {
@@ -575,7 +575,7 @@
 }
 .owll-home .thread-center .eyebrow {
   display: block;
-  font-size: 9px;
+  font-size: 12px;
   margin-bottom: 12px;
 }
 .owll-home .thread-center p {
@@ -595,7 +595,7 @@
 }
 .owll-home .plate-caption {
   font:
-    10px/1.8 var(--font-ibm-plex-mono),
+    12px/1.8 var(--font-ibm-plex-mono),
     monospace;
   color: var(--quiet);
   margin: 24px 0 0;
@@ -655,7 +655,7 @@
 .owll-home .participation-paths span {
   display: block;
   font:
-    9px/1.6 var(--font-ibm-plex-mono),
+    12px/1.6 var(--font-ibm-plex-mono),
     monospace;
   letter-spacing: 1px;
   color: var(--water);
@@ -739,7 +739,7 @@
     margin-top: 24px;
   }
   .owll-home .hero-art {
-    margin: 10px 20px 25px;
+    margin: 12px 20px 25px;
   }
   .owll-home .hero-art img {
     height: 300px;
@@ -748,7 +748,7 @@
   .owll-home .hero-art figcaption {
     padding: 12px 0 0;
     flex-direction: row;
-    font-size: 9px;
+    font-size: 12px;
     gap: 20px;
   }
   .owll-home .hero-art figcaption span:last-child {
@@ -934,4 +934,33 @@
   .owll-home .context-controls button {
     padding-inline: 12px;
   }
+}
+
+.owll-home .button {
+  border-radius: 999px;
+}
+.owll-home .knowledge-bridge {
+  border-top: 1px solid #77978b;
+  margin-top: 24px;
+  padding-top: 20px;
+}
+.owll-home .knowledge-bridge h4 {
+  font-size: 21px;
+  margin-bottom: 10px;
+}
+.owll-home .knowledge-bridge p {
+  font-size: 14px;
+}
+.owll-home .knowledge-bridge .artifact-caption {
+  font-size: 12px;
+}
+.owll-home .artifact-caption {
+  font-size: 12px;
+  margin-top: 8px;
+}
+.owll-home .principles-detail .questions {
+  padding-block: 20px;
+}
+.owll-home .principles-detail summary {
+  font-size: 15px;
 }

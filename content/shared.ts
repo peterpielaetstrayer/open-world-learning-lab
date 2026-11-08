@@ -34,7 +34,7 @@ export const guardrails = [
   {
     title: "Humans Lead",
     description:
-      "AI can scaffold, organize, translate, prompt, and support. Teachers, mentors, families, guides, and communities remain responsible for human judgment and care.",
+      "Guidance should strengthen the learner’s judgment. AI can help organize and explore; learners, mentors and educators bring purpose, interpretation and care. Adults retain responsibility for children’s safety and support.",
   },
   {
     title: "Safety Before Spectacle",

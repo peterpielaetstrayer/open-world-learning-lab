@@ -13,12 +13,9 @@ export const metadata: Metadata = createPageMetadata({
 });
 
 const inquiryCategories = [
-  "Learning and curriculum",
-  "Potential pilot environments",
-  "Mentorship and learner support",
-  "Product and technology",
-  "Research and design",
-  "General collaboration",
+  "A place or community where learning could happen",
+  "A research question or learning-design challenge",
+  "An idea for a tool, prototype or collaboration",
 ];
 
 export default function ContactPage() {
@@ -30,24 +27,28 @@ export default function ContactPage() {
           <SectionHeader
             level={1}
             title="Start a thoughtful conversation."
-            intro="OWLL is interested in conversations with educators, mentors, learning designers, researchers, community organizations, technologists, and potential pilot collaborators."
+            intro="Have a place, question or project worth exploring together? We welcome conversations with learners, families, educators, researchers and creators."
           />
 
           <div className="space-y-5 text-muted leading-relaxed">
             <p>
-              Because the work is early, the most useful conversations are specific. Share what you are working on, what part of OWLL interests you, and what kind of conversation or collaboration you have in mind.
+              Tell us what you are exploring, what brought you to OWLL and what
+              you would like to discuss. A short note is enough.
             </p>
           </div>
 
           <div className="mt-10 card-premium p-6 md:p-8">
-            <p className="field-label mb-4">Suggested inquiry categories</p>
+            <p className="field-label mb-4">A few ways to begin</p>
             <ul className="grid sm:grid-cols-2 gap-2">
               {inquiryCategories.map((category) => (
                 <li
                   key={category}
                   className="text-sm text-muted flex items-start gap-2"
                 >
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-tahoe" aria-hidden="true" />
+                  <span
+                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-tahoe"
+                    aria-hidden="true"
+                  />
                   {category}
                 </li>
               ))}
@@ -59,11 +60,9 @@ export default function ContactPage() {
               href={`mailto:${siteConfig.email}?subject=OWLL%20Conversation`}
               className="btn-tactile inline-flex min-h-11 items-center justify-center rounded-full bg-pine px-8 py-3 text-sm font-medium text-white hover:bg-pine-light"
             >
-              Start a Conversation
+              Email OWLL
             </a>
-            <p className="mt-4 text-sm text-stone">
-              {siteConfig.email}
-            </p>
+            <p className="mt-4 text-sm text-stone">{siteConfig.email}</p>
           </div>
         </div>
       </main>

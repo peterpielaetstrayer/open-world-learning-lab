@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import ProjectPageLayout, { ContentSection } from "@/components/ProjectPageLayout";
+import ProjectPageLayout, {
+  ContentSection,
+} from "@/components/ProjectPageLayout";
 import ProjectMasthead from "@/components/ProjectMasthead";
 import VisualPlate from "@/components/visual/VisualPlate";
 import LocusCoreLayers from "@/components/diagrams/LocusCoreLayers";
@@ -19,7 +21,9 @@ export const metadata: Metadata = createPageMetadata({
 });
 
 export default function LocusPage() {
-  const relatedProjects = projects.filter((p) => p.slug !== "locus").slice(0, 2);
+  const relatedProjects = projects
+    .filter((p) => p.slug !== "locus")
+    .slice(0, 2);
 
   return (
     <ProjectPageLayout
@@ -33,36 +37,78 @@ export default function LocusPage() {
           ]}
           projectType="Learning Infrastructure"
           status="product-prototype"
-          summary="LOCUS helps connect real-world experience, Field Notes, guided inquiry, practice, mentorship, creation, reflection, and cumulative growth."
-          statusNotice="LOCUS is in product and learning-experience design. Early functions may be manually facilitated, rule-based, or simulated. The public page describes the educational system from the learner's perspective and does not represent a complete production platform."
+          summary="A learner-owned continuity and intelligence system in development: connecting what you notice, investigate and create with what you choose to pursue next."
+          statusNotice="Early prototype. This page distinguishes current functionality from the wider design. The examples below illustrate the approach; they are not records of evaluated learner outcomes."
         />
       }
       related={<RelatedWork projects={relatedProjects} />}
     >
-      <ContentSection title="What LOCUS is">
+      <ContentSection title="Keep building on what you learn">
         <p>
-          LOCUS helps connect real-world experience, Field Notes, guided inquiry, practice, mentorship, creation, reflection, and cumulative growth.
+          Learning can become fragmented across places, courses, projects and
+          tools. LOCUS is an OWLL initiative exploring how questions,
+          explanations and evidence can remain useful to a person across those
+          changes.
         </p>
         <p>
-          It is not simply an AI tutor. It is the emerging learning and creator infrastructure behind open-world education.
+          A record matters when you can return to it, question it, connect it to
+          something new and decide what to do next. That is the continuity LOCUS
+          aims to support.
         </p>
       </ContentSection>
 
-      <ContentSection title="One complete learner journey">
+      <ContentSection title="What exists today">
+        <p>
+          The early learner prototype supports recording an inquiry, returning
+          to records in the same browser and exporting notes. It is separate
+          from this public website, which provides a system description and
+          illustrative design artifacts.
+        </p>
+        <p>
+          Cross-device continuity, a comprehensive learning atlas and adaptive
+          intelligence remain development goals. The prototype does not yet
+          establish improved learning outcomes.
+        </p>
+      </ContentSection>
+
+      <ContentSection title="Two starting points, a continuing record">
+        <p>
+          Structured Journeys provide a designed path through a question or
+          setting. Open Explore starts with something the learner notices or
+          wants to understand. Both can include mentors, reliable sources,
+          deliberate practice and feedback.
+        </p>
+        <p>
+          Connections to concepts, courses or curricular standards could help
+          learners relate an experience to formal study. Such connections need
+          review; a captured note alone is not evidence of mastery.
+        </p>
+      </ContentSection>
+
+      <ContentSection title="A learner journey we are designing toward">
+        <p>
+          The sequence below describes the wider design, including capabilities
+          that are not yet implemented.
+        </p>
         <ol className="relative max-w-reading list-none pl-5 border-l border-water/20">
           {locusFullLearnerJourney.map((step) => (
             <li key={step.step} className="relative pb-5 last:pb-0 pl-4">
               <span className="absolute -left-[calc(0.75rem+1px)] top-0.5 flex h-6 w-6 items-center justify-center rounded-full border border-water/30 bg-page font-mono text-[0.65rem] text-water">
                 {step.step}
               </span>
-              <p className="text-sm text-secondary leading-relaxed">{step.text}</p>
+              <p className="text-sm text-secondary leading-relaxed">
+                {step.text}
+              </p>
             </li>
           ))}
         </ol>
       </ContentSection>
 
       <section aria-labelledby="locus-system-view">
-        <h2 id="locus-system-view" className="font-serif text-section-title text-ink mb-5">
+        <h2
+          id="locus-system-view"
+          className="font-serif text-section-title text-ink mb-5"
+        >
           LOCUS in One View
         </h2>
         <VisualPlate
@@ -75,49 +121,67 @@ export default function LocusPage() {
         />
       </section>
 
-      <ContentSection title="What LOCUS is not">
+      <ContentSection title="Design commitments">
         <ul className="space-y-2 border-l-2 border-sediment/30 pl-5">
-          <li>Not an AI tutor or chatbot with educational branding</li>
-          <li>Not a replacement for teachers</li>
-          <li>Not a screen-first learning platform</li>
-          <li>Not a points-and-badges layer</li>
-          <li>Not a system designed to automate every human decision</li>
+          <li>
+            Learners should be able to inspect, correct, export and decide how
+            to share their records.
+          </li>
+          <li>
+            Guidance should strengthen the learner&apos;s judgment and preserve
+            the role of mentors and educators.
+          </li>
+          <li>
+            Technology should support attention to the experience and the people
+            involved.
+          </li>
+          <li>
+            Claims about understanding should be grounded in explanation,
+            practice and evidence.
+          </li>
         </ul>
       </ContentSection>
 
-      <ContentSection title="Core layers">
+      <ContentSection title="The wider system design">
         <p className="mb-6 text-sm text-secondary">
-          After one learner journey, the wider system can be understood as connected layers.
+          These conceptual layers describe the longer-term architecture, not a
+          list of available features.
         </p>
         <LocusCoreLayers />
       </ContentSection>
 
-      <FieldNoteSpecimen />
+      <section id="field-note-example" aria-label="Illustrative Field Note">
+        <FieldNoteSpecimen />
+      </section>
 
-      <ContentSection title="Intelligence—real and simulated">
+      <ContentSection title="What could intelligence add?">
         <p>
-          Some early prototype functions may initially be manually facilitated, rule-based, or simulated in order to understand what the product genuinely needs before automating it.
+          A future system could help a learner notice connections between
+          experiences, return to an unfinished question or identify a useful
+          next step. The central question is whether that assistance strengthens
+          understanding and agency.
         </p>
         <p>
-          The purpose of the prototype is not to pretend that complete artificial intelligence already exists. It is to identify where intelligence adds educational value, where human judgment remains necessary, and how the complete learning loop should function.
-        </p>
-      </ContentSection>
-
-      <ContentSection title="What currently exists">
-        <p>
-          A public system description, educational architecture outline, and early prototype design direction. Production platform, creator methodology, and internal systems remain in development.
+          Early tests can use human facilitation, simple rules or clearly
+          labeled simulations to examine that value before adding automation.
+          Any suggestions should remain open to inspection and correction.
         </p>
       </ContentSection>
 
       <ContentSection title="What remains future work">
         <p>
-          Full platform development, automated Field Notes tooling, creator workflows, mentor dashboards, Learning Atlas visualization, and validated learning-loop prototypes in real educational contexts.
+          Questions for future work include continuity across devices, a
+          learner-controlled atlas, creator and mentor tools, and ways to help
+          families navigate learning opportunities. Field testing should
+          determine which capabilities deserve to be built next.
         </p>
       </ContentSection>
 
       <ContentSection title="Start a product conversation">
         <p>
-          OWLL is interested in conversations about product design, learning infrastructure, and technology collaboration — not procurement or enrollment.
+          Have experience with learner agency, knowledge systems, learning
+          design or personal data ownership? We welcome a specific question or a
+          proposal to explore together.
         </p>
         <div className="mt-6">
           <a
@@ -130,7 +194,10 @@ export default function LocusPage() {
       </ContentSection>
 
       <div className="pt-4">
-        <Link href="/work" className="text-sm font-medium text-water hover:text-moss transition-colors">
+        <Link
+          href="/work"
+          className="text-sm font-medium text-water hover:text-moss transition-colors"
+        >
           ← View all current work
         </Link>
       </div>

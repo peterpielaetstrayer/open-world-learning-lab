@@ -18,15 +18,15 @@ export default function LearningExample() {
         <div className="experience-heading">
           <div>
             <p className="eyebrow">
-              <span className="index">02</span> A small window into the
-              possibility
+              <span className="index">02</span> From experience to understanding
             </p>
             <h2 id="experience-title">Everywhere, a way in.</h2>
           </div>
           <p>
             A mountain. A shoreline. A moment at home.
             <br />
-            Follow an observation into a question of your own.
+            See how an observation can lead to knowledge, explanation and a
+            reason to return.
           </p>
         </div>
         <div className="example-layout">
@@ -155,11 +155,10 @@ export default function LearningExample() {
             </p>
             <h3 id="context-title">{example.title}</h3>
             <p id="context-intro">{example.intro}</p>
-            <p className="origin-note">
-              The Tahoe origin imagined a whole place as a learning environment.
-              Phones, cameras and future wearable interfaces could help connect
-              experience and reflection.
-            </p>
+            <div className="knowledge-bridge">
+              <h4>A connection to knowledge</h4>
+              <p>{example.bridge}</p>
+            </div>
           </div>
           <div className="inquiry" aria-live="polite" aria-atomic="true">
             <p className="eyebrow">An inquiry can unfold like this</p>
@@ -198,15 +197,15 @@ export default function LearningExample() {
               <p id="concepts">{example.concepts}</p>
             </div>
             <p className="example-boundary">
-              These examples illustrate a design approach. Choose safe
-              observations appropriate to your setting and support needs.
+              Illustrative examples. Choose an observation that fits your
+              setting and support needs.
             </p>
           </div>
         </div>
         <div className="try-strip">
           <div>
             <strong>Start with something around you.</strong>
-            <p>The published ten-minute inquiry is available now.</p>
+            <p>Try a ten-minute inquiry. No account needed.</p>
           </div>
           <Link className="button light" href="/start">
             Try the field inquiry <span aria-hidden="true">↗</span>

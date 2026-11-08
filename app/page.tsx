@@ -30,19 +30,20 @@ export default function Home() {
               <em>more capable?</em>
             </h1>
             <p className="hero-intro">
-              Open World Learning Lab explores how people learn, develop agency,
-              and make meaning through the world around them.
+              Open World Learning Lab investigates how learning can grow from
+              the things people notice, care about and want to understand—and
+              develops tools and experiences to help them take it further.
             </p>
             <p className="hero-detail">
-              An early-stage initiative bringing research, learning experiences
-              and emerging technology into conversation.
+              An independent lab in development, working across learning design,
+              human development and emerging technology.
             </p>
             <div className="actions">
               <Link className="button" href="#research">
                 Explore the lab <span aria-hidden="true">↓</span>
               </Link>
               <Link className="text-action" href="#experience">
-                Begin with a question <span aria-hidden="true">↗</span>
+                See learning in action <span aria-hidden="true">↗</span>
               </Link>
             </div>
           </div>
@@ -56,8 +57,8 @@ export default function Home() {
               alt="Conceptual field atlas showing a learner on a coastal path, with observations and returning routes connecting the landscape."
             />
             <figcaption>
-              <span>FIELD ATLAS / 001</span>
-              <span>Experience becomes an opening for inquiry.</span>
+              <span>A LEARNING LANDSCAPE</span>
+              <span>Concept illustration</span>
             </figcaption>
           </figure>
         </section>
@@ -69,9 +70,8 @@ export default function Home() {
             <span>Human agency is the purpose.</span>
           </p>
           <p>
-            From an everyday question to a lifelong pursuit.
-            <br />
-            From a first observation to something worth understanding.
+            Connecting lived experience with deep knowledge, <br /> deliberate
+            practice and human guidance.
           </p>
         </div>
 
@@ -86,25 +86,22 @@ export default function Home() {
             </p>
             <div>
               <h2 id="research-title">
-                A lab begins
-                <br />
-                with an open question.
+                What helps people become <br /> authors of their learning?
               </h2>
               <p>
-                Learning reaches across minds, relationships, places and
-                technologies. OWLL is developing a research and design practice
-                around the conditions that help people become thoughtful,
-                capable and increasingly self-directed.
+                We investigate how guidance, environments and continuity can
+                help people understand more deeply, create with purpose and
+                direct their own learning.
               </p>
             </div>
           </div>
           <div className="questions">
             <article>
               <span className="topic">AGENCY &amp; INTELLIGENCE</span>
-              <h3>When does help make us more independent?</h3>
+              <h3>When does guidance strengthen our own judgment?</h3>
               <p>
-                Explore how human and AI guidance can support judgment,
-                productive effort and learning that lasts.
+                What distinguishes support that helps someone think from
+                assistance that takes over the thinking?
               </p>
               <Link href="#work">
                 See the questions in practice <span aria-hidden="true">↗</span>
@@ -112,10 +109,10 @@ export default function Home() {
             </article>
             <article>
               <span className="topic">ENVIRONMENTS &amp; EXPERIENCE</span>
-              <h3>What can a place invite us to notice?</h3>
+              <h3>How can our surroundings support deeper learning?</h3>
               <p>
-                Investigate how the settings we inhabit can open routes into
-                knowledge, practice and meaningful creation.
+                Explore how places, people and tools can invite attention,
+                inquiry, practice and creation.
               </p>
               <Link href="#experience">
                 Explore a learning example <span aria-hidden="true">↗</span>
@@ -125,8 +122,8 @@ export default function Home() {
               <span className="topic">CONTINUITY &amp; OWNERSHIP</span>
               <h3>How can learning travel with a person?</h3>
               <p>
-                Design ways to keep questions, evidence and understanding
-                connected across experiences and institutions.
+                Connect questions, explanations and evidence across experiences,
+                relationships and institutions.
               </p>
               <Link href="#locus">
                 Meet the LOCUS initiative <span aria-hidden="true">↗</span>
@@ -143,7 +140,7 @@ export default function Home() {
           aria-label="The Open-World Learning Loop"
         >
           <details>
-            <summary>Explore the full learning model</summary>
+            <summary>Explore the learning model</summary>
             <p>
               A design model connecting experience, inquiry, practice,
               mentorship, creation, reflection and return.
@@ -163,14 +160,11 @@ export default function Home() {
             </p>
             <div>
               <h2 id="work-title">
-                From possibility
-                <br />
-                to something we can examine.
+                What we’re building <br /> and investigating.
               </h2>
               <p>
-                Questions become designs. Designs become prototypes. What
-                happens next should inform what we build. This is a growing
-                record of the work and its open questions.
+                Explore the current projects, what exists today and the
+                questions that remain open.
               </p>
             </div>
           </div>
@@ -183,8 +177,8 @@ export default function Home() {
               <div className="work-body">
                 <h3>LOCUS</h3>
                 <p>
-                  A learner-owned system for connecting questions, experiences,
-                  evidence and future learning.
+                  A prototype exploring how learners can keep control of their
+                  questions, records and developing understanding.
                 </p>
                 <details>
                   <summary>Examine the work</summary>
@@ -194,14 +188,14 @@ export default function Home() {
                       What helps a person return to an inquiry with
                       understanding they can use?
                     </dd>
-                    <dt>Documented basis</dt>
+                    <dt>What exists today</dt>
                     <dd>
-                      The early learner field-test implementation supports a
-                      small learning loop, records in the same browser, later
-                      re-entry and export. This describes prototype
-                      functionality.
+                      The current learner prototype supports recording an
+                      inquiry, returning to it in the same browser and exporting
+                      notes. It is separate from the illustrative examples on
+                      this website.
                     </dd>
-                    <dt>Still open</dt>
+                    <dt>Open questions</dt>
                     <dd>
                       Whether the approach improves durable learning, how it
                       serves different learners, and how continuity works across
@@ -234,26 +228,26 @@ export default function Home() {
                       How can an encounter with a place become sustained inquiry
                       and an explanation grounded in evidence?
                     </dd>
-                    <dt>Documented basis</dt>
+                    <dt>What exists today</dt>
                     <dd>
-                      The First Landing dossier preserves a six-week design
-                      sketch and describes a related eight-stop Journey Studio
-                      prototype.
+                      A six-week learning design and a related eight-stop
+                      creator prototype. These are design artifacts, not a
+                      completed field study.
                     </dd>
-                    <dt>Still open</dt>
+                    <dt>Open questions</dt>
                     <dd>
                       Field usability, learner outcomes, facilitation needs and
                       transfer to other places.
                     </dd>
                   </dl>
                   <p>
-                    A small Coastal Inquiry Lab is being considered for summer
-                    2027. Its host, site, participation model, funding and
-                    readiness remain in planning.
+                    A small coastal learning pilot is being considered for
+                    summer 2027. Its setting, participants and delivery plan
+                    remain to be decided.
                   </p>
                 </details>
                 <Link href="/work/first-landing">
-                  Read the current dossier <span aria-hidden="true">↗</span>
+                  Explore First Landing <span aria-hidden="true">↗</span>
                 </Link>
               </div>
               <span className="work-id">OWLL / 02</span>
@@ -264,7 +258,7 @@ export default function Home() {
                 <span className="status">Early concept</span>
               </div>
               <div className="work-body">
-                <h3>Places for learning</h3>
+                <h3>Learning Environments</h3>
                 <p>
                   Exploring how physical spaces, human support and thoughtful
                   technology could make room for attention, inquiry and
@@ -278,12 +272,12 @@ export default function Home() {
                       What changes when a learning environment is designed
                       around the person and the activity?
                     </dd>
-                    <dt>Documented basis</dt>
+                    <dt>What exists today</dt>
                     <dd>
-                      An early public research direction and conceptual learning
-                      zones.
+                      An initial design brief exploring spaces for focus,
+                      inquiry, making and reflection.
                     </dd>
-                    <dt>Still open</dt>
+                    <dt>Open questions</dt>
                     <dd>
                       Which changes are useful, accessible and sustainable in
                       everyday settings.
@@ -299,10 +293,19 @@ export default function Home() {
           </div>
           <div className="evidence-foot">
             <p>
-              <strong>Evidence matters.</strong> A prototype shows what can be
-              built. Observing use and studying learning are further steps.
+              <strong>Built, tested, learned.</strong> We distinguish what has
+              been built from what has been tested—and what remains unknown.
             </p>
-            <Link href="/releases">Browse public releases ↗</Link>
+            <div>
+              <Link href="/releases/owll-at-a-glance">
+                Read OWLL at a Glance ↗
+              </Link>
+              <p className="artifact-caption">
+                Concept brief · July 28, 2026 · An earlier direction, preserved
+                as the work evolves.
+              </p>
+              <Link href="/releases">All public releases →</Link>
+            </div>
           </div>
         </section>
 
@@ -317,21 +320,20 @@ export default function Home() {
                 <span className="index">04</span> An initiative within OWLL
               </p>
               <h2 id="locus-title">
-                A learning life
-                <br />
-                with continuity.
+                Keep building on <br /> what you’ve learned.
               </h2>
               <p className="large-copy">
-                LOCUS is being developed to help people carry meaningful
-                learning across experiences, people and time.
+                LOCUS is being developed to help learners connect what they
+                notice, investigate and create—and use that history to decide
+                what to pursue next.
               </p>
               <p>
-                A structured Journey can offer guidance. Open Explore can begin
-                with a question of your own. Both should leave you with
-                something to return to, examine and build upon.
+                Structured Journeys offer a designed starting point. Open
+                Explore begins with a question of your own. Both can include
+                guidance, practice and a record you can return to.
               </p>
               <Link className="text-action" href="/work/locus">
-                Read the LOCUS initiative dossier ↗
+                Explore LOCUS ↗
               </Link>
             </div>
             <div className="continuity-plate">
@@ -349,7 +351,7 @@ export default function Home() {
                 <span></span>
               </div>
               <div className="thread-center">
-                <span className="eyebrow">A shared learning thread</span>
+                <span className="eyebrow">Your learning thread</span>
                 <strong>Question · evidence · understanding</strong>
                 <p>With people, practice and reflection along the way.</p>
               </div>
@@ -358,23 +360,25 @@ export default function Home() {
                 <span aria-hidden="true">↗</span>
               </div>
               <p className="plate-caption">
-                Conceptual relationship · The long-term aim is a record the
-                learner can inspect, correct and control.
+                Design model · A record becomes useful through explanation,
+                feedback and return. Capturing an experience alone does not
+                establish understanding.
               </p>
             </div>
           </div>
           <div className="shell locus-bottom">
             <p>
-              Future product experiences may have their own home. Here, the
-              focus is the purpose, research questions and progress behind the
-              initiative.
+              Learner control is a design commitment: you should be able to
+              inspect, correct, export and decide how to share your learning
+              record.
             </p>
             <details>
-              <summary>On the horizon</summary>
+              <summary>What could intelligence add?</summary>
               <p>
-                An inspectable Learner Atlas, a Family Learning Navigator,
-                creator tools and spatial interfaces could extend this work.
-                Their scope and value remain questions for design and testing.
+                The longer-term question is how a system could help you notice
+                connections, revisit unfinished questions and choose useful next
+                steps. These capabilities need design and testing; they are not
+                a description of the current prototype.
               </p>
             </details>
           </div>
@@ -390,9 +394,7 @@ export default function Home() {
               <span className="index">05</span> An enduring home for inquiry
             </p>
             <h2 id="about-title">
-              Rooted in the world.
-              <br />
-              Open to what comes next.
+              From Tahoe <br /> to a wider question.
             </h2>
           </div>
           <div>
@@ -402,16 +404,15 @@ export default function Home() {
               environment?
             </p>
             <p>
-              That question has grown into a wider ambition for an independent
-              research and design institute, with the creative and
-              entrepreneurial capacity to develop tools, experiences and new
-              educational models.
+              The original idea explored how wearable technology could connect
+              an experience to questions, knowledge and human guidance. The
+              ambition has grown beyond a single place or device.
             </p>
             <p>
-              Today, OWLL is an early-stage initiative founded by Peter
-              Pielaet-Strayer. Its organizational form is still evolving. Human
-              agency, mentorship, intellectual openness and evidence guide the
-              direction.
+              Founded by Peter Pielaet-Strayer, OWLL is developing toward an
+              independent research and design institute. Over time, its work
+              could grow into new tools, learning environments and independent
+              ventures.
             </p>
             <div className="actions">
               <Link href="/about">About the lab and its founder ↗</Link>
@@ -425,18 +426,20 @@ export default function Home() {
           className="section shell"
           aria-labelledby="guardrails-title"
         >
-          <p className="eyebrow">The conditions for responsible exploration</p>
-          <h2 id="guardrails-title">
-            More possibility. Human judgment at the center.
-          </h2>
-          <div className="questions">
-            {guardrails.map((principle) => (
-              <article key={principle.title}>
-                <h3>{principle.title}</h3>
-                <p>{principle.description}</p>
-              </article>
-            ))}
-          </div>
+          <p className="eyebrow">Principles that guide the work</p>
+          <h2 id="guardrails-title">Learning with agency and care.</h2>
+          <details className="principles-detail">
+            <summary>Read the principles</summary>
+            <div className="questions">
+              {" "}
+              {guardrails.map((principle) => (
+                <article key={principle.title}>
+                  <h3>{principle.title}</h3>
+                  <p>{principle.description}</p>
+                </article>
+              ))}{" "}
+            </div>
+          </details>{" "}
         </section>
 
         <section id="participate" className="participate">
@@ -457,17 +460,16 @@ export default function Home() {
                 <b aria-hidden="true">↗</b>
               </Link>
               <Link href="#work">
-                <span>FOR THOSE WHO WANT TO LOOK CLOSER</span>
+                <span>EXPLORE THE WORK</span>
                 <strong>Examine the work</strong>
                 <p>Explore a question, prototype or emerging direction.</p>
                 <b aria-hidden="true">↗</b>
               </Link>
               <Link href="/contact">
-                <span>FOR POSSIBLE COLLABORATORS</span>
+                <span>COLLABORATE</span>
                 <strong>Start a conversation</strong>
                 <p>
-                  Bring an educational, research, community or technology
-                  perspective.
+                  Have a place, question or project worth exploring together?
                 </p>
                 <b aria-hidden="true">↗</b>
               </Link>

@@ -19,45 +19,72 @@ export default function AboutPage() {
       <Header />
       <main className="py-section-y-page">
         <div className="mx-auto max-w-3xl px-5 sm:px-6">
-          <SectionHeader level={1} title="Designing toward a more alive learning future." />
+          <SectionHeader
+            level={1}
+            title="Why Open World Learning Lab exists."
+          />
 
           <div className="space-y-5 text-muted leading-relaxed">
             <p>
-              Open World Learning Lab is an independent, early-stage research and design initiative exploring how people can take greater ownership of learning throughout life.
+              Open World Learning Lab is an independent, early-stage research
+              and design initiative exploring how people can take greater
+              ownership of learning throughout life.
             </p>
             <p>
-              Our premise is that learning happens through places, families, communities, work, books, conversation, practice, and meaningful projects. We study how those experiences can become sustained knowledge, skills, better questions, and greater agency.
+              Our premise is that learning happens through places, families,
+              communities, work, books, conversation, practice, and meaningful
+              projects. Our research and design questions concern how those
+              experiences can lead to lasting understanding, useful skills and
+              greater agency.
             </p>
             <p>
-              OWLL pursues educational sovereignty: the practical capacity to shape one&apos;s learning and development with meaningful opportunity, sound judgment, and human support. For children, that agency develops alongside adults&apos; responsibilities for care, safety, and exposure to diverse ideas.
+              OWLL pursues educational sovereignty: the practical capacity to
+              shape one&apos;s learning and development with meaningful
+              opportunity, sound judgment, and human support. For children, that
+              agency develops alongside adults&apos; responsibilities for care,
+              safety, and exposure to diverse ideas.
             </p>
             <p>
-              The current public work includes place-based learning journey designs, learner-support ideas, system maps, the early LOCUS prototype, and exploratory physical Learning Environments research. Adult and family learning resources are under editorial development, not yet a public program.
+              Current work includes learning journey designs, the LOCUS
+              continuity prototype and exploratory Learning Environments
+              concepts. The longer-term ambition is an independent research and
+              design institute whose work can generate new tools, educational
+              models and ventures.
             </p>
           </div>
 
           <section className="mt-12 max-w-reading">
-            <h2 className="font-serif text-2xl text-ink">Who can learn here?</h2>
+            <h2 className="font-serif text-2xl text-ink">
+              Who this work is for
+            </h2>
             <p className="mt-4 text-muted leading-relaxed">
-              Self-directed adults, parents and children, educators, mentors, community groups,
-              and researchers all have a place in the long-term vision. Parents are learners, too.
-              Supporting access means creating useful low-cost entry points and adaptable guidance
+              Self-directed adults, parents and children, educators, mentors,
+              community groups, and researchers all have a place in the
+              long-term vision. Parents are learners, too. Supporting access
+              means creating useful low-cost entry points and adaptable guidance
               without limiting how far an ambitious learner may progress.
             </p>
             <p className="mt-4 text-muted leading-relaxed">
-              These are intended audiences, not a claim that all corresponding programs,
-              resources, partnerships, or services are already operating.
+              Today, anyone can try the public field inquiry or explore the
+              project designs. Broader programs and family resources remain in
+              development.
             </p>
           </section>
 
           <section className="mt-12 rounded-lg border border-border bg-soft-paper p-6">
-            <h2 className="font-serif text-2xl text-ink">Learning environments, not just learning content.</h2>
+            <h2 className="font-serif text-2xl text-ink">
+              Learning environments, not just learning content.
+            </h2>
             <p className="mt-3 text-sm leading-relaxed text-secondary">
-              A new early-stage research direction considers how rooms, tools, and daily routines
-              could support independent inquiry and learner agency. It remains exploratory,
-              and no room installation service has launched.
+              Learning Environments explores how rooms, tools, relationships and
+              daily routines can support attention, inquiry and creation. The
+              first concepts consider everyday spaces and the people who use
+              them.
             </p>
-            <Link href="/learning-environments" className="mt-4 inline-block text-sm font-medium text-water hover:text-moss">
+            <Link
+              href="/learning-environments"
+              className="mt-4 inline-block text-sm font-medium text-water hover:text-moss"
+            >
               Explore Learning Environments →
             </Link>
           </section>
@@ -69,22 +96,32 @@ export default function AboutPage() {
             <div className="space-y-5 text-muted leading-relaxed">
               <p>{founderBio.short}</p>
               <p>
-                His background spans student mentorship and teaching, program and experience design, hospitality, and place-based learning. He is currently completing an M.S. in Learning Design and Technology while developing First Landing, LOCUS, and the broader OWLL research and design program.
+                OWLL began with an idea in Tahoe: connect a mountain, lake,
+                trail and community into a learning environment, with emerging
+                wearable technology helping people follow their questions. That
+                starting point now informs a broader inquiry into learning
+                across places, relationships and time.
               </p>
             </div>
           </section>
 
           <section className="mt-16">
             <h2 className="font-serif text-2xl text-foreground mb-6">
-              Creator Before the Platform
+              Build from educational practice
             </h2>
             <div className="space-y-5 text-muted leading-relaxed">
-              <p>The first version of LOCUS is not software alone.</p>
+              <p>The design approach begins with the learning experience.</p>
               <p>
-                Before automating the system, OWLL is manually performing the work: studying a place or domain, identifying meaningful questions, building a learning architecture, guiding a learner through the experience, examining the evidence, and revising the journey.
+                Start by studying a place or domain, identifying meaningful
+                questions and designing a path through them. Then examine how
+                learners use the experience, what they can explain and where
+                guidance helps. These are the steps the prototypes are intended
+                to make testable.
               </p>
               <p>
-                This approach allows the product to emerge from real educational work rather than forcing learning into a predetermined software structure.
+                The aim is to let observations from educational practice shape
+                the tools. Field testing and evidence of learning remain
+                necessary parts of that work.
               </p>
             </div>
           </section>

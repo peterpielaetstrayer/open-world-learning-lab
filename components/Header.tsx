@@ -43,7 +43,7 @@ export default function Header() {
           className="font-serif text-[0.9375rem] leading-snug sm:text-lg text-ink tracking-tight hover:text-water transition-colors min-w-0 shrink focus-visible:rounded-sm"
         >
           <span className="block text-3xl">{siteConfig.shortName}</span>
-          <span className="block mt-1 font-mono text-[9px] uppercase tracking-widest">
+          <span className="block mt-1 font-mono text-[11px] uppercase tracking-widest">
             {siteConfig.name}
           </span>
         </Link>
