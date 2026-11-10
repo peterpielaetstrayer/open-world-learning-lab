@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { LessonEditor } from "./lesson-editor";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type {
   CourseMembership, CourseActivity, LearnerDraft, LearnerSubmission,
@@ -19,6 +20,7 @@ export default function StudioPage() {
   const [identity, setIdentity] = useState("");
   const [membership, setMembership] = useState<CourseMembership | null>(null);
   const [activities, setActivities] = useState<CourseActivity[]>([]);
+  const [modules, setModules] = useState<{ id: string; title: string; module_number: number; is_published: boolean }[]>([]);
   const [drafts, setDrafts] = useState<LearnerDraft[]>([]);
   const [submissions, setSubmissions] = useState<LearnerSubmission[]>([]);
   const [feedbackRows, setFeedbackRows] = useState<PublishedFeedback[]>([]);
@@ -57,8 +59,10 @@ export default function StudioPage() {
       }
       setMembership(currentMembership);
       const courseId = currentMembership.course_id;
-      const [activityResult, draftResult, submissionResult, feedbackResult, criteriaResult, scoresResult] =
+      const [moduleResult, activityResult, draftResult, submissionResult, feedbackResult, criteriaResult, scoresResult] =
         await Promise.all([
+          supabase.from("pll_modules").select("id,title,module_number,is_published")
+            .eq("course_id", courseId).order("module_number"),
           supabase.from("pll_activities")
             .select("id,course_id,module_id,title,slug,instructions,is_published")
             .eq("course_id", courseId).order("title"),
@@ -78,9 +82,10 @@ export default function StudioPage() {
             .select("id,submission_id,criterion_id,awarded_points,criterion_note")
             .eq("course_id", courseId)
         ]);
-      for (const result of [activityResult, draftResult, submissionResult, feedbackResult, criteriaResult, scoresResult]) {
+      for (const result of [moduleResult, activityResult, draftResult, submissionResult, feedbackResult, criteriaResult, scoresResult]) {
         if (result.error) throw result.error;
       }
+      setModules(moduleResult.data ?? []);
       setActivities((activityResult.data ?? []) as CourseActivity[]);
       setDrafts((draftResult.data ?? []) as LearnerDraft[]);
       setSubmissions((submissionResult.data ?? []) as LearnerSubmission[]);
@@ -238,6 +243,10 @@ export default function StudioPage() {
       </div>
       {notice && <p role="status" className="form-success">{notice}</p>}
       {error && <p role="alert" className="form-error">{error}</p>}
+      {membership.member_role === "facilitator" && supabase && (
+        <LessonEditor supabase={supabase} courseId={membership.course_id} activities={activities}
+          modules={modules} refresh={refresh} />
+      )}
       {membership.member_role === "learner" ? (
         <section aria-labelledby="work-heading" className="studio-work">
           <h2 id="work-heading">Choose a learning activity</h2>
