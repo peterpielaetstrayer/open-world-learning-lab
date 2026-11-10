@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Project Launch Lab | From Curiosity to Action",
+  title: "Open World Learning Lab",
   description:
-    "Discover a project direction, test what is feasible, and begin with a meaningful first step.",
+    "Access and teach courses in Open World Learning Lab.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

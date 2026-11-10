@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { browserSupabase } from "@/lib/supabase-browser";
 
@@ -22,7 +21,7 @@ export default function LoginPage() {
         password,
       });
       if (authError) throw authError;
-      router.replace("/studio");
+      router.replace("/courses");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Sign-in failed.");
     } finally {
@@ -33,10 +32,9 @@ export default function LoginPage() {
   return (
     <main className="auth-page">
       <div className="auth-card">
-        <Link href="/" className="back-link">← Back to the learning lab</Link>
-        <p className="eyebrow">Project Launch Lab / Invited participants</p>
-        <h1>Return to your studio.</h1>
-        <p>Sign in to continue your project, submit work, or review learner feedback.</p>
+        <p className="eyebrow">Open World Learning Lab</p>
+        <h1>Sign in</h1>
+        <p>Access the courses you teach or are enrolled in.</p>
         <form onSubmit={signIn} className="auth-form">
           <label htmlFor="login-email">Email</label>
           <input

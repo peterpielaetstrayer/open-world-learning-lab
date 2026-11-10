@@ -17,6 +17,7 @@ export default function StudioPage() {
     catch { return null; }
   }, []);
   const [loadState, setLoadState] = useState<LoadState>("loading");
+  const [courseTitle, setCourseTitle] = useState("");
   const [identity, setIdentity] = useState("");
   const [membership, setMembership] = useState<CourseMembership | null>(null);
   const [activities, setActivities] = useState<CourseActivity[]>([]);
@@ -38,6 +39,8 @@ export default function StudioPage() {
 
   const refresh = useCallback(async () => {
     if (!supabase) { setLoadState("unconfigured"); return; }
+    const selectedCourseId = new URLSearchParams(window.location.search).get("course");
+    if (!selectedCourseId) { window.location.replace("/courses"); return; }
     try {
       const userResult = await supabase.auth.getUser();
       if (userResult.error || !userResult.data.user) {
@@ -49,7 +52,8 @@ export default function StudioPage() {
       const membershipResult = await supabase
         .from("pll_memberships")
         .select("course_id,user_id,member_role")
-        .limit(1)
+        .eq("course_id", selectedCourseId)
+        .eq("user_id", currentUser.id)
         .maybeSingle();
       if (membershipResult.error) throw membershipResult.error;
       const currentMembership = membershipResult.data as CourseMembership | null;
@@ -59,6 +63,9 @@ export default function StudioPage() {
       }
       setMembership(currentMembership);
       const courseId = currentMembership.course_id;
+      const courseResult = await supabase.from("pll_courses").select("title").eq("id", courseId).single();
+      if (courseResult.error) throw new Error(courseResult.error.message);
+      setCourseTitle(courseResult.data.title);
       const [moduleResult, activityResult, draftResult, submissionResult, feedbackResult, criteriaResult, scoresResult] =
         await Promise.all([
           supabase.from("pll_modules").select("id,title,module_number,is_published")
@@ -219,13 +226,13 @@ export default function StudioPage() {
     if (!supabase) return;
     await supabase.auth.signOut();
     setMembership(null);
-    setLoadState("signed-out");
+    window.location.replace("/login");
   }
 
   if (loadState === "loading") return <StudioFrame><p>Opening your studio…</p></StudioFrame>;
   if (loadState === "unconfigured") return <StudioFrame><p role="alert">The secure LMS is not yet configured for this deployment. Set the public Supabase URL and publishable key.</p></StudioFrame>;
   if (loadState === "signed-out") return <StudioFrame><h1>Welcome back.</h1><p>Sign in to see your course and feedback.</p><Link href="/login" className="primary-link">Sign in <span aria-hidden="true">↗</span></Link></StudioFrame>;
-  if (loadState === "unenrolled") return <StudioFrame><h1>Enrollment pending.</h1><p>Your account is signed in but hasn&apos;t been enrolled in this course. Contact the facilitator. Learners cannot enroll themselves.</p><button type="button" onClick={signOut} className="text-button">Sign out</button></StudioFrame>;
+  if (loadState === "unenrolled") return <StudioFrame><h1>Course access unavailable</h1><p>Your account does not have access to this course.</p><button type="button" onClick={signOut} className="text-button">Sign out</button></StudioFrame>;
   if (loadState === "error") return <StudioFrame><p role="alert" className="form-error">{error}</p><button type="button" onClick={() => void refresh()} className="feedback-button">Try again</button></StudioFrame>;
   if (!membership) return null;
 
@@ -234,7 +241,7 @@ export default function StudioPage() {
       <div className="studio-top">
         <div>
           <p className="eyebrow">Learning studio / {membership.member_role === "learner" ? "Learner" : "Facilitator"}</p>
-          <h1>{membership.member_role === "learner" ? "Your work, your next step." : "Facilitator review."}</h1>
+          <h1>{courseTitle}</h1>
           <p>{membership.member_role === "learner"
             ? "Explain your thinking, save a draft, and submit it when you're ready."
             : "Review project decisions against transparent criteria and return useful feedback."}</p>
@@ -358,9 +365,9 @@ function StudioFrame({children}: {children: React.ReactNode}) {
       <a className="skip" href="#studio-main">Skip to studio content</a>
       <header className="site-header">
         <div className="brand"><span className="brand-mark" aria-hidden="true">✳</span>
-          <div><strong>Project Launch Lab</strong><span className="brand-sub">Open World Learning Lab · Development</span></div>
+          <div><strong>Open World Learning Lab</strong></div>
         </div>
-        <nav aria-label="Navigation"><Link href="/">Course overview</Link><Link href="/studio">My studio</Link></nav>
+        <nav aria-label="Navigation"><Link href="/courses">My Courses</Link></nav>
       </header>
       <main className="page-wrap studio-container" id="studio-main">{children}</main>
     </>
