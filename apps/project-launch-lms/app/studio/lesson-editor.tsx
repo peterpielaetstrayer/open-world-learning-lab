@@ -21,7 +21,7 @@ export function LessonEditor({ supabase, courseId, activities, modules, refresh 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
-  const module = modules.find(item => item.id === moduleId);
+  const selectedModule = modules.find(item => item.id === moduleId);
 
   function selectLesson(id: string) {
     const lesson = activities.find(item => item.id === id);
@@ -36,7 +36,7 @@ export function LessonEditor({ supabase, courseId, activities, modules, refresh 
 
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy || !module || !title.trim() || !instructions.trim()) return;
+    if (busy || !selectedModule || !title.trim() || !instructions.trim()) return;
     setBusy(true);
     setError("");
     setStatus("");
@@ -46,7 +46,7 @@ export function LessonEditor({ supabase, courseId, activities, modules, refresh 
         ? await supabase.from("pll_activities").update(values)
           .eq("id", lessonId).eq("course_id", courseId).select("id").single()
         : await supabase.from("pll_activities").insert({
-          ...values, course_id: courseId, module_id: module.id, slug: crypto.randomUUID()
+          ...values, course_id: courseId, module_id: selectedModule.id, slug: crypto.randomUUID()
         }).select("id").single();
       if (result.error) throw new Error(result.error.message);
       setLessonId(result.data.id);
@@ -60,13 +60,13 @@ export function LessonEditor({ supabase, courseId, activities, modules, refresh 
   }
 
   async function publishModule() {
-    if (!module || busy) return;
+    if (!selectedModule || busy) return;
     setBusy(true);
     setError("");
     setStatus("");
     try {
       const result = await supabase.from("pll_modules").update({ is_published: true })
-        .eq("id", module.id).eq("course_id", courseId).select("id").single();
+        .eq("id", selectedModule.id).eq("course_id", courseId).select("id").single();
       if (result.error) throw new Error(result.error.message);
       await refresh();
       setStatus("Module published. Published lessons in this module are now visible to learners.");
@@ -98,7 +98,7 @@ export function LessonEditor({ supabase, courseId, activities, modules, refresh 
               {item.module_number}. {item.title}{item.is_published ? "" : " (draft)"}
             </option>)}
           </select>
-          {module && !module.is_published && (
+          {selectedModule && !selectedModule.is_published && (
             <button type="button" className="text-button" onClick={() => void publishModule()}>
               Publish module
             </button>
@@ -113,7 +113,7 @@ export function LessonEditor({ supabase, courseId, activities, modules, refresh 
           <select id="lesson-visibility" value={published ? "published" : "draft"}
             onChange={event => setPublished(event.target.value === "published")}>
             <option value="draft">Draft</option>
-            <option value="published" disabled={!module?.is_published}>Published</option>
+            <option value="published" disabled={!selectedModule?.is_published}>Published</option>
           </select>
           <div className="studio-actions">
             <button className="feedback-button" type="submit">Save lesson</button>
