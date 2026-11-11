@@ -1,7 +1,7 @@
 import { LessonText, getResourceUrl } from "./lesson-text";
 import type { CourseActivity, LearnerSubmission, PublishedFeedback, RubricCriterion } from "@/lib/course-types";
 
-export type CourseSection = "home" | "modules" | "assignments" | "feedback" | "resources" | "manage";
+export type CourseSection = "home" | "modules" | "assignments" | "feedback" | "resources" | "discussions" | "quiz" | "evaluation" | "manage";
 export type CourseModule = { id: string; title: string; module_number: number; is_published: boolean };
 
 export function CourseHome({ description, modules, activities, onOpen, onModules }: {

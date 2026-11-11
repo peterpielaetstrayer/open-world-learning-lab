@@ -3,6 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { CourseHome, CourseOutline, AssignmentList, CourseResources, type CourseSection } from "./course-navigation";
+import { CourseQuiz } from "./course-quiz";
+import { Discussions } from "./discussions";
+import { CourseEvaluation } from "./course-evaluation";
 import { ModuleEditor } from "./module-editor";
 import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
@@ -270,7 +273,7 @@ export default function StudioPage() {
     setError("");
   }
 
-  const sectionLinks = [{ id: "home", label: "Home" }, { id: "modules", label: "Modules" }, { id: "assignments", label: "Assignments" }, { id: "resources", label: "Resources" }, { id: "feedback", label: isInstructor && !studentPreview ? "Review submissions" : "Feedback" }, ...(isInstructor && !studentPreview ? [{ id: "manage", label: "Edit course" }] : [])];
+  const sectionLinks = [{ id: "home", label: "Home" }, { id: "modules", label: "Modules" }, { id: "assignments", label: "Assignments" }, { id: "resources", label: "Resources" }, { id: "discussions", label: "Discussions" }, { id: "quiz", label: "Quiz" }, { id: "evaluation", label: "Evaluation" }, { id: "feedback", label: isInstructor && !studentPreview ? "Review submissions" : "Feedback" }, ...(isInstructor && !studentPreview ? [{ id: "manage", label: "Edit course" }] : [])];
 
   return (
     <StudioFrame>
@@ -415,6 +418,12 @@ export default function StudioPage() {
           ) : <AssignmentList activities={orderedActivities} criteria={criteria} submissions={ownSubmissions}
             feedback={feedbackRows} onOpen={openActivity} showFeedback={true} />)}
           {section === "resources" && <CourseResources activities={orderedActivities} />}
+          {section === "discussions" && supabase && <Discussions supabase={supabase}
+            courseId={membership.course_id} identity={identity} preview={studentPreview} />}
+          {section === "quiz" && supabase && <CourseQuiz supabase={supabase}
+            courseId={membership.course_id} identity={identity} instructor={isInstructor} preview={studentPreview} />}
+          {section === "evaluation" && supabase && <CourseEvaluation supabase={supabase}
+            courseId={membership.course_id} instructor={isInstructor} preview={studentPreview} />}
           {section === "manage" && isInstructor && !studentPreview && supabase && <>
             <h2>Edit course</h2>
             <ModuleEditor supabase={supabase} courseId={membership.course_id} modules={modules} refresh={refresh} />
