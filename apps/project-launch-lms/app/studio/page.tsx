@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ModuleEditor } from "./module-editor";
+import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type {
@@ -279,7 +280,7 @@ export default function StudioPage() {
           {activeActivity && (
             <div className="studio-panel">
               <h3>{activeActivity.title}</h3>
-              <p className="prewrap">{activeActivity.instructions}</p>
+              <LessonText text={activeActivity.instructions} />
               <h4>How your work will be evaluated</h4>
               {assignedCriteria.length === 0 ? <p>Rubric criteria are being prepared.</p> :
               <ul>{assignedCriteria.map(c => <li key={c.id}><strong>{c.title} ({c.maximum_points} points)</strong> — {c.description}</li>)}</ul>}

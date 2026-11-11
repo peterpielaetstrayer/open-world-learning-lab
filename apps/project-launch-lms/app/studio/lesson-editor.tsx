@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { LessonText } from "./lesson-text";
 import type { CourseActivity } from "@/lib/course-types";
 
 type Module = { id: string; title: string; module_number: number; is_published: boolean };
@@ -123,7 +124,7 @@ export function LessonEditor({ supabase, courseId, activities, modules, refresh 
       <details>
         <summary>Preview lesson text</summary>
         <h3>{title || "Untitled lesson"}</h3>
-        <p className="prewrap">{instructions}</p>
+        <LessonText text={instructions} />
       </details>
     </section>
   );
