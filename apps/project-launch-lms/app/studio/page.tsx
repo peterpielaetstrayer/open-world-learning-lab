@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { ModuleEditor } from "./module-editor";
 import { LessonEditor } from "./lesson-editor";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type {
@@ -251,8 +252,11 @@ export default function StudioPage() {
       {notice && <p role="status" className="form-success">{notice}</p>}
       {error && <p role="alert" className="form-error">{error}</p>}
       {membership.member_role === "facilitator" && supabase && (
-        <LessonEditor supabase={supabase} courseId={membership.course_id} activities={activities}
-          modules={modules} refresh={refresh} />
+        <>
+          <ModuleEditor supabase={supabase} courseId={membership.course_id} modules={modules} refresh={refresh} />
+          <LessonEditor supabase={supabase} courseId={membership.course_id} activities={activities}
+            modules={modules} refresh={refresh} />
+        </>
       )}
       {membership.member_role === "learner" ? (
         <section aria-labelledby="work-heading" className="studio-work">
@@ -263,7 +267,12 @@ export default function StudioPage() {
               <label htmlFor="activity-choice">Activity</label>
               <select id="activity-choice" value={selectedActivity} onChange={(e) => chooseActivity(e.target.value)}>
                 <option value="">Choose an activity</option>
-                {activities.map(a => <option key={a.id} value={a.id}>{a.title}</option>)}
+                {modules.map(item => (
+                  <optgroup key={item.id} label={`${item.module_number}. ${item.title}`}>
+                    {activities.filter(activity => activity.module_id === item.id)
+                      .map(activity => <option key={activity.id} value={activity.id}>{activity.title}</option>)}
+                  </optgroup>
+                ))}
               </select>
             </>
           )}
