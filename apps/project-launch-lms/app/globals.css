@@ -73,3 +73,8 @@
 .studio-work .option:has(input:checked){border-color:var(--water);background:#eff5f3}
 .studio-work .option input[type=radio]{flex:0 0 auto;width:auto;padding:0;margin:5px 0 0}
 .studio-work fieldset:disabled .option{cursor:default}
+
+.playback-example{margin:20px 0;padding:16px;border:1px solid var(--border);background:#f5f7f3}
+.playback-example figcaption{font-weight:700;margin-bottom:8px}
+.playback-example audio{width:min(100%,420px)}
+.playback-example p{margin-bottom:0}

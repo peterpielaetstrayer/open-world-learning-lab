@@ -64,6 +64,13 @@ export function FirstMoveStudio() {
         <p className="form-note">Decision {step + 1} of {decisions.length}</p>
         <h4 id={`${id}-heading`} tabIndex={-1} ref={heading}>{decision.title}</h4>
         <p>{decision.context}</p>
+        {step === 1 && <figure className="playback-example">
+          <figcaption id={`${id}-playback`}>Illustrative playback from Maya’s first test</figcaption>
+          <audio controls preload="none" aria-labelledby={`${id}-playback`}
+            src="/media/first-move-count-in.wav" />
+          <p>Audio description: Four high clicks count in. A lower tone marks beat one.
+            Maya’s tap follows about a quarter of a second later, and the next two taps are late too.</p>
+        </figure>}
         <fieldset>
           <legend>{decision.prompt}</legend>
           <div className="options">
