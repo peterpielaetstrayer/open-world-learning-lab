@@ -65,3 +65,11 @@
 .preview-banner{border:1px solid var(--water);background:#eff5f3;padding:16px;line-height:1.6}
 @media(max-width:1050px){.module-reader{grid-template-columns:1fr}.module-reader>.course-outline{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}.module-outline{border:1px solid var(--border);padding:16px}.module-outline:first-child{padding-top:16px}}
 @media(max-width:700px){.course-layout{grid-template-columns:1fr;gap:24px}.course-navigation{position:static;flex-direction:row;overflow-x:auto;border-bottom:1px solid var(--border)}.course-navigation button{white-space:nowrap;border-left:0;border-bottom:3px solid transparent;padding:12px}.studio-top{margin-bottom:24px}.module-reader>.course-outline{grid-template-columns:1fr}}
+
+/* Keep choice controls compact inside the course form layout. */
+.studio-work fieldset.criterion-editor,.studio-work .lab-body fieldset{min-width:0;border:0;padding:0;margin:0 0 24px}
+.studio-work fieldset.criterion-editor legend,.studio-work .lab-body legend{font-weight:700;line-height:1.45;margin-bottom:12px}
+.studio-work .option{display:flex;margin:0;font-weight:400;line-height:1.5}
+.studio-work .option:has(input:checked){border-color:var(--water);background:#eff5f3}
+.studio-work .option input[type=radio]{flex:0 0 auto;width:auto;padding:0;margin:5px 0 0}
+.studio-work fieldset:disabled .option{cursor:default}
