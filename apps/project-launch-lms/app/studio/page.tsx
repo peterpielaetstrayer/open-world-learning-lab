@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { CourseHome, CourseOutline, AssignmentList, type CourseSection } from "./course-navigation";
 import { ModuleEditor } from "./module-editor";
 import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
@@ -19,6 +20,9 @@ export default function StudioPage() {
     catch { return null; }
   }, []);
   const [loadState, setLoadState] = useState<LoadState>("loading");
+  const [section, setSection] = useState<CourseSection>("home");
+  const [studentPreview, setStudentPreview] = useState(false);
+  const [courseDescription, setCourseDescription] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
   const [identity, setIdentity] = useState("");
   const [membership, setMembership] = useState<CourseMembership | null>(null);
@@ -65,9 +69,10 @@ export default function StudioPage() {
       }
       setMembership(currentMembership);
       const courseId = currentMembership.course_id;
-      const courseResult = await supabase.from("pll_courses").select("title").eq("id", courseId).single();
+      const courseResult = await supabase.from("pll_courses").select("title,description").eq("id", courseId).single();
       if (courseResult.error) throw new Error(courseResult.error.message);
       setCourseTitle(courseResult.data.title);
+      setCourseDescription(courseResult.data.description);
       const [moduleResult, activityResult, draftResult, submissionResult, feedbackResult, criteriaResult, scoresResult] =
         await Promise.all([
           supabase.from("pll_modules").select("id,title,module_number,is_published")
@@ -113,6 +118,20 @@ export default function StudioPage() {
     queueMicrotask(() => { if (!cancelled) void refresh(); });
     return () => { cancelled = true; };
   }, [refresh]);
+
+  const isInstructor = membership?.member_role === "facilitator";
+  const visibleModules = modules.filter(item => !studentPreview || item.is_published);
+  const visibleActivities = activities.filter(activity => !studentPreview ||
+    (activity.is_published && visibleModules.some(item => item.id === activity.module_id)));
+  const orderedActivities = visibleModules.flatMap(item => visibleActivities
+    .filter(activity => activity.module_id === item.id)
+    .sort((a, b) => {
+      const aAssignment = criteria.some(criterion => criterion.activity_id === a.id);
+      const bAssignment = criteria.some(criterion => criterion.activity_id === b.id);
+      return Number(aAssignment) - Number(bAssignment) || a.title.localeCompare(b.title);
+    }));
+  const readableActivity = visibleActivities.find(activity => activity.id === selectedActivity);
+  const ownSubmissions = submissions.filter(item => item.learner_id === identity);
 
   const activeActivity = activities.find((activity) => activity.id === selectedActivity);
   const activeDraft = drafts.find((draft) => draft.activity_id === activeActivity?.id && draft.learner_id === identity);
@@ -238,53 +257,63 @@ export default function StudioPage() {
   if (loadState === "error") return <StudioFrame><p role="alert" className="form-error">{error}</p><button type="button" onClick={() => void refresh()} className="feedback-button">Try again</button></StudioFrame>;
   if (!membership) return null;
 
+  function openActivity(id: string) {
+    chooseActivity(id);
+    setSection("modules");
+  }
+
+  function togglePreview() {
+    setStudentPreview(previous => !previous);
+    setSection("home");
+    setSelectedActivity("");
+    setNotice("");
+    setError("");
+  }
+
+  const sectionLinks = [{ id: "home", label: "Home" }, { id: "modules", label: "Modules" }, { id: "assignments", label: "Assignments" }, { id: "feedback", label: isInstructor && !studentPreview ? "Review submissions" : "Feedback" }, ...(isInstructor && !studentPreview ? [{ id: "manage", label: "Edit course" }] : [])];
+
   return (
     <StudioFrame>
       <div className="studio-top">
         <div>
-          <p className="eyebrow">Learning studio / {membership.member_role === "learner" ? "Learner" : "Facilitator"}</p>
+          <p className="eyebrow">{isInstructor ? "Instructor" : "Student"}</p>
           <h1>{courseTitle}</h1>
-          <p>{membership.member_role === "learner"
-            ? "Explain your thinking, save a draft, and submit it when you're ready."
-            : "Review project decisions against transparent criteria and return useful feedback."}</p>
         </div>
-        <button className="text-button" onClick={signOut} type="button">Sign out</button>
+        <div className="studio-actions">
+          {isInstructor && <button type="button" className="secondary-button" onClick={togglePreview}>
+            {studentPreview ? "Exit Student Preview" : "Student Preview"}
+          </button>}
+          <button className="text-button" onClick={signOut} type="button">Sign out</button>
+        </div>
       </div>
+      {studentPreview && <p role="status" className="preview-banner">
+        Student Preview · Published course content. Use a Student account to test submissions and grades.
+      </p>}
       {notice && <p role="status" className="form-success">{notice}</p>}
       {error && <p role="alert" className="form-error">{error}</p>}
-      {membership.member_role === "facilitator" && supabase && (
-        <>
-          <ModuleEditor supabase={supabase} courseId={membership.course_id} modules={modules} refresh={refresh} />
-          <LessonEditor supabase={supabase} courseId={membership.course_id} activities={activities}
-            modules={modules} refresh={refresh} />
-        </>
-      )}
-      {membership.member_role === "learner" ? (
-        <section aria-labelledby="work-heading" className="studio-work">
-          <h2 id="work-heading">Choose a learning activity</h2>
-          {activities.length === 0 && <p>Activities are not published yet. Your facilitator will make them available when ready.</p>}
-          {activities.length > 0 && (
-            <>
-              <label htmlFor="activity-choice">Activity</label>
-              <select id="activity-choice" value={selectedActivity} onChange={(e) => chooseActivity(e.target.value)}>
-                <option value="">Choose an activity</option>
-                {modules.map(item => (
-                  <optgroup key={item.id} label={`${item.module_number}. ${item.title}`}>
-                    {activities.filter(activity => activity.module_id === item.id)
-                      .map(activity => <option key={activity.id} value={activity.id}>{activity.title}</option>)}
-                  </optgroup>
-                ))}
-              </select>
-            </>
-          )}
-          {activeActivity && (
+      <div className="course-layout">
+        <nav aria-label="Course navigation" className="course-navigation">
+          {sectionLinks.map(item => <button key={item.id} type="button"
+            aria-current={section === item.id ? "page" : undefined}
+            onClick={() => setSection(item.id as CourseSection)}>{item.label}</button>)}
+        </nav>
+        <div className="course-content">
+          {section === "home" && <CourseHome description={courseDescription} modules={visibleModules}
+            activities={orderedActivities} onOpen={openActivity} onModules={() => setSection("modules")} />}
+          {section === "modules" && (
+            <div className="module-reader">
+              <CourseOutline modules={visibleModules} activities={orderedActivities} criteria={criteria}
+                selectedId={selectedActivity} onOpen={openActivity} />
+              <section className="studio-work" aria-label="Lesson content">
+                {!readableActivity && <p>Choose a lesson from the module list.</p>}
+          {activeActivity && readableActivity && (
             <div className="studio-panel">
               <h3>{activeActivity.title}</h3>
               <LessonText text={activeActivity.instructions} />
+              {assignedCriteria.length > 0 && <>
               <h4>How your work will be evaluated</h4>
-              {assignedCriteria.length === 0 ? <p>Rubric criteria are being prepared.</p> :
-              <ul>{assignedCriteria.map(c => <li key={c.id}><strong>{c.title} ({c.maximum_points} points)</strong> — {c.description}</li>)}</ul>}
-              {finalSubmission ? (
+              <ul>{assignedCriteria.map(c => <li key={c.id}><strong>{c.title} ({c.maximum_points} points)</strong> — {c.description}</li>)}</ul></>}
+              {!isInstructor && assignedCriteria.length > 0 && (finalSubmission ? (
                 <>
                   <p className="form-success">Submitted {new Date(finalSubmission.submitted_at).toLocaleString()}.</p>
                   <h4>Your submitted explanation</h4>
@@ -314,11 +343,31 @@ export default function StudioPage() {
                     </button>
                   </div>
                 </>
-              )}
+              ))}
+              {isInstructor && assignedCriteria.length > 0 && <p className="form-note">Use a Student account to save and submit work for this assignment.</p>}
             </div>
           )}
-        </section>
-      ) : (
+
+                {readableActivity && <nav className="studio-actions" aria-label="Lesson navigation">
+                  {orderedActivities.findIndex(item => item.id === selectedActivity) > 0 && (
+                    <button type="button" className="secondary-button" onClick={() => {
+                      const index = orderedActivities.findIndex(item => item.id === selectedActivity);
+                      openActivity(orderedActivities[index - 1].id);
+                    }}>Previous lesson</button>
+                  )}
+                  {orderedActivities.findIndex(item => item.id === selectedActivity) < orderedActivities.length - 1 && (
+                    <button type="button" className="feedback-button" onClick={() => {
+                      const index = orderedActivities.findIndex(item => item.id === selectedActivity);
+                      openActivity(orderedActivities[index + 1].id);
+                    }}>Next lesson</button>
+                  )}
+                </nav>}
+              </section>
+            </div>
+          )}
+          {section === "assignments" && <AssignmentList activities={orderedActivities} criteria={criteria}
+            submissions={isInstructor ? [] : ownSubmissions} feedback={feedbackRows} onOpen={openActivity} showFeedback={false} />}
+          {section === "feedback" && (isInstructor && !studentPreview ? (
         <section className="studio-work" aria-labelledby="reviews-heading">
           <h2 id="reviews-heading">Learner submissions</h2>
           {submissions.length === 0 ? <p>No learner submissions yet. The platform uses synthetic demonstration accounts until reviewer access is configured.</p> : (
@@ -363,8 +412,16 @@ export default function StudioPage() {
             </div>
           )}
         </section>
-      )}
-      <p className="form-note studio-note">Development build: learner and facilitator flows must pass live Auth, RLS and role-isolation tests before release. Only synthetic demonstration accounts are permitted during testing.</p>
+          ) : <AssignmentList activities={orderedActivities} criteria={criteria} submissions={ownSubmissions}
+            feedback={feedbackRows} onOpen={openActivity} showFeedback={true} />)}
+          {section === "manage" && isInstructor && !studentPreview && supabase && <>
+            <h2>Edit course</h2>
+            <ModuleEditor supabase={supabase} courseId={membership.course_id} modules={modules} refresh={refresh} />
+            <LessonEditor supabase={supabase} courseId={membership.course_id} activities={activities}
+              modules={modules} refresh={refresh} />
+          </>}
+        </div>
+      </div>
     </StudioFrame>
   );
 }
