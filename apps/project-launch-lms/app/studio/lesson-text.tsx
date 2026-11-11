@@ -1,3 +1,5 @@
+import { FirstMoveStudio } from "./first-move-studio";
+
 export function getResourceUrl(text: string): URL | null {
   if (!/^https:\/\/\S+$/.test(text)) return null;
   try {
@@ -12,6 +14,7 @@ export function LessonText({ text }: { text: string }) {
   return text.trim().split(/\r?\n\s*\r?\n/).map((block, index) => {
     const lines = block.split(/\r?\n/);
     const key = `${index}-${lines[0]}`;
+    if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} />;
     if (lines.every(line => /^\d+\. /.test(line))) {
       return <ol key={key}>{lines.map((line, position) => <li key={position}>{line.replace(/^\d+\. /, "").replaceAll("**", "")}</li>)}</ol>;
     }
