@@ -9,6 +9,7 @@ import { CourseEvaluation } from "./course-evaluation";
 import { ModuleEditor } from "./module-editor";
 import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
+import { RubricEditor } from "./rubric-editor";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type {
   CourseMembership, CourseActivity, LearnerDraft, LearnerSubmission,
@@ -394,7 +395,7 @@ export default function StudioPage() {
                 <div className="criterion-editor" key={c.id}>
                   <label htmlFor={`score-${c.id}`}>{c.title} — maximum {c.maximum_points} points</label>
                   <p>{c.description}</p>
-                  <input type="number" min="0" max={c.maximum_points} step="0.5" id={`score-${c.id}`}
+                  <input type="number" min="0" max={c.maximum_points} step="0.01" id={`score-${c.id}`}
                     value={pointInputs[c.id] ?? ""} onChange={e => setPointInputs(prev=>({...prev,[c.id]:e.target.value}))} />
                   <label htmlFor={`note-${c.id}`}>Criterion feedback (optional)</label>
                   <textarea id={`note-${c.id}`} rows={2} maxLength={4000}
@@ -429,6 +430,7 @@ export default function StudioPage() {
             <ModuleEditor supabase={supabase} courseId={membership.course_id} modules={modules} refresh={refresh} />
             <LessonEditor supabase={supabase} courseId={membership.course_id} activities={activities}
               modules={modules} refresh={refresh} />
+            <RubricEditor supabase={supabase} activities={activities} criteria={criteria} refresh={refresh} />
           </>}
         </div>
       </div>
