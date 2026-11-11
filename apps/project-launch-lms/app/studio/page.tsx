@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { CourseHome, CourseOutline, AssignmentList, type CourseSection } from "./course-navigation";
+import { CourseHome, CourseOutline, AssignmentList, CourseResources, type CourseSection } from "./course-navigation";
 import { ModuleEditor } from "./module-editor";
 import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
@@ -270,7 +270,7 @@ export default function StudioPage() {
     setError("");
   }
 
-  const sectionLinks = [{ id: "home", label: "Home" }, { id: "modules", label: "Modules" }, { id: "assignments", label: "Assignments" }, { id: "feedback", label: isInstructor && !studentPreview ? "Review submissions" : "Feedback" }, ...(isInstructor && !studentPreview ? [{ id: "manage", label: "Edit course" }] : [])];
+  const sectionLinks = [{ id: "home", label: "Home" }, { id: "modules", label: "Modules" }, { id: "assignments", label: "Assignments" }, { id: "resources", label: "Resources" }, { id: "feedback", label: isInstructor && !studentPreview ? "Review submissions" : "Feedback" }, ...(isInstructor && !studentPreview ? [{ id: "manage", label: "Edit course" }] : [])];
 
   return (
     <StudioFrame>
@@ -414,6 +414,7 @@ export default function StudioPage() {
         </section>
           ) : <AssignmentList activities={orderedActivities} criteria={criteria} submissions={ownSubmissions}
             feedback={feedbackRows} onOpen={openActivity} showFeedback={true} />)}
+          {section === "resources" && <CourseResources activities={orderedActivities} />}
           {section === "manage" && isInstructor && !studentPreview && supabase && <>
             <h2>Edit course</h2>
             <ModuleEditor supabase={supabase} courseId={membership.course_id} modules={modules} refresh={refresh} />

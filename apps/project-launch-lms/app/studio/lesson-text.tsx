@@ -1,3 +1,13 @@
+export function getResourceUrl(text: string): URL | null {
+  if (!/^https:\/\/\S+$/.test(text)) return null;
+  try {
+    const url = new URL(text);
+    return url.hostname ? url : null;
+  } catch {
+    return null;
+  }
+}
+
 export function LessonText({ text }: { text: string }) {
   return text.trim().split(/\r?\n\s*\r?\n/).map((block, index) => {
     const lines = block.split(/\r?\n/);
@@ -7,6 +17,12 @@ export function LessonText({ text }: { text: string }) {
     }
     if (lines.every(line => /^- /.test(line))) {
       return <ul key={key}>{lines.map((line, position) => <li key={position}>{line.slice(2).replaceAll("**", "")}</li>)}</ul>;
+    }
+    const resource = getResourceUrl(block);
+    if (resource) {
+      return <p key={key}><a className="back-link" href={resource.href} target="_blank" rel="noopener noreferrer">
+        Open {resource.hostname} (opens in new tab)
+      </a></p>;
     }
     const heading = lines[0].match(/^#{1,4} (.+)$/);
     if (heading) {

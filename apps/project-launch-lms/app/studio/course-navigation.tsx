@@ -1,7 +1,7 @@
-import { LessonText } from "./lesson-text";
+import { LessonText, getResourceUrl } from "./lesson-text";
 import type { CourseActivity, LearnerSubmission, PublishedFeedback, RubricCriterion } from "@/lib/course-types";
 
-export type CourseSection = "home" | "modules" | "assignments" | "feedback" | "manage";
+export type CourseSection = "home" | "modules" | "assignments" | "feedback" | "resources" | "manage";
 export type CourseModule = { id: string; title: string; module_number: number; is_published: boolean };
 
 export function CourseHome({ description, modules, activities, onOpen, onModules }: {
@@ -83,6 +83,27 @@ export function AssignmentList({ activities, criteria, submissions, feedback, on
           {showFeedback && review && <LessonText text={review.summary} />}
         </article>;
       })}
+    </section>
+  );
+}
+
+export function CourseResources({ activities }: { activities: CourseActivity[] }) {
+  const resources = activities.flatMap(activity => {
+    const urls = [...new Set(activity.instructions.split(/\r?\n/)
+      .map(line => getResourceUrl(line.trim())?.href).filter((url): url is string => Boolean(url)))];
+    return urls.map(url => ({ activity, url }));
+  });
+  return (
+    <section aria-labelledby="resources-heading">
+      <h2 id="resources-heading">Resources</h2>
+      <p>These resources are also linked from their lessons.</p>
+      {resources.map(({ activity, url }) => <article className="assignment-card" key={activity.id + url}>
+        <h3>{activity.title}</h3>
+        <a className="back-link" href={url} target="_blank" rel="noopener noreferrer">
+          Open {new URL(url).hostname} (opens in new tab)
+        </a>
+      </article>)}
+      {resources.length === 0 && <p>Resources will appear here when they are added to published lessons.</p>}
     </section>
   );
 }
