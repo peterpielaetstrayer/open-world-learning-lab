@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { routePasswordEmail } from "@/lib/password-email";
 import { browserSupabase } from "@/lib/supabase-browser";
 
 type Course = { id: string; title: string; description: string };
@@ -15,6 +16,7 @@ export default function CoursesPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (routePasswordEmail()) return;
     let cancelled = false;
     async function loadCourses() {
       try {

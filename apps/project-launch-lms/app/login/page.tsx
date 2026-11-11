@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { routePasswordEmail } from "@/lib/password-email";
 import { browserSupabase } from "@/lib/supabase-browser";
 
 export default function LoginPage() {
@@ -12,6 +13,8 @@ export default function LoginPage() {
   const [working, setWorking] = useState(false);
   const [recovering, setRecovering] = useState(false);
   const [notice, setNotice] = useState("");
+
+  useEffect(() => { routePasswordEmail(); }, []);
 
   async function signIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
