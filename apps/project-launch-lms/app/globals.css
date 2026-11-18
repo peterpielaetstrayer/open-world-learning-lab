@@ -63,6 +63,38 @@
 .assignment-card h3{margin:0}
 .assignment-card .text-button{text-align:left;font-size:1.2rem;padding-left:0}
 .preview-banner{border:1px solid var(--water);background:#eff5f3;padding:16px;line-height:1.6}
+
+/* Learner dashboard: learning journey, honest progress and safety context. */
+.course-dashboard{max-width:1100px}
+.course-welcome{background:linear-gradient(135deg,#e3ece5 0%,#f7f3e9 100%);border:1px solid #bdc9bd;padding:clamp(24px,4vw,44px)}
+.course-welcome h2{max-width:740px;font-size:clamp(2.1rem,4vw,3.5rem);line-height:1.13;margin:14px 0 20px}
+.course-home-lead{font-size:1.12rem;max-width:760px;color:#263e38}
+.course-description{color:#41534a;font-size:.92rem;max-width:740px}
+.course-description p:last-child{margin-bottom:8px}
+.course-activity-status{display:flex;align-items:center;gap:36px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding:23px 4px}
+.course-activity-status p{margin:0;display:flex;gap:12px;align-items:baseline}
+.course-activity-status strong{font:500 2.2rem/1 Georgia,serif;color:#164e54}
+.course-activity-status span{font-size:.88rem;color:#40534b}
+.course-activity-status .course-status-caution{flex-basis:100%;font-size:.84rem;color:#52645a;margin-top:0}
+.course-section-heading{margin:35px 0 22px}
+.course-section-heading h3{font:500 clamp(1.5rem,2.5vw,2.15rem)/1.2 Georgia,serif;margin:5px 0}
+.course-journey-grid{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:0;margin:0}
+.course-journey-card{display:flex;flex-direction:column;border:1px solid var(--border);background:var(--card);padding:clamp(22px,3vw,32px);min-width:0}
+.course-module-counter{font-weight:750;font-size:.75rem;color:var(--water);text-transform:uppercase;letter-spacing:.12em}
+.course-journey-card h4{font:500 clamp(1.4rem,2.5vw,1.9rem)/1.2 Georgia,serif;margin:3px 0 15px}
+.course-journey-card>p:not(.course-module-counter){color:#40534b}
+.course-journey-card .course-module-status{font-size:.82rem;margin-top:auto;padding-top:22px}
+.course-journey-card .text-button{text-align:left;align-self:start;padding:4px 0;color:var(--water);font-weight:750}
+.course-how{margin-top:40px}
+.course-how h3,.course-safety h3{font:500 1.6rem/1.2 Georgia,serif}
+.course-how ol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:0;counter-reset:steps;list-style:none}
+.course-how li{position:relative;border-top:2px solid #7e9b8d;padding:18px 8px 10px 39px;color:#3b4e45;counter-increment:steps}
+.course-how li:before{content:counter(steps) ".";position:absolute;left:5px;top:18px;font:500 1.35rem Georgia,serif;color:var(--water)}
+.course-how li strong{color:var(--ink)}
+.course-safety{margin:28px 0 18px;border-left:4px solid #46756a;background:#eef2eb;padding:24px clamp(21px,3vw,34px)}
+.course-safety p{max-width:780px;color:#344940}
+.course-safety .course-small{font-size:.86rem;margin-bottom:0}
+@media(max-width:780px){.course-journey-grid,.course-how ol{grid-template-columns:1fr}.course-activity-status{gap:20px}.course-activity-status p{align-items:center}.course-welcome{padding:24px}.course-home-lead{font-size:1rem}}
 @media(max-width:1050px){.module-reader{grid-template-columns:1fr}.module-reader>.course-outline{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}.module-outline{border:1px solid var(--border);padding:16px}.module-outline:first-child{padding-top:16px}}
 @media(max-width:700px){.course-layout{grid-template-columns:1fr;gap:24px}.course-navigation{position:static;flex-direction:row;overflow-x:auto;border-bottom:1px solid var(--border)}.course-navigation button{white-space:nowrap;border-left:0;border-bottom:3px solid transparent;padding:12px}.studio-top{margin-bottom:24px}.module-reader>.course-outline{grid-template-columns:1fr}}
 

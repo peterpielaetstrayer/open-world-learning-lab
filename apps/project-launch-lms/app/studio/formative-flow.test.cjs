@@ -202,3 +202,29 @@ test("unknown saved lesson format is not silently overwritten", async () => {
   assert.equal(screen.queryByRole("button", { name: "Save my lesson work" }), null);
   assert.equal(db.pll_lesson_progress[0].state.version, 2);
 });
+
+test("learner dashboard shows the course journey, safe choices and honest progress", async () => {
+  resetData();
+  render(React.createElement(StudioPage));
+  const heading = await screen.findByRole("heading", { name: /Start with curiosity/ });
+  assert.ok(heading);
+  assert.match(screen.getByText(/These counts track submissions and feedback/).textContent, /not mastery/);
+  assert.ok(screen.getByText(/You do not need to buy anything/));
+  assert.ok(screen.getByRole("button", { name: "Begin exploring" }));
+  assert.ok(screen.getByRole("heading", { name: "Discover & Define" }));
+  fireEvent.click(screen.getByRole("button", { name: "Begin exploring" }));
+  assert.ok(screen.getByText("Compare two options."));
+});
+
+test("ungraded responses and published feedback are discoverable in Feedback", async () => {
+  resetData();
+  db.pll_submissions.push({ id: "response-1", activity_id: "practice-1", course_id: "course-1", learner_id: "learner-1", response_text: "I chose a smaller test.", submitted_at: "2026-11-18T12:00:00Z" });
+  db.pll_feedback.push({ id: "feedback-1", course_id: "course-1", submission_id: "response-1", summary: "Good constraint analysis. Now ask what you can observe.", published_at: "2026-11-18T12:30:00Z" });
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  assert.ok(screen.getByText("of 2 activity responses shared"));
+  fireEvent.click(screen.getByRole("button", { name: "Feedback" }));
+  assert.ok(screen.getByRole("heading", { name: "Your work and feedback" }));
+  assert.ok(screen.getByText("Ungraded practice"));
+  assert.ok(screen.getByText("Good constraint analysis. Now ask what you can observe."));
+});

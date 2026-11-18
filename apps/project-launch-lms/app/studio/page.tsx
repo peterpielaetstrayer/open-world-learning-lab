@@ -312,7 +312,8 @@ export default function StudioPage() {
         </nav>
         <div className="course-content">
           {section === "home" && <CourseHome description={courseDescription} modules={visibleModules}
-            activities={orderedActivities} onOpen={openActivity} onModules={() => setSection("modules")} />}
+            activities={orderedActivities} submissions={ownSubmissions}
+            feedback={feedbackRows} instructor={isInstructor} onOpen={openActivity} onModules={() => setSection("modules")} />}
           {section === "modules" && (
             <div className="module-reader">
               <CourseOutline modules={visibleModules} activities={orderedActivities} criteria={criteria}
