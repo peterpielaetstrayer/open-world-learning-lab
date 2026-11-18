@@ -88,6 +88,8 @@ const { FirstMoveEvidence } = require("./first-move-evidence.tsx");
 const { FirstMoveRevision } = require("./first-move-revision.tsx");
 const { FirstMoveStudio } = require("./first-move-studio.tsx");
 const { FirstStepMiniLesson, MayaGardenModel, FirstStepChecks } = require("./first-step-foundations.tsx");
+const { LaunchPortfolioRubricReview, academicLaunchPortfolioRubric,
+  academicLaunchPortfolioPointBands, compareLaunchPortfolioRubric } = require("./launch-portfolio-rubric.tsx");
 Module._load = originalLoad;
 
 function resetData() {
@@ -688,4 +690,38 @@ test("source-only Module 2 foundation markers render in a hypothetical authentic
   assert.ok(screen.getByRole("heading", { name: "Check your first-step reasoning" }));
   assert.equal(db.pll_submissions.length, 0);
   assert.equal(db.pll_drafts.length, 0);
+});
+
+test("academic Launch Portfolio rubric has four distinct criteria with 15/10/5/0 level descriptors", () => {
+  assert.equal(academicLaunchPortfolioRubric.length, 4);
+  assert.deepEqual([...academicLaunchPortfolioPointBands], [15, 10, 5, 0]);
+  assert.equal(academicLaunchPortfolioRubric.reduce((sum, criterion) => sum + criterion.maximumPoints, 0), 60);
+  assert.ok(academicLaunchPortfolioRubric.every(criterion => criterion.bands.length === 4));
+  assert.match(academicLaunchPortfolioRubric[2].bands[0], /credible documented obstacle/);
+  const { container } = render(React.createElement(LaunchPortfolioRubricReview));
+  assert.ok(screen.getByRole("heading", { name: /Proposed Launch Portfolio assessment — 60 points/ }));
+  assert.equal(container.querySelectorAll("details").length, 4);
+  fireEvent.click(screen.getByText(/Criterion 3: First action and evidence interpretation/));
+  assert.match(screen.getByText(/Provides inspectable evidence of an attempt or credible documented obstacle/).textContent,
+    /recognizes at least one limit/);
+  assert.equal(screen.queryByRole("button", { name: /Submit|Publish|Save grade/ }), null);
+});
+
+test("live-style three-by-ten rubric fails academic alignment comparison without altering any scores", () => {
+  const live = [
+    { title: "Feasible plan", maximum_points: "10.00" },
+    { title: "First-action evidence", maximum_points: "10.00" },
+    { title: "Evidence-informed next step", maximum_points: "10.00" },
+  ];
+  const mismatch = compareLaunchPortfolioRubric(live);
+  assert.equal(mismatch.matchesAcademicDraft, false);
+  assert.equal(mismatch.actualTotal, 30);
+  assert.equal(mismatch.academicTotal, 60);
+  assert.match(mismatch.problems.join(" "), /Expected four criteria/);
+  const matched = compareLaunchPortfolioRubric(academicLaunchPortfolioRubric.map(row => ({
+    title: row.title, maximum_points: row.maximumPoints,
+  })));
+  assert.equal(matched.matchesAcademicDraft, true);
+  assert.equal(matched.actualTotal, 60);
+  assert.equal(matched.problems.length, 0);
 });

@@ -7,6 +7,7 @@ import { FirstMoveCard, type FirstMovePlan } from "../studio/first-move-card";
 import { FirstMoveRevision } from "../studio/first-move-revision";
 import { FirstMoveEvidence } from "../studio/first-move-evidence";
 import { FirstStepMiniLesson, MayaGardenModel, FirstStepChecks } from "../studio/first-step-foundations";
+import { LaunchPortfolioRubricReview } from "../studio/launch-portfolio-rubric";
 
 const steps = [
   "Welcome", "Learn first steps", "Maya's garden model", "Guided checks",
@@ -102,6 +103,7 @@ export function ModuleTwoWalkthrough() {
         <div className="preview-banner" role="note">
           <strong>Rubric mismatch not resolved:</strong> The academic storyboard proposes four criteria worth 15 points each (60 total), but the currently published database rubric has three 10-point criteria (30 total). The actual scoring interface must be reconciled against the authoritative faculty assignment before use. This preview does not simulate a grade.
         </div>
+        <LaunchPortfolioRubricReview />
         <h3>Exit and transfer</h3>
         <p>Before completing the real course, the learner should take the existing ten-item scenario quiz, revisit the entry confidence question (1–5), name a transferable strategy, and choose a safe next move. Confidence change is self-report, <strong>not</strong> proof of competence.</p>
         <p className="form-note">The quiz and Level 1 course evaluation exist as separate authenticated studio features; this preview does not duplicate or claim to verify them.</p>
