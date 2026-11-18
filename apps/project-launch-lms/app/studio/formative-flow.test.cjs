@@ -78,7 +78,7 @@ Module._load = function (request, parent, isMain) {
 };
 require("tsx/cjs");
 const React = require("react");
-const { render, screen, fireEvent, waitFor, cleanup } = require("@testing-library/react");
+const { render, screen, within, fireEvent, waitFor, cleanup } = require("@testing-library/react");
 const StudioPage = require("./page.tsx").default;
 const { ProjectDirectionLesson } = require("./project-direction-lesson.tsx");
 const { SyntheticStudio } = require("../studio-preview/synthetic-studio.tsx");
@@ -86,6 +86,7 @@ const { ModuleOneWalkthrough } = require("../module-one-preview/walkthrough.tsx"
 const { ModuleTwoWalkthrough } = require("../module-two-preview/walkthrough.tsx");
 const { FirstMoveEvidence } = require("./first-move-evidence.tsx");
 const { FirstMoveStudio } = require("./first-move-studio.tsx");
+const { FirstStepMiniLesson, MayaGardenModel, FirstStepChecks } = require("./first-step-foundations.tsx");
 Module._load = originalLoad;
 
 function resetData() {
@@ -372,7 +373,7 @@ test("authenticated Module 2 First Move Card prepares but does not silently subm
   assert.equal(review.disabled, true);
   const prompts = [
     "My project direction", "My purpose and who or what it serves", "The smallest safe first action",
-    "What I want to learn", "Time window or first checkpoint",
+    "What I want to learn", "Three ordered milestones and my first checkpoint",
     "Materials, permission, trusted support and low-resource alternative",
     "One possible constraint and a safe substitute", "Non-sensitive evidence I could collect",
     "What I could learn even if my attempt does not work", "One specific question for facilitator feedback",
@@ -487,11 +488,80 @@ test("Maya scenario remembers earlier choice and its explanatory feedback", () =
 test("protected Module 2 preview carries the in-session plan direction into the evidence screen", () => {
   render(React.createElement(ModuleTwoWalkthrough));
   assert.ok(screen.getByText(/Synthetic design review/));
-  fireEvent.click(screen.getByRole("button", { name: /03 · First Move Card/ }));
+  fireEvent.click(screen.getByRole("button", { name: /06 · First Move Card/ }));
   fireEvent.change(screen.getByLabelText(/My project direction/), { target: { value: "Investigate a tiny sketch guide" } });
-  fireEvent.click(screen.getByRole("button", { name: /05 · Action or obstacle/ }));
+  fireEvent.click(screen.getByRole("button", { name: /08 · Action or obstacle/ }));
   assert.match(screen.getByText(/Your draft direction from this preview:/).parentElement.textContent,
     /Investigate a tiny sketch guide/);
-  fireEvent.click(screen.getByRole("button", { name: /03 · First Move Card/ }));
+  fireEvent.click(screen.getByRole("button", { name: /06 · First Move Card/ }));
   assert.equal(screen.getByLabelText(/My project direction/).value, "Investigate a tiny sketch guide");
+});
+
+test("Module 2 teaches planning vocabulary and at least three ordered milestones before application", () => {
+  render(React.createElement(FirstStepMiniLesson));
+  assert.ok(screen.getByRole("heading", { name: "What makes a first step feasible?" }));
+  assert.match(screen.getByText(/Break a larger direction into at least three/).textContent, /three ordered/);
+  assert.match(screen.getByText(/First-action checklist:/).parentElement.textContent, /evidence/);
+  assert.equal(screen.queryByText(/Submit quiz/), null);
+});
+
+test("Maya garden model distinguishes planned action from performed evidence", () => {
+  render(React.createElement(MayaGardenModel));
+  assert.equal(screen.queryByRole("status", { name: "Annotated garden plan" }), null);
+  fireEvent.click(screen.getByRole("button", { name: "Show annotated model" }));
+  const model = screen.getByRole("status", { name: "Annotated garden plan" });
+  assert.match(model.textContent, /Missing permission or supplies/);
+  assert.match(model.textContent, /if collected/);
+  assert.match(model.textContent, /not a claim that Maya obtained permission/);
+  fireEvent.click(screen.getByRole("button", { name: "Hide annotated model" }));
+  assert.equal(screen.queryByRole("status", { name: "Annotated garden plan" }), null);
+});
+
+test("Module 2 three guided checks disclose nine answer-specific explanations and support retry", () => {
+  const { container } = render(React.createElement(FirstStepChecks));
+  const sections = container.querySelectorAll(".foundation-check");
+  assert.equal(sections.length, 3);
+  const expected = [
+    [/Interest explains purpose/, /Permission is a real/, /Plant choice might matter/],
+    [/Physical changes before permission/, /Spending money is not needed/, /A sketch and requirements check/],
+    [/Confidence is still a prediction/, /observed feedback/, /predicts other people's reactions/],
+  ];
+  sections.forEach((section, question) => {
+    assert.equal(within(section).getByRole("button", { name: "Show explanation" }).disabled, true);
+    for (let choice = 0; choice < 3; choice++) {
+      fireEvent.click(within(section).getAllByRole("radio")[choice]);
+      fireEvent.click(within(section).getByRole("button", { name: "Show explanation" }));
+      assert.match(within(section).getByRole("status").textContent, expected[question][choice]);
+      fireEvent.click(within(section).getByRole("button", { name: "Try this question again" }));
+    }
+  });
+});
+
+test("Module 2 private walkthrough orders Learn, garden model and checks before fresh Studio scenario", () => {
+  render(React.createElement(ModuleTwoWalkthrough));
+  fireEvent.click(screen.getByRole("button", { name: /02 · Learn first steps/ }));
+  assert.ok(screen.getByRole("heading", { name: "What makes a first step feasible?" }));
+  fireEvent.click(screen.getByRole("button", { name: /03 · Maya's garden model/ }));
+  fireEvent.click(screen.getByRole("button", { name: "Show annotated model" }));
+  fireEvent.click(screen.getByRole("button", { name: /04 · Guided checks/ }));
+  assert.ok(screen.getByRole("heading", { name: "Check your first-step reasoning" }));
+  fireEvent.click(screen.getByRole("button", { name: /05 · First Move Studio/ }));
+  assert.match(screen.getByText(/Transfer to a fresh scenario/).parentElement.textContent, /rhythm guide/);
+  fireEvent.click(screen.getByRole("button", { name: /03 · Maya's garden model/ }));
+  assert.ok(screen.getByRole("status", { name: "Annotated garden plan" }));
+});
+
+test("source-only Module 2 foundation markers render in a hypothetical authenticated lesson without a submission", async () => {
+  resetData();
+  addModuleTwoActivity("First-step foundations",
+    "[[first-step-mini-lesson]]\n\n[[maya-garden-model]]\n\n[[first-step-checks]]");
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /First-step foundations/ }));
+  assert.ok(screen.getByRole("heading", { name: "What makes a first step feasible?" }));
+  assert.ok(screen.getByRole("heading", { name: "Maya's school garden: a worked decision" }));
+  assert.ok(screen.getByRole("heading", { name: "Check your first-step reasoning" }));
+  assert.equal(db.pll_submissions.length, 0);
+  assert.equal(db.pll_drafts.length, 0);
 });

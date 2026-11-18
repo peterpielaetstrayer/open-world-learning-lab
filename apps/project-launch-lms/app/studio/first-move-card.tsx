@@ -25,7 +25,7 @@ const fields: { key: keyof FirstMovePlan; title: string; hint: string }[] = [
   { key: "purpose", title: "My purpose and who or what it serves", hint: "Explain why the direction matters without naming or identifying another person." },
   { key: "firstAction", title: "The smallest safe first action", hint: "What can you investigate, sketch, compare or test without unsafe or costly requirements?" },
   { key: "learningQuestion", title: "What I want to learn", hint: "Name information the attempt could reveal, not simply a finished product you hope to make." },
-  { key: "checkpoint", title: "Time window or first checkpoint", hint: "What short, realistic period will you use to decide what you learned?" },
+  { key: "checkpoint", title: "Three ordered milestones and my first checkpoint", hint: "List three realistic, ordered steps toward the direction. Which short checkpoint helps you pause and assess what you learned?" },
   { key: "resources", title: "Materials, permission, trusted support and low-resource alternative", hint: "What do you already have? If you need help or permission, what can you do safely before getting it?" },
   { key: "constraint", title: "One possible constraint and a safe substitute", hint: "Consider access, time, physical safety, privacy, tools or support. A barrier is not a failure." },
   { key: "evidence", title: "Non-sensitive evidence I could collect", hint: "For example, a private observation note, an anonymized tally or a sketch. No identifiable photos or public posts required." },
@@ -69,14 +69,14 @@ export function FirstMoveCard({ onPrepareResponse, onPlanChange }: {
     </header>
 
     <details className="launch-model">
-      <summary>See Maya’s short worked plan</summary>
+      <summary>See a second worked plan: the rhythm guide</summary>
       <dl>
         <dt>Direction and purpose</dt><dd>Make a short rhythm guide that helps someone understand when a musical phrase begins.</dd>
         <dt>First test and learning question</dt><dd>Make a brief count-in cue and check whether the timing is understandable, before making a full track.</dd>
-        <dt>Conditions and checkpoint</dt><dd>Use an available phone, a short quiet period and permission for any shared audio. If recording is blocked, check the written timing silently and explain what remains unknown.</dd>
+        <dt>Milestones and checkpoint</dt><dd>1. Write the opening cue. 2. Make a brief count-in if recording is permitted. 3. Review notes about the cue and decide what to revise. Use an available phone and quiet period only if permitted; otherwise check the written timing silently.</dd>
         <dt>Evidence and next decision</dt><dd>Keep private notes from a few playbacks; distinguish what Maya observed from what other learners might experience.</dd>
       </dl>
-      <p>Write a plan for your own direction. Maya’s example is an illustration, not a required music project.</p>
+      <p>The school-garden model taught the planning framework; this different rhythm-guide example shows how that framework transfers. You do not need to choose a music project.</p>
     </details>
 
     <div className="launch-form">

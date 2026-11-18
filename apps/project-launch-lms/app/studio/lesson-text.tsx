@@ -4,6 +4,7 @@ import { EntryDiagnostic } from "./entry-diagnostic";
 import { DirectionComparison } from "./direction-comparison";
 import { FirstMoveCard } from "./first-move-card";
 import { FirstMoveEvidence } from "./first-move-evidence";
+import { FirstStepMiniLesson, MayaGardenModel, FirstStepChecks } from "./first-step-foundations";
 
 export function getResourceUrl(text: string): URL | null {
   if (!/^https:\/\/\S+$/.test(text)) return null;
@@ -27,6 +28,9 @@ export function LessonText({ text, lessonProgress, onPrepareResponse }: {
     if (block === "[[direction-comparison]]") return <DirectionComparison key={key} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[first-move-card]]") return <FirstMoveCard key={key} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[first-move-evidence]]") return <FirstMoveEvidence key={key} onPrepareResponse={onPrepareResponse} />;
+    if (block === "[[first-step-mini-lesson]]") return <FirstStepMiniLesson key={key} />;
+    if (block === "[[maya-garden-model]]") return <MayaGardenModel key={key} />;
+    if (block === "[[first-step-checks]]") return <FirstStepChecks key={key} />;
     if (lines.every(line => /^\d+\. /.test(line))) {
       return <ol key={key}>{lines.map((line, position) => <li key={position}>{line.replace(/^\d+\. /, "").replaceAll("**", "")}</li>)}</ol>;
     }
