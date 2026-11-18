@@ -6,14 +6,14 @@ A self-contained Next.js application under the OWLL monorepo, maintained on a fe
 
 ## Educational purpose
 
-**Project Launch Lab: From Curiosity to Action** is a two-module introductory learning experience within the *proposed* Open World Studio Pathway, built for high-school learners. This application will eventually support:
+**Project Launch Lab: Turning Curiosity Into a Meaningful Project in the AI Age** is a two-module introductory learning experience within the *proposed* Open World Studio Pathway, built for high-school learners. This application will eventually support:
 
 - **Discover & Define:** identify curiosity, evaluate relevance/feasibility/scope, formulate a focused project direction.
 - **Plan & Launch:** plan, critique, safely attempt an informative first action (or document a genuine obstacle), interpret evidence and decide on the next step.
 - Distinct learner and facilitator experiences, with persistent draft/submission/review feedback rather than simulated gradebook records.
 - The instructor's full 24-point LMS requirements checklist.
 
-Current source includes course-shell and non-persistent decision example **plus real Supabase-backed login, saved draft, immutable submission, criterion scoring and facilitator feedback UIs**. The corresponding data schema is deployed, but there are **no Auth users or course memberships**, so these are unverified integration pathways. Peer forums, quiz and survey are not built.
+Current source includes a course shell, ten-screen standalone instructional lesson prototype, Supabase-backed login, draft and final submission interfaces, facilitator feedback with optional rubric scores, forums, graded quiz, Level 1 course evaluation, and editing tools. **These capabilities have different verification levels and do not yet constitute a complete course.** The ten-screen lesson preview retains work in browser state and permits a text export; it does not yet persist its ten individual responses to the learner account. The separate authenticated studio can save and submit written responses for both graded and ungraded activities.
 
 ## Local development
 
@@ -27,12 +27,12 @@ Node.js 22+ is recommended. Configure the public Supabase URL/publishable key fr
 
 ## Production gates
 
-1. Instructor acceptance of a self-built LMS for the formal Capstone submission (**pending**).
+1. Instructor acceptance of a self-built LMS for the formal Capstone submission (**not verified**).
 2. Dedicated Supabase project created under OWLL at quoted $0/month (**done**).
-3. Baseline database/RLS and atomic rubric migration (**done**); real synthetic Auth-account role isolation, server-side quiz scoring and protected media uploads (**pending**).
+3. Baseline database/RLS, atomic rubric migration, and formative (ungraded) written-feedback migration (**done**); real multi-account Auth/RLS role tests and protected media uploads (**pending**).
 4. End-to-end vertical slice: learner authenticates → submits a project judgment → facilitator reviews and scores against a rubric → learner reads feedback; verified isolation across accounts.
-5. Distinct functioning forums, graded 10-question quiz with right/wrong explanations, module-specific assignments, Level 1 survey, original multimedia, welcome and orientation, accessible student-view testing, reviewer login.
-6. Decision by Nov 6–7 if feasible; fallback to Canvas Lite course administration if instructor or security/function tests fail. Full course Nov 30; reviewer/instructor access Nov 27 (check live Canvas).
+5. Verify existing discussion, graded quiz and Level 1 evaluation against actual course/rubric requirements. Finish original multimedia, complete module lessons, orientation, accessible student-view testing, and reviewer login.
+6. Reconfirm the actual remaining LDT 560 Canvas assignment deadlines and instructor expectations before treating Nov 27/30 planning dates as authoritative. Keep Canvas Lite fallback available if instructor acceptance or functional/security testing fails.
 
 Source-of-truth design crosswalk: Peter OS draft PR #6 / `LMS_Course_Requirements_Crosswalk_2026-11-02.md`.
 
@@ -58,3 +58,11 @@ See [Architecture](docs/ARCHITECTURE.md) and [Supabase data model](docs/DATA_MOD
 - The guarded synthetic-role harness `scripts/smoke-roles.mjs` creates a pair of synthetic learners plus a facilitator through official Auth-admin APIs, then validates cross-user record isolation, draft persistence, immutable final submission and facilitator feedback. **It has not run** because it requires an admin-only credential that is not exposed by the connected project tools. It must not be confused with completed role tests. The test restores publication flags and deletes synthetic accounts where possible.
 - **Reproducible and audited runtime:** a committed app-specific `package-lock.json` pins the dependency tree. A high/critical runtime audit identified critical Next.js 16.3.8 advisories, so the isolated LMS was patched to **Next.js 16.4.4** with matching ESLint configuration and regenerated lockfile. The GitHub pipeline now uses `npm ci`, runs `npm audit --omit=dev --audit-level=high`, checks both guarded admin scripts fail closed, and passes lint, TypeScript and Next.js build. This audit has **no high/critical findings at the latest check**, but is not a complete application security review. The original OWLL public-site CI and Gauntlet remain separate.
 - **Open engineering gaps:** provider invitation email template/redirect and invitation-only settings; 3-account E2E; reviewer workflow; two complete modules, original media, discussion forums, ten-item LMS-graded quiz and Level 1 survey. Vercel preview has been built with both preview-scoped `NEXT_PUBLIC_SUPABASE_*` variables configured, but their runtime correctness and browser-level Auth have not yet been verified. See the canonical Peter OS handoff for academic priorities.
+
+## Verified incremental update — November 18, 2026
+
+- The separate Vercel `project-launch-lms` **preview** serves the ten-screen standalone lesson at `/lesson-preview`; the route is disabled in production and access remains protected by Vercel authentication. This is a demonstration of the instructional prototype, not account-persistent work or proof of a complete LMS.
+- The actual Supabase database now contains **13 RLS-enabled `pll_*` tables**, **2 Auth users with 2 memberships**, and **4 published activities across 2 published modules**; at the time of review, it contained **0 drafts, 0 submissions and 0 reviews**. Earlier sections in this README document the historical November 3 state, not today's state. Account identities and real-world suitability are not assumed from the counts.
+- Ungraded `gauntlet-practice` and `first-move-studio` can now use the same authenticated draft/final submission experience as rubric-based assignments. Facilitators can publish text-only formative feedback by calling `pll_publish_formative_feedback`. The SQL migration `20261118185236_pll_formative_feedback.sql` was applied to the actual Supabase project, and its function execution grants were verified (authenticated only, not anonymous). Graded reviews retain their full-rubric requirement. New simulated-client React tests cover learner draft/final, ungraded facilitator feedback and scored facilitator review with `npm run test:formative`.
+- **Verification boundaries:** these React tests stub the Supabase client; they do not exercise a real authenticated multi-user browser session or RLS. The ten-screen lesson responses still need account persistence and a deliberate relationship to the course assignments. An observed course-design mismatch remains: the currently published Module 2 `launch-portfolio` has **three 10-point criteria**, whereas the academic storyboard calls for **four 15-point criteria**. Resolve that with the authoritative assignment before changing a live rubric.
+- Supabase's advisor reported no new database security issue after the migration, but the pre-existing Auth warning for leaked-password protection remains. The application is still a protected preview, not a learner-ready release; production, invitations and instructor-facing claims require separate acceptance.
