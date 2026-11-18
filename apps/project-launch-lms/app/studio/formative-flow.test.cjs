@@ -80,6 +80,7 @@ require("tsx/cjs");
 const React = require("react");
 const { render, screen, fireEvent, waitFor, cleanup } = require("@testing-library/react");
 const StudioPage = require("./page.tsx").default;
+const { ProjectDirectionLesson } = require("./project-direction-lesson.tsx");
 Module._load = originalLoad;
 
 function resetData() {
@@ -92,7 +93,7 @@ function resetData() {
       { id: "practice-1", course_id: "course-1", module_id: "module-1", slug: "practice", title: "Practice choosing", instructions: "Compare two options.", is_published: true },
       { id: "graded-1", course_id: "course-1", module_id: "module-1", slug: "brief", title: "Direction Brief", instructions: "Explain your choice.", is_published: true },
     ],
-    pll_drafts: [], pll_submissions: [], pll_feedback: [], pll_rubric_scores: [],
+    pll_drafts: [], pll_submissions: [], pll_feedback: [], pll_rubric_scores: [], pll_lesson_progress: [],
     pll_rubric_criteria: [{ id: "criterion-1", activity_id: "graded-1", course_id: "course-1", position: 1, title: "Reasoning", description: "Explain the decision", maximum_points: 10 }],
   };
   calls.length = 0;
@@ -166,4 +167,38 @@ test("facilitator graded review still requires every criterion and uses rubric p
   const rpc = calls.find(call => call.kind === "rpc");
   assert.equal(rpc.name, "pll_publish_review");
   assert.deepEqual(rpc.values.p_scores, [{ criterion_id: "criterion-1", points: 8, note: "" }]);
+});
+
+test("signed-in lesson explicitly saves and resumes private progress without a grade", async () => {
+  resetData();
+  const progress = { courseId: "course-1", activityId: "practice-1", learnerId: "learner-1" };
+  render(React.createElement(ProjectDirectionLesson, { progress }));
+  const save = await screen.findByRole("button", { name: "Save my lesson work" });
+  fireEvent.change(screen.getByLabelText("Something I care about or like exploring"), { target: { value: "Bird migration" } });
+  fireEvent.click(screen.getByRole("button", { name: /Consider/ }));
+  fireEvent.change(screen.getByLabelText("My possible project direction"), { target: { value: "Map one nearby bird route" } });
+  fireEvent.click(save);
+  await waitFor(() => assert.equal(db.pll_lesson_progress.length, 1));
+  assert.equal(db.pll_lesson_progress[0].state.version, 1);
+  assert.equal(db.pll_lesson_progress[0].state.curiosity, "Bird migration");
+  assert.equal(db.pll_submissions.length, 0);
+  cleanup();
+  render(React.createElement(ProjectDirectionLesson, { progress }));
+  await screen.findByDisplayValue("Map one nearby bird route");
+  assert.equal(screen.getByLabelText("My possible project direction").value, "Map one nearby bird route");
+  assert.match(screen.getByText(/Your lesson work is saved to your account/).textContent, /saved/);
+  assert.equal(screen.getByRole("button", { name: "Save my lesson work" }).disabled, true);
+});
+
+test("unknown saved lesson format is not silently overwritten", async () => {
+  resetData();
+  db.pll_lesson_progress.push({
+    id: "legacy-progress", course_id: "course-1", activity_id: "practice-1", learner_id: "learner-1",
+    lesson_key: "project-direction-lesson-v1", state: { version: 2, anOlderFormat: true },
+  });
+  render(React.createElement(ProjectDirectionLesson, { progress: { courseId: "course-1", activityId: "practice-1", learnerId: "learner-1" } }));
+  const alert = await screen.findByRole("alert");
+  assert.match(alert.textContent, /unsupported format/);
+  assert.equal(screen.queryByRole("button", { name: "Save my lesson work" }), null);
+  assert.equal(db.pll_lesson_progress[0].state.version, 2);
 });

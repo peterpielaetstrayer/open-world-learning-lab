@@ -322,7 +322,12 @@ export default function StudioPage() {
           {activeActivity && readableActivity && (
             <div className="studio-panel">
               <h3>{activeActivity.title}</h3>
-              <LessonText text={activeActivity.instructions} />
+              <LessonText key={activeActivity.id} text={activeActivity.instructions}
+                lessonProgress={!isInstructor ? {
+                  courseId: membership.course_id,
+                  activityId: activeActivity.id,
+                  learnerId: identity
+                } : undefined} />
               {assignedCriteria.length > 0 && <>
               <h4>How your work will be evaluated</h4>
               <ul>{assignedCriteria.map(c => <li key={c.id}><strong>{c.title} ({c.maximum_points} points)</strong> — {c.description}</li>)}</ul></>}

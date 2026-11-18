@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { browserSupabase } from "@/lib/supabase-browser";
 
 const stages = [
   { name: "Start with curiosity", short: "Notice" },
@@ -141,7 +142,60 @@ const knowledgeChecks = [
 type PracticeResponse = { relevance: string; feasibility: string; scope: string; combined: string; revealed: boolean };
 const newPracticeResponse = (): PracticeResponse => ({ relevance: "", feasibility: "", scope: "", combined: "", revealed: false });
 
-export function ProjectDirectionLesson() {
+export type LessonProgressIdentity = {
+  courseId: string;
+  activityId: string;
+  learnerId: string;
+};
+
+type LessonSnapshot = {
+  version: 1;
+  stage: number;
+  curiosity: string;
+  wonder: string;
+  direction: string;
+  considered: boolean[];
+  chosen: number | null;
+  reason: string;
+  feedbackVisible: boolean;
+  practice: PracticeResponse[];
+  checkChoices: (number | null)[];
+  checkRevealed: boolean[];
+  draftWhy: string;
+  draftFirst: string;
+  draftFocus: string;
+  draftLearn: string;
+};
+
+const asText = (value: unknown) => typeof value === "string" ? value.slice(0, 10000) : "";
+const asChoice = (value: unknown) => Number.isInteger(value) && Number(value) >= 0 && Number(value) <= 2
+  ? Number(value) : null;
+
+function normalizeSnapshot(raw: unknown): LessonSnapshot | null {
+  if (!raw || typeof raw !== "object" || !("version" in raw) || raw.version !== 1) return null;
+  const saved = raw as Partial<LessonSnapshot>;
+  return {
+    version: 1,
+    stage: Number.isInteger(saved.stage) && Number(saved.stage) >= 0 && Number(saved.stage) < stages.length ? Number(saved.stage) : 0,
+    curiosity: asText(saved.curiosity), wonder: asText(saved.wonder), direction: asText(saved.direction),
+    considered: Array.from({ length: 4 }, (_, i) => saved.considered?.[i] === true),
+    chosen: asChoice(saved.chosen), reason: asText(saved.reason),
+    feedbackVisible: saved.feedbackVisible === true && asChoice(saved.chosen) !== null,
+    practice: practiceScenes.map((_, i) => ({
+      relevance: asText(saved.practice?.[i]?.relevance),
+      feasibility: asText(saved.practice?.[i]?.feasibility),
+      scope: asText(saved.practice?.[i]?.scope),
+      combined: asText(saved.practice?.[i]?.combined),
+      revealed: saved.practice?.[i]?.revealed === true,
+    })),
+    checkChoices: Array.from({ length: 3 }, (_, i) => asChoice(saved.checkChoices?.[i])),
+    checkRevealed: Array.from({ length: 3 }, (_, i) => saved.checkRevealed?.[i] === true && asChoice(saved.checkChoices?.[i]) !== null),
+    draftWhy: asText(saved.draftWhy), draftFirst: asText(saved.draftFirst),
+    draftFocus: asText(saved.draftFocus), draftLearn: asText(saved.draftLearn),
+  };
+}
+
+export function ProjectDirectionLesson({ progress }: { progress?: LessonProgressIdentity }) {
   const id = useId();
   const [stage, setStage] = useState(0);
   const [curiosity, setCuriosity] = useState("");
@@ -158,8 +212,81 @@ export function ProjectDirectionLesson() {
   const [draftFirst, setDraftFirst] = useState("");
   const [draftFocus, setDraftFocus] = useState("");
   const [draftLearn, setDraftLearn] = useState("");
+  const [progressId, setProgressId] = useState<string | null>(null);
+  const [progressState, setProgressState] = useState<"loading" | "ready" | "saving" | "error">(progress ? "loading" : "ready");
+  const [progressError, setProgressError] = useState("");
+  const [savedFingerprint, setSavedFingerprint] = useState("");
   const heading = useRef<HTMLHeadingElement>(null);
   const shouldFocusHeading = useRef(false);
+
+  const snapshot: LessonSnapshot = {
+    version: 1, stage, curiosity, wonder, direction, considered, chosen, reason,
+    feedbackVisible, practice, checkChoices, checkRevealed,
+    draftWhy, draftFirst, draftFocus, draftLearn,
+  };
+  const fingerprint = JSON.stringify(snapshot);
+  const needsSave = fingerprint !== savedFingerprint;
+  const courseId = progress?.courseId;
+  const activityId = progress?.activityId;
+  const learnerId = progress?.learnerId;
+
+  useEffect(() => {
+    if (!courseId || !activityId || !learnerId) return;
+    let cancelled = false;
+    async function load() {
+      try {
+        const supabase = browserSupabase();
+        const { data, error } = await supabase.from("pll_lesson_progress")
+          .select("id,state").eq("course_id", courseId).eq("activity_id", activityId)
+          .eq("learner_id", learnerId).eq("lesson_key", "project-direction-lesson-v1").maybeSingle();
+        if (cancelled) return;
+        if (error) throw error;
+        if (data) {
+          const saved = normalizeSnapshot(data.state);
+          if (!saved) throw new Error("This saved lesson uses an unsupported format. Nothing has been overwritten.");
+          setStage(saved.stage);
+          setCuriosity(saved.curiosity); setWonder(saved.wonder); setDirection(saved.direction);
+          setConsidered(saved.considered); setChosen(saved.chosen); setReason(saved.reason);
+          setFeedbackVisible(saved.feedbackVisible); setPractice(saved.practice);
+          setCheckChoices(saved.checkChoices); setCheckRevealed(saved.checkRevealed);
+          setDraftWhy(saved.draftWhy); setDraftFirst(saved.draftFirst);
+          setDraftFocus(saved.draftFocus); setDraftLearn(saved.draftLearn);
+          setProgressId(data.id);
+          setSavedFingerprint(JSON.stringify(saved));
+        }
+        setProgressState("ready");
+      } catch (cause) {
+        if (cancelled) return;
+        setProgressError(cause instanceof Error ? cause.message : "Could not load your saved lesson work.");
+        setProgressState("error");
+      }
+    }
+    void load();
+    return () => { cancelled = true; };
+  }, [courseId, activityId, learnerId]);
+
+  async function saveLessonProgress() {
+    if (!courseId || !activityId || !learnerId || progressState !== "ready") return;
+    setProgressState("saving"); setProgressError("");
+    const saved = snapshot;
+    try {
+      const supabase = browserSupabase();
+      const query = progressId
+        ? supabase.from("pll_lesson_progress").update({ state: saved, updated_at: new Date().toISOString() }).eq("id", progressId)
+        : supabase.from("pll_lesson_progress").insert({
+          course_id: courseId, activity_id: activityId, learner_id: learnerId,
+          lesson_key: "project-direction-lesson-v1", state: saved,
+        });
+      const { data, error } = await query.select("id").single();
+      if (error) throw error;
+      setProgressId(data.id);
+      setSavedFingerprint(JSON.stringify(saved));
+    } catch (cause) {
+      setProgressError(cause instanceof Error ? cause.message : "Your lesson work was not saved.");
+    } finally {
+      setProgressState("ready");
+    }
+  }
 
   useEffect(() => {
     if (shouldFocusHeading.current) {
@@ -191,7 +318,8 @@ export function ProjectDirectionLesson() {
     `What I could learn: ${draftLearn || "(not filled in)"}`,
     "",
     "Next: compare directions, explore tradeoffs, request feedback, then prepare a Direction Brief.",
-    "This draft is stored only in this page until you download or copy it.",
+    progress ? "The interactive lesson saves only when you choose Save my lesson work; this is not a final submission."
+      : "This draft is stored only in this page until you download or copy it.",
   ].join("\n");
 
   function updatePractice(index: number, field: keyof Omit<PracticeResponse, "revealed">, value: string) {
@@ -214,13 +342,35 @@ export function ProjectDirectionLesson() {
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
+  if (progress && progressState === "loading") {
+    return <div className="direction-lesson" role="status"><p>Loading your private lesson work…</p></div>;
+  }
+
+  if (progress && progressState === "error") {
+    return <div className="direction-lesson" role="alert">
+      <h3>We could not open your saved lesson</h3>
+      <p>{progressError}</p>
+      <p>To protect your earlier work, this lesson is paused. Please reload when your connection is working, or contact your facilitator.</p>
+    </div>;
+  }
+
   return (
     <section className="direction-lesson" aria-labelledby={`${id}-lesson-heading`}>
       <div className="direction-intro">
         <p className="direction-kicker">Project Launch Lab · Module 1</p>
         <h3 id={`${id}-lesson-heading`}>Find a project direction</h3>
         <p>Turn something you are curious about into a direction you can actually explore.</p>
-        <p className="direction-save-note"><strong>Interactive draft:</strong> Your answers stay on this page for this session, but are not yet saved to your account. Download or copy your Project Direction Draft in Part 9 before leaving.</p>
+        <p className="direction-save-note"><strong>Interactive draft:</strong> {progress
+          ? "Your work is private to your learner account. Select Save my lesson work before leaving or changing devices; changes are not autosaved. This is not a graded submission. You can also export your draft in Part 9."
+          : "Your answers stay on this page for this session, but are not yet saved to your account. Download or copy your Project Direction Draft in Part 9 before leaving."}</p>
+        {progress && <div className="studio-actions">
+          <button type="button" className="direction-primary" disabled={progressState !== "ready" || !needsSave}
+            onClick={() => void saveLessonProgress()}>
+            {progressState === "saving" ? "Saving…" : "Save my lesson work"}
+          </button>
+          <p role="status" className="direction-small">{progressError || (progressState === "saving"
+            ? "Saving your private answers…" : needsSave ? "Unsaved changes" : "Your lesson work is saved to your account.")}</p>
+        </div>}
       </div>
 
       <nav aria-label="Lesson sections" className="direction-steps">
@@ -461,7 +611,9 @@ export function ProjectDirectionLesson() {
             <div className="direction-insight">If an answer is hard to write, that is useful information. Try narrowing the direction, choosing a safe alternative, or naming what support you would need.</div>
             <div className="direction-draft-export">
               <h4>Keep a copy of your draft</h4>
-              <p>The LMS does not yet save this exercise. Download your draft now, or select and copy the plain text below before closing this page. Keep it somewhere private.</p>
+              <p>{progress
+                ? "Save your private lesson work to your account using the button at the top of this lesson. You can also download or copy this plain-text draft for yourself. The separate final Direction Brief must still be submitted in the course."
+                : "The LMS does not yet save this exercise in the preview. Download your draft now, or select and copy the plain text below before closing this page. Keep it somewhere private."}</p>
               <button type="button" className="direction-primary" onClick={downloadDraft}>Download my draft (.txt)</button>
               <label htmlFor={`${id}-draft-copy`}>Plain-text copy of my current draft</label>
               <textarea id={`${id}-draft-copy`} rows={10} readOnly value={draftText} />
@@ -474,7 +626,9 @@ export function ProjectDirectionLesson() {
             <h3 id={`${id}-stage-heading`} tabIndex={-1} ref={heading}>A direction worth exploring</h3>
             <p className="direction-lead">You have practiced using relevance, feasibility and scope to turn broad ideas into manageable first directions. Your reasoning matters more than having a polished answer today.</p>
             <div className="direction-insight">
-              <p><strong>Before you leave:</strong> If you wrote a Project Direction Draft, return to the previous screen and download or copy it. This prototype does not save your text to your account.</p>
+              <p><strong>Before you leave:</strong> {progress
+                ? "Save your lesson work if you want to resume later, and keep a private export of your Project Direction Draft if useful. It has not been submitted for a grade."
+                : "If you wrote a Project Direction Draft, return to the previous screen and download or copy it. This prototype does not save your text to your account."}</p>
               <button type="button" className="direction-link-button" onClick={() => navigate(8)}>Review and keep my draft</button>
             </div>
             <h4>Where you go next</h4>
