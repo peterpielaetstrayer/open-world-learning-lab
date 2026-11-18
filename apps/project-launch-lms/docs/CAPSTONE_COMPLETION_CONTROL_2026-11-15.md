@@ -2,7 +2,9 @@
 
 **Baseline:** November 15, 2026. **Status:** working implementation control, not a claim of formal course completion.
 **Scope:** Two-module high-school introduction to the proposed longer OWLL Studio Pathway, *not* the entire 12-week pathway.
-**Design authority:** Dr. Lisa Evans-approved LDT 560 Learning Design Blueprint, LDT 555 Module 1 work, actual LDT 560 assignment prompts/rubrics, and the live implementation. Preserve the approved original Google Doc; record proposed refinements here pending Peter's review.
+**Design authority at this dated baseline:** Peter's LDT 560 Learning Design Blueprint faculty-review draft, LDT 555 Module 1 work, actual LDT 560 assignment prompts/rubrics, and the live implementation. Faculty approval of the proposed foundational MLO replacements and 60-point assignment rubric has **not** been independently verified. Preserve the original Google Doc; record proposed refinements separately pending Peter's and Dr. Evans's review.
+
+> **November 18 superseding alignment check:** The M1/M2 outcome bullets below reflect the **older applied storyboard version**, not the six proposed foundational MLOs in the later LA 4.1/Blueprint academic documents. See [outcome-to-graded-evidence crosswalk](OUTCOME_TO_GRADED_EVIDENCE_CROSSWALK_2026-11-18.md) for the authority hierarchy, literal direct-assessment gaps, CLO mapping and pending faculty decisions. This dated control register is retained as an implementation baseline, not as an approved academic MLO list or a current pass/fail receipt.
 
 ## Definition of done
 
@@ -23,7 +25,7 @@ A student can sign in as an invited learner, understand the purpose and outcomes
 | 8. Check understanding and transfer | Answers ten scenario questions with explanations, reflects on transferable decisions, rates confidence again and commits to next step | Knowledge check, exit confidence, transfer intention | Correct/incorrect feedback, self-report separated from graded achievement | Ten questions and survey implemented; actual attempts zero and exit/transfer linkage incomplete |
 | 9. Evaluate course | Gives Level 1 reaction feedback without affecting grade | Reaction survey | Instructor design revision | Evaluation interface exists; no attempts; privacy/copy QA needed |
 
-### Outcomes-to-evidence crosswalk
+### Historical applied outcome-to-evidence sketch (superseded as an academic MLO crosswalk November 18)
 
 - **M1.1 Identify** interests/questions → orientation/diagnostic plus comparison practice and Direction Brief.
 - **M1.2 Evaluate** candidate directions for relevance, feasibility and scope → Gauntlet explanations plus Direction Brief's judgment/tradeoff.

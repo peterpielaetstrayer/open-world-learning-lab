@@ -4,7 +4,7 @@
 
 ## Instructional outcome
 
-The Module 2 preview now makes the core *Plan & Launch* reasoning visible: a learner frames a feasible and safe first test, anticipates resources and constraints, considers authentic feedback, reports either an attempted action **or** an actual obstacle without fabricating success, and justifies a next step. This is a derivative implementation of the November 15 learner-experience storyboard; it does not change the instructor-approved learning design blueprint.
+The Module 2 preview now makes the core *Plan & Launch* reasoning visible: a learner frames a feasible and safe first test, anticipates resources and constraints, considers authentic feedback, reports either an attempted action **or** an actual obstacle without fabricating success, and justifies a next step. This is a derivative implementation of the November 15 learner-experience storyboard; it does not change Peter's faculty-review Learning Design Blueprint or imply that the proposed replacement MLOs have received instructor approval.
 
 ## Reviewable nine-step synthetic walkthrough
 
@@ -47,7 +47,7 @@ The source has **not** inserted these markers into any live Supabase activity. P
 - The original November 16 LDT 560 Learning Activity 4.1 explicitly uses Maya's **school garden** as the modeled example, followed by a **fresh** scenario for First Move Studio. The preview now follows that sequence and preserves the rhythm-guide widget for transfer, renaming its student **Ari** to eliminate the confusing shared character name.
 - The academic LA 4.1 document describes the graded Launch Portfolio using **four criteria × 15 points = 60**, with anchored levels **15/10/5/0**. A fresh read-only live database check confirms the published rubric is **three × 10 = 30**, currently with **zero submissions and zero score rows**. The actual facilitator scoring form accepts arbitrary 0.01-point values, another unresolved discrepancy. The private preview displays the complete academic draft for review, does not apply or simulate scores, and changes no existing rubric or learner record. See [Launch Portfolio reconciliation](LAUNCH_PORTFOLIO_RUBRIC_RECONCILIATION_2026-11-18.md).
 - The ten-item quiz and Level 1 course evaluation are separate implemented components, not re-created or declared validated by this preview.
-- Learner outcome wording, current Canvas submission receipts, instructor permission to use this custom LMS, media captions/transcripts and accessibility acceptance remain open gates.
+- Learner outcome wording, current Canvas submission receipts, instructor permission to use this custom LMS, media captions/transcripts and accessibility acceptance remain open gates. The later [MLO-to-graded-evidence crosswalk](OUTCOME_TO_GRADED_EVIDENCE_CROSSWALK_2026-11-18.md) identifies six foundational MLO direct-assessment gaps that source-only transfer performances cannot close by themselves.
 
 ## Verification checkpoint
 
@@ -59,4 +59,4 @@ The source has **not** inserted these markers into any live Supabase activity. P
 
 ## Release boundary and next actions
 
-Keep PR #15 draft/unmerged, public OWLL website untouched, and course records unchanged. Next: reconcile the academic MLO-to-rubric mapping and 60/30 rubric; decide whether and when to publish a **separate** First Move Card, feedback/revision follow-up and evidence journal, checking that each has appropriate facilitator visibility. Then run real synthetic A/B/facilitator Auth/RLS acceptance with a trusted server-only test environment and inspect every screen in a browser for mobile, keyboard, audio and reviewer access. Do not enroll real minors or claim the course complete.
+Keep PR #15 draft/unmerged, public OWLL website untouched, and course records unchanged. Next: obtain faculty feedback on direct MLO scoring evidence using the crosswalk; reconcile the academic 60/30-point rubric; decide whether and when to publish a **separate** First Move Card, feedback/revision follow-up and evidence journal, checking that each has appropriate facilitator visibility. Then run real synthetic A/B/facilitator Auth/RLS acceptance with a trusted server-only test environment and inspect every screen in a browser for mobile, keyboard, audio and reviewer access. Do not enroll real minors or claim the course complete.
