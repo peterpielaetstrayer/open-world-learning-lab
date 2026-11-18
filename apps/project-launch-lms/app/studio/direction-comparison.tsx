@@ -20,6 +20,7 @@ export function DirectionComparison({ onPrepareResponse }: { onPrepareResponse?:
   const [chosen, setChosen] = useState<0 | 1 | null>(null);
   const [reconsider, setReconsider] = useState("");
   const [question, setQuestion] = useState("");
+  const [practiceInsight, setPracticeInsight] = useState("");
   const [reviewed, setReviewed] = useState(false);
   const [preparedFingerprint, setPreparedFingerprint] = useState("");
 
@@ -28,6 +29,7 @@ export function DirectionComparison({ onPrepareResponse }: { onPrepareResponse?:
   const summary = [
     "PROJECT LAUNCH LAB · TWO-DIRECTION COMPARISON",
     "Ungraded formative practice · working judgment, not a final commitment",
+    practiceInsight.trim() ? "Optional Gauntlet/text-scenario insight (not a score): " + practiceInsight.trim() : "Optional practice insight: not provided; personal comparison is still valid.",
     ...ideas.flatMap((idea, index) => [
       "",
       `DIRECTION ${index === 0 ? "A" : "B"}: ${idea.direction.trim()}`,
@@ -64,6 +66,22 @@ export function DirectionComparison({ onPrepareResponse }: { onPrepareResponse?:
       <p><strong>Tradeoff:</strong> The small comparison will not change everyone’s eating habits. It can, however, reveal what a realistic first question looks like.</p>
       <p>Use your own interests where possible. The optional Project Launch Gauntlet may help you explore a choice, but you can complete this activity with text alone.</p>
     </details>
+
+    <div className="direction-comparison-decision">
+      <label htmlFor={id + "-practice-insight"}>
+        Optional: What did the Gauntlet or the text-only scenario teach you about a project constraint?
+      </label>
+      <p className="form-note">
+        You may leave this blank. An insight is useful; a Gauntlet score is not
+        required or recorded here.
+      </p>
+      <textarea id={id + "-practice-insight"} rows={3} maxLength={900}
+        value={practiceInsight} onChange={event => {
+          setPracticeInsight(event.target.value);
+          setReviewed(false);
+          setPreparedFingerprint("");
+        }} placeholder="One idea seemed promising until…" />
+    </div>
 
     <div className="direction-comparison-grid">
       {ideas.map((idea, index) => <fieldset key={index} className="direction-comparison-idea">

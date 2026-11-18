@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { EntryDiagnostic } from "../studio/entry-diagnostic";
 import { ProjectDirectionLesson } from "../studio/project-direction-lesson";
 import { DirectionComparison } from "../studio/direction-comparison";
+import { GauntletBridge } from "../studio/gauntlet-bridge";
 import Link from "next/link";
 
 const steps = ["Welcome", "Starting point", "Learn the lenses", "Compare ideas", "Direction Brief"] as const;
@@ -45,7 +46,7 @@ export function ModuleOneWalkthrough() {
       </div>
       <div hidden={step !== 1}><EntryDiagnostic /></div>
       <div hidden={step !== 2}><ProjectDirectionLesson /></div>
-      <div hidden={step !== 3}><DirectionComparison /></div>
+      <div hidden={step !== 3}><GauntletBridge /><DirectionComparison /></div>
       <div hidden={step !== 4}>
         <p className="direction-lead">The Project Direction Brief is a separate, graded assignment. Use the questions and comparison you developed—along with any facilitator feedback—to show the reasoning behind your choice.</p>
         <h3>What to include</h3>

@@ -352,8 +352,43 @@ test("Module 1 protected walkthrough preserves unsaved in-page ideas across less
   fireEvent.change(screen.getByLabelText(/Two interests, questions, or problems/), { target: { value: "Clouds and music" } });
   fireEvent.click(screen.getByRole("button", { name: /04 · Compare ideas/ }));
   assert.ok(screen.getByRole("heading", { name: "Compare ideas" }));
+  const gauntlet = screen.getByRole("link", { name: /Open Project Launch Gauntlet/ });
+  assert.equal(gauntlet.getAttribute("href"), "https://project-launch-gauntlet.vercel.app/");
+  assert.equal(gauntlet.getAttribute("target"), "_blank", "Game must preserve the draft in this course tab");
+  assert.match(gauntlet.getAttribute("rel"), /noopener/);
+  assert.ok(screen.getByText(/Gauntlet does not/));
+  fireEvent.click(screen.getByText(/Use the text-only alternative/));
+  assert.ok(screen.getByText(/Devon wants to share stories/));
   fireEvent.click(screen.getByRole("button", { name: /02 · Starting point/ }));
   assert.equal(screen.getByLabelText(/Two interests, questions, or problems/).value, "Clouds and music");
+});
+
+test("optional Gauntlet insight accompanies personal comparison without requiring a game score", async () => {
+  resetData();
+  db.pll_activities[0].instructions = "[[gauntlet-bridge]]\n\n[[direction-comparison]]";
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  assert.ok(screen.getByRole("link", { name: /Open Project Launch Gauntlet/ }));
+  const insight = screen.getByLabelText(/Optional: What did the Gauntlet/);
+  fireEvent.change(insight, { target: { value: "Permission matters more than a fast public launch." } });
+  for (const index of ["A", "B"]) {
+    const position = index === "A" ? 0 : 1;
+    for (const label of ["Possible project direction", "Relevance: why it matters", "Feasibility: what is available", "Scope: a small first test", "One tradeoff"]) {
+      fireEvent.change(screen.getAllByLabelText(label)[position], { target: { value: index + " " + label } });
+    }
+  }
+  fireEvent.click(screen.getByRole("radio", { name: /Direction A/ }));
+  fireEvent.change(screen.getByLabelText("What information or feedback could make you reconsider?"), { target: { value: "A constraint I overlooked" } });
+  fireEvent.change(screen.getByLabelText("What specific question would you ask your facilitator?"), { target: { value: "Is this safe and small enough?" } });
+  fireEvent.click(screen.getByRole("button", { name: "Review my comparison" }));
+  fireEvent.click(screen.getByRole("button", { name: "Use this comparison in my course response" }));
+  const response = screen.getByLabelText("Your practice reflection or question for feedback");
+  assert.match(response.value, /Permission matters more than a fast public launch/);
+  assert.match(response.value, /not a score/);
+  assert.equal(db.pll_drafts.length, 0, "Preparing text must not silently save");
+  assert.equal(db.pll_submissions.length, 0, "Preparing text must not silently share");
 });
 
 function addModuleTwoActivity(title, marker) {
