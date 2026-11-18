@@ -17,7 +17,7 @@ Vercel project ID: `prj_GYl06IyFCEXH0gbgiCgefliQBvUy`. Preview-only `NEXT_PUBLIC
 3. In Authentication's configuration/provider settings, turn **Allow new users to sign up** off, ensure anonymous sign-ins are disabled, and preserve email confirmation for actual invited users. The app has no public sign-up page, but that alone does not disable provider-level registration.
 4. Check rate limits, email delivery/OTP expiry and Vercel preview authorization before the first adult invite. Email scanners can prefetch and consume single-use link tokens; if encountered, implement a confirm-then-POST acceptance flow or OTP rather than repeatedly exposing invitation hashes.
 5. Keep `SUPABASE_SERVICE_ROLE_KEY` / newer Supabase server-side secret credentials only in a trusted administrator's local secret store or ephemeral controlled test runner. **Do not** add them to Vercel's browser public variables, the GitHub repository, unsecured CI, or this document.
-6. Only after the above, execute `smoke-roles.mjs` against this exact Supabase project with the required opt-in flags. Verify all three live Auth sessions, RLS denials, final-submission immutability, rubric feedback and post-test cleanup. The script requires access not currently exposed by the connected Supabase management tools, and **has not been run**.
+6. Only after the above, execute `smoke-roles.mjs` against this exact Supabase project with the required opt-in flags. The current version requires the Module 1 practice and Direction Brief to be *already published* and never changes publication flags. Verify all three live Auth sessions, RLS denials, private lesson save/reload, formative feedback, final-submission immutability, rubric feedback and post-test cleanup. The script requires access not currently exposed by the connected Supabase management tools, and **has not been run**.
 7. Subsequently, test the invitation email and password setup with one explicitly approved consenting adult account, then repeat learner A/B/facilitator tasks in separate browsers. Test invalid/expired links and sign-out. Do not use real minors or professor/peer accounts until faculty/platform approval.
 
 The canonical readme and PeterOS handoff distinguish **source built and deployed to a protected preview** from **actual user login verified**. Supabase references: [redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls), [email templates](https://supabase.com/docs/guides/auth/auth-email-templates), [general configuration](https://supabase.com/docs/guides/auth/general-configuration), and [inviting users](https://supabase.com/docs/guides/auth/users).
@@ -63,7 +63,7 @@ export PLL_ALLOW_SYNTHETIC_ROLE_TEST="yes"
 node scripts/smoke-roles.mjs
 ```
 
-Expected test: create synthetic learner A, learner B, and facilitator through **supported Supabase Auth admin API**; grant explicit memberships; temporarily publish the draft M1 activity; demonstrate own draft persist, cross-learner data invisibility and forged-submission denial; demonstrate immutable final, facilitator-only rubric publication, rejection of incomplete criteria and learner-visible published scores; restore draft publication flags and delete synthetic users in `finally`.
+Expected test: read the **existing published** M1 practice and Direction Brief, create synthetic learner A, learner B, and facilitator through **supported Supabase Auth admin API**, and grant explicit memberships. Demonstrate own draft persistence, cross-learner data invisibility and forged-submission denial; immutable final work, facilitator-only rubric publication, rejection of incomplete criteria and learner-visible scores; private interactive-lesson save/update/reload with learner-only access; and ungraded submission/formative facilitator feedback with no score or cross-account leak. The script changes **no published course content or publication flags** and deletes synthetic users in `finally`.
 
 **Safeguards:** project-ref and explicit enable flags required; script does not run under CI; no real student identifiers, invited reviewers or external email messages used; passwords and secret keys never printed. Cleanup failure should be investigated before another test; it is *not* a guarantee that all provisional records disappeared.
 
@@ -72,7 +72,7 @@ Expected test: create synthetic learner A, learner B, and facilitator through **
 ## Mandatory post-test checks
 
 - Verify `auth.users` synthetic records removed and matching `pll_memberships`, `pll_drafts`, `pll_submissions`, `pll_feedback`, `pll_rubric_scores` have returned to their baseline counts.
-- Confirm draft course/modules/assignments remain unpublished and role-grants unchanged.
+- Confirm course/module/activity publication flags and role grants remain exactly as found; the role-test script should not modify them.
 - Rerun Supabase security/performance advisors and close any **critical** finding.
 - Test actual mobile/keyboard flow, invalid invitation, expired token, signed-out session, learner A vs B, facilitator rubric publication, error handling, and reload persistence.
 - Confirm Dr. Evans accepts this approach, then create **reviewer-specific** roles and share credentials through a secure channel only, not repository documentation.

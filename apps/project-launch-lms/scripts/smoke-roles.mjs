@@ -4,7 +4,8 @@
  * Creates ONLY synthetic users and deletes them in finally.
  *
  * Run only against the dedicated staging/demo Supabase project and while no
- * external evaluator is using the course; temporarily publishes one activity.
+ * external evaluator is using the course. Requires M1 practice and brief to
+ * be published already; this script never changes course publication flags.
  */
 import { createClient } from "@supabase/supabase-js";
 import { randomBytes, randomUUID } from "node:crypto";
@@ -28,10 +29,6 @@ const admin = createClient(url, serviceKey, {
 const ids = [];
 const tag = randomUUID().slice(0, 12);
 const courseSlug = "project-launch-lab";
-let activity = null;
-let originalPublished = false;
-let originalModulePublished = false;
-let courseModule = null;
 let cleanupFailed = false;
 
 function expect(ok, text) {
@@ -63,20 +60,25 @@ try {
     await admin.from("pll_courses").select("id").eq("slug", courseSlug).single(),
     "Find dedicated course"
   );
-  courseModule = assertNoError(
+  const courseModule = assertNoError(
     await admin.from("pll_modules").select("id,is_published").eq("course_id", course.id)
       .eq("module_number", 1).single(),
     "Find module"
   );
-  const a = assertNoError(
+  const activity = assertNoError(
     await admin.from("pll_activities")
       .select("id,course_id,module_id,is_published")
       .eq("course_id", course.id).eq("slug", "project-direction-brief").single(),
     "Find draft assignment"
   );
-  activity = a;
-  originalPublished = a.is_published;
-  originalModulePublished = courseModule.is_published;
+  const practiceActivity = assertNoError(
+    await admin.from("pll_activities")
+      .select("id,course_id,module_id,is_published")
+      .eq("course_id", course.id).eq("slug", "gauntlet-practice").single(),
+    "Find ungraded practice"
+  );
+  expect(courseModule.is_published && activity.is_published && practiceActivity.is_published,
+    "Both M1 test activities and their module must be published before role testing");
 
   const alice = await makeClient("learner-a");
   const bob = await makeClient("learner-b");
@@ -87,11 +89,6 @@ try {
     { course_id: course.id, user_id: bob.user.id, member_role: "learner" },
     { course_id: course.id, user_id: facilitator.user.id, member_role: "facilitator" },
   ]), "Enroll synthetic accounts");
-
-  assertNoError(await admin.from("pll_modules").update({ is_published: true }).eq("id", courseModule.id),
-    "Temporarily publish module for synthetic test");
-  assertNoError(await admin.from("pll_activities").update({ is_published: true }).eq("id", activity.id),
-    "Temporarily publish assignment for synthetic test");
 
   const draft = assertNoError(await alice.login.from("pll_drafts").insert({
     course_id: course.id,
@@ -186,19 +183,81 @@ try {
     .select("id").eq("submission_id", submission.id), "Learner B feedback query");
   expect(otherFeedback.length === 0, "Learner B cannot read another learner's feedback");
 
+  // Private working lesson progress is not a final course submission. It must
+  // survive a learner re-read but remain invisible to peers and facilitators.
+  const lessonProgress = assertNoError(await alice.login.from("pll_lesson_progress").insert({
+    course_id: course.id,
+    activity_id: practiceActivity.id,
+    learner_id: alice.user.id,
+    lesson_key: "project-direction-lesson-v1",
+    state: { version: 1, stage: 0, curiosity: "A tiny local art project" },
+  }).select("id,state").single(), "Learner A private lesson save");
+  expect(lessonProgress.state.curiosity === "A tiny local art project",
+    "Private lesson work saved without submitting or grading");
+  const peerProgress = assertNoError(await bob.login.from("pll_lesson_progress")
+    .select("id").eq("id", lessonProgress.id), "Learner B private lesson query");
+  expect(peerProgress.length === 0, "Learner B cannot read another learner's lesson state");
+  const staffProgress = assertNoError(await facilitator.login.from("pll_lesson_progress")
+    .select("id").eq("id", lessonProgress.id), "Facilitator private lesson query");
+  expect(staffProgress.length === 0, "Facilitator cannot read learner's private working lesson");
+  const forgedProgress = await bob.login.from("pll_lesson_progress").insert({
+    course_id: course.id, activity_id: practiceActivity.id,
+    learner_id: alice.user.id, lesson_key: "forged-lesson-v1", state: { version: 1 },
+  });
+  expect(Boolean(forgedProgress.error), "Learner B cannot create lesson state owned by learner A");
+  assertNoError(await alice.login.from("pll_lesson_progress")
+    .update({ state: { version: 1, stage: 2, curiosity: "Revised local art project" } })
+    .eq("id", lessonProgress.id), "Learner A updates private lesson progress");
+  const resumed = assertNoError(await alice.login.from("pll_lesson_progress")
+    .select("state").eq("id", lessonProgress.id).single(), "Learner A reloads private lesson");
+  expect(resumed.state.stage === 2 && resumed.state.curiosity === "Revised local art project",
+    "Learner A can resume an updated private lesson");
+
+  // The same learner/facilitator contract applies to ungraded activities,
+  // without creating rubric scores or an artificial zero-point grade.
+  const practiceResponse = assertNoError(await alice.login.from("pll_submissions").insert({
+    course_id: course.id,
+    activity_id: practiceActivity.id,
+    learner_id: alice.user.id,
+    response_text: "A short guide is a safer first test than a schoolwide campaign.",
+  }).select("id").single(), "Learner A submits ungraded practice");
+  expect(Boolean(practiceResponse?.id), "Ungraded final response persisted");
+  const forgedPractice = await bob.login.from("pll_submissions").insert({
+    course_id: course.id, activity_id: practiceActivity.id,
+    learner_id: alice.user.id, response_text: "Forged ungraded work",
+  });
+  expect(Boolean(forgedPractice.error), "Learner B cannot forge an ungraded submission");
+  const otherPractice = assertNoError(await bob.login.from("pll_submissions")
+    .select("id").eq("id", practiceResponse.id), "Learner B ungraded submission query");
+  expect(otherPractice.length === 0, "Learner B cannot read another learner's practice");
+  const learnerAttempt = await bob.login.rpc("pll_publish_formative_feedback", {
+    p_submission_id: practiceResponse.id, p_summary: "Forged feedback",
+  });
+  expect(Boolean(learnerAttempt.error), "Learner B cannot publish formative feedback");
+  const wrongReviewType = await facilitator.login.rpc("pll_publish_formative_feedback", {
+    p_submission_id: submission.id, p_summary: "Attempt to bypass graded rubric",
+  });
+  expect(Boolean(wrongReviewType.error), "Ungraded review RPC rejects graded assignment");
+  assertNoError(await facilitator.login.rpc("pll_publish_formative_feedback", {
+    p_submission_id: practiceResponse.id,
+    p_summary: "You used available resources and a realistic first test. What will you observe?",
+  }), "Facilitator publishes ungraded feedback");
+  const practiceFeedback = assertNoError(await alice.login.from("pll_feedback")
+    .select("summary,percentage_score,published_at")
+    .eq("submission_id", practiceResponse.id).single(), "Learner A ungraded feedback read");
+  expect(Boolean(practiceFeedback.published_at) && practiceFeedback.percentage_score === null,
+    "Ungraded feedback is published with no artificial score");
+  const formativeScores = assertNoError(await alice.login.from("pll_rubric_scores")
+    .select("id").eq("submission_id", practiceResponse.id), "Ungraded rubric score check");
+  expect(formativeScores.length === 0, "Ungraded work has no rubric score records");
+  const otherPracticeFeedback = assertNoError(await bob.login.from("pll_feedback")
+    .select("id").eq("submission_id", practiceResponse.id), "Learner B ungraded feedback query");
+  expect(otherPracticeFeedback.length === 0, "Learner B cannot read another learner's formative feedback");
+
   console.log("ROLE SMOKE TEST COMPLETE — all assertions passed (synthetic accounts only).");
 } finally {
-  // Restore the unpublished course and remove synthetic accounts even on failure.
-  if (activity) {
-    const r = await admin.from("pll_activities")
-      .update({is_published: originalPublished}).eq("id",activity.id);
-    if (r.error) { cleanupFailed = true; console.error("CLEANUP WARNING: activity publication state requires review."); }
-  }
-  if (courseModule) {
-    const r = await admin.from("pll_modules")
-      .update({is_published: originalModulePublished}).eq("id",courseModule.id);
-    if (r.error) { cleanupFailed = true; console.error("CLEANUP WARNING: module publication state requires review."); }
-  }
+  // Delete only the synthetic accounts created by this run. Their enrolled
+  // records cascade from auth.users; leave all course publication as found.
   for (const userId of ids) {
     const r = await admin.auth.admin.deleteUser(userId);
     if (r.error) { cleanupFailed = true; console.error("CLEANUP WARNING: synthetic Auth user requires review."); }
