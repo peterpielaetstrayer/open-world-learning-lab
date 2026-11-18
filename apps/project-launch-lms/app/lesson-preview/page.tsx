@@ -11,7 +11,7 @@ export default function LessonPreviewPage() {
     <main id="main-content" className="page-wrap direction-preview-page">
       <p className="eyebrow">Development preview · synthetic learner</p>
       <h1>Project Launch Lab</h1>
-      <p className="direction-preview-lead">Module 1, Lesson 1 · interaction slice S01–S04. Nothing entered here is submitted or stored.</p>
+      <p className="direction-preview-lead">Module 1, Lesson 1 · ten-screen interactive working prototype. Nothing entered here is submitted or stored on the server.</p>
       <ProjectDirectionLesson />
     </main>
   );

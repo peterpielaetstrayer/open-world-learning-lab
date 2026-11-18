@@ -4,6 +4,8 @@
 
 **Date:** 2026-11-18
 
+**Historical checkpoint:** this record captures the first S01–S04 delivery before the S05–S10 continuation. For current whole-lesson code status and evidence, read `MODULE1_LESSON1_TEN_SCREEN_IMPLEMENTATION_2026-11-18.md` alongside this file. Do not interpret this four-screen snapshot as the present upper bound of the source.
+
 ## Source and authority
 
 - PeterOS `20_Projects/LDT560_M1_Lesson_01_Learner_Copy_v0.2.md` is the text manuscript being transformed.
