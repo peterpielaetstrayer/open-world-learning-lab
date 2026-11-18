@@ -110,6 +110,7 @@ export function LessonEditor({ supabase, courseId, activities, modules, refresh 
           <label htmlFor="lesson-instructions">Lesson instructions</label>
           <textarea id="lesson-instructions" required rows={8} maxLength={20000} value={instructions}
             onChange={event => setInstructions(event.target.value)} />
+          <p className="form-note">To include the interactive Project Direction prototype, put <code>[[project-direction-lesson]]</code> on its own line, surrounded by blank lines. Learner responses inside this prototype are not saved yet.</p>
           <label htmlFor="lesson-visibility">Visibility</label>
           <select id="lesson-visibility" value={published ? "published" : "draft"}
             onChange={event => setPublished(event.target.value === "published")}>

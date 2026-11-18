@@ -78,3 +78,66 @@
 .playback-example figcaption{font-weight:700;margin-bottom:8px}
 .playback-example audio{width:min(100%,420px)}
 .playback-example p{margin-bottom:0}
+
+/* Module 1, Lesson 1 · four-screen interactive direction prototype */
+.direction-preview-page{padding-top:65px;padding-bottom:95px}
+.direction-preview-page>h1{font-size:clamp(2.3rem,5vw,4rem);margin-bottom:12px}
+.direction-preview-lead{max-width:740px;color:#415148;margin-bottom:38px}
+.direction-lesson{max-width:920px;margin:34px 0 46px;border:1px solid #aab7a9;background:#fdfbf6;box-shadow:0 14px 36px #17201d0d}
+.direction-intro{padding:clamp(22px,4vw,44px) clamp(22px,5vw,54px) 28px;background:linear-gradient(135deg,#e4ece6 0%,#f5f1e7 100%);border-bottom:1px solid #bdc9bd}
+.direction-kicker,.direction-progress,.direction-lens-index{font-size:.73rem;font-weight:750;letter-spacing:.11em;text-transform:uppercase;color:#335d55}
+.direction-intro h3{font:500 clamp(1.85rem,3.4vw,2.9rem)/1.16 Georgia,serif;letter-spacing:-.025em;margin:14px 0}
+.direction-intro>p:not(.direction-kicker){max-width:700px}
+.direction-save-note{font-size:.82rem;line-height:1.5;background:#fdfbf6;border-left:3px solid #54716e;padding:12px 16px;margin:22px 0 0}
+.direction-steps{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #bbc7bb;background:#f0f2ea}
+.direction-steps button{font-family:inherit;font-size:.85rem;font-weight:600;line-height:1.3;text-align:left;background:none;border:0;border-bottom:4px solid transparent;color:#334f47;padding:18px 14px;cursor:pointer;display:flex;gap:10px;align-items:center}
+.direction-steps button[aria-current=step]{background:#dce9df;border-bottom-color:#235762;color:#132f2d}
+.direction-steps button:hover:not([aria-current=step]){background:#e6eee5}
+.direction-step-number{font-size:.77rem;font-weight:750;color:#557268}
+.direction-panel{padding:clamp(22px,5vw,54px)}
+.direction-progress{margin:0 0 14px}
+.direction-panel h3{font:500 clamp(1.65rem,3vw,2.5rem)/1.2 Georgia,serif;letter-spacing:-.025em;max-width:700px;margin:0 0 22px}
+.direction-panel h4{font:500 1.38rem/1.2 Georgia,serif;margin:0 0 16px}
+.direction-panel p{max-width:730px}
+.direction-lead{font-size:1.08rem;color:#35493f;line-height:1.7}
+.direction-quote{background:#e9f0e9;border-left:4px solid #52714e;padding:22px 24px;font:italic 1.22rem/1.5 Georgia,serif;margin:25px 0 30px}
+.direction-panel label:not(.direction-check):not(.direction-option){display:block;font-weight:700;margin:21px 0 8px}
+.direction-panel textarea{display:block;width:100%;max-width:720px;min-height:70px;border:1px solid #71877a;background:#fff;color:var(--ink);padding:13px 15px;font:inherit;line-height:1.5;border-radius:3px;resize:vertical}
+.direction-panel textarea::placeholder{color:#50675e}
+.direction-help{padding:16px 20px;border:1px solid #bcc9bf;background:#f6f7f1;margin-top:30px}
+.direction-help summary{font-weight:700;cursor:pointer;color:#1f5360}
+.direction-help ul{margin:12px 0 8px;padding-left:24px}
+.direction-help li{margin-bottom:8px}
+.direction-help p{margin-bottom:0}
+.direction-lens-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:28px 0}
+.direction-lens{border:1px solid #bdc9bc;padding:22px 19px;background:#f8f8f2;min-width:0}
+.direction-lens:nth-child(2){background:#f0f4ee}
+.direction-lens h4{font:500 1.55rem Georgia,serif;margin:8px 0 18px}
+.direction-lens p{line-height:1.55}
+.direction-lens-index{margin:0;color:#526b50}
+.direction-example{border-top:1px solid #c2cec2;padding:13px 0 0;margin-top:18px}
+.direction-example>span{font-size:.74rem;color:#506759;letter-spacing:.07em;font-weight:750;text-transform:uppercase}
+.direction-example p{margin:8px 0 0;font-style:italic}
+.direction-nuance{font-size:.85rem;color:#41564b;margin:18px 0 0}
+.direction-footnote,.direction-small{color:#4d6255;font-size:.9rem}
+.direction-checks,.direction-choice-fieldset{border:0;padding:0;margin:28px 0 17px;min-width:0}
+.direction-checks legend,.direction-choice-fieldset legend{font-weight:750;margin-bottom:13px}
+.direction-check{display:flex;align-items:flex-start;gap:14px;padding:16px 15px;background:#f5f7f2;border:1px solid #bcc9bd;margin-bottom:9px;cursor:pointer}
+.direction-check input,.direction-option input{margin:5px 0 0;width:18px;height:18px;accent-color:#285f67;flex-shrink:0}
+.direction-check strong,.direction-check span span{display:block}
+.direction-check span span{font-weight:400;line-height:1.5;margin-top:3px}
+.direction-insight{background:#edf3ed;border-left:4px solid #5e805a;padding:18px 21px;margin:24px 0}
+.direction-options{display:grid;gap:10px}
+.direction-option{display:flex;align-items:start;gap:15px;border:1px solid #aabcae;background:white;padding:17px;cursor:pointer;line-height:1.5;font-weight:500}
+.direction-option-selected,.direction-option:has(input:checked){background:#eaf3ed;border-color:#285f67;box-shadow:inset 0 0 0 1px #285f67}
+.direction-option-letter{display:grid;place-items:center;width:25px;height:25px;flex-shrink:0;background:#dce8e0;font-size:.81rem;font-weight:750;border-radius:50%}
+.direction-primary{background:#20515a;border:1px solid #20515a;color:#fff;padding:12px 21px;font-family:inherit;font-weight:700;font-size:.96rem;line-height:1.4;cursor:pointer}
+.direction-primary:disabled,.direction-back:disabled{opacity:.5;cursor:not-allowed}
+.direction-primary:not(:disabled):hover{background:#153e45}
+.direction-back{background:transparent;border:1px solid #58766a;color:#204b47;padding:12px 18px;font-family:inherit;font-weight:700;font-size:.96rem;line-height:1.4;cursor:pointer}
+.direction-controls{border-top:1px solid #c4cec2;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-top:40px;padding-top:25px}
+.direction-feedback{background:#eaf2e9;border-left:4px solid #557853;padding:20px 24px;margin:27px 0}
+.direction-feedback h4{font:500 1.35rem Georgia,serif}
+.direction-link-button{font-family:inherit;font-weight:700;font-size:.92rem;line-height:1.4;border:0;background:transparent;color:#204f59;text-decoration:underline;padding:6px 0;cursor:pointer}
+@media(max-width:760px){.direction-lens-grid{grid-template-columns:1fr}.direction-steps button{padding:15px 10px;font-size:.8rem;flex-direction:column;align-items:start;gap:5px}.direction-lens{padding:19px}.direction-controls>button{flex:1 1 165px}.direction-intro{padding-bottom:22px}}
+@media(max-width:440px){.direction-steps button{font-size:.72rem;overflow-wrap:anywhere}.direction-step-number{font-size:.7rem}.direction-option{gap:10px;padding:12px}.direction-panel{padding:21px}}
