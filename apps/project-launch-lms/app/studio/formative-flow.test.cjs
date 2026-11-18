@@ -85,6 +85,7 @@ const { SyntheticStudio } = require("../studio-preview/synthetic-studio.tsx");
 const { ModuleOneWalkthrough } = require("../module-one-preview/walkthrough.tsx");
 const { ModuleTwoWalkthrough } = require("../module-two-preview/walkthrough.tsx");
 const { FirstMoveEvidence } = require("./first-move-evidence.tsx");
+const { FirstMoveRevision } = require("./first-move-revision.tsx");
 const { FirstMoveStudio } = require("./first-move-studio.tsx");
 const { FirstStepMiniLesson, MayaGardenModel, FirstStepChecks } = require("./first-step-foundations.tsx");
 Module._load = originalLoad;
@@ -507,6 +508,93 @@ test("actual-attempt path distinguishes observation, limits and feedback-driven 
   assert.match(summary, /Actual feedback: The first picture needs clearer arrows/);
   assert.match(summary, /My response to feedback: Revised the plan/);
   assert.doesNotMatch(summary, /Why I did not push past the barrier/);
+});
+
+test("pending First Move feedback stays an incomplete working copy and cannot be promoted to final revision", () => {
+  render(React.createElement(FirstMoveRevision));
+  fireEvent.change(screen.getByLabelText("Original First Move Card action or relevant excerpt"),
+    { target: { value: "Draft a paper garden map" } });
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet; I am still waiting/ }));
+  fireEvent.change(screen.getByLabelText("What question are you waiting to have answered?"),
+    { target: { value: "Is a sketch enough to begin?" } });
+  fireEvent.change(screen.getByLabelText("What remains uncertain or untested?"),
+    { target: { value: "Whether the space is available" } });
+  fireEvent.change(screen.getByLabelText("My next safe step or feedback checkpoint"),
+    { target: { value: "Ask the facilitator next week" } });
+  assert.equal(screen.getByRole("button", { name: "Review my feedback decision" }).disabled, true);
+  const workingCopy = screen.getByLabelText("Working note (copy if you need to leave)").value;
+  assert.match(workingCopy, /INCOMPLETE WORKING COPY/);
+  assert.match(workingCopy, /Awaiting feedback/);
+  assert.match(workingCopy, /No claim of revision or retention after feedback/);
+  assert.equal(screen.queryByRole("button", { name: /Use my revision record/ }), null);
+});
+
+test("a retained plan records actual feedback and a justified decision without requiring fictional changes", () => {
+  render(React.createElement(FirstMoveRevision));
+  fireEvent.change(screen.getByLabelText("Original First Move Card action or relevant excerpt"),
+    { target: { value: "Ask for garden approval before making changes" } });
+  fireEvent.click(screen.getByRole("radio", { name: /Yes, feedback has arrived/ }));
+  fireEvent.change(screen.getByLabelText(/What feedback did you actually receive/),
+    { target: { value: "Check whether we also need a budget" } });
+  fireEvent.click(screen.getByRole("radio", { name: /I kept the plan and can explain why/ }));
+  fireEvent.change(screen.getByLabelText("Why is keeping the original plan still justified?"),
+    { target: { value: "Permission comes before costs; I will ask about budget in that meeting" } });
+  fireEvent.change(screen.getByLabelText("What remains uncertain or untested?"),
+    { target: { value: "Garden budget and permission" } });
+  fireEvent.change(screen.getByLabelText("My next safe step or feedback checkpoint"),
+    { target: { value: "Ask the school office next Tuesday" } });
+  assert.equal(screen.queryByLabelText("My revised safe first action or changed planning step"), null);
+  fireEvent.click(screen.getByRole("button", { name: "Review my feedback decision" }));
+  const record = screen.getByLabelText("Your separate feedback and revision record").value;
+  assert.match(record, /Retained the plan with reasons/);
+  assert.match(record, /Permission comes before costs/);
+  assert.doesNotMatch(record, /Revised safe first action or relevant planning change:/);
+});
+
+test("separate authenticated feedback follow-up cannot overwrite an earlier final First Move Card", async () => {
+  resetData();
+  db.pll_modules.push({ id: "module-2", course_id: "course-1", module_number: 2,
+    title: "Plan & Launch", is_published: true });
+  db.pll_activities.push(
+    { id: "first-card", course_id: "course-1", module_id: "module-2", slug: "first-move-card",
+      title: "First Move Card", instructions: "[[first-move-card]]", is_published: true },
+    { id: "revision-follow-up", course_id: "course-1", module_id: "module-2", slug: "revision-follow-up",
+      title: "Feedback revision follow-up", instructions: "[[first-move-revision]]", is_published: true }
+  );
+  const originalText = "FIRST MOVE CARD: I will sketch one garden area before asking permission.";
+  db.pll_submissions.push({ id: "original-final", activity_id: "first-card", course_id: "course-1",
+    learner_id: "learner-1", response_text: originalText, submitted_at: "2026-11-18T12:00:00Z" });
+  window.confirm = () => true;
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Feedback revision follow-up/ }));
+  fireEvent.change(screen.getByLabelText("Original First Move Card action or relevant excerpt"),
+    { target: { value: "Sketch one garden area before asking permission" } });
+  fireEvent.click(screen.getByRole("radio", { name: /Yes, feedback has arrived/ }));
+  fireEvent.change(screen.getByLabelText(/What feedback did you actually receive/),
+    { target: { value: "Ask a teacher about site boundaries first" } });
+  fireEvent.click(screen.getByRole("radio", { name: "I revised my plan" }));
+  fireEvent.change(screen.getByLabelText("What did the feedback change in your reasoning?"),
+    { target: { value: "A sketch could imply permission that has not been granted" } });
+  fireEvent.change(screen.getByLabelText("My revised safe first action or changed planning step"),
+    { target: { value: "Ask for the school's boundaries before drawing" } });
+  fireEvent.change(screen.getByLabelText("What remains uncertain or untested?"),
+    { target: { value: "Whether any location is approved" } });
+  fireEvent.change(screen.getByLabelText("My next safe step or feedback checkpoint"),
+    { target: { value: "Request a teacher conversation" } });
+  fireEvent.click(screen.getByRole("button", { name: "Review my feedback decision" }));
+  fireEvent.click(screen.getByRole("button", { name: "Use my revision record in this course activity" }));
+  const draftText = screen.getByLabelText("Your practice reflection or question for feedback").value;
+  assert.match(draftText, /Revised the plan/);
+  assert.match(draftText, /school's boundaries/);
+  assert.equal(db.pll_submissions.length, 1, "A preparation action must not submit anything");
+  assert.equal(db.pll_submissions[0].response_text, originalText);
+  fireEvent.click(screen.getByRole("button", { name: "Share with facilitator (final)" }));
+  await waitFor(() => assert.equal(db.pll_submissions.length, 2));
+  assert.equal(db.pll_submissions.find(row => row.activity_id === "first-card").response_text, originalText);
+  assert.equal(db.pll_submissions.find(row => row.activity_id === "revision-follow-up").response_text, draftText);
+  assert.equal(calls.filter(call => call.table === "pll_submissions" && call.kind === "insert").length, 1);
 });
 
 test("Ari transfer scenario remembers earlier choice and its explanatory feedback", () => {

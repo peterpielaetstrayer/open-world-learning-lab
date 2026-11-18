@@ -16,7 +16,7 @@ Protected `/module-two-preview` (local development or authenticated Vercel Previ
 4. **Practice:** three ungraded checks on the garden constraint, safe bounded action, and prediction-versus-evidence distinction. All **nine answer choices** give targeted explanation and allow retry.
 5. **Apply in First Move Studio:** the existing three-decision **rhythm-guide** scenario, with explanatory feedback and audio text alternative. Its student is now named **Ari**, distinct from Maya in the garden worked model, so this is visibly a fresh transfer application.
 6. **First Move Card:** ten prompts cover direction, purpose, safe action, learning question, **three ordered milestones and checkpoint**, resource/permission alternative, constraint/substitute, non-sensitive evidence, useful negative outcome, and facilitator question. Output is ungraded.
-7. **Feedback:** four-part critique prompts; peer participation and agreement with a suggestion are optional. Post-final revision still needs an explicit activity/versioning design.
+7. **Feedback & revision:** four-part critique prompts followed by a separate First Move feedback/revision record. Learners identify real feedback (or explicitly mark it pending), then justify either changing the plan or retaining it, including remaining uncertainty and a safe checkpoint. A final revision record is unavailable while actual feedback is pending; the learner may copy a clearly incomplete working note. The original First Move Card is not edited.
 8. **Action or obstacle:** distinguish a true bounded attempt from a genuine barrier, evidence from assumption, and received from pending feedback. Both routes are legitimate.
 9. **Portfolio & transfer:** proposed four-criterion 60-point assessment, explicit warning about the **unresolved 60-versus-30-point database rubric**, separate existing quiz/evaluation, and exit confidence as self-report, not competence evidence.
 
@@ -27,19 +27,20 @@ The walkthrough passes the evolving First Move Card's project direction into the
 `LessonText` now recognizes:
 
 - `[[first-move-card]]` → `FirstMoveCard`
+- `[[first-move-revision]]` → `FirstMoveRevision` (separate ungraded follow-up; never overwrite an earlier shared card)
 - `[[first-move-evidence]]` → `FirstMoveEvidence`
 - Existing `[[first-move-studio]]` continues to render the three-decision rhythm-guide scenario, now featuring Ari.
 - `[[first-step-mini-lesson]]` → `FirstStepMiniLesson`
 - `[[maya-garden-model]]` → `MayaGardenModel`
 - `[[first-step-checks]]` → `FirstStepChecks`
 
-These three new markers are **source-only, ungraded prerequisite instruction**. They do not satisfy LA 4.1 on their own. That activity requires a separate fresh Studio scenario, learner-produced card, facilitator feedback and a reasoned revision or retention. No published lesson or progress-tracking record was changed.
+The three first-step foundation markers are **source-only, ungraded prerequisite instruction**. They do not satisfy LA 4.1 on their own. That activity requires a separate fresh Studio scenario, learner-produced card, facilitator feedback and a reasoned revision or retention. The revision marker is also source-only. No published lesson or progress-tracking record was changed.
 
-The new interactive forms can **prepare** a structured response in the authenticated course activity's ordinary ungraded response box. The backend only changes when the learner separately chooses **Save draft** or **Share with facilitator (final)**. Existing response text requires explicit overwrite confirmation. Form input limits keep the generated response within the existing 20,000-character transfer boundary, and the studio refuses larger transfers without truncation.
+The new interactive forms can **prepare** a structured response in the authenticated course activity's ordinary ungraded response box. The backend only changes when the learner separately chooses **Save draft** or **Share with facilitator (final)**. Existing response text requires explicit overwrite confirmation. Form input limits keep the generated response within the existing 20,000-character transfer boundary, and the studio refuses larger transfers without truncation. Unlike other long-form components, the revision component intentionally cannot prepare a final course response when feedback is pending; its incomplete note is selectable for manual copy only.
 
 Learners can prepare an **incomplete working copy** from either long form, then deliberately save a course draft. It is labeled incomplete and does not claim a finished task. Important limitation: the graphical fields do not currently rehydrate from a saved text draft; the learner may continue editing the saved response itself, or use a private copy when resuming the form. Do not claim a complete cross-device interactive form-resume workflow for these two new components.
 
-The source has **not** inserted these markers into any live Supabase activity. Published Module 2 `first-move-studio` exists, but the First Move Card and subsequent action/obstacle journal have not been issued as distinct course activities. In particular, reusing the same activity for a final First Move Card and a later revised evidence response would conflict with the current **immutable final submission** contract. Choose a separate follow-up activity/versioning rule with academic review before publication.
+The source has **not** inserted these markers into any live Supabase activity. Published Module 2 `first-move-studio` exists, but the First Move Card, feedback/revision follow-up and subsequent action/obstacle journal have not been issued as distinct course activities. In particular, reusing the same activity for a final First Move Card and its later feedback revision would conflict with the current **immutable final submission** contract. The source supports a distinct ungraded follow-up activity with its own submission ID, but activity placement, feedback timing and academic acceptance remain to be approved before publication.
 
 ## Scenario and assessment mismatches retained, not silently repaired
 
@@ -50,7 +51,7 @@ The source has **not** inserted these markers into any live Supabase activity. P
 
 ## Verification checkpoint
 
-- `npm run test:formative`: **24/24** synthetic React/DOM tests, including the plan/evidence branches, lesson-to-form markers, the garden example's honesty boundary, all **nine** corrective-choice explanations, revised sequencing, rhythm-guide back-navigation and in-page continuity.
+- `npm run test:formative`: **28/28** synthetic React/DOM tests covering plan/evidence branches, the feedback-pending gate, revised and retained decisions, a distinct authenticated follow-up activity whose submission leaves the original First Move Card unchanged, lesson-to-form markers, the garden example's honesty boundary, all **nine** corrective-choice explanations, revised sequencing, rhythm-guide back-navigation and in-page continuity.
 - `npm run test:lesson`: **5/5** standalone Module 1 lesson checks.
 - Local ESLint, TypeScript and Next production build passed; the build includes `/module-two-preview`.
 - Runtime dependency audit: **0 high/critical vulnerabilities**.
@@ -58,4 +59,4 @@ The source has **not** inserted these markers into any live Supabase activity. P
 
 ## Release boundary and next actions
 
-Keep PR #15 draft/unmerged, public OWLL website untouched, and course records unchanged. Next: reconcile the academic MLO-to-rubric mapping and 60/30 rubric; map the First Move Card and evidence journal into separate activities, and design post-feedback immutable-final revision semantics. Then run real synthetic A/B/facilitator Auth/RLS acceptance with a trusted server-only test environment and inspect every screen in a browser for mobile, keyboard, audio and reviewer access. Do not enroll real minors or claim the course complete.
+Keep PR #15 draft/unmerged, public OWLL website untouched, and course records unchanged. Next: reconcile the academic MLO-to-rubric mapping and 60/30 rubric; decide whether and when to publish a **separate** First Move Card, feedback/revision follow-up and evidence journal, checking that each has appropriate facilitator visibility. Then run real synthetic A/B/facilitator Auth/RLS acceptance with a trusted server-only test environment and inspect every screen in a browser for mobile, keyboard, audio and reviewer access. Do not enroll real minors or claim the course complete.

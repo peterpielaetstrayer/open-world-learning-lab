@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { FirstMoveStudio } from "../studio/first-move-studio";
 import { FirstMoveCard, type FirstMovePlan } from "../studio/first-move-card";
+import { FirstMoveRevision } from "../studio/first-move-revision";
 import { FirstMoveEvidence } from "../studio/first-move-evidence";
 import { FirstStepMiniLesson, MayaGardenModel, FirstStepChecks } from "../studio/first-step-foundations";
 
 const steps = [
   "Welcome", "Learn first steps", "Maya's garden model", "Guided checks",
-  "First Move Studio", "First Move Card", "Feedback", "Action or obstacle", "Portfolio & transfer",
+  "First Move Studio", "First Move Card", "Feedback & revision", "Action or obstacle", "Portfolio & transfer",
 ] as const;
 
 export function ModuleTwoWalkthrough() {
@@ -81,8 +82,9 @@ export function ModuleTwoWalkthrough() {
           <li>“A condition or constraint you might account for is …”</li>
           <li>“One question that could sharpen your evidence is …”</li>
         </ol>
-        <div className="direction-insight"><strong>After receiving feedback:</strong> You can improve the plan or explain why you kept it. Neither automatic agreement nor a polished-looking result is the goal. The next screen lets you honestly record whether feedback has actually arrived.</div>
+        <div className="direction-insight"><strong>After receiving feedback:</strong> Improve the plan or justify retaining it. Neither automatic agreement nor a polished-looking result is the goal. Use the separate revision record below before moving to honest action evidence.</div>
         <p className="form-note">A final shared course response is currently immutable. Revisions after that point need a separate follow-up activity or an explicitly designed versioning workflow; the present LMS does not silently reopen final submissions.</p>
+        <FirstMoveRevision plan={plan} />
       </div>
 
       <div hidden={step !== 7}><FirstMoveEvidence plan={plan} /></div>

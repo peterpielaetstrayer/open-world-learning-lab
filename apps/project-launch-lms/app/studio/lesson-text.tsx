@@ -4,6 +4,7 @@ import { EntryDiagnostic } from "./entry-diagnostic";
 import { DirectionComparison } from "./direction-comparison";
 import { GauntletBridge } from "./gauntlet-bridge";
 import { FirstMoveCard } from "./first-move-card";
+import { FirstMoveRevision } from "./first-move-revision";
 import { FirstMoveEvidence } from "./first-move-evidence";
 import { FirstStepMiniLesson, MayaGardenModel, FirstStepChecks } from "./first-step-foundations";
 
@@ -29,6 +30,7 @@ export function LessonText({ text, lessonProgress, onPrepareResponse }: {
     if (block === "[[direction-comparison]]") return <DirectionComparison key={key} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[gauntlet-bridge]]") return <GauntletBridge key={key} />;
     if (block === "[[first-move-card]]") return <FirstMoveCard key={key} onPrepareResponse={onPrepareResponse} />;
+    if (block === "[[first-move-revision]]") return <FirstMoveRevision key={key} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[first-move-evidence]]") return <FirstMoveEvidence key={key} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[first-step-mini-lesson]]") return <FirstStepMiniLesson key={key} />;
     if (block === "[[maya-garden-model]]") return <MayaGardenModel key={key} />;
