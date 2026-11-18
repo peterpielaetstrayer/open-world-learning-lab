@@ -328,6 +328,11 @@ export default function StudioPage() {
                   courseId: membership.course_id,
                   activityId: activeActivity.id,
                   learnerId: identity
+                } : undefined}
+                onPrepareResponse={!isInstructor && !finalSubmission ? (prepared) => {
+                  if (response.trim() && !window.confirm("Replace the text in your course response box with these entry answers? Save any draft you want to keep first.")) return false;
+                  setResponse(prepared);
+                  return true;
                 } : undefined} />
               {assignedCriteria.length > 0 && <>
               <h4>How your work will be evaluated</h4>

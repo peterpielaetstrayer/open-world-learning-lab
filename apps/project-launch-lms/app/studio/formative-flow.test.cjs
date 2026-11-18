@@ -245,3 +245,37 @@ test("protected design preview distinguishes fictional states and navigates to f
   assert.ok(screen.getByText(/Your example reflection/));
   assert.equal(screen.queryByText(/Saving and sharing are disabled/), null);
 });
+
+test("entry diagnostic explains the starting point and prepares a real ungraded draft", async () => {
+  resetData();
+  db.pll_activities[0].instructions = "[[entry-diagnostic]]";
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  const review = screen.getByRole("button", { name: "Review my starting point" });
+  assert.equal(review.disabled, true);
+  const answers = [
+    ["Two interests, questions, or problems", "Drawing and bird migration"],
+    ["Something you tried to learn or do", "A garden needed time and help"],
+    ["A more testable direction", "A short guide; I would need permission"],
+    ["A tiny first move", "Make a paper draft"],
+  ];
+  for (const [label, value] of answers) {
+    fireEvent.change(screen.getByLabelText(new RegExp(label)), { target: { value } });
+  }
+  fireEvent.click(screen.getByRole("radio", { name: "3" }));
+  assert.equal(review.disabled, false);
+  fireEvent.click(review);
+  assert.ok(screen.getByText(/A focused first question creates a path/));
+  assert.equal(db.pll_drafts.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Use these answers in my course response" }));
+  const courseResponse = screen.getByLabelText("Your practice reflection or question for feedback");
+  assert.match(courseResponse.value, /Drawing and bird migration/);
+  assert.match(courseResponse.value, /Starting confidence .*: 3/);
+  assert.equal(db.pll_drafts.length, 0, "Preparing cannot silently save to the backend");
+  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+  await waitFor(() => assert.equal(db.pll_drafts.length, 1));
+  assert.match(db.pll_drafts[0].response_text, /Make a paper draft/);
+  assert.equal(db.pll_submissions.length, 0, "A saved diagnostic draft is not a final submission");
+});
