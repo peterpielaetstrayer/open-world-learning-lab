@@ -1,5 +1,9 @@
 # Project Launch Lab — custom LMS foundation
 
+### Module 1 learner sequence — November 18 continuation
+
+The protected, synthetic `/module-one-preview` now connects Welcome → Entry Diagnostic → ten-screen Project Direction Lesson → two-direction formative comparison → proposed 30-point Direction Brief. A new `[[direction-comparison]]` marker renders a reasoned comparison card (two ideas, relevance/feasibility/scope, tradeoffs, tentative choice, reconsideration, facilitator question). In the authenticated studio, the comparison and ten-screen lesson draft can **prepare** the course response, after which the learner still must explicitly Save draft or Share final; existing text requires overwrite confirmation. No published course content, rubric or real learner account was changed. See `docs/MODULE_ONE_SEQUENCE_IMPLEMENTATION_2026-11-18.md` for the exact implementation/status crosswalk and remaining gates.
+
 **Stage:** database-backed source implementation with a successfully built, Vercel-authentication-protected staging preview; real Auth-user end-to-end tests and instructor acceptance remain pending. **Not a completed LMS** or an authorized replacement for Canvas Lite yet.
 
 A self-contained Next.js application under the OWLL monorepo, maintained on a feature branch. A dedicated `project-launch-lms` Vercel project now builds this app separately from the OWLL website, on the draft PR feature branch. Neither the OWLL production site nor the existing Gauntlet repo is modified.

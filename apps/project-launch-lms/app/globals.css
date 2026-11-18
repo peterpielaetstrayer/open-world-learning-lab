@@ -117,6 +117,37 @@
 .diagnostic-feedback h4{font:500 1.5rem Georgia,serif;margin:6px 0 20px}
 .diagnostic-feedback p{max-width:720px}
 .diagnostic-feedback .form-success{margin-top:20px}
+.direction-comparison{max-width:990px;margin:28px 0 40px}
+.direction-comparison .diagnostic-intro h3{font:500 clamp(1.85rem,3vw,2.55rem)/1.2 Georgia,serif}
+.direction-comparison-model{margin:20px 0;padding:18px 22px;border:1px solid #bdcbbf;background:#f5f8f1}
+.direction-comparison-model summary{font-weight:750;color:#255458;cursor:pointer}
+.direction-comparison-model p{max-width:780px;line-height:1.6}
+.direction-comparison-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:22px 0}
+.direction-comparison-idea{min-width:0;margin:0;padding:23px;border:1px solid #b4c6b9;background:#fffdf7}
+.direction-comparison-idea legend{font:500 1.5rem Georgia,serif;padding:0 10px}
+.direction-comparison-question{margin:0 0 18px}
+.direction-comparison-question label,.direction-comparison-decision>label,.direction-comparison-feedback label{display:block;font-weight:750;margin:0 0 8px}
+.direction-comparison-question p{margin:0 0 8px;line-height:1.45}
+.direction-comparison textarea{display:block;width:100%;max-width:100%;font:inherit;line-height:1.5;color:var(--ink);border:1px solid #748c7b;border-radius:2px;background:white;padding:12px 14px;resize:vertical}
+.direction-comparison-decision,.direction-comparison-feedback{padding:clamp(20px,3vw,32px);background:#edf3ed;border-left:4px solid #547b68;margin:25px 0}
+.direction-comparison-decision fieldset{border:0;margin:0 0 25px;padding:0}
+.direction-comparison-decision legend{font-weight:750;margin-bottom:9px}
+.direction-comparison-radio{display:flex;align-items:start;gap:10px;margin:11px 0;line-height:1.5;cursor:pointer;overflow-wrap:anywhere}
+.direction-comparison-radio input{margin-top:5px;accent-color:var(--water);flex-shrink:0}
+.direction-comparison-decision>textarea{margin:0 0 22px}
+.direction-comparison-feedback h4{font:500 1.55rem Georgia,serif}
+.direction-comparison-feedback textarea[readonly]{font-size:.88rem;background:#fffefa;white-space:pre-wrap;margin:12px 0 20px}
+.direction-comparison-feedback button{margin:4px 0 15px}
+.module-one-tabs{display:flex;flex-wrap:wrap;gap:9px;margin:26px 0 18px}
+.module-one-tabs button{border:1px solid #9eb5a6;background:#fffdf8;color:#23504b;font-family:inherit;font-size:.92rem;font-weight:600;line-height:1.35;padding:11px 15px;cursor:pointer}
+.module-one-tabs button[aria-current=step]{border-color:#235762;background:#e0ece4;box-shadow:inset 0 -3px #235762}
+.module-one-panel{padding:clamp(18px,3vw,33px);border:1px solid var(--border);background:#fdfbf7}
+.module-one-panel h2{font:500 clamp(1.7rem,3vw,2.5rem)/1.2 Georgia,serif}
+.module-one-panel>p{max-width:760px}
+.module-one-nav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin:22px 0 52px}
+.module-one-rubric{max-width:780px;border-collapse:collapse;width:100%;margin:25px 0}
+.module-one-rubric th,.module-one-rubric td{text-align:left;border-bottom:1px solid #becbbf;padding:14px 10px}
+@media(max-width:760px){.direction-comparison-grid{grid-template-columns:1fr}.direction-comparison-idea{padding:18px}}
 @media(max-width:780px){.course-journey-grid,.course-how ol{grid-template-columns:1fr}.course-activity-status{gap:20px}.course-activity-status p{align-items:center}.course-welcome{padding:24px}.course-home-lead{font-size:1rem}}
 @media(max-width:1050px){.module-reader{grid-template-columns:1fr}.module-reader>.course-outline{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}.module-outline{border:1px solid var(--border);padding:16px}.module-outline:first-child{padding-top:16px}}
 @media(max-width:700px){.course-layout{grid-template-columns:1fr;gap:24px}.course-navigation{position:static;flex-direction:row;overflow-x:auto;border-bottom:1px solid var(--border)}.course-navigation button{white-space:nowrap;border-left:0;border-bottom:3px solid transparent;padding:12px}.studio-top{margin-bottom:24px}.module-reader>.course-outline{grid-template-columns:1fr}}

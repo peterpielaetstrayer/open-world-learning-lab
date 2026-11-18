@@ -1,6 +1,7 @@
 import { FirstMoveStudio } from "./first-move-studio";
 import { ProjectDirectionLesson, type LessonProgressIdentity } from "./project-direction-lesson";
 import { EntryDiagnostic } from "./entry-diagnostic";
+import { DirectionComparison } from "./direction-comparison";
 
 export function getResourceUrl(text: string): URL | null {
   if (!/^https:\/\/\S+$/.test(text)) return null;
@@ -19,8 +20,9 @@ export function LessonText({ text, lessonProgress, onPrepareResponse }: {
     const lines = block.split(/\r?\n/);
     const key = `${index}-${lines[0]}`;
     if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} />;
-    if (block === "[[project-direction-lesson]]") return <ProjectDirectionLesson key={key} progress={lessonProgress} />;
+    if (block === "[[project-direction-lesson]]") return <ProjectDirectionLesson key={key} progress={lessonProgress} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[entry-diagnostic]]") return <EntryDiagnostic key={key} onPrepareResponse={onPrepareResponse} />;
+    if (block === "[[direction-comparison]]") return <DirectionComparison key={key} onPrepareResponse={onPrepareResponse} />;
     if (lines.every(line => /^\d+\. /.test(line))) {
       return <ol key={key}>{lines.map((line, position) => <li key={position}>{line.replace(/^\d+\. /, "").replaceAll("**", "")}</li>)}</ol>;
     }

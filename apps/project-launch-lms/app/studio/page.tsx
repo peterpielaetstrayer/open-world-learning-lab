@@ -330,7 +330,11 @@ export default function StudioPage() {
                   learnerId: identity
                 } : undefined}
                 onPrepareResponse={!isInstructor && !finalSubmission ? (prepared) => {
-                  if (response.trim() && !window.confirm("Replace the text in your course response box with these entry answers? Save any draft you want to keep first.")) return false;
+                  if (prepared.length > 20000) {
+                    window.alert("This lesson draft exceeds the 20,000-character course response limit. Shorten it before preparing a course response, and keep a private copy if needed.");
+                    return false;
+                  }
+                  if (response.trim() && !window.confirm("Replace the text in your course response box with this lesson work? Save any draft you want to keep first.")) return false;
                   setResponse(prepared);
                   return true;
                 } : undefined} />

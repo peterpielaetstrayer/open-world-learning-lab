@@ -195,7 +195,10 @@ function normalizeSnapshot(raw: unknown): LessonSnapshot | null {
   };
 }
 
-export function ProjectDirectionLesson({ progress }: { progress?: LessonProgressIdentity }) {
+export function ProjectDirectionLesson({ progress, onPrepareResponse }: {
+  progress?: LessonProgressIdentity;
+  onPrepareResponse?: (text: string) => boolean;
+}) {
   const id = useId();
   const [stage, setStage] = useState(0);
   const [curiosity, setCuriosity] = useState("");
@@ -212,6 +215,7 @@ export function ProjectDirectionLesson({ progress }: { progress?: LessonProgress
   const [draftFirst, setDraftFirst] = useState("");
   const [draftFocus, setDraftFocus] = useState("");
   const [draftLearn, setDraftLearn] = useState("");
+  const [preparedFingerprint, setPreparedFingerprint] = useState("");
   const [progressId, setProgressId] = useState<string | null>(null);
   const [progressState, setProgressState] = useState<"loading" | "ready" | "saving" | "error">(progress ? "loading" : "ready");
   const [progressError, setProgressError] = useState("");
@@ -612,8 +616,16 @@ export function ProjectDirectionLesson({ progress }: { progress?: LessonProgress
             <div className="direction-draft-export">
               <h4>Keep a copy of your draft</h4>
               <p>{progress
-                ? "Save your private lesson work to your account using the button at the top of this lesson. You can also download or copy this plain-text draft for yourself. The separate final Direction Brief must still be submitted in the course."
-                : "The LMS does not yet save this exercise in the preview. Download your draft now, or select and copy the plain text below before closing this page. Keep it somewhere private."}</p>
+                ? "Save your private lesson work to your account using the button at the top of this lesson. Preparing a course response is a separate action; it is not saved or submitted automatically."
+                : "Download or copy this draft before closing the preview; this page does not save work to a course account."}</p>
+              {onPrepareResponse && <>
+                <button type="button" className="secondary-button" disabled={!direction.trim()}
+                  onClick={() => setPreparedFingerprint(onPrepareResponse(draftText) ? draftText : "")}>Use my direction draft in the course response</button>
+                {preparedFingerprint === draftText && <p role="status" className="form-success">
+                  Your direction draft is now in the course response box below. It is <strong>not saved or submitted yet</strong>.
+                  Choose Save draft, or share it with your facilitator only when you are ready.
+                </p>}
+              </>}
               <button type="button" className="direction-primary" onClick={downloadDraft}>Download my draft (.txt)</button>
               <label htmlFor={`${id}-draft-copy`}>Plain-text copy of my current draft</label>
               <textarea id={`${id}-draft-copy`} rows={10} readOnly value={draftText} />

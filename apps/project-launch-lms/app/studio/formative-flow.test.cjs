@@ -82,6 +82,7 @@ const { render, screen, fireEvent, waitFor, cleanup } = require("@testing-librar
 const StudioPage = require("./page.tsx").default;
 const { ProjectDirectionLesson } = require("./project-direction-lesson.tsx");
 const { SyntheticStudio } = require("../studio-preview/synthetic-studio.tsx");
+const { ModuleOneWalkthrough } = require("../module-one-preview/walkthrough.tsx");
 Module._load = originalLoad;
 
 function resetData() {
@@ -278,4 +279,75 @@ test("entry diagnostic explains the starting point and prepares a real ungraded 
   await waitFor(() => assert.equal(db.pll_drafts.length, 1));
   assert.match(db.pll_drafts[0].response_text, /Make a paper draft/);
   assert.equal(db.pll_submissions.length, 0, "A saved diagnostic draft is not a final submission");
+});
+
+test("direction lesson draft can be prepared for the actual LMS response without silently saving", async () => {
+  resetData();
+  db.pll_activities[0].instructions = "[[project-direction-lesson]]";
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  fireEvent.click(await screen.findByRole("button", { name: /My draft/ }));
+  fireEvent.change(screen.getByLabelText("One direction I want to explore"), { target: { value: "Compare three watercolor exercises" } });
+  fireEvent.change(screen.getByLabelText("What I can realistically investigate or create first"), { target: { value: "Try one sketch on paper" } });
+  fireEvent.click(screen.getByRole("button", { name: "Use my direction draft in the course response" }));
+  const response = screen.getByLabelText("Your practice reflection or question for feedback");
+  assert.match(response.value, /Compare three watercolor exercises/);
+  assert.equal(db.pll_drafts.length, 0);
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+  await waitFor(() => assert.equal(db.pll_drafts.length, 1));
+  assert.match(db.pll_drafts[0].response_text, /Try one sketch on paper/);
+  assert.equal(db.pll_submissions.length, 0);
+});
+
+test("two-direction comparison prepares a formative draft and respects overwrite refusal", async () => {
+  resetData();
+  db.pll_activities[0].instructions = "[[direction-comparison]]";
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  const comparisonButton = screen.getByRole("button", { name: "Review my comparison" });
+  assert.equal(comparisonButton.disabled, true);
+  for (const index of ["A", "B"]) {
+    const position = index === "A" ? 0 : 1;
+    for (const label of ["Possible project direction", "Relevance: why it matters", "Feasibility: what is available", "Scope: a small first test", "One tradeoff"]) {
+      const inputs = screen.getAllByLabelText(label);
+      fireEvent.change(inputs[position], { target: { value: `${index}: ${label}` } });
+    }
+  }
+  fireEvent.click(screen.getByRole("radio", { name: /Direction A/ }));
+  fireEvent.change(screen.getByLabelText("What information or feedback could make you reconsider?"), { target: { value: "A test fails to teach me anything" } });
+  fireEvent.change(screen.getByLabelText("What specific question would you ask your facilitator?"), { target: { value: "Is my first step narrow enough?" } });
+  assert.equal(comparisonButton.disabled, false);
+  fireEvent.click(comparisonButton);
+  assert.ok(screen.getByText(/confirms the comparison steps, not the quality/));
+  assert.equal(db.pll_drafts.length, 0);
+  const response = screen.getByLabelText("Your practice reflection or question for feedback");
+  fireEvent.change(response, { target: { value: "My other draft" } });
+  window.confirm = () => false;
+  fireEvent.click(screen.getByRole("button", { name: "Use this comparison in my course response" }));
+  assert.equal(response.value, "My other draft");
+  assert.equal(screen.queryByText(/not been saved or shared/), null);
+  window.confirm = () => true;
+  fireEvent.click(screen.getByRole("button", { name: "Use this comparison in my course response" }));
+  assert.match(response.value, /DIRECTION A/);
+  assert.match(response.value, /Is my first step narrow enough/);
+  assert.equal(db.pll_drafts.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+  await waitFor(() => assert.equal(db.pll_drafts.length, 1));
+  assert.match(db.pll_drafts[0].response_text, /DIRECTION B/);
+});
+
+test("Module 1 protected walkthrough preserves unsaved in-page ideas across lesson steps", () => {
+  render(React.createElement(ModuleOneWalkthrough));
+  assert.ok(screen.getByText(/Review prototype only/));
+  fireEvent.click(screen.getByRole("button", { name: /02 · Starting point/ }));
+  fireEvent.change(screen.getByLabelText(/Two interests, questions, or problems/), { target: { value: "Clouds and music" } });
+  fireEvent.click(screen.getByRole("button", { name: /04 · Compare ideas/ }));
+  assert.ok(screen.getByRole("heading", { name: "Compare ideas" }));
+  fireEvent.click(screen.getByRole("button", { name: /02 · Starting point/ }));
+  assert.equal(screen.getByLabelText(/Two interests, questions, or problems/).value, "Clouds and music");
 });
