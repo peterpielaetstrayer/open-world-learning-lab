@@ -1,5 +1,9 @@
 # Project Launch Lab — custom LMS foundation
 
+### Module 2 learning and evidence pathways — November 18 continuation
+
+The protected synthetic `/module-two-preview` now connects Maya's three-decision worked example, a ten-field **First Move Card**, a structured critique protocol, an honest **attempt or genuine obstacle** evidence record, and proposed Launch Portfolio/transfer guidance. New source markers `[[first-move-card]]` and `[[first-move-evidence]]` can deliberately prepare ungraded course responses; the learner must still save/share them explicitly, and partial long-form working copies can be saved as labeled incomplete drafts. **These markers have not been inserted into published Module 2 course activities.** No rubric, user or production content changed. The published Launch Portfolio's 30-point implementation versus academic 60-point design mismatch remains open. See `docs/MODULE_TWO_IMPLEMENTATION_2026-11-18.md` for status, test evidence, and the immutable-final follow-up design gate.
+
 ### Module 1 learner sequence — November 18 continuation
 
 The protected, synthetic `/module-one-preview` now connects Welcome → Entry Diagnostic → ten-screen Project Direction Lesson → two-direction formative comparison → proposed 30-point Direction Brief. A new `[[direction-comparison]]` marker renders a reasoned comparison card (two ideas, relevance/feasibility/scope, tradeoffs, tentative choice, reconsideration, facilitator question). In the authenticated studio, the comparison and ten-screen lesson draft can **prepare** the course response, after which the learner still must explicitly Save draft or Share final; existing text requires overwrite confirmation. No published course content, rubric or real learner account was changed. See `docs/MODULE_ONE_SEQUENCE_IMPLEMENTATION_2026-11-18.md` for the exact implementation/status crosswalk and remaining gates.

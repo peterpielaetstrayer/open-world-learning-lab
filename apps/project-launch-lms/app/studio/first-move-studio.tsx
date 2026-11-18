@@ -38,8 +38,10 @@ const decisions = [
 export function FirstMoveStudio() {
   const id = useId();
   const [step, setStep] = useState(0);
-  const [choice, setChoice] = useState<number | null>(null);
-  const [revealed, setRevealed] = useState(false);
+  const [choices, setChoices] = useState<(number | null)[]>([null, null, null]);
+  const [reveals, setReveals] = useState<boolean[]>([false, false, false]);
+  const choice = choices[step];
+  const revealed = reveals[step];
   const decision = decisions[step];
   const heading = useRef<HTMLHeadingElement>(null);
   const focusHeading = useRef(false);
@@ -54,8 +56,6 @@ export function FirstMoveStudio() {
   function goTo(nextStep: number) {
     focusHeading.current = true;
     setStep(nextStep);
-    setChoice(null);
-    setRevealed(false);
   }
 
   return (
@@ -77,7 +77,10 @@ export function FirstMoveStudio() {
             {decision.options.map((option, index) => (
               <label key={option.label} className={choice === index ? "option selected" : "option"}>
                 <input type="radio" name={id} checked={choice === index}
-                  onChange={() => { setChoice(index); setRevealed(false); }} />
+                  onChange={() => {
+                    setChoices(previous => previous.map((answer, position) => position === step ? index : answer));
+                    setReveals(previous => previous.map((shown, position) => position === step ? false : shown));
+                  }} />
                 <span>{option.label}</span>
               </label>
             ))}
@@ -86,7 +89,7 @@ export function FirstMoveStudio() {
         <div className="studio-actions">
           {step > 0 && <button type="button" className="secondary-button" onClick={() => goTo(step - 1)}>Previous decision</button>}
           <button type="button" className="feedback-button" disabled={choice === null || revealed}
-            onClick={() => setRevealed(true)}>Show feedback</button>
+            onClick={() => setReveals(previous => previous.map((shown, position) => position === step ? true : shown))}>Show feedback</button>
         </div>
         {revealed && choice !== null && (
           <>

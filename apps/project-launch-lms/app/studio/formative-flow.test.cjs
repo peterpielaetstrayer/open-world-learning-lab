@@ -83,6 +83,9 @@ const StudioPage = require("./page.tsx").default;
 const { ProjectDirectionLesson } = require("./project-direction-lesson.tsx");
 const { SyntheticStudio } = require("../studio-preview/synthetic-studio.tsx");
 const { ModuleOneWalkthrough } = require("../module-one-preview/walkthrough.tsx");
+const { ModuleTwoWalkthrough } = require("../module-two-preview/walkthrough.tsx");
+const { FirstMoveEvidence } = require("./first-move-evidence.tsx");
+const { FirstMoveStudio } = require("./first-move-studio.tsx");
 Module._load = originalLoad;
 
 function resetData() {
@@ -350,4 +353,145 @@ test("Module 1 protected walkthrough preserves unsaved in-page ideas across less
   assert.ok(screen.getByRole("heading", { name: "Compare ideas" }));
   fireEvent.click(screen.getByRole("button", { name: /02 · Starting point/ }));
   assert.equal(screen.getByLabelText(/Two interests, questions, or problems/).value, "Clouds and music");
+});
+
+function addModuleTwoActivity(title, marker) {
+  db.pll_modules.push({ id: "module-2", course_id: "course-1", module_number: 2, title: "Plan & Launch", is_published: true });
+  db.pll_activities.push({ id: "m2-activity", course_id: "course-1", module_id: "module-2",
+    slug: "m2-formative", title, instructions: marker, is_published: true });
+}
+
+test("authenticated Module 2 First Move Card prepares but does not silently submit a formative plan", async () => {
+  resetData();
+  addModuleTwoActivity("First Move Card", "[[first-move-card]]");
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /First Move Card/ }));
+  const review = screen.getByRole("button", { name: "Review my First Move Card" });
+  assert.equal(review.disabled, true);
+  const prompts = [
+    "My project direction", "My purpose and who or what it serves", "The smallest safe first action",
+    "What I want to learn", "Time window or first checkpoint",
+    "Materials, permission, trusted support and low-resource alternative",
+    "One possible constraint and a safe substitute", "Non-sensitive evidence I could collect",
+    "What I could learn even if my attempt does not work", "One specific question for facilitator feedback",
+  ];
+  for (const label of prompts) {
+    fireEvent.change(screen.getByLabelText(new RegExp(label)), { target: { value: `Plan: ${label}` } });
+  }
+  assert.equal(review.disabled, false);
+  fireEvent.click(review);
+  assert.ok(screen.getByText(/This check confirms the prompts are filled in/));
+  fireEvent.click(screen.getByRole("button", { name: "Use this card in my course response" }));
+  const response = screen.getByLabelText("Your practice reflection or question for feedback");
+  assert.match(response.value, /FIRST MOVE CARD/);
+  assert.match(response.value, /Non-sensitive evidence I could collect/);
+  assert.equal(db.pll_drafts.length, 0);
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+  await waitFor(() => assert.equal(db.pll_drafts.length, 1));
+  assert.equal(db.pll_drafts[0].activity_id, "m2-activity");
+  assert.equal(db.pll_submissions.length, 0);
+});
+
+test("long First Move Card supports an explicit incomplete draft without pretending completion", async () => {
+  resetData();
+  addModuleTwoActivity("First Move Card", "[[first-move-card]]");
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /First Move Card/ }));
+  const prepare = screen.getByRole("button", { name: "Prepare working copy for Save draft" });
+  assert.equal(prepare.disabled, true);
+  fireEvent.change(screen.getByLabelText(/My project direction/), { target: { value: "Try one drawing prompt" } });
+  assert.equal(prepare.disabled, false);
+  assert.equal(screen.getByRole("button", { name: "Review my First Move Card" }).disabled, true);
+  fireEvent.click(prepare);
+  const response = screen.getByLabelText("Your practice reflection or question for feedback");
+  assert.match(response.value, /INCOMPLETE WORKING COPY/);
+  assert.match(response.value, /Try one drawing prompt/);
+  assert.equal(db.pll_drafts.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+  await waitFor(() => assert.equal(db.pll_drafts.length, 1));
+  assert.equal(db.pll_submissions.length, 0);
+});
+
+test("real-obstacle path transfers honest conditions and no invented attempt into ungraded draft", async () => {
+  resetData();
+  addModuleTwoActivity("Evidence or obstacle", "[[first-move-evidence]]");
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Evidence or obstacle/ }));
+  const review = screen.getByRole("button", { name: "Review my evidence and decision" });
+  assert.equal(review.disabled, true);
+  fireEvent.change(screen.getByLabelText(/Project direction \(or a change/), { target: { value: "Sketch a guide for one beginner" } });
+  fireEvent.click(screen.getByRole("radio", { name: /A genuine obstacle prevented/ }));
+  const obstaclePrompts = [
+    "What actually blocked the planned action", "Why I did not push past the barrier",
+    "What I learned about the conditions", "A safer or lower-resource alternative", "What remains genuinely untested",
+  ];
+  for (const label of obstaclePrompts) fireEvent.change(screen.getByLabelText(new RegExp(label)), { target: { value: `A real condition: ${label}` } });
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet—I will record a question/ }));
+  fireEvent.change(screen.getByLabelText("What question is still waiting for feedback?"), { target: { value: "Could I check a paper prototype instead?" } });
+  fireEvent.change(screen.getByLabelText("My next safe move, based on what I now know"), { target: { value: "Ask a trusted adult about a safe alternative" } });
+  assert.equal(review.disabled, false);
+  fireEvent.click(review);
+  assert.ok(screen.getByText(/A barrier is legitimate evidence/));
+  fireEvent.click(screen.getByRole("button", { name: "Use this record in my course response" }));
+  const response = screen.getByLabelText("Your practice reflection or question for feedback");
+  assert.match(response.value, /A genuine obstacle prevented the first move/);
+  assert.match(response.value, /Feedback status: Not received yet/);
+  assert.doesNotMatch(response.value, /What I actually did/);
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+  await waitFor(() => assert.equal(db.pll_drafts.length, 1));
+  assert.equal(db.pll_drafts[0].activity_id, "m2-activity");
+  assert.equal(db.pll_submissions.length, 0);
+});
+
+test("actual-attempt path distinguishes observation, limits and feedback-driven revision", () => {
+  render(React.createElement(FirstMoveEvidence));
+  fireEvent.change(screen.getByLabelText(/Project direction \(or a change/), { target: { value: "Make a three-step sketch guide" } });
+  fireEvent.click(screen.getByRole("radio", { name: /I safely tried a small first move/ }));
+  const attemptPrompts = [
+    "What I actually did", "What I observed—not what I assumed",
+    "What differed from my prediction", "What this single attempt cannot tell me", "My non-sensitive evidence record",
+  ];
+  for (const label of attemptPrompts) fireEvent.change(screen.getByLabelText(new RegExp(label)), { target: { value: `Observed: ${label}` } });
+  fireEvent.click(screen.getByRole("radio", { name: /Yes, I can describe what someone said/ }));
+  fireEvent.change(screen.getByLabelText("What feedback did you actually receive?"), { target: { value: "The first picture needs clearer arrows" } });
+  fireEvent.click(screen.getByRole("radio", { name: /I revised my plan/ }));
+  fireEvent.change(screen.getByLabelText("Explain the change or why you kept the original plan"), { target: { value: "A friend could not follow the first drawing" } });
+  fireEvent.change(screen.getByLabelText("My next safe move, based on what I now know"), { target: { value: "Revise the first arrow" } });
+  fireEvent.click(screen.getByRole("button", { name: "Review my evidence and decision" }));
+  const summary = screen.getByLabelText("Your evidence and reflection (select and copy if useful)").value;
+  assert.match(summary, /Honest evidence route: I safely tried a small first move/);
+  assert.match(summary, /Actual feedback: The first picture needs clearer arrows/);
+  assert.match(summary, /My response to feedback: Revised the plan/);
+  assert.doesNotMatch(summary, /Why I did not push past the barrier/);
+});
+
+test("Maya scenario remembers earlier choice and its explanatory feedback", () => {
+  render(React.createElement(FirstMoveStudio));
+  fireEvent.click(screen.getAllByRole("radio")[1]);
+  fireEvent.click(screen.getByRole("button", { name: "Show feedback" }));
+  assert.ok(screen.getByRole("status").textContent.includes("short sample"));
+  fireEvent.click(screen.getByRole("button", { name: "Next decision" }));
+  fireEvent.click(screen.getByRole("button", { name: "Previous decision" }));
+  assert.equal(screen.getAllByRole("radio")[1].checked, true);
+  assert.ok(screen.getByRole("status").textContent.includes("short sample"));
+});
+
+test("protected Module 2 preview carries the in-session plan direction into the evidence screen", () => {
+  render(React.createElement(ModuleTwoWalkthrough));
+  assert.ok(screen.getByText(/Synthetic design review/));
+  fireEvent.click(screen.getByRole("button", { name: /03 · First Move Card/ }));
+  fireEvent.change(screen.getByLabelText(/My project direction/), { target: { value: "Investigate a tiny sketch guide" } });
+  fireEvent.click(screen.getByRole("button", { name: /05 · Action or obstacle/ }));
+  assert.match(screen.getByText(/Your draft direction from this preview:/).parentElement.textContent,
+    /Investigate a tiny sketch guide/);
+  fireEvent.click(screen.getByRole("button", { name: /03 · First Move Card/ }));
+  assert.equal(screen.getByLabelText(/My project direction/).value, "Investigate a tiny sketch guide");
 });

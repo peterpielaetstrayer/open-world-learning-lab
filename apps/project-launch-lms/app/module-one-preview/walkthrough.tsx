@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { EntryDiagnostic } from "../studio/entry-diagnostic";
 import { ProjectDirectionLesson } from "../studio/project-direction-lesson";
 import { DirectionComparison } from "../studio/direction-comparison";
+import Link from "next/link";
 
 const steps = ["Welcome", "Starting point", "Learn the lenses", "Compare ideas", "Direction Brief"] as const;
 
@@ -67,6 +68,7 @@ export function ModuleOneWalkthrough() {
         <div className="direction-insight">
           <strong>Bridge to Module 2:</strong> You have a direction, not a lifetime commitment. What is the biggest unknown in this direction? Carry that question into your First Move Plan.
         </div>
+        <p><Link className="back-link" href="/module-two-preview">Preview Module 2: From direction to first move</Link></p>
       </div>
     </div>
     <div className="module-one-nav">
