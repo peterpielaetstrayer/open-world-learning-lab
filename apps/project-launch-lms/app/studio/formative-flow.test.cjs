@@ -81,6 +81,7 @@ const React = require("react");
 const { render, screen, fireEvent, waitFor, cleanup } = require("@testing-library/react");
 const StudioPage = require("./page.tsx").default;
 const { ProjectDirectionLesson } = require("./project-direction-lesson.tsx");
+const { SyntheticStudio } = require("../studio-preview/synthetic-studio.tsx");
 Module._load = originalLoad;
 
 function resetData() {
@@ -227,4 +228,20 @@ test("ungraded responses and published feedback are discoverable in Feedback", a
   assert.ok(screen.getByRole("heading", { name: "Your work and feedback" }));
   assert.ok(screen.getByText("Ungraded practice"));
   assert.ok(screen.getByText("Good constraint analysis. Now ask what you can observe."));
+});
+
+test("protected design preview distinguishes fictional states and navigates to feedback", () => {
+  render(React.createElement(SyntheticStudio));
+  assert.ok(screen.getByText(/This is a design preview, not a signed-in course/));
+  assert.ok(screen.getByRole("button", { name: "Starting learner" }));
+  assert.ok(screen.getByRole("heading", { name: /Start with curiosity/ }));
+  fireEvent.click(screen.getByRole("button", { name: "Example with feedback" }));
+  assert.ok(screen.getByText("of 4 activity responses shared"));
+  fireEvent.click(screen.getByRole("button", { name: "Feedback" }));
+  assert.ok(screen.getByRole("heading", { name: "Your work and feedback" }));
+  assert.ok(screen.getAllByText("Ungraded practice").length >= 1);
+  assert.ok(screen.getByText(/What one observation would show whether/));
+  fireEvent.click(screen.getByRole("button", { name: "Practice choosing a direction" }));
+  assert.ok(screen.getByText(/Your example reflection/));
+  assert.equal(screen.queryByText(/Saving and sharing are disabled/), null);
 });
