@@ -509,8 +509,9 @@ test("actual-attempt path distinguishes observation, limits and feedback-driven 
   assert.doesNotMatch(summary, /Why I did not push past the barrier/);
 });
 
-test("Maya scenario remembers earlier choice and its explanatory feedback", () => {
+test("Ari transfer scenario remembers earlier choice and its explanatory feedback", () => {
   render(React.createElement(FirstMoveStudio));
+  assert.ok(screen.getByText(/Ari wants to make a 30-second practice track/));
   fireEvent.click(screen.getAllByRole("radio")[1]);
   fireEvent.click(screen.getByRole("button", { name: "Show feedback" }));
   assert.ok(screen.getByRole("status").textContent.includes("short sample"));

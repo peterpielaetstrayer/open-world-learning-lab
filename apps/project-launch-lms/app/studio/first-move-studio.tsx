@@ -5,32 +5,32 @@ import { useEffect, useId, useRef, useState } from "react";
 const decisions = [
   {
     title: "Choose what to test",
-    context: "Maya wants to make a 30-second practice track for someone learning to enter on beat one. She has a phone and 20 minutes in a quiet room. Her first plan is to record the whole track.",
-    prompt: "Which action would tell Maya whether the count-in gives her enough time to enter?",
+    context: "Ari wants to make a 30-second practice track for someone learning to enter on beat one. They have a phone and 20 minutes in a quiet room. Their first plan is to record the whole track.",
+    prompt: "Which action would tell Ari whether the count-in gives them enough time to enter?",
     options: [
-      { label: "Record the whole track and play it back with the guide.", feedback: "That could show how the complete exercise flows. It also means recording material Maya may redo if the opening cue changes." },
-      { label: "Record just the count-in and first beat, then try it with the guide.", feedback: "This checks the audible cue against the guide and gives Maya a short sample she can easily revise and replay." },
-      { label: "Tap through the timing in the written guide.", feedback: "A silent check can expose an unclear instruction. It leaves open whether the cue is audible and gives Maya enough time to enter." },
+      { label: "Record the whole track and play it back with the guide.", feedback: "That could show how the complete exercise flows. It also means recording material Ari may redo if the opening cue changes." },
+      { label: "Record just the count-in and first beat, then try it with the guide.", feedback: "This checks the audible cue against the guide and gives Ari a short sample they can easily revise and replay." },
+      { label: "Tap through the timing in the written guide.", feedback: "A silent check can expose an unclear instruction. It leaves open whether the cue is audible and gives Ari enough time to enter." },
     ],
   },
   {
     title: "Use the result",
-    context: "A peer asks what Maya needs to learn before recording the whole track. Maya tests just the opening. She follows the guide on two playbacks and misses beat one both times.",
+    context: "A peer asks what Ari needs to learn before recording the whole track. Ari tests just the opening. They follow the guide on two playbacks and miss beat one both times.",
     prompt: "What is a reasonable next move based on those two playbacks?",
     options: [
-      { label: "Add a clearer spoken count-in and repeat the same check.", feedback: "The missed entries give Maya a reason to revise the cue. Repeating the same check gives her a useful comparison. A later test with beginners can answer how they respond." },
-      { label: "Conclude that the guide fails for all beginners.", feedback: "The two playbacks describe Maya’s own experience under those conditions. She would need observations from beginners to make a claim about them." },
-      { label: "Record the full track before changing the cue.", feedback: "Recording more would not resolve what Maya already observed about the opening. She can revise and retest the cue while the rest of the track is still flexible." },
+      { label: "Add a clearer spoken count-in and repeat the same check.", feedback: "The missed entries give Ari a reason to revise the cue. Repeating the same check offers a useful comparison. A later test with beginners can show how they respond." },
+      { label: "Conclude that the guide fails for all beginners.", feedback: "The two playbacks describe Ari’s own experience under those conditions. They would need observations from beginners to make a claim about them." },
+      { label: "Record the full track before changing the cue.", feedback: "Recording more would not resolve what Ari already observed about the opening. They can revise and retest the cue while the rest of the track is still flexible." },
     ],
   },
   {
     title: "Respond when the test is blocked",
-    context: "Imagine a different outcome. Maya tries to record, but background noise makes the cue impossible to hear clearly.",
-    prompt: "What can Maya do with the information she has?",
+    context: "Imagine a different outcome. Ari tries to record, but background noise makes the cue impossible to hear clearly.",
+    prompt: "What can Ari do with the information they have?",
     options: [
-      { label: "Mark the count-in as successful and move on.", feedback: "The recording did not let Maya evaluate the cue. Record the obstacle so the next decision reflects what she actually learned." },
-      { label: "Note the obstacle, check the written timing silently, and plan another recording.", feedback: "The silent check can improve the instructions. Maya still needs a usable recording to check the audible cue, and her notes explain why that test remains open." },
-      { label: "Give up the project and choose a different idea.", feedback: "The obstacle concerns where and when Maya can record. She can adjust the test conditions and keep the project direction." },
+      { label: "Mark the count-in as successful and move on.", feedback: "The recording did not let Ari evaluate the cue. Record the obstacle so the next decision reflects what they actually learned." },
+      { label: "Note the obstacle, check the written timing silently, and plan another recording.", feedback: "The silent check can improve the instructions. Ari still needs a usable recording to check the audible cue, and the notes explain why that test remains open." },
+      { label: "Give up the project and choose a different idea.", feedback: "The obstacle concerns where and when Ari can record. They can adjust the test conditions and keep the project direction." },
     ],
   },
 ];
@@ -65,11 +65,11 @@ export function FirstMoveStudio() {
         <h4 id={`${id}-heading`} tabIndex={-1} ref={heading}>{decision.title}</h4>
         <p>{decision.context}</p>
         {step === 1 && <figure className="playback-example">
-          <figcaption id={`${id}-playback`}>Illustrative playback from Maya’s first test</figcaption>
+          <figcaption id={`${id}-playback`}>Illustrative playback from Ari’s first test</figcaption>
           <audio controls preload="none" aria-labelledby={`${id}-playback`}
             src="/media/first-move-count-in.wav" />
           <p>Audio description: Four high clicks count in. A lower tone marks beat one.
-            Maya’s tap follows about a quarter of a second later, and the next two taps are late too.</p>
+            Ari’s tap follows about a quarter of a second later, and the next two taps are late too.</p>
         </figure>}
         <fieldset>
           <legend>{decision.prompt}</legend>

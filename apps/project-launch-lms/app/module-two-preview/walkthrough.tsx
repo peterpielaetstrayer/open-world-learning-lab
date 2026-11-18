@@ -65,7 +65,7 @@ export function ModuleTwoWalkthrough() {
             <li>Two missed entries describe the observation under those conditions, not how every future learner will perform.</li>
             <li>Background noise is evidence about test conditions. It does not prove the direction is unworthy.</li>
           </ul>
-          <p className="form-note">The existing widget names this rhythm-guide student Maya too. We are preserving source while reviewing whether to rename the transfer character; the garden worked model remains the academic reference.</p>
+          <p className="form-note">This fresh application follows Ari&apos;s rhythm guide. The separate school-garden example follows Maya and remains the academic worked model.</p>
           <p>The audio has a written description in the decision activity. Independent screen-reader, keyboard and media acceptance remain pending.</p>
         </div>
       </div>

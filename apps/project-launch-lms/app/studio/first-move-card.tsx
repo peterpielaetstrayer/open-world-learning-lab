@@ -74,7 +74,7 @@ export function FirstMoveCard({ onPrepareResponse, onPlanChange }: {
         <dt>Direction and purpose</dt><dd>Make a short rhythm guide that helps someone understand when a musical phrase begins.</dd>
         <dt>First test and learning question</dt><dd>Make a brief count-in cue and check whether the timing is understandable, before making a full track.</dd>
         <dt>Milestones and checkpoint</dt><dd>1. Write the opening cue. 2. Make a brief count-in if recording is permitted. 3. Review notes about the cue and decide what to revise. Use an available phone and quiet period only if permitted; otherwise check the written timing silently.</dd>
-        <dt>Evidence and next decision</dt><dd>Keep private notes from a few playbacks; distinguish what Maya observed from what other learners might experience.</dd>
+        <dt>Evidence and next decision</dt><dd>Keep private notes from a few playbacks; distinguish what Ari observed from what other learners might experience.</dd>
       </dl>
       <p>The school-garden model taught the planning framework; this different rhythm-guide example shows how that framework transfers. You do not need to choose a music project.</p>
     </details>

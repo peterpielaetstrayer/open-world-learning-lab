@@ -14,7 +14,7 @@ Protected `/module-two-preview` (local development or authenticated Vercel Previ
 2. **Learn:** a short five-concept mini-lesson on purpose, milestones, constraints, safe action, prediction versus evidence, and feedback.
 3. **Observe:** an annotated Maya **school garden** worked example, matching the original LDT 560 Learning Activity 4.1. Students reflect before revealing why a sketch and permission check may be a better start than a full redesign. The model makes no false claim that Maya obtained permission or gathered evidence.
 4. **Practice:** three ungraded checks on the garden constraint, safe bounded action, and prediction-versus-evidence distinction. All **nine answer choices** give targeted explanation and allow retry.
-5. **Apply in First Move Studio:** the existing three-decision **rhythm-guide** scenario, with explanatory feedback and audio text alternative. It is now a distinct transfer application after the garden model, though its character is also named Maya pending editorial review.
+5. **Apply in First Move Studio:** the existing three-decision **rhythm-guide** scenario, with explanatory feedback and audio text alternative. Its student is now named **Ari**, distinct from Maya in the garden worked model, so this is visibly a fresh transfer application.
 6. **First Move Card:** ten prompts cover direction, purpose, safe action, learning question, **three ordered milestones and checkpoint**, resource/permission alternative, constraint/substitute, non-sensitive evidence, useful negative outcome, and facilitator question. Output is ungraded.
 7. **Feedback:** four-part critique prompts; peer participation and agreement with a suggestion are optional. Post-final revision still needs an explicit activity/versioning design.
 8. **Action or obstacle:** distinguish a true bounded attempt from a genuine barrier, evidence from assumption, and received from pending feedback. Both routes are legitimate.
@@ -28,7 +28,7 @@ The walkthrough passes the evolving First Move Card's project direction into the
 
 - `[[first-move-card]]` → `FirstMoveCard`
 - `[[first-move-evidence]]` → `FirstMoveEvidence`
-- Existing `[[first-move-studio]]` continues to render Maya's scenario.
+- Existing `[[first-move-studio]]` continues to render the three-decision rhythm-guide scenario, now featuring Ari.
 - `[[first-step-mini-lesson]]` → `FirstStepMiniLesson`
 - `[[maya-garden-model]]` → `MayaGardenModel`
 - `[[first-step-checks]]` → `FirstStepChecks`
@@ -43,7 +43,7 @@ The source has **not** inserted these markers into any live Supabase activity. P
 
 ## Scenario and assessment mismatches retained, not silently repaired
 
-- The original November 16 LDT 560 Learning Activity 4.1 explicitly uses Maya's **school garden** as the modeled example, followed by a **fresh** scenario for First Move Studio. The preview now follows that sequence and preserves the rhythm-guide widget for transfer. Because the widget also calls the music character Maya, the editorial name needs review before faculty-facing release.
+- The original November 16 LDT 560 Learning Activity 4.1 explicitly uses Maya's **school garden** as the modeled example, followed by a **fresh** scenario for First Move Studio. The preview now follows that sequence and preserves the rhythm-guide widget for transfer, renaming its student **Ari** to eliminate the confusing shared character name.
 - The academic storyboard describes the graded Launch Portfolio using **four criteria × 15 points = 60**. The currently published database rubric is **three × 10 = 30**. This preview displays the conflict prominently, does not apply or simulate scores, and changes no existing rubric or learner record.
 - The ten-item quiz and Level 1 course evaluation are separate implemented components, not re-created or declared validated by this preview.
 - Learner outcome wording, current Canvas submission receipts, instructor permission to use this custom LMS, media captions/transcripts and accessibility acceptance remain open gates.
@@ -58,4 +58,4 @@ The source has **not** inserted these markers into any live Supabase activity. P
 
 ## Release boundary and next actions
 
-Keep PR #15 draft/unmerged, public OWLL website untouched, and course records unchanged. Next: reconcile the academic MLO-to-rubric mapping and 60/30 rubric; choose the rhythm-guide transfer character, map the First Move Card and evidence journal into separate activities, and design post-feedback immutable-final revision semantics. Then run real synthetic A/B/facilitator Auth/RLS acceptance with a trusted server-only test environment and inspect every screen in a browser for mobile, keyboard, audio and reviewer access. Do not enroll real minors or claim the course complete.
+Keep PR #15 draft/unmerged, public OWLL website untouched, and course records unchanged. Next: reconcile the academic MLO-to-rubric mapping and 60/30 rubric; map the First Move Card and evidence journal into separate activities, and design post-feedback immutable-final revision semantics. Then run real synthetic A/B/facilitator Auth/RLS acceptance with a trusted server-only test environment and inspect every screen in a browser for mobile, keyboard, audio and reviewer access. Do not enroll real minors or claim the course complete.
