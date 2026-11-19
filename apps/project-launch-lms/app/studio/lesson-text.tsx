@@ -7,6 +7,7 @@ import { FirstMoveCard } from "./first-move-card";
 import { FirstMoveRevision } from "./first-move-revision";
 import { FirstMoveEvidence } from "./first-move-evidence";
 import { FirstStepMiniLesson, MayaGardenModel, FirstStepChecks } from "./first-step-foundations";
+import { LevelTwoExitCheck } from "./level-two-exit-check";
 
 export function getResourceUrl(text: string): URL | null {
   if (!/^https:\/\/\S+$/.test(text)) return null;
@@ -35,6 +36,7 @@ export function LessonText({ text, lessonProgress, onPrepareResponse }: {
     if (block === "[[first-step-mini-lesson]]") return <FirstStepMiniLesson key={key} />;
     if (block === "[[maya-garden-model]]") return <MayaGardenModel key={key} />;
     if (block === "[[first-step-checks]]") return <FirstStepChecks key={key} />;
+    if (block === "[[level-two-exit-check]]") return <LevelTwoExitCheck key={key} onPrepareResponse={onPrepareResponse} />;
     if (lines.every(line => /^\d+\. /.test(line))) {
       return <ol key={key}>{lines.map((line, position) => <li key={position}>{line.replace(/^\d+\. /, "").replaceAll("**", "")}</li>)}</ol>;
     }
