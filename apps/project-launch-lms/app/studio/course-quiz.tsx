@@ -69,6 +69,10 @@ export function CourseQuiz({ supabase, courseId, identity, instructor, preview }
   const attempt = !instructor && attempts[0];
   return <section className="studio-work" aria-labelledby="quiz-heading">
     <h2 id="quiz-heading">Project Launch knowledge check</h2>
+    <p className="form-note"><strong>Level 2 · Knowledge and scenario judgment.</strong> These questions check
+      how you reason about project decisions in examples. They do not, by themselves, show how you apply
+      those decisions to your own project. Your Direction Brief and other project work provide separate
+      evidence of applied skills. A quiz score is not a measure of your confidence or intentions.</p>
     {loading && <p role="status">Loading quiz…</p>}
     {error && <p className="form-error" role="alert">{error}</p>}
     {!loading && !error && questions.length !== 10 && <p>The quiz is not available for this course yet.</p>}
