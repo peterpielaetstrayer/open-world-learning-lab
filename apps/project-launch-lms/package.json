@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test:lesson": "node --test app/studio/project-direction-lesson.test.cjs",
     "test:formative": "node --test app/studio/formative-flow.test.cjs",
-    "test:a11y:synthetic": "node --test scripts/preview-accessibility.test.cjs"
+    "test:a11y:synthetic": "node --test scripts/preview-accessibility.test.cjs scripts/preview-contrast.test.cjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

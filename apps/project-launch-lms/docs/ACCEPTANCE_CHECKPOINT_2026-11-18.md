@@ -64,3 +64,12 @@ The signed-in course previously allowed ordinary `launch-portfolio` final submis
 - **Test coverage:** Two isolated role-UI tests exercise the current 30-point mismatch and saved-draft behavior; a third confirms the 60-point copy remains held pending faculty acceptance. All tests use synthetic in-memory clients; they do not prove RLS, real Auth, or true persistence.
 
 **Release decision:** no change. Remove the hold only after a faculty-approved scoring contract, exact source/database rubric reconciliation, authoritative write-path enforcement, verified role tests, and a separate release decision. Do not misrepresent this source UI guard as protection of the current Supabase backend.
+
+## Checkpoint 3 addendum — source-backed color contrast sample audit
+
+**Date:** November 18–19, 2026. **Scope:** representative CSS text/surface pairs in the protected review and authenticated studio; no claim of complete rendered-page WCAG acceptance.
+
+- New reproducible `scripts/preview-contrast.test.cjs` reads the real `app/globals.css`, resolves root color variables and compares **16 representative foreground/background pairs** to the 4.5:1 WCAG AA threshold for normal text. It runs alongside the existing 14-step semantic test through `npm run test:a11y:synthetic`.
+- The original small direction-step label (`#557268` on `#f0f2ea`) was the lowest sampled pair at **4.66:1**. Darkening its text slightly to `#486359` raises it to approximately **5.80:1** while preserving the design palette.
+- After this change, all 16 sampled pairs pass the normal-text threshold. This is **not** an automated browser contrast audit: computed inheritance, responsive overlays, transparency, opacity, gradient/image contexts, disabled states and text over actual media require manual/rendered verification.
+- The protected Vercel preview is READY and fetchable through the official account integration, but the workspace has no linked/authenticated Vercel CLI for an origin-scoped browser request. Do not weaken Deployment Protection, circulate sensitive preview credentials, or claim an end-to-end browser pass. A trusted test session or authorized reviewer handoff remains necessary.
