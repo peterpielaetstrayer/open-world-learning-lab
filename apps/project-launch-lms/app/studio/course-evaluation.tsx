@@ -67,6 +67,11 @@ export function CourseEvaluation({ supabase, courseId, instructor, preview }: {
 
   return <section className="studio-work" aria-labelledby="evaluation-heading">
     <h2 id="evaluation-heading">Course evaluation</h2>
+    <p className="form-note"><strong>Level 1 · Your experience of the course.</strong> These ratings help your
+      facilitator improve the learning experience. They are not graded and do not affect your course score.
+      This survey is <strong>not anonymous</strong>: your response is associated with your course account,
+      and facilitators can view submitted comments. Please leave out identifying or private details about
+      yourself or other people. You can submit one evaluation.</p>
     {loading && <p role="status">Loading evaluation…</p>}
     {error && <p className="form-error" role="alert">{error}</p>}
     {!loading && instructor && !preview && <>
