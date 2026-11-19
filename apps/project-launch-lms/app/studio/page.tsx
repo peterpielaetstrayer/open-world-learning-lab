@@ -10,6 +10,7 @@ import { ModuleEditor } from "./module-editor";
 import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
 import { RubricEditor } from "./rubric-editor";
+import { compareLaunchPortfolioRubric } from "./launch-portfolio-rubric";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type {
   CourseMembership, CourseActivity, LearnerDraft, LearnerSubmission,
@@ -148,6 +149,12 @@ export default function StudioPage() {
   const reviewActivity = activities.find((activity) => activity.id === reviewSubmission?.activity_id);
   const reviewCriteria = criteria.filter((criterion) => criterion.activity_id === reviewSubmission?.activity_id);
   const existingReview = feedbackRows.find((feedback) => feedback.submission_id === selectedSubmission);
+  // Academic LA 4.1 specifies a different Launch Portfolio rubric from the
+  // published LMS. Hold *only* this assessment until faculty/design signoff.
+  // This is a UI safeguard, not a substitute for server-side release controls.
+  const portfolioSubmissionOnHold = activeActivity?.slug === "launch-portfolio";
+  const portfolioReviewOnHold = reviewActivity?.slug === "launch-portfolio";
+  const portfolioRubricComparison = portfolioReviewOnHold ? compareLaunchPortfolioRubric(reviewCriteria) : null;
 
   function chooseActivity(id: string) {
     setSelectedActivity(id);
@@ -196,6 +203,10 @@ export default function StudioPage() {
 
   async function submitFinal() {
     if (!supabase || !membership || !activeActivity || !identity || finalSubmission) return;
+    if (portfolioSubmissionOnHold) {
+      setError("Launch Portfolio final submission is temporarily on hold while the academic rubric and faculty review are reconciled. You can still save a draft.");
+      return;
+    }
     if (!response.trim()) { setError("Please write your explanation before submitting."); return; }
     if (!window.confirm("Submit this response for facilitator review? Final submissions cannot be edited.")) return;
     setBusy(true); setError(""); setNotice("");
@@ -216,6 +227,10 @@ export default function StudioPage() {
 
   async function publishReview() {
     if (!supabase || !reviewSubmission) return;
+    if (portfolioReviewOnHold) {
+      setError("Launch Portfolio scoring is on hold pending rubric reconciliation and faculty approval. No scores were published.");
+      return;
+    }
     if (!reviewText.trim()) { setError("Add written feedback before publishing."); return; }
     const rubricScores = reviewCriteria.map((criterion) => ({
       criterion_id: criterion.id,
@@ -341,6 +356,9 @@ export default function StudioPage() {
               {assignedCriteria.length > 0 && <>
               <h4>How your work will be evaluated</h4>
               <ul>{assignedCriteria.map(c => <li key={c.id}><strong>{c.title} ({c.maximum_points} points)</strong> — {c.description}</li>)}</ul></>}
+              {portfolioSubmissionOnHold && !isInstructor && <p className="preview-banner" role="status">
+                <strong>Launch Portfolio submission on hold.</strong> The academic rubric and the LMS scoring configuration do not yet agree, and faculty review is pending. You can work on your response and save a draft, but do not submit a final portfolio here yet.
+              </p>}
               {!isInstructor && (finalSubmission ? (
                 <>
                   <p className="form-success">Submitted {new Date(finalSubmission.submitted_at).toLocaleString()}.</p>
@@ -367,7 +385,7 @@ export default function StudioPage() {
                     <button disabled={busy} type="button" onClick={() => void saveDraft()} className="secondary-button">
                       {busy ? "Working…" : "Save draft"}
                     </button>
-                    <button disabled={busy || !response.trim()} type="button" onClick={() => void submitFinal()} className="feedback-button">
+                    <button disabled={busy || !response.trim() || portfolioSubmissionOnHold} type="button" onClick={() => void submitFinal()} className="feedback-button">
                       {assignedCriteria.length > 0 ? "Submit final response" : "Share with facilitator (final)"}
                     </button>
                   </div>
@@ -413,6 +431,11 @@ export default function StudioPage() {
           {reviewSubmission && (
             <div className="studio-panel">
               <h3>{reviewActivity?.title ?? "Assignment review"}</h3>
+              {portfolioReviewOnHold && <div className="preview-banner" role="status">
+                <strong>Launch Portfolio scoring on hold.</strong> Faculty review of the assessment contract is still pending. The academic design proposes four criteria totaling 60 points; this configured rubric totals {portfolioRubricComparison?.actualTotal ?? "unknown"} points.
+                {portfolioRubricComparison?.matchesAcademicDraft && <span> Even a matching draft rubric cannot be used for grading until the academic approval gate is closed.</span>}
+                <p>No grade can be published through this draft interface while the hold is active.</p>
+              </div>}
               <p className="eyebrow">Learner explanation</p>
               <p className="prewrap">{reviewSubmission.response_text}</p>
               {reviewCriteria.length > 0 ? <h4>Score each criterion</h4> : <p className="form-note">Ungraded practice. Respond to the learner&apos;s reasoning with specific, useful feedback. This activity has no points or rubric score.</p>}
@@ -432,7 +455,7 @@ export default function StudioPage() {
                 onChange={e => setReviewText(e.target.value)}
                 placeholder="Explain the reasoning the learner demonstrated and identify a useful next step." />
               <div className="studio-actions">
-                <button type="button" className="feedback-button" disabled={busy || !reviewText.trim()}
+                <button type="button" className="feedback-button" disabled={busy || !reviewText.trim() || portfolioReviewOnHold}
                   onClick={() => void publishReview()}>
                   {busy ? "Publishing…" : existingReview?.published_at ? "Update published review" : reviewCriteria.length === 0 ? "Publish formative feedback" : "Publish complete review"}
                 </button>

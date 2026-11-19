@@ -178,6 +178,87 @@ test("facilitator graded review still requires every criterion and uses rubric p
   assert.deepEqual(rpc.values.p_scores, [{ criterion_id: "criterion-1", points: 8, note: "" }]);
 });
 
+function addUnreconciledLaunchPortfolio() {
+  db.pll_activities.push({
+    id: "launch-portfolio-1", course_id: "course-1", module_id: "module-1",
+    slug: "launch-portfolio", title: "Launch Portfolio", instructions: "Reflect on your first move.", is_published: true,
+  });
+  for (const [index, title] of ["Feasible plan", "First-action evidence", "Evidence-informed next step"].entries()) {
+    db.pll_rubric_criteria.push({
+      id: `portfolio-criterion-${index}`, activity_id: "launch-portfolio-1", course_id: "course-1",
+      position: index + 1, title, description: title, maximum_points: 10,
+    });
+  }
+}
+
+test("unreconciled Launch Portfolio permits a saved draft but not an accidental final submission", async () => {
+  resetData();
+  addUnreconciledLaunchPortfolio();
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Launch Portfolio/ }));
+  assert.match(screen.getByRole("status").textContent, /submission on hold/i);
+  fireEvent.change(screen.getByLabelText("Your project reasoning or response"), {
+    target: { value: "Here is my draft plan and a genuine obstacle." },
+  });
+  assert.equal(screen.getByRole("button", { name: "Submit final response" }).disabled, true);
+  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+  await waitFor(() => assert.equal(db.pll_drafts.length, 1));
+  assert.equal(db.pll_drafts[0].response_text, "Here is my draft plan and a genuine obstacle.");
+  assert.equal(db.pll_submissions.length, 0);
+});
+
+test("unreconciled Launch Portfolio cannot publish a grade through the facilitator UI", async () => {
+  resetData();
+  addUnreconciledLaunchPortfolio();
+  currentUserId = "facilitator-1";
+  db.pll_memberships = [{ course_id: "course-1", user_id: currentUserId, member_role: "facilitator" }];
+  db.pll_submissions.push({
+    id: "portfolio-submission-1", activity_id: "launch-portfolio-1", course_id: "course-1",
+    learner_id: "learner-1", response_text: "A bounded first action was blocked by unsafe weather.",
+    submitted_at: "2026-11-18T12:00:00Z",
+  });
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Review submissions" }));
+  fireEvent.change(screen.getByLabelText("Submission to review"), { target: { value: "portfolio-submission-1" } });
+  assert.match(screen.getByRole("status").textContent, /totals 30 points/);
+  fireEvent.change(screen.getByLabelText("Overall feedback"), {
+    target: { value: "The documented obstacle was authentic. Consider a safer next test." },
+  });
+  assert.equal(screen.getByRole("button", { name: "Publish complete review" }).disabled, true);
+  assert.equal(calls.filter(call => call.kind === "rpc").length, 0);
+  assert.equal(db.pll_feedback.length, 0);
+});
+
+test("a four-by-fifteen Launch Portfolio draft still requires faculty release before scoring", async () => {
+  resetData();
+  addUnreconciledLaunchPortfolio();
+  db.pll_rubric_criteria = db.pll_rubric_criteria.filter(item => item.activity_id !== "launch-portfolio-1");
+  for (const [index, rubric] of academicLaunchPortfolioRubric.entries()) {
+    db.pll_rubric_criteria.push({
+      id: `academic-criterion-${index}`, activity_id: "launch-portfolio-1", course_id: "course-1",
+      position: index + 1, title: rubric.title, description: rubric.evidence, maximum_points: 15,
+    });
+  }
+  currentUserId = "facilitator-1";
+  db.pll_memberships = [{ course_id: "course-1", user_id: currentUserId, member_role: "facilitator" }];
+  db.pll_submissions.push({
+    id: "portfolio-submission-2", activity_id: "launch-portfolio-1", course_id: "course-1",
+    learner_id: "learner-1", response_text: "A thoughtful and safe first attempt.",
+    submitted_at: "2026-11-18T12:00:00Z",
+  });
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Review submissions" }));
+  fireEvent.change(screen.getByLabelText("Submission to review"), { target: { value: "portfolio-submission-2" } });
+  assert.match(screen.getByRole("status").textContent, /academic approval gate/);
+  assert.match(screen.getByRole("status").textContent, /totals 60 points/);
+  fireEvent.change(screen.getByLabelText("Overall feedback"), {
+    target: { value: "Good rationale and honest interpretation." },
+  });
+  assert.equal(screen.getByRole("button", { name: "Publish complete review" }).disabled, true);
+  assert.equal(calls.filter(call => call.kind === "rpc").length, 0);
+});
+
 test("signed-in lesson explicitly saves and resumes private progress without a grade", async () => {
   resetData();
   const progress = { courseId: "course-1", activityId: "practice-1", learnerId: "learner-1" };

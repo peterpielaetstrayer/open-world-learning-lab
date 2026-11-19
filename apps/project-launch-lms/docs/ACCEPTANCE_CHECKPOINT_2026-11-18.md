@@ -51,3 +51,16 @@ npm run build
 **Observed:** 3/3 new a11y/step tests, 30/30 formative, 5/5 lesson, lint, TypeScript and production build passed. The new script uses a test-only native-anchor stand-in for Next Link to avoid unrelated asynchronous prefetch effects; it makes **no** claims about actual navigation or authenticated persistence.
 
 **No release:** keep PR #15 draft/unmerged, the public OWLL website unchanged and live Supabase content/rubric unchanged. Do not create test accounts or send invitations simply to close a report line. The next full acceptance pass begins **only after** the protected browser and explicitly authorized synthetic Auth environment can actually be used.
+
+## Checkpoint 2 addendum — private source safeguard for an unresolved academic rubric
+
+**Date:** November 18–19, 2026. **Scope:** draft LMS client only; no Supabase schema/data changes, no new users, no public release.
+
+The signed-in course previously allowed ordinary `launch-portfolio` final submission and facilitator score publishing using whichever criteria the LMS happened to contain. That is not an acceptable test assumption while the authored academic rubric (4 × 15 = 60 with explicit performance anchors) differs from the currently published LMS rubric (3 × 10 = 30), and faculty authorization of the assessment contract is unverified.
+
+- **Learner:** The Launch Portfolio final-submission button now stays disabled with a clear explanation. Learners may still save draft responses. Other graded activities, including Direction Brief, are unaffected.
+- **Facilitator:** The Launch Portfolio score-publishing button stays disabled with a warning that reports the configured total. This hold persists even if the criteria happen to match the academic draft; matching numbers are not evidence of faculty signoff. Other rubric-scored and ungraded reviews remain operational.
+- **Defense-in-depth:** The action handlers also refuse a Launch Portfolio final submission or scored review if invoked through the component while the hold is active. This **does not** enforce a database-wide freeze: direct RPC/API requests could bypass a client-only guard. Before any real learners or grades, release controls must also be implemented in an authoritative server/database path after explicit approval.
+- **Test coverage:** Two isolated role-UI tests exercise the current 30-point mismatch and saved-draft behavior; a third confirms the 60-point copy remains held pending faculty acceptance. All tests use synthetic in-memory clients; they do not prove RLS, real Auth, or true persistence.
+
+**Release decision:** no change. Remove the hold only after a faculty-approved scoring contract, exact source/database rubric reconciliation, authoritative write-path enforcement, verified role tests, and a separate release decision. Do not misrepresent this source UI guard as protection of the current Supabase backend.
