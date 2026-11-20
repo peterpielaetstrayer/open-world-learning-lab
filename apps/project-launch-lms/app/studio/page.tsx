@@ -11,6 +11,7 @@ import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
 import { RubricEditor } from "./rubric-editor";
 import { compareLaunchPortfolioRubric } from "./launch-portfolio-rubric";
+import { sortCourseActivities } from "./activity-order";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type {
   CourseMembership, CourseActivity, LearnerDraft, LearnerSubmission,
@@ -128,13 +129,9 @@ export default function StudioPage() {
   const visibleModules = modules.filter(item => !studentPreview || item.is_published);
   const visibleActivities = activities.filter(activity => !studentPreview ||
     (activity.is_published && visibleModules.some(item => item.id === activity.module_id)));
-  const orderedActivities = visibleModules.flatMap(item => visibleActivities
-    .filter(activity => activity.module_id === item.id)
-    .sort((a, b) => {
-      const aAssignment = criteria.some(criterion => criterion.activity_id === a.id);
-      const bAssignment = criteria.some(criterion => criterion.activity_id === b.id);
-      return Number(aAssignment) - Number(bAssignment) || a.title.localeCompare(b.title);
-    }));
+  const orderedActivities = visibleModules.flatMap(item => sortCourseActivities(
+    visibleActivities.filter(activity => activity.module_id === item.id), criteria
+  ));
   const readableActivity = visibleActivities.find(activity => activity.id === selectedActivity);
   const ownSubmissions = submissions.filter(item => item.learner_id === identity);
 
