@@ -1,5 +1,5 @@
 import { LessonText, getResourceUrl } from "./lesson-text";
-import type { CourseActivity, LearnerSubmission, PublishedFeedback, RubricCriterion } from "@/lib/course-types";
+import type { CourseActivity, CriterionScore, LearnerSubmission, PublishedFeedback, RubricCriterion } from "@/lib/course-types";
 import { activityExpectsResponse } from "./activity-order";
 
 export type CourseSection = "home" | "modules" | "assignments" | "feedback" | "resources" | "discussions" | "quiz" | "evaluation" | "manage";
@@ -22,7 +22,7 @@ export function CourseHome({ description, modules, activities, submissions, feed
         <p className="eyebrow">Project Launch Lab · Your learning studio</p>
         <h2 id="course-home-heading">Start with curiosity. Leave with a next move.</h2>
         <p className="course-home-lead">You will choose a project direction that matters to you, plan a realistic first step, and learn from what happens. You do not need a perfect idea or a successful outcome to do meaningful work.</p>
-        {description && <div className="course-description"><LessonText text={description} /></div>}
+        {description && <div className="course-description"><LessonText text={description} headingLevel={3} /></div>}
         <div className="studio-actions">
           {beginning && <button type="button" className="feedback-button" onClick={() => submittedCount ? onModules() : onOpen(beginning.id)}>
             {instructor ? "Open first activity" : submittedCount ? "Open module pathway" : "Begin exploring"}
@@ -133,11 +133,13 @@ export function CourseOutline({ modules, activities, criteria, selectedId, onOpe
   );
 }
 
-export function AssignmentList({ activities, criteria, submissions, feedback, onOpen, showFeedback }: {
+export function AssignmentList({ activities, criteria, submissions, feedback, scores = [], onOpen, showFeedback }: {
   activities: CourseActivity[]; criteria: RubricCriterion[]; submissions: LearnerSubmission[];
-  feedback: PublishedFeedback[]; onOpen: (id: string) => void; showFeedback: boolean;
+  feedback: PublishedFeedback[]; scores?: CriterionScore[]; onOpen: (id: string) => void; showFeedback: boolean;
 }) {
-  const assignments = showFeedback ? activities : activities.filter(activity => criteria.some(item => item.activity_id === activity.id));
+  const assignments = activities.filter(activity => showFeedback
+    ? activityExpectsResponse(activity, criteria)
+    : criteria.some(item => item.activity_id === activity.id));
   return (
     <section aria-labelledby="assignment-list-heading">
       <h2 id="assignment-list-heading">{showFeedback ? "Your work and feedback" : "Assignments"}</h2>
@@ -147,8 +149,12 @@ export function AssignmentList({ activities, criteria, submissions, feedback, on
         const review = feedback.find(item => item.submission_id === submission?.id && item.published_at);
         const maximum = criteria.filter(item => item.activity_id === activity.id)
           .reduce((total, item) => total + Number(item.maximum_points), 0);
-        // The published 30-point Portfolio rubric conflicts with the academic
-        // 60-point design. Do not present its stale total as an assessable grade.
+        const assignmentCriteria = criteria.filter(item => item.activity_id === activity.id);
+        const matchingScores = review ? assignmentCriteria.map(criterion =>
+          scores.find(score => score.submission_id === review.submission_id && score.criterion_id === criterion.id)) : [];
+        const total = matchingScores.length > 0 && matchingScores.every(score => score !== undefined)
+          ? matchingScores.reduce((sum, score) => sum + Number(score?.awarded_points ?? 0), 0)
+          : null;
         const portfolioOnHold = activity.slug === "launch-portfolio";
         return <article key={activity.id} className="assignment-card">
           <h3><button type="button" className="text-button" onClick={() => onOpen(activity.id)}>{activity.title}</button></h3>
@@ -156,7 +162,8 @@ export function AssignmentList({ activities, criteria, submissions, feedback, on
           {submission ? <p>Submitted {new Date(submission.submitted_at).toLocaleString()}{review ? " · Feedback available" : " · Awaiting review"}</p>
             : portfolioOnHold ? <p>You may save a draft; final submission and grading are not available until the assessment is approved.</p>
             : <p>Ready for your response</p>}
-          {showFeedback && review && <LessonText text={review.summary} />}
+          {showFeedback && review && <p className="prewrap">{review.summary}</p>}
+          {review && !portfolioOnHold && total !== null && <p><strong>Score:</strong> {total} / {maximum} points</p>}
         </article>;
       })}
     </section>
