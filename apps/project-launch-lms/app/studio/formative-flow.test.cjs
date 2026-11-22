@@ -298,7 +298,7 @@ test("learner dashboard shows the course journey, safe choices and honest progre
   render(React.createElement(StudioPage));
   const heading = await screen.findByRole("heading", { name: /Start with curiosity/ });
   assert.ok(heading);
-  assert.match(screen.getByText(/These counts track submissions and feedback/).textContent, /not mastery/);
+  assert.match(screen.getByText(/These counts track shared responses and feedback/).textContent, /not mastery/);
   assert.ok(screen.getByText(/You do not need to buy anything/));
   assert.ok(screen.getByRole("button", { name: "Begin exploring" }));
   assert.ok(screen.getByRole("heading", { name: "Discover & Define" }));
