@@ -27,6 +27,19 @@ This self-review follows the five design areas identified in the Assignment 6.1 
 
 The existing six CLOs and assignment rubrics are preserved. The stage adds student-facing module outcomes and clearer boundaries between instruction, practice, feedback and application. Faculty confirmation of formal revised MLO language or mapping remains separate from learner copy.
 
+### Module outcomes from the submitted blueprint
+
+| Module outcome | Blueprint CLO linkage | Learner evidence |
+| --- | --- | --- |
+| M1.1 Identify personal interests or questions that could start a project | 1, 6 | Starting Point and two project options in the Brief |
+| M1.2 Evaluate ideas using relevance, feasibility, and scope | 1, 2 | Compare Two Directions, then the scored Brief |
+| M1.3 Formulate a focused project direction | 3 | Chosen direction and rationale in the Brief |
+| M2.1 Develop a feasible plan with milestones, resources, constraints, and a bounded action | 1, 4, 5 | Card and Portfolio criteria 1–2 |
+| M2.2 Evaluate a draft plan and justify an improvement or retention | 4, 5 | Respond to Feedback and Portfolio criterion 4 |
+| M2.3 Attempt a safe action, interpret results or a real obstacle, and justify a next step | 5, 6 | Act or Document a Real Barrier and Portfolio criteria 3–4 |
+
+Module 2 uses the submitted LA 4.1 relative day 3, day 5, and day 7 milestones. Module 1 uses proposed day 3 and day 7 pacing for the private review. These dates are relative to course opening and do not alter USD assignment deadlines. Both modules include a downloadable plain-text worksheet; the academic Portfolio text and rubric remain unchanged.
+
 ## Assessment evidence for LA 5.1
 
 - **Rubric attached to Module 4 graded work:** Launch Portfolio, 60 possible points. Criteria cover purpose and planning coherence; resources, constraints and feasibility; first action and evidence interpretation; and feedback, revision and next decision. Four performance levels 15, 10, 5 and 0 per criterion. The 30-point Direction Brief supplies supporting applied-skill evidence.

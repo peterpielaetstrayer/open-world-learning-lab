@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { CourseHome, CourseOutline, AssignmentList, CourseResources, type CourseSection } from "./course-navigation";
+import { ActivityPacing, CourseHome, CourseOutline, AssignmentList, CourseResources, type CourseSection } from "./course-navigation";
 import { CourseQuiz } from "./course-quiz";
 import { Discussions } from "./discussions";
 import { CourseEvaluation } from "./course-evaluation";
@@ -335,6 +335,8 @@ export default function StudioPage() {
           {activeActivity && readableActivity && (
             <div className="studio-panel">
               <h3>{activeActivity.title}</h3>
+              {orderedActivities.some(activity => activity.slug === "module-one-introduction") &&
+                <ActivityPacing slug={activeActivity.slug} />}
               <LessonText key={activeActivity.id} text={activeActivity.instructions}
                 lessonProgress={!isInstructor ? {
                   courseId: membership.course_id,

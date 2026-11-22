@@ -37,23 +37,23 @@ const mediaItems = {
     "scenes": [
       [
         "Start with something that matters",
-        "Tessa wants to help new students find their way around school. She compares making an illustrated guide to the whole school with testing one page about a single hard to find room."
+        "Jordan wants to help new students find their way around school. She compares making an illustrated guide to the whole school with testing one page about a single hard-to-find room."
       ],
       [
         "Relevance",
-        "Relevance asks why the project matters. Both ideas could help new students, and Tessa enjoys making illustrations."
+        "Relevance asks why the project matters. Both ideas could help new students, and Jordan enjoys making illustrations."
       ],
       [
         "Feasibility",
-        "Feasibility asks what Tessa could begin with the time and resources she has. One page can start with a sketch and feedback from a trusted adult."
+        "Feasibility asks what Jordan could begin with the time and resources she has. One page can start with a sketch and feedback from a trusted adult."
       ],
       [
         "Scope",
-        "Scope asks how focused the idea is. A guide to the entire school may be too big for the first attempt. One room gives Tessa a clear boundary."
+        "Scope asks how focused the idea is. A guide to the entire school may be too big for the first attempt. One room gives Jordan a clear boundary."
       ],
       [
         "Choose a direction and a tradeoff",
-        "Tessa chooses the smaller guide. She gives up wide coverage for now and gains a first draft she can learn from. Use these lenses when you compare your own directions."
+        "Jordan chooses the smaller guide. She gives up wide coverage for now and gains a first draft she can learn from. Use these lenses when you compare your own directions."
       ]
     ]
   },
@@ -62,7 +62,7 @@ const mediaItems = {
     "scenes": [
       [
         "Start with the purpose",
-        "Maya wants to learn whether a small pollinator garden might work at school. She needs permission and a spot with suitable light."
+        "Maya wants to improve her school garden. Before she can redesign it, she needs permission and a spot with suitable light."
       ],
       [
         "Put milestones in order",

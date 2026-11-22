@@ -180,6 +180,19 @@ export function AssignmentList({ activities, criteria, submissions, feedback, sc
   );
 }
 
+const moduleTargets: Readonly<Record<string, string>> = {
+  "direction-comparison": "Module 1, Day 3. Share your comparison for formative feedback.",
+  "project-direction-brief": "Module 1, Day 7. Submit your brief after considering feedback on your comparison.",
+  "first-move-card": "Module 2, Day 3. Share your card for facilitator feedback.",
+  "first-move-revision": "Module 2, Day 5. Complete your response after facilitator feedback arrives.",
+  "launch-portfolio": "Module 2, Day 7. Submit after you have considered the feedback and documented a safe attempt or barrier.",
+};
+
+export function ActivityPacing({ slug }: { slug: string }) {
+  const target = moduleTargets[slug];
+  return target ? <p className="form-note"><strong>Module pacing:</strong> {target} Day 1 begins when your facilitator opens the module. Follow any schedule your facilitator shares.</p> : null;
+}
+
 export function CourseResources({ activities }: { activities: CourseActivity[] }) {
   const resources = activities.flatMap(activity => {
     const urls = [...new Set(activity.instructions.split(/\r?\n/)
@@ -189,7 +202,10 @@ export function CourseResources({ activities }: { activities: CourseActivity[] }
   return (
     <section aria-labelledby="resources-heading">
       <h2 id="resources-heading">Resources</h2>
-      <p>These resources are also linked from their lessons.</p>
+      <p>These resources support work in both modules.</p>
+      {activities.some(activity => activity.slug === "module-one-introduction") && <ul>
+        <li><a className="back-link" href="/resources/project-launch-worksheets.txt" download>Download the project worksheets and first-action checklist (plain text)</a></li>
+      </ul>}
       {resources.map(({ activity, url }) => <article className="assignment-card" key={activity.id + url}>
         <h3>{activity.title}</h3>
         <a className="back-link" href={url} target="_blank" rel="noopener noreferrer">
