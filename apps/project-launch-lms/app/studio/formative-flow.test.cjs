@@ -54,6 +54,7 @@ const stubSupabase = {
     return query;
   },
   async rpc(name, values) {
+    if (name === "pll_portfolio_is_open") return { data: db.portfolioOpen === true, error: null };
     calls.push({ kind: "rpc", name, values });
     if (name === "pll_publish_formative_feedback") {
       db.pll_feedback.push({ id: "feedback-1", submission_id: values.p_submission_id, summary: values.p_summary, published_at: "2026-11-18T12:00:00Z" });
@@ -929,4 +930,26 @@ test("feedback shows a complete published score and omits instructional activiti
   fireEvent.click(await screen.findByRole("button", { name: "Feedback" }));
   assert.ok(screen.getByText(/8 \/ 10 points/));
   assert.equal(screen.queryByRole("button", { name: "Module 1 Introduction" }), null);
+});
+
+
+test("approved rubric and backend release status enable the Portfolio learner submission", async () => {
+  resetData();
+  addUnreconciledLaunchPortfolio();
+  db.portfolioOpen = true;
+  db.pll_rubric_criteria = db.pll_rubric_criteria.filter(item => item.activity_id !== "launch-portfolio-1");
+  for (const [index, rubric] of academicLaunchPortfolioRubric.entries()) {
+    db.pll_rubric_criteria.push({
+      id: `configured-${index}`, activity_id: "launch-portfolio-1", course_id: "course-1",
+      position: index + 1, title: rubric.title, description: rubric.evidence, maximum_points: 15,
+    });
+  }
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /^Launch Portfolio/ }));
+  fireEvent.change(screen.getByLabelText("Your project reasoning or response"), { target: { value: "Synthetic Portfolio evidence." } });
+  const rubric = screen.getByRole("region", { name: /Launch Portfolio assessment — 60 points/ });
+  assert.equal(rubric.querySelectorAll("dt").length, 16);
+  assert.equal(screen.getByRole("button", { name: "Submit final response" }).disabled, false);
+  assert.equal(calls.length, 0);
 });

@@ -70,11 +70,11 @@ export function compareLaunchPortfolioRubric(rows: ReadonlyArray<{ title: string
   return { matchesAcademicDraft: problems.length === 0, actualTotal, academicTotal: 60, problems };
 }
 
-export function LaunchPortfolioRubricReview() {
+export function LaunchPortfolioRubricReview({ onHold = true }: { onHold?: boolean }) {
   const bands = ["Proficient", "Developing", "Beginning", "Missing"] as const;
   return <section className="launch-model" aria-labelledby="launch-rubric-heading">
-    <p className="eyebrow">Academic design review · not live grading</p>
-    <h3 id="launch-rubric-heading">Proposed Launch Portfolio assessment — 60 points</h3>
+    <p className="eyebrow">{onHold ? "Academic rubric review" : "Academic rubric"}</p>
+    <h3 id="launch-rubric-heading">{onHold ? "Proposed Launch Portfolio assessment — 60 points" : "Launch Portfolio assessment — 60 points"}</h3>
     <p>Four criteria, each with four performance levels from the submitted November 16 LA 4.1 academic rubric.</p>
     <p>Each criterion values honest reasoning and evidence. An authentic, documented obstacle can qualify; successful completion of the project is not required. The examples below describe the evidence reviewers should look for.</p>
     {academicLaunchPortfolioRubric.map((criterion, index) => <details key={criterion.title}>
@@ -87,6 +87,6 @@ export function LaunchPortfolioRubricReview() {
         </div>)}
       </dl>
     </details>)}
-    <p className="form-note">The academic rubric specifies 15, 10, 5, and 0 point levels. Final submissions and scoring require release approval.</p>
+    <p className="form-note">The academic rubric specifies 15, 10, 5, and 0 point levels. {onHold && "Final submissions and scoring require release approval."}</p>
   </section>;
 }

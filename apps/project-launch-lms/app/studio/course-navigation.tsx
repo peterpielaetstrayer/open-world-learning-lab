@@ -113,9 +113,9 @@ export function CourseHome({ description, modules, activities, submissions, feed
   );
 }
 
-export function CourseOutline({ modules, activities, criteria, selectedId, onOpen }: {
+export function CourseOutline({ modules, activities, criteria, selectedId, portfolioOpen = false, onOpen }: {
   modules: CourseModule[]; activities: CourseActivity[]; criteria: RubricCriterion[];
-  selectedId: string; onOpen: (id: string) => void;
+  selectedId: string; portfolioOpen?: boolean; onOpen: (id: string) => void;
 }) {
   return (
     <nav aria-label="Module lessons" className="course-outline">
@@ -130,7 +130,7 @@ export function CourseOutline({ modules, activities, criteria, selectedId, onOpe
                 <button type="button" aria-current={selectedId === activity.id ? "page" : undefined}
                   onClick={() => onOpen(activity.id)}>
                   {activity.title}
-                  <span>{activity.slug === "launch-portfolio" ? "Assessment on hold" : criteria.some(criterion => criterion.activity_id === activity.id) ? "Assignment" : "Lesson"}
+                  <span>{activity.slug === "launch-portfolio" && !portfolioOpen ? "Assessment on hold" : criteria.some(criterion => criterion.activity_id === activity.id) ? "Assignment" : "Lesson"}
                     {!activity.is_published && " · Draft"}</span>
                 </button>
               </li>
@@ -143,9 +143,9 @@ export function CourseOutline({ modules, activities, criteria, selectedId, onOpe
   );
 }
 
-export function AssignmentList({ activities, criteria, submissions, feedback, scores = [], onOpen, showFeedback }: {
+export function AssignmentList({ activities, criteria, submissions, feedback, scores = [], portfolioOpen = false, onOpen, showFeedback }: {
   activities: CourseActivity[]; criteria: RubricCriterion[]; submissions: LearnerSubmission[];
-  feedback: PublishedFeedback[]; scores?: CriterionScore[]; onOpen: (id: string) => void; showFeedback: boolean;
+  feedback: PublishedFeedback[]; scores?: CriterionScore[]; portfolioOpen?: boolean; onOpen: (id: string) => void; showFeedback: boolean;
 }) {
   const assignments = activities.filter(activity => showFeedback
     ? activityExpectsResponse(activity, criteria)
@@ -165,7 +165,7 @@ export function AssignmentList({ activities, criteria, submissions, feedback, sc
         const total = matchingScores.length > 0 && matchingScores.every(score => score !== undefined)
           ? matchingScores.reduce((sum, score) => sum + Number(score?.awarded_points ?? 0), 0)
           : null;
-        const portfolioOnHold = activity.slug === "launch-portfolio";
+        const portfolioOnHold = activity.slug === "launch-portfolio" && !portfolioOpen;
         return <article key={activity.id} className="assignment-card">
           <h3><button type="button" className="text-button" onClick={() => onOpen(activity.id)}>{activity.title}</button></h3>
           <p>{portfolioOnHold ? "Assessment on hold · rubric under review" : maximum > 0 ? `${maximum} points` : "Ungraded practice"}{!activity.is_published && " · Draft"}</p>

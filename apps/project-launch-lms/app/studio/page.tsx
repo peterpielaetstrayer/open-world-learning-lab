@@ -10,7 +10,7 @@ import { ModuleEditor } from "./module-editor";
 import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
 import { RubricEditor } from "./rubric-editor";
-import { compareLaunchPortfolioRubric, LaunchPortfolioRubricReview } from "./launch-portfolio-rubric";
+import { academicLaunchPortfolioPointBands, compareLaunchPortfolioRubric, LaunchPortfolioRubricReview } from "./launch-portfolio-rubric";
 import { sortCourseActivities, activityExpectsResponse } from "./activity-order";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type {
@@ -39,6 +39,7 @@ export default function StudioPage() {
   const [feedbackRows, setFeedbackRows] = useState<PublishedFeedback[]>([]);
   const [criteria, setCriteria] = useState<RubricCriterion[]>([]);
   const [scores, setScores] = useState<CriterionScore[]>([]);
+  const [portfolioOpen, setPortfolioOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState("");
   const [selectedSubmission, setSelectedSubmission] = useState("");
   const [response, setResponse] = useState("");
@@ -79,7 +80,7 @@ export default function StudioPage() {
       if (courseResult.error) throw new Error(courseResult.error.message);
       setCourseTitle(courseResult.data.title);
       setCourseDescription(courseResult.data.description);
-      const [moduleResult, activityResult, draftResult, submissionResult, feedbackResult, criteriaResult, scoresResult] =
+      const [moduleResult, activityResult, draftResult, submissionResult, feedbackResult, criteriaResult, scoresResult, portfolioResult] =
         await Promise.all([
           supabase.from("pll_modules").select("id,title,module_number,is_published")
             .eq("course_id", courseId).order("module_number"),
@@ -100,7 +101,8 @@ export default function StudioPage() {
             .eq("course_id", courseId).order("position"),
           supabase.from("pll_rubric_scores")
             .select("id,submission_id,criterion_id,awarded_points,criterion_note")
-            .eq("course_id", courseId)
+            .eq("course_id", courseId),
+          supabase.rpc("pll_portfolio_is_open", { p_course_id: courseId })
         ]);
       for (const result of [moduleResult, activityResult, draftResult, submissionResult, feedbackResult, criteriaResult, scoresResult]) {
         if (result.error) throw result.error;
@@ -112,6 +114,7 @@ export default function StudioPage() {
       setFeedbackRows((feedbackResult.data ?? []) as PublishedFeedback[]);
       setCriteria((criteriaResult.data ?? []) as RubricCriterion[]);
       setScores((scoresResult.data ?? []) as CriterionScore[]);
+      setPortfolioOpen(!portfolioResult.error && portfolioResult.data === true);
       setLoadState("ready");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Could not load the course.");
@@ -148,10 +151,10 @@ export default function StudioPage() {
   const existingReview = feedbackRows.find((feedback) => feedback.submission_id === selectedSubmission);
   // Keep Portfolio submission and scoring held until the assessment is approved for release.
   // This is a UI safeguard, not a substitute for server-side release controls.
-  const portfolioSubmissionOnHold = activeActivity?.slug === "launch-portfolio";
-  const portfolioAssignmentRubric = portfolioSubmissionOnHold ? compareLaunchPortfolioRubric(assignedCriteria) : null;
-  const portfolioReviewOnHold = reviewActivity?.slug === "launch-portfolio";
-  const portfolioRubricComparison = portfolioReviewOnHold ? compareLaunchPortfolioRubric(reviewCriteria) : null;
+  const portfolioAssignmentRubric = activeActivity?.slug === "launch-portfolio" ? compareLaunchPortfolioRubric(assignedCriteria) : null;
+  const portfolioRubricComparison = reviewActivity?.slug === "launch-portfolio" ? compareLaunchPortfolioRubric(reviewCriteria) : null;
+  const portfolioSubmissionOnHold = portfolioAssignmentRubric !== null && !(portfolioOpen && portfolioAssignmentRubric.matchesAcademicDraft);
+  const portfolioReviewOnHold = portfolioRubricComparison !== null && !(portfolioOpen && portfolioRubricComparison.matchesAcademicDraft);
 
   function chooseActivity(id: string) {
     setSelectedActivity(id);
@@ -238,7 +241,8 @@ export default function StudioPage() {
       pointInputs[value.criterion_id]?.trim() === "" ||
       pointInputs[value.criterion_id] === undefined ||
       !Number.isFinite(value.points) || value.points < 0 ||
-      value.points > reviewCriteria[i].maximum_points
+      value.points > reviewCriteria[i].maximum_points ||
+      (portfolioRubricComparison !== null && !academicLaunchPortfolioPointBands.some(points => points === value.points))
     )) {
       setError("Give each rubric criterion a valid score within its maximum.");
       return;
@@ -329,7 +333,7 @@ export default function StudioPage() {
           {section === "modules" && (
             <div className="module-reader">
               <CourseOutline modules={visibleModules} activities={orderedActivities} criteria={criteria}
-                selectedId={selectedActivity} onOpen={openActivity} />
+                selectedId={selectedActivity} portfolioOpen={portfolioOpen} onOpen={openActivity} />
               <section className="studio-work" aria-label="Lesson content">
                 {!readableActivity && <p>Choose a lesson from the module list.</p>}
           {activeActivity && readableActivity && (
@@ -352,7 +356,7 @@ export default function StudioPage() {
                   setResponse(prepared);
                   return true;
                 } : undefined} />
-              {assignedCriteria.length > 0 && !portfolioSubmissionOnHold && <>
+              {assignedCriteria.length > 0 && !portfolioAssignmentRubric && <>
               <h4>How your work will be evaluated</h4>
               <ul>{assignedCriteria.map(c => <li key={c.id}><strong>{c.title} ({c.maximum_points} points)</strong> — {c.description}</li>)}</ul></>}
               {portfolioSubmissionOnHold && <p className="preview-banner" role="status">
@@ -360,8 +364,8 @@ export default function StudioPage() {
                   ? "The academic 60-point rubric is configured. Final submissions and scores are awaiting release approval."
                   : "The obsolete rubric is hidden while the academic 60-point rubric is being configured."} {!isInstructor && "You may work on your response and save a draft, but final submission is unavailable."}
               </p>}
-              {portfolioSubmissionOnHold && (portfolioAssignmentRubric?.matchesAcademicDraft || (isInstructor && !studentPreview)) &&
-                <LaunchPortfolioRubricReview />}
+              {portfolioAssignmentRubric && (portfolioAssignmentRubric.matchesAcademicDraft || (isInstructor && !studentPreview)) &&
+                <LaunchPortfolioRubricReview onHold={portfolioSubmissionOnHold} />}
               {!isInstructor && (finalSubmission ? (
                 <>
                   <p className="form-success">Submitted {new Date(finalSubmission.submitted_at).toLocaleString()}.</p>
@@ -418,7 +422,7 @@ export default function StudioPage() {
             </div>
           )}
           {section === "assignments" && <AssignmentList activities={orderedActivities} criteria={criteria}
-            submissions={isInstructor ? [] : ownSubmissions} feedback={feedbackRows} scores={scores} onOpen={openActivity} showFeedback={false} />}
+            submissions={isInstructor ? [] : ownSubmissions} feedback={feedbackRows} scores={scores} portfolioOpen={portfolioOpen} onOpen={openActivity} showFeedback={false} />}
           {section === "feedback" && (isInstructor && !studentPreview ? (
         <section className="studio-work" aria-labelledby="reviews-heading">
           <h2 id="reviews-heading">Learner submissions</h2>
@@ -448,8 +452,14 @@ export default function StudioPage() {
                 <div className="criterion-editor" key={c.id}>
                   <label htmlFor={`score-${c.id}`}>{c.title} — maximum {c.maximum_points} points</label>
                   <p>{c.description}</p>
-                  <input type="number" min="0" max={c.maximum_points} step="0.01" id={`score-${c.id}`}
-                    value={pointInputs[c.id] ?? ""} onChange={e => setPointInputs(prev=>({...prev,[c.id]:e.target.value}))} />
+                  {portfolioRubricComparison ? (
+                    <select id={`score-${c.id}`} disabled={portfolioReviewOnHold}
+                      value={pointInputs[c.id] ?? ""} onChange={e => setPointInputs(prev => ({...prev, [c.id]: e.target.value}))}>
+                      <option value="">Select a performance level</option>
+                      {academicLaunchPortfolioPointBands.map(points => <option key={points} value={points}>{points} points</option>)}
+                    </select>
+                  ) : <input type="number" min="0" max={c.maximum_points} step="0.01" id={`score-${c.id}`}
+                    value={pointInputs[c.id] ?? ""} onChange={e => setPointInputs(prev=>({...prev,[c.id]:e.target.value}))} />}
                   <label htmlFor={`note-${c.id}`}>Criterion feedback (optional)</label>
                   <textarea id={`note-${c.id}`} rows={2} maxLength={4000}
                     value={noteInputs[c.id] ?? ""} onChange={e => setNoteInputs(prev=>({...prev,[c.id]:e.target.value}))} />
@@ -470,7 +480,7 @@ export default function StudioPage() {
           )}
         </section>
           ) : <AssignmentList activities={orderedActivities} criteria={criteria} submissions={ownSubmissions}
-            feedback={feedbackRows} scores={scores} onOpen={openActivity} showFeedback={true} />)}
+            feedback={feedbackRows} scores={scores} portfolioOpen={portfolioOpen} onOpen={openActivity} showFeedback={true} />)}
           {section === "resources" && <CourseResources activities={orderedActivities} />}
           {section === "discussions" && supabase && <Discussions supabase={supabase}
             courseId={membership.course_id} identity={identity} preview={studentPreview} />}
