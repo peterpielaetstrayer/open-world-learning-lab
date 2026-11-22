@@ -861,6 +861,29 @@ test("held Launch Portfolio hides obsolete 30-point rubric across assignments an
   fireEvent.click(screen.getByRole("button", { name: /Launch Portfolio/ }));
   assert.equal(screen.queryByText("How your work will be evaluated"), null);
   assert.match(screen.getByRole("status").textContent, /obsolete rubric is hidden/);
+  assert.equal(screen.queryByRole("heading", { name: /Proposed Launch Portfolio assessment/ }), null);
   assert.equal(screen.getByRole("button", { name: "Submit final response" }).disabled, true);
   assert.equal(screen.getByRole("button", { name: "Save draft" }).disabled, false);
+});
+
+test("instructor can inspect the held academic rubric and all evaluation items before any submissions", async () => {
+  resetData();
+  currentUserId = "facilitator-1";
+  db.pll_memberships = [{ course_id: "course-1", user_id: currentUserId, member_role: "facilitator" }];
+  addUnreconciledLaunchPortfolio();
+  render(React.createElement(StudioPage));
+
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Launch Portfolio/ }));
+  const rubric = screen.getByRole("region", { name: /Proposed Launch Portfolio assessment — 60 points/ });
+  assert.equal(rubric.querySelectorAll("summary").length, 4);
+  assert.equal(rubric.querySelectorAll("dt").length, 16);
+  assert.equal(screen.queryByRole("button", { name: "Submit final response" }), null);
+
+  fireEvent.click(screen.getByRole("button", { name: "Evaluation" }));
+  await screen.findByText("0 responses");
+  assert.equal(screen.getAllByRole("listitem").length, 10);
+  assert.ok(screen.getByText(/Optional written response/));
+  assert.equal(screen.queryByRole("button", { name: "Submit evaluation" }), null);
+  assert.equal(calls.length, 0);
 });
