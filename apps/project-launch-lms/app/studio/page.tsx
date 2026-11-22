@@ -11,7 +11,7 @@ import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
 import { RubricEditor } from "./rubric-editor";
 import { compareLaunchPortfolioRubric } from "./launch-portfolio-rubric";
-import { sortCourseActivities } from "./activity-order";
+import { sortCourseActivities, activityExpectsResponse } from "./activity-order";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type {
   CourseMembership, CourseActivity, LearnerDraft, LearnerSubmission,
@@ -324,7 +324,7 @@ export default function StudioPage() {
         </nav>
         <div className="course-content">
           {section === "home" && <CourseHome description={courseDescription} modules={visibleModules}
-            activities={orderedActivities} submissions={ownSubmissions}
+            activities={orderedActivities} submissions={ownSubmissions} criteria={criteria}
             feedback={feedbackRows} instructor={isInstructor} onOpen={openActivity} onModules={() => setSection("modules")} />}
           {section === "modules" && (
             <div className="module-reader">
@@ -374,7 +374,9 @@ export default function StudioPage() {
                 </>
               ) : (
                 <>
-                  {assignedCriteria.length === 0 && <p className="form-note">Ungraded practice. You can save a working reflection or share it for facilitator feedback. Sharing is final; you can keep revising a saved draft until then. Only share what you feel comfortable putting in your course record.</p>}
+                  {assignedCriteria.length === 0 && <p className="form-note">{activityExpectsResponse(activeActivity, criteria)
+                     ? "Ungraded practice. You can save a working reflection or share it for facilitator feedback. Sharing is final; you can keep revising a saved draft until then. Only share what you feel comfortable putting in your course record."
+                     : "This is instructional material or guided practice; no final shared response is required. Use the next lesson when ready. You may save optional notes or share a question, but sharing creates a final course record."}</p>}
                   <label htmlFor="learner-response">{assignedCriteria.length > 0 ? "Your project reasoning or response" : "Your practice reflection or question for feedback"}</label>
                   <textarea id="learner-response" value={response} onChange={(e) => setResponse(e.target.value)}
                     rows={9} maxLength={20000} placeholder="Explain your choices, constraints, and what you would do next…" />
