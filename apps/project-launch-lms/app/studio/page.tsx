@@ -10,7 +10,7 @@ import { ModuleEditor } from "./module-editor";
 import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
 import { RubricEditor } from "./rubric-editor";
-import { compareLaunchPortfolioRubric } from "./launch-portfolio-rubric";
+import { compareLaunchPortfolioRubric, LaunchPortfolioRubricReview } from "./launch-portfolio-rubric";
 import { sortCourseActivities, activityExpectsResponse } from "./activity-order";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type {
@@ -356,6 +356,7 @@ export default function StudioPage() {
               {portfolioSubmissionOnHold && <p className="preview-banner" role="status">
                 <strong>Launch Portfolio submission on hold.</strong> The configured grading criteria do not match the academic 60-point design, so the obsolete rubric is hidden rather than presented as a valid score. Faculty review and an assessment acceptance test are still required. {!isInstructor && "You may work on your response and save a draft, but final submission is unavailable."}
               </p>}
+              {portfolioSubmissionOnHold && isInstructor && !studentPreview && <LaunchPortfolioRubricReview />}
               {!isInstructor && (finalSubmission ? (
                 <>
                   <p className="form-success">Submitted {new Date(finalSubmission.submitted_at).toLocaleString()}.</p>
