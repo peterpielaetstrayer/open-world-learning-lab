@@ -1,3 +1,4 @@
+import { CourseMedia } from "./course-media";
 import { LessonText, getResourceUrl } from "./lesson-text";
 import type { CourseActivity, CriterionScore, LearnerSubmission, PublishedFeedback, RubricCriterion } from "@/lib/course-types";
 import { activityExpectsResponse } from "./activity-order";
@@ -23,6 +24,7 @@ export function CourseHome({ description, modules, activities, submissions, feed
         <h2 id="course-home-heading">Start with curiosity. Leave with a next move.</h2>
         <p className="course-home-lead">You will choose a project direction that matters to you, plan a realistic first step, and learn from what happens. You do not need a perfect idea or a successful outcome to do meaningful work.</p>
         {description && <div className="course-description"><LessonText text={description} headingLevel={3} /></div>}
+        {activities.some(activity => activity.slug === "module-one-introduction") && <CourseMedia item="overview" />}
         <div className="studio-actions">
           {beginning && <button type="button" className="feedback-button" onClick={() => submittedCount ? onModules() : onOpen(beginning.id)}>
             {instructor ? "Open first activity" : submittedCount ? "Open module pathway" : "Begin exploring"}

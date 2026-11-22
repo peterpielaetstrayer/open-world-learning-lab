@@ -1,3 +1,4 @@
+import { CourseMedia } from "./course-media";
 import { FirstMoveStudio } from "./first-move-studio";
 import { ProjectDirectionLesson, type LessonProgressIdentity } from "./project-direction-lesson";
 import { EntryDiagnostic } from "./entry-diagnostic";
@@ -35,6 +36,8 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
   return blocks.map((block, index) => {
     const lines = block.split(/\r?\n/);
     const key = `${index}-${lines[0]}`;
+    if (block === "[[direction-video]]") return <CourseMedia key={key} item="direction" />;
+    if (block === "[[first-move-video]]") return <CourseMedia key={key} item="firstmove" />;
     if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} />;
     if (block === "[[project-direction-lesson]]") return <ProjectDirectionLesson key={key} progress={lessonProgress} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[entry-diagnostic]]") return <EntryDiagnostic key={key} onPrepareResponse={onPrepareResponse} />;
