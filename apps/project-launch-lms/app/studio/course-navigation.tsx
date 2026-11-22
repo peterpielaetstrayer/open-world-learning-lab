@@ -1,18 +1,20 @@
 import { LessonText, getResourceUrl } from "./lesson-text";
 import type { CourseActivity, LearnerSubmission, PublishedFeedback, RubricCriterion } from "@/lib/course-types";
+import { activityExpectsResponse } from "./activity-order";
 
 export type CourseSection = "home" | "modules" | "assignments" | "feedback" | "resources" | "discussions" | "quiz" | "evaluation" | "manage";
 export type CourseModule = { id: string; title: string; module_number: number; is_published: boolean };
 
-export function CourseHome({ description, modules, activities, submissions, feedback, instructor, onOpen, onModules }: {
+export function CourseHome({ description, modules, activities, submissions, feedback, instructor, criteria = [], onOpen, onModules }: {
   description: string; modules: CourseModule[]; activities: CourseActivity[];
-  submissions: LearnerSubmission[]; feedback: PublishedFeedback[]; instructor: boolean;
+  submissions: LearnerSubmission[]; feedback: PublishedFeedback[]; instructor: boolean; criteria?: RubricCriterion[];
   onOpen: (id: string) => void; onModules: () => void;
 }) {
   const ordered = modules.flatMap(item => activities.filter(activity => activity.module_id === item.id));
   const submittedActivityIds = new Set(submissions.map(item => item.activity_id));
-  const next = ordered.find(item => !submittedActivityIds.has(item.id));
-  const submittedCount = ordered.filter(item => submittedActivityIds.has(item.id)).length;
+  const responseActivities = ordered.filter(item => activityExpectsResponse(item, criteria));
+  const beginning = ordered[0];
+  const submittedCount = responseActivities.filter(item => submittedActivityIds.has(item.id)).length;
   const reviewedCount = submissions.filter(item => feedback.some(review => review.submission_id === item.id && review.published_at)).length;
   return (
     <section className="course-dashboard" aria-labelledby="course-home-heading">
@@ -22,8 +24,8 @@ export function CourseHome({ description, modules, activities, submissions, feed
         <p className="course-home-lead">You will choose a project direction that matters to you, plan a realistic first step, and learn from what happens. You do not need a perfect idea or a successful outcome to do meaningful work.</p>
         {description && <div className="course-description"><LessonText text={description} /></div>}
         <div className="studio-actions">
-          {next && <button type="button" className="feedback-button" onClick={() => onOpen(next.id)}>
-            {instructor ? "Open first activity" : submittedCount ? "Continue learning" : "Begin exploring"}
+          {beginning && <button type="button" className="feedback-button" onClick={() => submittedCount ? onModules() : onOpen(beginning.id)}>
+            {instructor ? "Open first activity" : submittedCount ? "Open module pathway" : "Begin exploring"}
           </button>}
           <button type="button" className="secondary-button" onClick={onModules}>View the module map</button>
         </div>
@@ -31,9 +33,9 @@ export function CourseHome({ description, modules, activities, submissions, feed
 
       {!instructor && ordered.length > 0 && (
         <div className="course-activity-status" aria-label="Your course work status">
-          <p><strong>{submittedCount}</strong><span>of {ordered.length} activity responses shared</span></p>
+          <p><strong>{submittedCount}</strong><span>of {responseActivities.length} requested responses shared</span></p>
           <p><strong>{reviewedCount}</strong><span>facilitator reviews published</span></p>
-          <p className="course-status-caution">These counts track submissions and feedback—not mastery. You may need to revisit an idea after receiving feedback.</p>
+          <p className="course-status-caution">These counts track shared responses and feedback—not mastery or completion of reading lessons. Follow the module map in order so you encounter instruction before assessments.</p>
         </div>
       )}
 
