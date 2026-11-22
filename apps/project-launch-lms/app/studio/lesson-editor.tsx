@@ -110,7 +110,7 @@ export function LessonEditor({ supabase, courseId, activities, modules, refresh 
           <label htmlFor="lesson-instructions">Lesson instructions</label>
           <textarea id="lesson-instructions" required rows={8} maxLength={20000} value={instructions}
             onChange={event => setInstructions(event.target.value)} />
-          <p className="form-note">To include the interactive Project Direction prototype, put <code>[[project-direction-lesson]]</code> on its own line, surrounded by blank lines. Learner responses inside this prototype are not saved yet.</p>
+          <p className="form-note">Place one interactive shortcode on its own line, surrounded by blank lines—for example, <code>[[project-direction-lesson]]</code>. Inside a signed-in learner activity, the Project Direction lesson offers a separate Save my lesson work action. For other planning activities, the learner must explicitly prepare a response and then Save draft or Share final. This editor preview does not save learner work. Confirm the whole module sequence before publishing.</p>
           <label htmlFor="lesson-visibility">Visibility</label>
           <select id="lesson-visibility" value={published ? "published" : "draft"}
             onChange={event => setPublished(event.target.value === "published")}>
