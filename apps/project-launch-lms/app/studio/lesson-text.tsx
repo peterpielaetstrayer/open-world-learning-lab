@@ -19,10 +19,20 @@ export function getResourceUrl(text: string): URL | null {
   }
 }
 
-export function LessonText({ text, lessonProgress, onPrepareResponse }: {
-  text: string; lessonProgress?: LessonProgressIdentity; onPrepareResponse?: (text: string) => boolean;
+export function LessonText({ text, lessonProgress, onPrepareResponse, headingLevel = 4 }: {
+  text: string; headingLevel?: 3 | 4; lessonProgress?: LessonProgressIdentity; onPrepareResponse?: (text: string) => boolean;
 }) {
-  return text.trim().split(/\r?\n\s*\r?\n/).map((block, index) => {
+  const blocks: string[] = [];
+  for (const block of text.trim().split(/\r?\n\s*\r?\n/)) {
+    const last = blocks.at(-1);
+    if (last && [last, block].every(part => part.split(/\r?\n/).every(line => /^\d+\. /.test(line)))) {
+      blocks[blocks.length - 1] = last + "\n" + block;
+    } else {
+      blocks.push(block);
+    }
+  }
+  const Heading = headingLevel === 3 ? "h3" : "h4";
+  return blocks.map((block, index) => {
     const lines = block.split(/\r?\n/);
     const key = `${index}-${lines[0]}`;
     if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} />;
@@ -52,7 +62,7 @@ export function LessonText({ text, lessonProgress, onPrepareResponse }: {
     const heading = lines[0].match(/^#{1,4} (.+)$/);
     if (heading) {
       return <div key={key}>
-        <h4>{heading[1]}</h4>
+        <Heading>{heading[1]}</Heading>
         {lines.length > 1 && <p className="prewrap">{lines.slice(1).join("\n")}</p>}
       </div>;
     }
