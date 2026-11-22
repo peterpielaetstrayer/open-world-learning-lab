@@ -30,6 +30,10 @@ function hasStandaloneMarker(instructions: string, marker: string): boolean {
 function courseStage(activity: CourseActivity, isGraded: boolean): number {
   if (activity.slug === LEVEL_TWO_CLOSING_REFLECTION_SLUG ||
     hasStandaloneMarker(activity.instructions, "[[level-two-exit-check]]")) return 100;
+  // The lesson editor generates UUID slugs; recognize explicit module
+  // introductions and conclusions by their faculty-facing activity titles.
+  if (/^module [12] introduction\b/i.test(activity.title)) return 5;
+  if (/^module [12] conclusion\b/i.test(activity.title)) return 95;
   // Preserve the first instructional prerequisite when a staged lesson
   // deliberately includes multiple teaching markers.
   const known = COURSE_STAGES.find(stage =>
