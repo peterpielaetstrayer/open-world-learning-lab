@@ -350,11 +350,11 @@ export default function StudioPage() {
                   setResponse(prepared);
                   return true;
                 } : undefined} />
-              {assignedCriteria.length > 0 && <>
+              {assignedCriteria.length > 0 && !portfolioSubmissionOnHold && <>
               <h4>How your work will be evaluated</h4>
               <ul>{assignedCriteria.map(c => <li key={c.id}><strong>{c.title} ({c.maximum_points} points)</strong> — {c.description}</li>)}</ul></>}
-              {portfolioSubmissionOnHold && !isInstructor && <p className="preview-banner" role="status">
-                <strong>Launch Portfolio submission on hold.</strong> The academic rubric and the LMS scoring configuration do not yet agree, and faculty review is pending. You can work on your response and save a draft, but do not submit a final portfolio here yet.
+              {portfolioSubmissionOnHold && <p className="preview-banner" role="status">
+                <strong>Launch Portfolio submission on hold.</strong> The configured grading criteria do not match the academic 60-point design, so the obsolete rubric is hidden rather than presented as a valid score. Faculty review and an assessment acceptance test are still required. {!isInstructor && "You may work on your response and save a draft, but final submission is unavailable."}
               </p>}
               {!isInstructor && (finalSubmission ? (
                 <>
