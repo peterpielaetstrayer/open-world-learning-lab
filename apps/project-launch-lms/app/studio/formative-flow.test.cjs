@@ -887,3 +887,23 @@ test("instructor can inspect the held academic rubric and all evaluation items b
   assert.equal(screen.queryByRole("button", { name: "Submit evaluation" }), null);
   assert.equal(calls.length, 0);
 });
+
+test("learner can read the configured academic rubric with final submission still held", async () => {
+  resetData();
+  addUnreconciledLaunchPortfolio();
+  db.pll_rubric_criteria = db.pll_rubric_criteria.filter(item => item.activity_id !== "launch-portfolio-1");
+  for (const [index, rubric] of academicLaunchPortfolioRubric.entries()) {
+    db.pll_rubric_criteria.push({
+      id: `configured-${index}`, activity_id: "launch-portfolio-1", course_id: "course-1",
+      position: index + 1, title: rubric.title, description: rubric.evidence, maximum_points: 15,
+    });
+  }
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /^Launch Portfolio/ }));
+  assert.match(screen.getByRole("status").textContent, /academic 60-point rubric is configured/);
+  const rubric = screen.getByRole("region", { name: /Proposed Launch Portfolio assessment — 60 points/ });
+  assert.equal(rubric.querySelectorAll("dt").length, 16);
+  assert.equal(screen.getByRole("button", { name: "Submit final response" }).disabled, true);
+  assert.equal(calls.length, 0);
+});
