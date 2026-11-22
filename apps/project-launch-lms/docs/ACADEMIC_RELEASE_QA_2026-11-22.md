@@ -118,3 +118,10 @@ Use **three consenting adult synthetic test identities** under approved access c
 | Assignment6.1 LMS delivery and Canvas receipt | Student | Not submitted | OPEN |
 
 **Status on November 22:** safe to continue private course authoring and testing; **not** safe to attest complete course or submit protected draft URL as a finished instructor-accessible LMS.
+
+
+## G. November 22 verified quiz continuity correction
+
+The original ten-item project-scenario quiz included rhythm-guide questions 1, 6 and 8 that still named **Maya**, even though the revised planned Module 2 worked model uses **Maya** for a garden and the rhythm-guide transfer scenario is now **Ari**. With **zero** learner quiz attempts, the live quiz text was changed through reviewed, precondition-guarded data migrations **20261122183218**, **20261122183235** and **20261122183316**, mirrored in the private source. These updates change **character-name/pronoun consistency only**; no question count, option order, correct answer, score, rubric or existing attempt was changed.
+
+**Verified final SQL readback:** 10 quiz questions; 0 inappropriate Maya/she/her case references; all 3 affected rhythm cases retain expected answer index 2; no persisted quiz attempts, drafts, submissions, rubric grades or feedback; 14 staged activities still unpublished. A rollback-only regrade still yielded one 10-explanation quiz receipt and score 3/10 for the fixed test answer array; rolled back. The graded quiz remains subject to actual browser and accessibility acceptance testing.
