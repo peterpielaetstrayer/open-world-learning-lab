@@ -61,3 +61,43 @@ export function sortCourseActivities(
       || a.id.localeCompare(b.id);
   });
 }
+
+/**
+ * Instructional content does not require a final shared course response merely
+ * because it has an activity record. The separate lesson-progress feature is
+ * not a submitted assignment. Unknown authored activities retain the prior
+ * submittable behavior until they are explicitly classified.
+ */
+export function activityExpectsResponse(
+  activity: CourseActivity,
+  criteria: RubricCriterion[],
+): boolean {
+  if (criteria.some(item => item.activity_id === activity.id)) return true;
+
+  const responseSlugs = [
+    "entry-diagnostic", "gauntlet-practice", "direction-comparison",
+    "first-move-studio", "first-move-card", "first-move-revision",
+    "first-move-evidence", LEVEL_TWO_CLOSING_REFLECTION_SLUG,
+  ];
+  if (responseSlugs.includes(activity.slug)) return true;
+
+  const responseMarkers = [
+    "[[entry-diagnostic]]", "[[gauntlet-bridge]]", "[[direction-comparison]]",
+    "[[first-move-studio]]", "[[first-move-card]]", "[[first-move-revision]]",
+    "[[first-move-evidence]]", "[[level-two-exit-check]]",
+  ];
+  if (responseMarkers.some(marker => hasStandaloneMarker(activity.instructions, marker))) return true;
+
+  if (/^module [12] (introduction|conclusion)\b/i.test(activity.title)) return false;
+  const instructionOnlySlugs = [
+    "project-direction-lesson", "first-step-mini-lesson", "first-step-foundations",
+    "maya-garden-model", "first-step-checks",
+  ];
+  const instructionOnlyMarkers = [
+    "[[project-direction-lesson]]", "[[first-step-mini-lesson]]",
+    "[[maya-garden-model]]", "[[first-step-checks]]",
+  ];
+  if (instructionOnlySlugs.includes(activity.slug)
+    || instructionOnlyMarkers.some(marker => hasStandaloneMarker(activity.instructions, marker))) return false;
+  return true;
+}
