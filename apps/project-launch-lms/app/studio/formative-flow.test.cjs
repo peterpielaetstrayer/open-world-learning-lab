@@ -298,6 +298,12 @@ test("learner dashboard shows the course journey, safe choices and honest progre
   render(React.createElement(StudioPage));
   const heading = await screen.findByRole("heading", { name: /Start with curiosity/ });
   assert.ok(heading);
+  const outcomes = screen.getByRole("heading", { name: "What you will learn" }).closest("section");
+  assert.ok(outcomes, "Original course outcomes are visible on the actual course home");
+  assert.equal(outcomes.querySelectorAll("ol > li").length, 6);
+  assert.match(outcomes.textContent, /Identify possible starting points for learner-directed projects/);
+  assert.match(outcomes.textContent, /Explain why a personally chosen direction matters/);
+  assert.match(outcomes.textContent, /document a genuine barrier/);
   assert.match(screen.getByText(/These counts track shared responses and feedback/).textContent, /not mastery/);
   assert.ok(screen.getByText(/You do not need to buy anything/));
   assert.ok(screen.getByRole("button", { name: "Begin exploring" }));
