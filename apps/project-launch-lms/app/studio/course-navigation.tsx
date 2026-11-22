@@ -15,6 +15,7 @@ export function CourseHome({ description, modules, activities, submissions, feed
   const submittedActivityIds = new Set(submissions.map(item => item.activity_id));
   const responseActivities = ordered.filter(item => activityExpectsResponse(item, criteria));
   const beginning = ordered[0];
+  const hasOrientation = activities.some(activity => activity.slug === "module-one-introduction");
   const submittedCount = responseActivities.filter(item => submittedActivityIds.has(item.id)).length;
   const reviewedCount = submissions.filter(item => feedback.some(review => review.submission_id === item.id && review.published_at)).length;
   return (
@@ -24,7 +25,14 @@ export function CourseHome({ description, modules, activities, submissions, feed
         <h2 id="course-home-heading">Start with curiosity. Leave with a next move.</h2>
         <p className="course-home-lead">You will choose a project direction that matters to you, plan a realistic first step, and learn from what happens. You do not need a perfect idea or a successful outcome to do meaningful work.</p>
         {description && <div className="course-description"><LessonText text={description} headingLevel={3} /></div>}
-        {activities.some(activity => activity.slug === "module-one-introduction") && <CourseMedia item="overview" />}
+        {hasOrientation && <>
+          <CourseMedia item="overview" />
+          <section aria-labelledby="course-help-heading">
+            <h3 id="course-help-heading">Meet your facilitator</h3>
+            <p>Peter Pielaet-Strayer designed Project Launch Lab for his University of San Diego Learning Design and Technology capstone. His work focuses on helping learners explore interests, make decisions, and start projects they care about.</p>
+            <p>Open Discussions and choose Course questions for help with directions, access, or the next step. Use your assignment response and the feedback area for private project work. Leave personal details out of discussion posts.</p>
+          </section>
+        </>}
         <div className="studio-actions">
           {beginning && <button type="button" className="feedback-button" onClick={() => submittedCount ? onModules() : onOpen(beginning.id)}>
             {instructor ? "Open first activity" : submittedCount ? "Open module pathway" : "Begin exploring"}

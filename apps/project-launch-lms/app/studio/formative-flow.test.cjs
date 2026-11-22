@@ -907,3 +907,26 @@ test("learner can read the configured academic rubric with final submission stil
   assert.equal(screen.getByRole("button", { name: "Submit final response" }).disabled, true);
   assert.equal(calls.length, 0);
 });
+
+test("feedback shows a complete published score but hides instructional and unreleased score records", async () => {
+  resetData();
+  db.pll_activities.push({
+    id: "intro", course_id: "course-1", module_id: "module-1", slug: "module-one-introduction",
+    title: "Module 1 Introduction", instructions: "Welcome.", is_published: true,
+  });
+  db.pll_submissions.push({
+    id: "graded-response", activity_id: "graded-1", course_id: "course-1", learner_id: "learner-1",
+    response_text: "I compared two directions.", submitted_at: "2026-11-18T12:00:00Z",
+  });
+  db.pll_feedback.push({
+    id: "review", course_id: "course-1", submission_id: "graded-response", summary: "Explain the tradeoff.",
+    published_at: "2026-11-18T12:30:00Z",
+  });
+  db.pll_rubric_scores.push({
+    id: "score", submission_id: "graded-response", criterion_id: "criterion-1", awarded_points: 8, criterion_note: "",
+  });
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Feedback" }));
+  assert.ok(screen.getByText(/8 \/ 10 points/));
+  assert.equal(screen.queryByRole("button", { name: "Module 1 Introduction" }), null);
+});
