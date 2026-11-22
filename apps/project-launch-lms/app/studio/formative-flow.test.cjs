@@ -835,3 +835,26 @@ test("after sharing a response, home returns the learner to the ordered pathway"
   assert.ok(screen.getByRole("navigation", { name: "Module lessons" }));
   assert.ok(screen.getByRole("button", { name: /Practice choosing/ }));
 });
+
+test("held Launch Portfolio hides obsolete 30-point rubric across assignments and lesson while preserving drafts", async () => {
+  resetData();
+  addUnreconciledLaunchPortfolio();
+  render(React.createElement(StudioPage));
+
+  fireEvent.click(await screen.findByRole("button", { name: "Assignments" }));
+  const heading = screen.getByRole("heading", { name: "Launch Portfolio" });
+  const card = heading.closest("article");
+  assert.ok(card);
+  assert.match(card.textContent, /Assessment on hold/);
+  assert.match(card.textContent, /final submission and grading are not available/);
+  assert.doesNotMatch(card.textContent, /30 points/);
+  const brief = screen.getByRole("heading", { name: "Direction Brief" }).closest("article");
+  assert.match(brief.textContent, /10 points/, "Other graded rubrics remain visible");
+
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Launch Portfolio/ }));
+  assert.equal(screen.queryByText("How your work will be evaluated"), null);
+  assert.match(screen.getByRole("status").textContent, /obsolete rubric is hidden/);
+  assert.equal(screen.getByRole("button", { name: "Submit final response" }).disabled, true);
+  assert.equal(screen.getByRole("button", { name: "Save draft" }).disabled, false);
+});
