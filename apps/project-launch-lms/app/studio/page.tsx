@@ -416,7 +416,7 @@ export default function StudioPage() {
             </div>
           )}
           {section === "assignments" && <AssignmentList activities={orderedActivities} criteria={criteria}
-            submissions={isInstructor ? [] : ownSubmissions} feedback={feedbackRows} onOpen={openActivity} showFeedback={false} />}
+            submissions={isInstructor ? [] : ownSubmissions} feedback={feedbackRows} scores={scores} onOpen={openActivity} showFeedback={false} />}
           {section === "feedback" && (isInstructor && !studentPreview ? (
         <section className="studio-work" aria-labelledby="reviews-heading">
           <h2 id="reviews-heading">Learner submissions</h2>
@@ -468,7 +468,7 @@ export default function StudioPage() {
           )}
         </section>
           ) : <AssignmentList activities={orderedActivities} criteria={criteria} submissions={ownSubmissions}
-            feedback={feedbackRows} onOpen={openActivity} showFeedback={true} />)}
+            feedback={feedbackRows} scores={scores} onOpen={openActivity} showFeedback={true} />)}
           {section === "resources" && <CourseResources activities={orderedActivities} />}
           {section === "discussions" && supabase && <Discussions supabase={supabase}
             courseId={membership.course_id} identity={identity} preview={studentPreview} />}
