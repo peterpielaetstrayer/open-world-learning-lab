@@ -208,3 +208,15 @@ What is the smallest informative action for your project?”
 - No use of real high-school learner data in development.
 
 **Deliverable status (updated November 22):** 14 unpublished activities now exist in the live course database, but were NOT released to learners. Videos, usable published lessons, role-tested LMS, graded rubric migration, real faculty access and full completion evidence are **not** implied by this file.
+
+## November 22 integration — Module 1 comparison
+
+The unpublished `direction-comparison` activity now places the following text directly above its existing `[[direction-comparison]]` interaction. It carries the Gauntlet decision into the learner's own comparison and gives learners a text case in the course. The activity stays unpublished.
+
+### Bring one decision into your comparison
+
+If you completed the Project Launch Gauntlet, recall one choice where a constraint changed what the learner could realistically do. You can use the practice case below if you prefer to stay in this course.
+
+Devon wants to share stories about a neighborhood park. Devon could interview strangers and publish photos immediately, or create a one-page draft from public information or original sketches and ask a trusted adult about permissions before reaching out. The draft keeps the project moving while Devon checks what permission is needed. What would Devon learn from the draft, and what would still be unknown?
+
+With that tradeoff in mind, compare two directions of your own.
