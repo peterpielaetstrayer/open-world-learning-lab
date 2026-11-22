@@ -37,5 +37,12 @@ jobs:
           if node scripts/invite-member.mjs; then echo 'Unsafe: invite tool ran without --send'; exit 1; fi
       - name: Check TypeScript
         run: npm run typecheck
+      - name: Run instructional and assessment regression tests
+        run: |
+          npm run test:lesson
+          npm run test:formative
+          node --test app/studio/activity-order.test.cjs app/studio/level-two-exit-check.test.cjs app/studio/assessment-domain-labels.test.cjs
+      - name: Run synthetic accessibility and contrast checks
+        run: npm run test:a11y:synthetic
       - name: Build the standalone app
         run: npm run build
