@@ -45,7 +45,8 @@ jobs:
           PLL_QA_REPORT_KEY: ${{ secrets.PLL_QA_REPORT_KEY }}
         run: |
           if [[ -z "$PLL_QA_COURSE_SEED" || -z "$PLL_QA_REPORT_KEY" ]]; then
-            echo '::error::Set PLL_QA_COURSE_SEED and PLL_QA_REPORT_KEY before full acceptance.'
+            PLL_QA_SCHEMA_ONLY=1 bash qa/run.sh
+            echo '::error::Set PLL_QA_COURSE_SEED and PLL_QA_REPORT_KEY before full browser acceptance.'
             exit 1
           fi
       - name: Install locked app dependencies and isolated browser toolchain
