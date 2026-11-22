@@ -24,11 +24,26 @@ node qa/rebuild.mjs "$scratch/supabase/migrations" "$scratch/supabase/seed.sql"
 unset PLL_QA_COURSE_SEED
 cd "$scratch"
 if ! supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor >"$scratch/start.log" 2>&1; then
-  echo "Supabase start failed. Diagnostics are available in the encrypted report."
+  echo "Supabase start failed. Check the pinned CLI, container health and migration order."
   if [[ -n "${PLL_QA_REPORT_KEY:-}" ]]; then
     tar -cz -C "$scratch" start.log | openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:PLL_QA_REPORT_KEY -out "$RUNNER_TEMP/pll-report.enc"
   fi
   exit 1
+fi
+if [[ "${PLL_QA_SCHEMA_ONLY:-0}" == 1 ]]; then
+  docker exec -i supabase_db_pll-acceptance psql -X -U postgres -d postgres -v ON_ERROR_STOP=1 >/dev/null <<'SQL'
+do $qa$
+begin
+  if (select count(*) from pg_policy where polname in (
+      'pll_launch_portfolio_submission_hold','pll_launch_portfolio_score_insert_hold','pll_launch_portfolio_score_update_hold'
+    )) <> 3 or not exists (select 1 from pg_trigger where tgname = 'pll_portfolio_score_band' and tgenabled = 'O') then
+    raise exception 'The empty rebuild did not install the Portfolio guards.';
+  end if;
+end
+$qa$;
+SQL
+  echo 'PASS: clean local schema with all three Portfolio holds and the score-band trigger'
+  exit 0
 fi
 supabase status -o json >"$scratch/status.json" 2>"$scratch/status.log"
 cd "$app"
