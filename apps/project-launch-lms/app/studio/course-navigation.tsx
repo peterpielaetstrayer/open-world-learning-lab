@@ -31,6 +31,20 @@ export function CourseHome({ description, modules, activities, submissions, feed
         </div>
       </div>
 
+      <section className="course-how" aria-labelledby="course-outcomes-heading">
+        <h3 id="course-outcomes-heading">What you will learn</h3>
+        <p className="course-small">These are the six course learning outcomes from the academic design. You will build toward them through examples, practice, feedback, and project work. No prior project-building experience or AI tools are required.</p>
+        <ol>
+          <li>Identify possible starting points for learner-directed projects and define relevance, feasibility, scope, milestones, constraints and feedback checkpoints.</li>
+          <li>Evaluate possible project directions using personal relevance, feasibility and scope, explaining a meaningful tradeoff.</li>
+          <li>Formulate a personally selected project direction that is specific, manageable and supported by a reasoned rationale.</li>
+          <li>Analyze and evaluate a proposed launch plan for alignment among purpose, milestones, resources, constraints and evidence from a first test.</li>
+          <li>Develop, attempt and adjust a feasible launch plan using evidence from a safe, bounded first action and actionable feedback.</li>
+          <li>Explain why a personally chosen direction matters and identify a credible next step and support for continued effort.</li>
+        </ol>
+        <p className="course-small">For a first action that is not safe or feasible to attempt, you may document a genuine barrier, the preparation you completed, and a justified next move. Never invent an attempt to finish an assignment.</p>
+      </section>
+
       {!instructor && ordered.length > 0 && (
         <div className="course-activity-status" aria-label="Your course work status">
           <p><strong>{submittedCount}</strong><span>of {responseActivities.length} requested responses shared</span></p>
