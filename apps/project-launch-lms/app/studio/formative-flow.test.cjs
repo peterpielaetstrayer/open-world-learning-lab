@@ -312,7 +312,7 @@ test("ungraded responses and published feedback are discoverable in Feedback", a
   db.pll_feedback.push({ id: "feedback-1", course_id: "course-1", submission_id: "response-1", summary: "Good constraint analysis. Now ask what you can observe.", published_at: "2026-11-18T12:30:00Z" });
   render(React.createElement(StudioPage));
   await screen.findByRole("heading", { name: /Start with curiosity/ });
-  assert.ok(screen.getByText("of 2 activity responses shared"));
+  assert.ok(screen.getByText("of 2 requested responses shared"));
   fireEvent.click(screen.getByRole("button", { name: "Feedback" }));
   assert.ok(screen.getByRole("heading", { name: "Your work and feedback" }));
   assert.ok(screen.getByText("Ungraded practice"));
@@ -325,7 +325,7 @@ test("protected design preview distinguishes fictional states and navigates to f
   assert.ok(screen.getByRole("button", { name: "Starting learner" }));
   assert.ok(screen.getByRole("heading", { name: /Start with curiosity/ }));
   fireEvent.click(screen.getByRole("button", { name: "Example with feedback" }));
-  assert.ok(screen.getByText("of 4 activity responses shared"));
+  assert.ok(screen.getByText("of 4 requested responses shared"));
   fireEvent.click(screen.getByRole("button", { name: "Feedback" }));
   assert.ok(screen.getByRole("heading", { name: "Your work and feedback" }));
   assert.ok(screen.getAllByText("Ungraded practice").length >= 1);
