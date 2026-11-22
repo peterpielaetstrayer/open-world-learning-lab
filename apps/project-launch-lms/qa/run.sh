@@ -21,6 +21,10 @@ sed -i -E 's/^project_id = .*/project_id = "pll-acceptance"/' supabase/config.to
 mkdir -p supabase/migrations
 cd "$app"
 node qa/rebuild.mjs "$scratch/supabase/migrations" "$scratch/supabase/seed.sql"
+if [[ -n "${PLL_QA_COURSE_SEED:-}" ]]; then
+  PLL_QA_REPORT_KEY="$(printf 'project-launch-acceptance-report-v1:%s' "$PLL_QA_COURSE_SEED" | openssl dgst -sha256 -r | cut -d ' ' -f 1)"
+  export PLL_QA_REPORT_KEY
+fi
 unset PLL_QA_COURSE_SEED
 cd "$scratch"
 if ! supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor >"$scratch/start.log" 2>&1; then
