@@ -174,3 +174,11 @@ All 14 currently unpublished course activities were inspected against their inte
 
 **Verified after migration:** Each updated activity remains `is_published=false`; original jargon no longer appears; 14 total unpublished remain; no learner submissions/drafts/grades/quiz/survey responses were created. Exact applied SQL was read from Supabase migration history and mirrored verbatim to private PR #15 source `supabase/migrations/20261122193608_pll_clean_unpublished_learner_instructions.sql`, commit `80e58d6f412dfae20d6ee0c67e1af299cbbee8f4`. This is text QA and schema continuity, not real browser/learner acceptance, permission to publish, new multimedia, or academic submission.
 
+## Latest OWLL acceptance evidence
+
+| Gate | Evidence |
+| --- | --- |
+| Signed-in instructor | Stable OWLL branch URL opened its actual Instructor workspace; all 18 activities in two modules, 10 quiz items, 10 survey ratings, the held Portfolio rubric and the staged exit prompt inspected in the browser. |
+| Learner visibility | Instructor Student Preview showed 4 published activities. Rollback-only database learner rehearsal saw all 18 after temporary publication in its transaction. Independent learner browser acceptance remains open. |
+| Portfolio configuration | Migration `20261122204148` installed 4×15 and 16 anchors; holds and zero submissions/scores verified. |
+| Faculty delivery | Existing signed-in Instructor works. External review requires independent verification before sharing the submission URL. Production Vercel browser configuration points to dedicated Supabase. Production and faculty access await release approval. |
