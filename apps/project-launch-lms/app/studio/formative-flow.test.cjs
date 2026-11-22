@@ -953,3 +953,37 @@ test("approved rubric and backend release status enable the Portfolio learner su
   assert.equal(screen.getByRole("button", { name: "Submit final response" }).disabled, false);
   assert.equal(calls.length, 0);
 });
+
+test("approved Portfolio review publishes all four academic grades and feedback", async () => {
+  resetData();
+  currentUserId = "facilitator-1";
+  db.pll_memberships = [{ course_id: "course-1", user_id: currentUserId, member_role: "facilitator" }];
+  db.portfolioOpen = true;
+  addUnreconciledLaunchPortfolio();
+  db.pll_rubric_criteria = db.pll_rubric_criteria.filter(item => item.activity_id !== "launch-portfolio-1");
+  for (const [index, rubric] of academicLaunchPortfolioRubric.entries()) {
+    db.pll_rubric_criteria.push({
+      id: `academic-${index}`, activity_id: "launch-portfolio-1", course_id: "course-1",
+      position: index + 1, title: rubric.title, description: rubric.evidence, maximum_points: 15,
+    });
+  }
+  db.pll_submissions.push({ id: "portfolio-qa", activity_id: "launch-portfolio-1",
+    course_id: "course-1", learner_id: "learner-1", response_text: "Synthetic Portfolio test.",
+    submitted_at: "2026-11-18T12:00:00Z" });
+  window.confirm = () => true;
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Review submissions" }));
+  fireEvent.change(screen.getByLabelText("Submission to review"), { target: { value: "portfolio-qa" } });
+  const points = [15, 10, 5, 0];
+  academicLaunchPortfolioRubric.forEach((criterion, index) => {
+    const input = screen.getByLabelText(`${criterion.title} — maximum 15 points`);
+    assert.deepEqual(Array.from(input.options, option => option.value), ["", "15", "10", "5", "0"]);
+    fireEvent.change(input, { target: { value: String(points[index]) } });
+  });
+  fireEvent.change(screen.getByLabelText("Overall feedback"), { target: { value: "QA feedback about the evidence." } });
+  fireEvent.click(screen.getByRole("button", { name: "Publish complete review" }));
+  await waitFor(() => assert.ok(calls.some(call => call.name === "pll_publish_review")));
+  const review = calls.find(call => call.name === "pll_publish_review");
+  assert.deepEqual(review.values.p_scores.map(score => score.points), points);
+  assert.equal(review.values.p_summary, "QA feedback about the evidence.");
+});
