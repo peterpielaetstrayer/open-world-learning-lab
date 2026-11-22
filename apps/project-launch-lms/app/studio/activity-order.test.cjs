@@ -3,7 +3,7 @@ const assert = require("node:assert/strict");
 const { test } = require("node:test");
 require("tsx/cjs");
 
-const { sortCourseActivities, LEVEL_TWO_CLOSING_REFLECTION_SLUG } = require("./activity-order.ts");
+const { sortCourseActivities, activityExpectsResponse, LEVEL_TWO_CLOSING_REFLECTION_SLUG } = require("./activity-order.ts");
 
 function activity(id, title, slug = id) {
   return { id, course_id: "course-1", module_id: "module-2", title, slug, instructions: "", is_published: true };
@@ -90,4 +90,23 @@ test("editor-created module introduction and conclusion titles bracket course wo
   const rubric = [{ id: "rubric", activity_id: "portfolio", maximum_points: 15 }];
   assert.deepEqual(sortCourseActivities([close, conclusion, portfolio, lesson, intro], rubric)
     .map(item => item.id), ["intro", "lesson", "portfolio", "conclusion", "close"]);
+});
+
+test("instructional lessons and conclusions do not require final learner submissions", () => {
+  const pure = activity("intro", "Module 1 Introduction — Discover & Define", "uuid-intro");
+  const lesson = activity("lesson", "From Curiosity to Direction", "uuid-lesson");
+  lesson.instructions = "Read the explanation.\n\n[[project-direction-lesson]]";
+  const combined = activity("scenario", "Studio plan", "uuid-combined");
+  combined.instructions = "[[first-step-mini-lesson]]\n\n[[first-move-card]]";
+  const rubric = activity("graded", "Launch Portfolio", "launch-portfolio");
+  const criteria = [{ id: "c1", activity_id: "graded", maximum_points: 15 }];
+
+  assert.equal(activityExpectsResponse(pure, criteria), false);
+  assert.equal(activityExpectsResponse(lesson, criteria), false);
+  assert.equal(activityExpectsResponse(activity("check", "Knowledge Check", "first-step-checks"), criteria), false);
+  assert.equal(activityExpectsResponse(activity("close", "Module 2 Conclusion — Next Move", "uuid"), criteria), false);
+  assert.equal(activityExpectsResponse(combined, criteria), true, "A response marker overrides a teaching marker");
+  assert.equal(activityExpectsResponse(rubric, criteria), true);
+  assert.equal(activityExpectsResponse(activity("practice", "Gauntlet", "gauntlet-practice"), criteria), true);
+  assert.equal(activityExpectsResponse(activity("unknown", "New instructor-authored question", "uuid"), criteria), true);
 });
