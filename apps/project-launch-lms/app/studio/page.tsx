@@ -499,7 +499,7 @@ function StudioFrame({children}: {children: React.ReactNode}) {
         </div>
         <nav aria-label="Navigation"><Link href="/courses">My Courses</Link></nav>
       </header>
-      <main className="page-wrap studio-container" id="studio-main">{children}</main>
+      <main className="page-wrap studio-container" id="studio-main" tabIndex={-1}>{children}</main>
     </>
   );
 }
