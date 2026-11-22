@@ -95,9 +95,11 @@ Use **three consenting adult synthetic test identities** under approved access c
 
 **P0 completion condition:** all tested, unresolved severity-1/2 issues fixed, course checklist crosswalk complete, and faculty receives authentic reviewer access. A student-facing release is not approved by database role simulations alone.
 
-## E. Immediate academic decision and fallback
+## E. OWLL academic delivery
 
-**LA5.1 due November 23:** actual accessible LMS rubric + Level2 quiz/skill/attitude package + Level1 10–15-item reaction survey, submitted as a Website URL in USD Canvas. The source-backed custom package is strong, but its new exit check remains unpublished and no independent faculty-safe URL is certified. If external access cannot be confirmed, use a **previously established but independently verified Canvas Lite** course with these three actual assessment objects. Do not treat a code preview or staged document as an LMS submission. Journal5.1 remains a separate first-person review/Canvas submission.
+**November 22 delivery decision:** The existing custom OWLL Project Launch LMS (Next.js, GitHub, Supabase, Vercel) is the sole course delivery platform. USD Canvas is for official academic instructions and assignment submissions. Use the stable [OWLL course URL](https://project-launch-lms-git-f-3c42e5-peter-pielaet-strayers-projects.vercel.app/studio?course=99dc9de5-bfbf-4891-8f5e-444212ec2073) for role verification. Earlier platform options are superseded. Keep pre-release safeguards in place until the corresponding access, assessment, and QA gates pass.
+
+**LA5.1 due November 23:** actual accessible LMS rubric + Level2 quiz/skill/attitude package + Level1 10–15-item reaction survey, submitted as a Website URL in USD Canvas. The source-backed custom package is strong, but its new exit check remains unpublished and no independent faculty-safe URL is certified. Verify external instructor access and the actual assessment objects on OWLL before submitting the URL. Do not treat a code preview or staged document as an LMS submission. Journal5.1 remains a separate first-person review/Canvas submission.
 
 **Nov27–30:** original course checklist, OLC-adapted scorecard, improvement plan and QA checklist; faculty and peer role acceptance; capture USD submission receipts.
 
@@ -134,7 +136,7 @@ The original ten-item project-scenario quiz included rhythm-guide questions 1, 6
 
 **Editorial acceptance to resolve in reviewed release:** The published Launch Portfolio directions still imply a completed attempt even when a genuine safety/permission barrier prevents the action; the authored academic assignment explicitly permits an honest obstacle route. Resolve during approved rubric/instruction release, not by changing grading expectations silently. Confirm whether the Direction Brief's three short 10-point criterion descriptions meet Dr. Evans's rubric expectation or whether anchored performance levels must be made visible; do not invent unapproved scoring bands.
 
-**Academic access and submission:** The separate Process Journal 5.1 Google Doc is substantively drafted but still requires Peter's personal approval and an actual Canvas receipt. The linked OLC design scorecard and QA checklist template Google Docs returned 403 via the connected Google identity; this does not establish absence. The instructor-safe URL, adult learner A/B and facilitator browser test, actual quiz/survey receipts and Canvas Lite fallback access remain unverified. LA5.1 is NO-GO for claiming full actual LMS delivery until its three required assessment objects are accessible and usable by Dr. Evans.
+**Academic access and submission:** The separate Process Journal 5.1 Google Doc is substantively drafted but still requires Peter's personal approval and an actual Canvas receipt. The linked OLC design scorecard and QA checklist template Google Docs returned 403 via the connected Google identity; this does not establish absence. The instructor-safe URL, adult learner A/B and facilitator browser test, actual quiz/survey receipts remain unverified. LA5.1 is NO-GO for claiming full actual LMS delivery until its three required assessment objects are accessible and usable by Dr. Evans.
 
 **No other release:** No real faculty/student invitations, account changes, site publication, grading migration, course rubric mutation or Canvas submission occurred in this continuation.
 
