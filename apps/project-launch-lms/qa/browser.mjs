@@ -144,7 +144,7 @@ try {
     await review(teacher,/^Project Direction Brief/,note,[10,10,10]);
     await open(a); await section(a,"Feedback");
     await a.getByText(note,{exact:true}).waitFor();
-    await a.getByText(/30\s*\/\s*30|100\s*%/).first().waitFor();
+    await a.getByText(/30\s*\/\s*30 points/).waitFor();
   });
   await runStep("Module 2 First Move Card, facilitator feedback, revision and evidence", async () => {
     await lesson(a,/^Create — First Move Card/);
@@ -168,7 +168,7 @@ try {
     await review(teacher,/^Launch Portfolio/,portfolioNote,[15,15,15,15],true);
     await open(a); await section(a,"Feedback");
     await a.getByText(portfolioNote,{exact:true}).waitFor();
-    await a.getByText(/60\s*\/\s*60|100\s*%/).last().waitFor();
+    await a.getByText(/60\s*\/\s*60 points/).waitFor();
     await a.screenshot({path:join(scratch,"portfolio-readback.png")});
     await open(b); await section(b,"Feedback");
     assert.equal(await b.getByText(portfolioNote,{exact:true}).count(),0);
