@@ -1,0 +1,28 @@
+name: Project Launch LMS — Isolated acceptance
+on:
+  push:
+    branches: [qa/project-launch-acceptance-2026-11-22]
+    paths: ['.github/workflows/project-launch-acceptance.yml', 'apps/project-launch-lms/qa/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: apps/project-launch-lms
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify runner capacity and container engine
+        run: |
+          nproc
+          free -h
+          df -h .
+          docker info --format '{{.ServerVersion}}'
+      - name: Run isolated browser acceptance
+        if: ${{ hashFiles('apps/project-launch-lms/qa/run.sh') != '' }}
+        run: bash qa/run.sh
