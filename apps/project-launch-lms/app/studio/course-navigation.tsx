@@ -106,7 +106,7 @@ export function CourseOutline({ modules, activities, criteria, selectedId, onOpe
                 <button type="button" aria-current={selectedId === activity.id ? "page" : undefined}
                   onClick={() => onOpen(activity.id)}>
                   {activity.title}
-                  <span>{criteria.some(criterion => criterion.activity_id === activity.id) ? "Assignment" : "Lesson"}
+                  <span>{activity.slug === "launch-portfolio" ? "Assessment on hold" : criteria.some(criterion => criterion.activity_id === activity.id) ? "Assignment" : "Lesson"}
                     {!activity.is_published && " · Draft"}</span>
                 </button>
               </li>
@@ -133,10 +133,14 @@ export function AssignmentList({ activities, criteria, submissions, feedback, on
         const review = feedback.find(item => item.submission_id === submission?.id && item.published_at);
         const maximum = criteria.filter(item => item.activity_id === activity.id)
           .reduce((total, item) => total + Number(item.maximum_points), 0);
+        // The published 30-point Portfolio rubric conflicts with the academic
+        // 60-point design. Do not present its stale total as an assessable grade.
+        const portfolioOnHold = activity.slug === "launch-portfolio";
         return <article key={activity.id} className="assignment-card">
           <h3><button type="button" className="text-button" onClick={() => onOpen(activity.id)}>{activity.title}</button></h3>
-          <p>{maximum > 0 ? `${maximum} points` : "Ungraded practice"}{!activity.is_published && " · Draft"}</p>
+          <p>{portfolioOnHold ? "Assessment on hold · rubric under review" : maximum > 0 ? `${maximum} points` : "Ungraded practice"}{!activity.is_published && " · Draft"}</p>
           {submission ? <p>Submitted {new Date(submission.submitted_at).toLocaleString()}{review ? " · Feedback available" : " · Awaiting review"}</p>
+            : portfolioOnHold ? <p>You may save a draft; final submission and grading are not available until the assessment is approved.</p>
             : <p>Ready for your response</p>}
           {showFeedback && review && <LessonText text={review.summary} />}
         </article>;
