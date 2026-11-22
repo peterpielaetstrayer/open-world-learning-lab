@@ -76,11 +76,12 @@ export function CourseEvaluation({ supabase, courseId, instructor, preview }: {
     {error && <p className="form-error" role="alert">{error}</p>}
     {!loading && instructor && !preview && <>
       <p>{responses.length} {responses.length === 1 ? "response" : "responses"}</p>
+      {responses.length > 0 && <p>Average rating for each statement, out of 5.</p>}
+      <ol>{questions.map((question, index) => <li key={question}>
+        {question} {responses.length > 0 && <strong>{(responses.reduce((total, response) => total + response.ratings[index], 0) / responses.length).toFixed(1)}</strong>}
+      </li>)}</ol>
+      <p>Optional written response: What would make this course better?</p>
       {responses.length > 0 && <>
-        <p>Average rating for each statement, out of 5.</p>
-        <ol>{questions.map((question, index) => <li key={question}>
-          {question} <strong>{(responses.reduce((total, response) => total + response.ratings[index], 0) / responses.length).toFixed(1)}</strong>
-        </li>)}</ol>
         {responses.filter(response => response.comments).map((response, index) =>
           <p className="prewrap" key={index}>{response.comments}</p>)}
       </>}
