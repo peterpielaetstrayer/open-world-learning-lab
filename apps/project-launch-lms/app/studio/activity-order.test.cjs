@@ -80,3 +80,14 @@ test("editor-created UUID activities use exact standalone shortcodes to preserve
   assert.deepEqual(sortCourseActivities([portfolio, studio, checks, lesson], criteria).map(item => item.id),
     ["lesson", "check", "studio", "portfolio"]);
 });
+
+test("editor-created module introduction and conclusion titles bracket course work", () => {
+  const intro = activity("intro", "Module 2 Introduction — Plan & Launch", "uuid-intro");
+  const lesson = activity("lesson", "Z Model", "maya-garden-model");
+  const portfolio = activity("portfolio", "Launch Portfolio", "launch-portfolio");
+  const conclusion = activity("conclusion", "Module 2 Conclusion — What You Learned", "uuid-conclusion");
+  const close = activity("close", "Your Next Move", LEVEL_TWO_CLOSING_REFLECTION_SLUG);
+  const rubric = [{ id: "rubric", activity_id: "portfolio", maximum_points: 15 }];
+  assert.deepEqual(sortCourseActivities([close, conclusion, portfolio, lesson, intro], rubric)
+    .map(item => item.id), ["intro", "lesson", "portfolio", "conclusion", "close"]);
+});
