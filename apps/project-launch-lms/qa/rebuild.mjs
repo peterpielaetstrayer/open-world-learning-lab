@@ -18,6 +18,7 @@ for (const name of migrations) {
     copyFileSync(resolve("supabase/migrations", name), resolve(target, name));
   }
 }
+if (process.env.PLL_QA_SCHEMA_ONLY === "1") process.exit(0);
 const bundle = process.env.PLL_QA_COURSE_SEED;
 if (!bundle) throw new Error("Set the protected PLL_QA_COURSE_SEED repository secret.");
 const data = JSON.parse(gunzipSync(Buffer.from(bundle, "base64")).toString());
