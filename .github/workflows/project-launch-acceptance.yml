@@ -42,11 +42,10 @@ jobs:
         id: inputs
         env:
           PLL_QA_COURSE_SEED: ${{ secrets.PLL_QA_COURSE_SEED }}
-          PLL_QA_REPORT_KEY: ${{ secrets.PLL_QA_REPORT_KEY }}
         run: |
-          if [[ -z "$PLL_QA_COURSE_SEED" || -z "$PLL_QA_REPORT_KEY" ]]; then
+          if [[ -z "$PLL_QA_COURSE_SEED" ]]; then
             PLL_QA_SCHEMA_ONLY=1 bash qa/run.sh
-            echo '::error::Set PLL_QA_COURSE_SEED and PLL_QA_REPORT_KEY before full browser acceptance.'
+            echo '::error::Set PLL_QA_COURSE_SEED before full browser acceptance.'
             exit 1
           fi
       - name: Install locked app dependencies and isolated browser toolchain
@@ -57,7 +56,6 @@ jobs:
       - name: Rebuild the database and run authenticated acceptance
         env:
           PLL_QA_COURSE_SEED: ${{ secrets.PLL_QA_COURSE_SEED }}
-          PLL_QA_REPORT_KEY: ${{ secrets.PLL_QA_REPORT_KEY }}
         run: |
           export PLL_QA_PLAYWRIGHT="$RUNNER_TEMP/pll-browser/node_modules/playwright/index.mjs"
           bash qa/run.sh
