@@ -146,10 +146,10 @@ export default function StudioPage() {
   const reviewActivity = activities.find((activity) => activity.id === reviewSubmission?.activity_id);
   const reviewCriteria = criteria.filter((criterion) => criterion.activity_id === reviewSubmission?.activity_id);
   const existingReview = feedbackRows.find((feedback) => feedback.submission_id === selectedSubmission);
-  // Academic LA 4.1 specifies a different Launch Portfolio rubric from the
-  // published LMS. Hold *only* this assessment until faculty/design signoff.
+  // Keep Portfolio submission and scoring held until the assessment is approved for release.
   // This is a UI safeguard, not a substitute for server-side release controls.
   const portfolioSubmissionOnHold = activeActivity?.slug === "launch-portfolio";
+  const portfolioAssignmentRubric = portfolioSubmissionOnHold ? compareLaunchPortfolioRubric(assignedCriteria) : null;
   const portfolioReviewOnHold = reviewActivity?.slug === "launch-portfolio";
   const portfolioRubricComparison = portfolioReviewOnHold ? compareLaunchPortfolioRubric(reviewCriteria) : null;
 
@@ -354,7 +354,9 @@ export default function StudioPage() {
               <h4>How your work will be evaluated</h4>
               <ul>{assignedCriteria.map(c => <li key={c.id}><strong>{c.title} ({c.maximum_points} points)</strong> — {c.description}</li>)}</ul></>}
               {portfolioSubmissionOnHold && <p className="preview-banner" role="status">
-                <strong>Launch Portfolio submission on hold.</strong> The configured grading criteria do not match the academic 60-point design, so the obsolete rubric is hidden rather than presented as a valid score. Faculty review and an assessment acceptance test are still required. {!isInstructor && "You may work on your response and save a draft, but final submission is unavailable."}
+                <strong>Launch Portfolio submission on hold.</strong> {portfolioAssignmentRubric?.matchesAcademicDraft
+                  ? "The academic 60-point rubric is configured. Final submissions and scores are awaiting release approval."
+                  : "The obsolete rubric is hidden while the academic 60-point rubric is being configured."} {!isInstructor && "You may work on your response and save a draft, but final submission is unavailable."}
               </p>}
               {portfolioSubmissionOnHold && isInstructor && !studentPreview && <LaunchPortfolioRubricReview />}
               {!isInstructor && (finalSubmission ? (
