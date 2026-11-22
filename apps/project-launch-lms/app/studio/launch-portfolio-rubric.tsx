@@ -75,7 +75,7 @@ export function LaunchPortfolioRubricReview() {
   return <section className="launch-model" aria-labelledby="launch-rubric-heading">
     <p className="eyebrow">Academic design review · not live grading</p>
     <h3 id="launch-rubric-heading">Proposed Launch Portfolio assessment — 60 points</h3>
-    <p>Four criteria, each with four specified performance levels. This is the rubric in Peter&apos;s November 16 LA 4.1 academic document, <strong>not</strong> the three-criterion rubric currently configured in the published LMS.</p>
+    <p>Four criteria, each with four performance levels from the submitted November 16 LA 4.1 academic rubric.</p>
     <p>Each criterion values honest reasoning and evidence. An authentic, documented obstacle can qualify; successful completion of the project is not required. The examples below describe the evidence reviewers should look for.</p>
     {academicLaunchPortfolioRubric.map((criterion, index) => <details key={criterion.title}>
       <summary>Criterion {index + 1}: {criterion.title} — 15 points</summary>
@@ -87,6 +87,6 @@ export function LaunchPortfolioRubricReview() {
         </div>)}
       </dl>
     </details>)}
-    <p className="form-note">The academic document specifies 15/10/5/0 point levels. The signed-in facilitator form currently permits arbitrary numeric entries, so level-based scoring and any rubric migration must be reconciled before a live assessment. This display neither calculates nor submits a grade.</p>
+    <p className="form-note">The academic rubric specifies 15, 10, 5, and 0 point levels. Final submissions and scoring require release approval.</p>
   </section>;
 }
