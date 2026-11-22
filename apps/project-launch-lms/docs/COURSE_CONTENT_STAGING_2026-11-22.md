@@ -3,7 +3,9 @@
 
 **Purpose:** Supply learner-ready introductions, original companion readings, module conclusions and *precise ordering* for the existing authored interactions in the custom LMS. This is not a substitute for the instructor-approved live course. It uses the original six course learning outcomes from the LDT 560 blueprint without silently replacing them, and treats the foundational revised MLOs as proposed. It preserves the student's actual project as the thread connecting two modules.
 
-**Source hierarchy:** (1) official *Capstone LMS Course Requirements*, (2) original academic LDT 560 design blueprint and content-curation grid, (3) November 16 LA4.1 and OWLL faculty-review blueprint, (4) implementation source on draft PR #15. Do not claim the newly scripted media are produced or that any of the activities below are in the live database. Do not replace existing final student responses or the academic grading rubric without approval.
+**Verified live staging, Nov 22:** After the OWLL Supabase connection was restored, 14 missing activities were inserted into the dedicated `project-launch-lab` database as **unpublished** drafts (5 Module 1, 9 Module 2), drawn from this reviewed source. The four original activities remain published and unmodified. Database readback confirms 7 total Module 1 activities and 11 Module 2 activities, all 14 new records marked `is_published=false`, 10 new widget-marker-bearing activities, rubric totals still 30 points each, and zero drafts/submissions/feedback/quiz attempts. The complete academic 60-point Launch Portfolio rubric is **not** released; real Auth role testing, faculty/reviewer access and original multimedia acceptance are still open. The staged student-facing instructions are abbreviated from the full source to make each interactive activity separately navigable; use this document for richer editorial and media specifications.
+
+**Source hierarchy:** (1) official *Capstone LMS Course Requirements*, (2) original academic LDT 560 design blueprint and content-curation grid, (3) November 16 LA4.1 and OWLL faculty-review blueprint, (4) implementation source on draft PR #15. Do not claim the newly scripted media are produced or that the draft activities below are published or usable by learners yet. Do not replace existing final student responses or the academic grading rubric without approval.
 
 ## 1. Course-level learner content
 
@@ -205,4 +207,4 @@ What is the smallest informative action for your project?”
 - Only publish after fresh authorized live-state readback, explicit assessment/rubric approval, three distinct consenting-adult synthetic identities, full save/reopen/submit/feedback/isolation QA, manual keyboard/mobile/screen-reader/media checks, and faculty/peer access confirmation.
 - No use of real high-school learner data in development.
 
-**Deliverable status:** Written staging content prepared privately. Videos, live lessons, role-tested LMS, graded rubric migration, real faculty access and full completion evidence are **not** implied by this file.
+**Deliverable status (updated November 22):** 14 unpublished activities now exist in the live course database, but were NOT released to learners. Videos, usable published lessons, role-tested LMS, graded rubric migration, real faculty access and full completion evidence are **not** implied by this file.
