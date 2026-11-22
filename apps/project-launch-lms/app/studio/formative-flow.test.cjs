@@ -908,7 +908,7 @@ test("learner can read the configured academic rubric with final submission stil
   assert.equal(calls.length, 0);
 });
 
-test("feedback shows a complete published score but hides instructional and unreleased score records", async () => {
+test("feedback shows a complete published score and omits instructional activities", async () => {
   resetData();
   db.pll_activities.push({
     id: "intro", course_id: "course-1", module_id: "module-1", slug: "module-one-introduction",
@@ -923,7 +923,7 @@ test("feedback shows a complete published score but hides instructional and unre
     published_at: "2026-11-18T12:30:00Z",
   });
   db.pll_rubric_scores.push({
-    id: "score", submission_id: "graded-response", criterion_id: "criterion-1", awarded_points: 8, criterion_note: "",
+    id: "score", course_id: "course-1", submission_id: "graded-response", criterion_id: "criterion-1", awarded_points: 8, criterion_note: "",
   });
   render(React.createElement(StudioPage));
   fireEvent.click(await screen.findByRole("button", { name: "Feedback" }));
