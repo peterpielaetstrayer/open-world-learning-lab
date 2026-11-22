@@ -5,11 +5,20 @@ app="$PWD"
 scratch="$(mktemp -d)"
 server_pid=
 cleanup() {
+  outcome=$?
+  set +e
+  if [[ -n "${PLL_QA_REPORT_KEY:-}" ]]; then
+    tar -cz --exclude=seed.sql --exclude=status.json --exclude=accounts.json --exclude=local.env \
+      --exclude=supabase -C "$scratch" . |
+      openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:PLL_QA_REPORT_KEY -out "$RUNNER_TEMP/pll-report.enc"
+    if [[ $? != 0 ]]; then rm -f -- "$RUNNER_TEMP/pll-report.enc"; outcome=1; fi
+  fi
   if [[ -n "$server_pid" ]]; then kill "$server_pid" 2>/dev/null || true; fi
   if [[ -f "$scratch/supabase/config.toml" ]]; then
     (cd "$scratch" && supabase stop --no-backup >"$scratch/stop.log" 2>&1) || true
   fi
-  rm -f -- "$scratch/supabase/seed.sql" "$scratch/status.json" "$scratch/accounts.json"
+  rm -f -- "$scratch/supabase/seed.sql" "$scratch/status.json" "$scratch/accounts.json" "$scratch/local.env"
+  return "$outcome"
 }
 trap cleanup EXIT
 unset SUPABASE_ACCESS_TOKEN SUPABASE_DB_PASSWORD SUPABASE_URL NEXT_PUBLIC_SUPABASE_URL
@@ -20,18 +29,18 @@ sed -i -E 's/^major_version = .*/major_version = 17/' supabase/config.toml
 sed -i -E 's/^project_id = .*/project_id = "pll-acceptance"/' supabase/config.toml
 mkdir -p supabase/migrations
 cd "$app"
-node qa/rebuild.mjs "$scratch/supabase/migrations" "$scratch/supabase/seed.sql"
 if [[ -n "${PLL_QA_COURSE_SEED:-}" ]]; then
   PLL_QA_REPORT_KEY="$(printf 'project-launch-acceptance-report-v1:%s' "$PLL_QA_COURSE_SEED" | openssl dgst -sha256 -r | cut -d ' ' -f 1)"
   export PLL_QA_REPORT_KEY
+fi
+if ! node qa/rebuild.mjs "$scratch/supabase/migrations" "$scratch/supabase/seed.sql" >"$scratch/rebuild.log" 2>&1; then
+  echo "Course fixture preparation failed."
+  exit 1
 fi
 unset PLL_QA_COURSE_SEED
 cd "$scratch"
 if ! supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor >"$scratch/start.log" 2>&1; then
   echo "Supabase start failed. Check the pinned CLI, container health and migration order."
-  if [[ -n "${PLL_QA_REPORT_KEY:-}" ]]; then
-    tar -cz -C "$scratch" start.log | openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:PLL_QA_REPORT_KEY -out "$RUNNER_TEMP/pll-report.enc"
-  fi
   exit 1
 fi
 if [[ "${PLL_QA_SCHEMA_ONLY:-0}" == 1 ]]; then
@@ -64,10 +73,5 @@ for _ in {1..60}; do
 done
 results=0
 node qa/browser.mjs >"$scratch/results.log" 2>&1 || results=$?
-if [[ -n "${PLL_QA_REPORT_KEY:-}" ]]; then
-  tar -cz --exclude=seed.sql --exclude=status.json --exclude=accounts.json --exclude=local.env \
-    --exclude=supabase -C "$scratch" . |
-    openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:PLL_QA_REPORT_KEY -out "$RUNNER_TEMP/pll-report.enc"
-fi
 sed -n '/^PASS: /p; /^FAIL: /p' "$scratch/results.log"
 exit "$results"
