@@ -50,10 +50,13 @@ Module 2 uses the submitted LA 4.1 relative day 3, day 5, and day 7 milestones. 
 
 ## QA evidence for the attestation
 
+The source checks passed on implementation commit `a3119671cabf`, including TypeScript, lint, accessibility, regression tests, and the course build. The browser pass used the earlier ready preview `0245839`. The updated worksheets, pacing, and final media revision are on the passing source branch. The provider hit its daily preview deployment limit when asked to deploy the exact latest implementation commit, so that build still needs its preview recheck.
+
+
 | Check | Evidence | Status |
 | --- | --- | --- |
-| Authoring inventory and order | Two modules and 18 activities. Instructor preview observed all; 4 published, 14 staged. Rollback classroom visibility rehearsal observed all 18 without persisting publication flags. | Verified in studio and database |
-| Media assets and alternatives | Three files decode; captions and full transcripts included. | Asset checks pass; verify browser timing and audible playback |
+| Authoring inventory and order | Two modules and 18 activities. All 18 lessons opened in order in the signed-in instructor preview; each rendered its lesson copy. Four activities are published and 14 are staged. Rollback classroom visibility rehearsal observed all 18 without persisting publication flags. | Verified in studio and database |
+| Media assets and alternatives | Three files decode and all three players loaded with controls and caption tracks in the protected instructor preview. The overview transcript expanded and the overview player started from the keyboard. | Asset and preview checks pass; verify caption sync and playback on the latest approved build |
 | Keyboard entry | Enter on Skip to studio content moved focus to the course landmark. | Verified in browser |
 | Role access and record privacy | Existing instructor session and guarded rollback test covered learner draft update, Direction Brief final, complete 30-point rubric, feedback readback, quiz scoring and nonmember exclusion. Zero temporary records persisted. | Database role checks pass; independent authenticated browser role acceptance remains |
 | Portfolio holds | 60-point rubric is available for review; three restrictive policies and UI keep final submission and scoring held. | Verified locks |
