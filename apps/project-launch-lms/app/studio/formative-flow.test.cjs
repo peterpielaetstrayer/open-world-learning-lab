@@ -806,3 +806,32 @@ test("live-style three-by-ten rubric fails academic alignment comparison without
   assert.equal(matched.actualTotal, 60);
   assert.equal(matched.problems.length, 0);
 });
+
+test("new instructional introduction is first but not an outstanding response", async () => {
+  resetData();
+  db.pll_activities.push({
+    id: "intro-1", course_id: "course-1", module_id: "module-1",
+    slug: "uuid-intro", title: "Module 1 Introduction — Discover & Define",
+    instructions: "Welcome: read this before practicing.", is_published: true,
+  });
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  assert.ok(screen.getByText("of 2 requested responses shared"));
+  fireEvent.click(screen.getByRole("button", { name: "Begin exploring" }));
+  assert.ok(screen.getByText("Welcome: read this before practicing."));
+  assert.match(screen.getByText(/no final shared response is required/i).textContent,
+    /no final shared response/i);
+});
+
+test("after sharing a response, home returns the learner to the ordered pathway", async () => {
+  resetData();
+  db.pll_submissions.push({
+    id: "shared-practice", course_id: "course-1", activity_id: "practice-1",
+    learner_id: "learner-1", response_text: "I chose a smaller step.", submitted_at: "2026-11-18T12:00:00Z",
+  });
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Open module pathway" }));
+  assert.ok(screen.getByRole("navigation", { name: "Module lessons" }));
+  assert.ok(screen.getByRole("button", { name: /Practice choosing/ }));
+});
