@@ -358,7 +358,8 @@ export default function StudioPage() {
                   ? "The academic 60-point rubric is configured. Final submissions and scores are awaiting release approval."
                   : "The obsolete rubric is hidden while the academic 60-point rubric is being configured."} {!isInstructor && "You may work on your response and save a draft, but final submission is unavailable."}
               </p>}
-              {portfolioSubmissionOnHold && isInstructor && !studentPreview && <LaunchPortfolioRubricReview />}
+              {portfolioSubmissionOnHold && (portfolioAssignmentRubric?.matchesAcademicDraft || (isInstructor && !studentPreview)) &&
+                <LaunchPortfolioRubricReview />}
               {!isInstructor && (finalSubmission ? (
                 <>
                   <p className="form-success">Submitted {new Date(finalSubmission.submitted_at).toLocaleString()}.</p>
