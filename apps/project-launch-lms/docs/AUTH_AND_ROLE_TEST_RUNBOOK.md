@@ -22,6 +22,12 @@ Vercel project ID: `prj_GYl06IyFCEXH0gbgiCgefliQBvUy`. Preview-only `NEXT_PUBLIC
 
 The canonical readme and PeterOS handoff distinguish **source built and deployed to a protected preview** from **actual user login verified**. Supabase references: [redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls), [email templates](https://supabase.com/docs/guides/auth/auth-email-templates), [general configuration](https://supabase.com/docs/guides/auth/general-configuration), and [inviting users](https://supabase.com/docs/guides/auth/users).
 
+## Current OWLL delivery route
+
+**November 22 delivery decision:** The existing custom OWLL Project Launch LMS (Next.js, GitHub, Supabase, Vercel) is the sole course delivery platform. USD Canvas is for official academic instructions and assignment submissions. Use the stable [OWLL course URL](https://project-launch-lms-git-f-3c42e5-peter-pielaet-strayers-projects.vercel.app/studio?course=99dc9de5-bfbf-4891-8f5e-444212ec2073) for role verification. Earlier platform options are superseded. Keep pre-release safeguards in place until the corresponding access, assessment, and QA gates pass.
+
+An existing instructor session loaded this course alias and opened the rubric, quiz, survey and both module outlines. An independent external reviewer session and learner test accounts are still needed before the URL is submitted. Use the same alias consistently for callback configuration and browser QA.
+
 ## What exists
 
 - `/login`: email/password sign-in for invited users; **no public signup route**.
@@ -76,7 +82,7 @@ Expected test: read the **existing published** M1 practice and Direction Brief, 
 - Rerun Supabase security/performance advisors and close any **critical** finding.
 - Test actual mobile/keyboard flow, invalid invitation, expired token, signed-out session, learner A vs B, facilitator rubric publication, error handling, and reload persistence.
 - Confirm Dr. Evans accepts this approach, then create **reviewer-specific** roles and share credentials through a secure channel only, not repository documentation.
-- Canvas Lite remains the formal fallback until instructor approval and a verified walkthrough.
+- Verify instructor and learner walks on the custom OWLL course before approval and release.
 
 ## Sources
 - [Supabase SSR Auth client](https://supabase.com/docs/guides/auth/server-side/creating-a-client)
