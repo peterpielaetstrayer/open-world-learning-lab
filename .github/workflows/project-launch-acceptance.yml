@@ -67,3 +67,67 @@ jobs:
           path: ${{ runner.temp }}/pll-report.enc
           if-no-files-found: ignore
           retention-days: 3
+
+  asset-access:
+    if: ${{ github.ref == 'refs/heads/qa/project-launch-acceptance-2026-11-22' || (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'qa/project-launch-acceptance-2026-11-22') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: e0aee4d05b12a207dbb57fb1a538aa0568c06395
+          path: candidate
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: supabase/setup-cli@v1
+        with:
+          version: '2.79.0'
+      - name: Boot local Auth and test the exact production candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          app="$GITHUB_WORKSPACE/candidate/apps/project-launch-lms"
+          qa="$GITHUB_WORKSPACE/apps/project-launch-lms/qa"
+          scratch="$(mktemp -d)"
+          server_pid=
+          cleanup() {
+            if [[ -n "$server_pid" ]]; then kill "$server_pid" 2>/dev/null || true; fi
+            (cd "$scratch" && supabase stop --no-backup >/dev/null 2>&1) || true
+          }
+          trap cleanup EXIT
+          unset SUPABASE_ACCESS_TOKEN SUPABASE_URL NEXT_PUBLIC_SUPABASE_URL
+          unset SUPABASE_SERVICE_ROLE_KEY NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+          cd "$scratch"
+          supabase init >/dev/null
+          sed -i -E 's/^project_id = .*/project_id = "pll-asset-check"/' supabase/config.toml
+          sed -i -E 's/^major_version = .*/major_version = 17/' supabase/config.toml
+          mkdir -p supabase/migrations
+          cd "$app"
+          PLL_QA_SCHEMA_ONLY=1 node "$qa/rebuild.mjs" "$scratch/supabase/migrations" "$scratch/supabase/seed.sql"
+          cd "$scratch"
+          supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor >"$scratch/start.log" 2>&1
+          export PLL_ASSET_STATUS="$scratch/status.json"
+          supabase status -o json >"$PLL_ASSET_STATUS" 2>"$scratch/status.log"
+          export NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="$(node -e 'const j=require(process.env.PLL_ASSET_STATUS); if(![j.API_URL].includes("http://127.0.0.1:54321")||!(j.PUBLISHABLE_KEY||j.ANON_KEY))process.exit(1);process.stdout.write(j.PUBLISHABLE_KEY||j.ANON_KEY)')"
+          export NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+          cd "$app"
+          npm ci --no-audit --no-fund
+          npm install --prefix "$RUNNER_TEMP/pll-browser" --no-audit --no-fund playwright@1.57.0
+          "$RUNNER_TEMP/pll-browser/node_modules/.bin/playwright" install --with-deps chromium
+          export PLL_QA_PLAYWRIGHT="$RUNNER_TEMP/pll-browser/node_modules/playwright/index.mjs"
+          cp "$qa/asset-check.mjs" ./asset-check.mjs
+          npm run build
+          ./node_modules/.bin/next start --hostname 127.0.0.1 --port 3000 >"$scratch/server.log" 2>&1 &
+          server_pid=$!
+          for _ in {1..60}; do
+            if curl -fsS http://127.0.0.1:3000/login >/dev/null 2>&1; then break; fi
+            sleep 1
+          done
+          node asset-check.mjs
