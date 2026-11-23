@@ -59,7 +59,9 @@ try {
   await signedOut.getByRole("heading",{name:"Welcome back."}).waitFor();
   for (const path of routes) await asset(anon,path,401,path.endsWith(".mp4"));
   const cb = await anon.request.get(origin + "/auth/callback?next=https%3A%2F%2Fexample.test",{maxRedirects:0});
-  assert.match(cb.headers().location ?? "", /^http:\/\/127\.0\.0\.1:3000\/login\?error=missing-code$/);
+  const redirect = new URL(cb.headers().location);
+  assert.ok(["http://localhost:3000", origin].includes(redirect.origin), "callback stays on the local app");
+  assert.equal(redirect.pathname + redirect.search, "/login?error=missing-code");
   console.log("PASS: signed-out denial, no-store, and local callback");
   const outsider = await setup("asset-outsider",false);
   await outsider.page.goto(course);
