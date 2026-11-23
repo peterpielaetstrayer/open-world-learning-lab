@@ -24,7 +24,7 @@ for (const [name, role] of [["learner-a", "learner"], ["learner-b", "learner"], 
   const created = await admin.auth.admin.createUser({ email, password, email_confirm: true });
   if (created.error || !created.data.user) throw new Error("Could not create a synthetic identity.");
   const { error } = await admin.from("pll_memberships").insert({
-    course_id: course.data.id, user_id: created.data.user.id, role,
+    course_id: course.data.id, user_id: created.data.user.id, member_role: role,
   });
   if (error) throw new Error("Could not enroll a synthetic identity.");
   identities[name] = { email, password };
