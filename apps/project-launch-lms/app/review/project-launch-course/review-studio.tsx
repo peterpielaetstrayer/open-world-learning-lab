@@ -7,7 +7,7 @@ import {
 } from "@/app/studio/course-navigation";
 import { CourseMedia } from "@/app/studio/course-media";
 import { LessonText } from "@/app/studio/lesson-text";
-import { LaunchPortfolioRubricReview } from "@/app/studio/launch-portfolio-rubric";
+import { LaunchPortfolioPreparation, LaunchPortfolioRubricReview } from "@/app/studio/launch-portfolio-rubric";
 import { sortCourseActivities } from "@/app/studio/activity-order";
 import { reviewCourseData } from "./review-course-data";
 import type { CourseActivity, RubricCriterion } from "@/lib/course-types";
@@ -105,6 +105,7 @@ export function ReviewStudio() {
                 <h2>{selected.title}</h2>
                 <ActivityPacing slug={selected.slug} />
                 <LessonText key={selected.id} text={selected.instructions} review={true} headingLevel={3} />
+                {portfolio && <LaunchPortfolioPreparation review />}
                 {selectedCriteria.length > 0 && <section aria-label="Assignment rubric">
                   <h3>How your work will be evaluated</h3>
                   <ul>{selectedCriteria.map(item =>
