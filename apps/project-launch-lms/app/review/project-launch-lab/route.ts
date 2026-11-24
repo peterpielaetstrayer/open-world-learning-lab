@@ -8,12 +8,14 @@ const headers = {
   "X-Content-Type-Options": "nosniff",
   "X-Robots-Tag": "noindex, nofollow",
   "Referrer-Policy": "no-referrer",
-  "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; media-src 'self'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'",
+  "Content-Security-Policy": "default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self'; media-src 'self'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'",
 };
 
 export function GET() {
   if (!facultyReviewEnabled()) return new Response(null, { status: 404, headers });
-  return new Response(reviewHtml, { headers });
+  // Serve the same approved curriculum snapshot inside a navigable, read-only course shell.
+  const coursePage = reviewHtml.replace("<style>", '<link rel="stylesheet" href="/review-ui.css"><script src="/review-ui.js" defer></script><style>');
+  return new Response(coursePage, { headers });
 }
 
 export function HEAD() {
