@@ -72,7 +72,7 @@ export function ReviewStudio() {
           <h1>{reviewCourseData.title}</h1>
           <p className="course-small">Read-only view of the published Project Launch Lab instructional experience.</p>
         </div>
-        <p className="review-status" role="status">Course review · No sign-in required</p>
+        <div><p className="review-status" role="status">Course review · No sign-in required</p><p><a className="back-link" href="/login">Invited student or facilitator? Sign in</a></p></div>
       </div>
       <p className="preview-banner review-banner">
         <strong>Faculty review mode.</strong> This uses the same module navigation, lesson renderer, media and interactive learning
@@ -140,9 +140,7 @@ export function ReviewStudio() {
             <CourseMedia item="overview" review={true} />
             <CourseMedia item="direction" review={true} />
             <CourseMedia item="firstmove" review={true} />
-            <p><a href="/review-materials/project-launch-worksheets.txt" target="_blank" rel="noopener noreferrer">
-              Open blank Project Launch worksheets and first-action checklist</a></p>
-            <CourseResources activities={orderedActivities} />
+            <CourseResources activities={orderedActivities} onOpen={openActivity} review={true} />
           </section>}
           {section === "discussions" && <section aria-labelledby="review-discussions-heading">
             <h2 id="review-discussions-heading">Facilitated discussions</h2>
