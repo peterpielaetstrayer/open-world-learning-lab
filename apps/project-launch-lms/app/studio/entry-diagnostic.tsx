@@ -35,7 +35,7 @@ export function EntryDiagnostic({ onPrepareResponse }: { onPrepareResponse?: (te
   const summary = [
     "Project Launch Lab — Entry diagnostic (ungraded)",
     ...prompts.map((prompt, index) => `${index + 1}. ${prompt.question}\nContext: ${prompt.help}\nResponse: ${answers[index].trim()}`),
-    `5. Confidence in narrowing an idea to a feasible first action (1–5): ${confidence ?? "Not answered"}`,
+    `5. Starting confidence (1 = not yet confident, 5 = very confident): ${confidence ?? "Not answered"}`,
   ].join("\n\n");
 
   return (
