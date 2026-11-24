@@ -84,13 +84,13 @@ const mediaItems = {
   }
 } as const;
 
-export function CourseMedia({ item }: { item: keyof typeof mediaItems }) {
+export function CourseMedia({ item, review = false }: { item: keyof typeof mediaItems; review?: boolean }) {
   const media = mediaItems[item];
   return <section className="course-how" aria-label={media.title}>
     <p><strong>{media.title}</strong></p>
     <video controls playsInline preload="metadata" aria-label={media.title} style={{ width: "100%", maxWidth: "50rem" }}>
-      <source src={`/media/${item}.mp4`} type="video/mp4" />
-      <track default kind="captions" src={`/media/${item}.vtt`} srcLang="en" label="English" />
+      <source src={`${review ? "/review-materials" : "/media"}/${item}.mp4`} type="video/mp4" />
+      <track default kind="captions" src={`${review ? "/review-materials" : "/media"}/${item}.vtt`} srcLang="en" label="English" />
       Read the transcript below for the complete lesson.
     </video>
     <details>
