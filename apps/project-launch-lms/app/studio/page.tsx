@@ -10,7 +10,7 @@ import { ModuleEditor } from "./module-editor";
 import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
 import { RubricEditor } from "./rubric-editor";
-import { academicLaunchPortfolioPointBands, compareLaunchPortfolioRubric, LaunchPortfolioRubricReview } from "./launch-portfolio-rubric";
+import { academicLaunchPortfolioPointBands, compareLaunchPortfolioRubric, LaunchPortfolioPreparation, LaunchPortfolioRubricReview } from "./launch-portfolio-rubric";
 import { sortCourseActivities, activityExpectsResponse } from "./activity-order";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type {
@@ -356,6 +356,7 @@ export default function StudioPage() {
                   setResponse(prepared);
                   return true;
                 } : undefined} />
+              {portfolioAssignmentRubric && <LaunchPortfolioPreparation />}
               {assignedCriteria.length > 0 && !portfolioAssignmentRubric && <>
               <h4>How your work will be evaluated</h4>
               <ul>{assignedCriteria.map(c => <li key={c.id}><strong>{c.title} ({c.maximum_points} points)</strong> — {c.description}</li>)}</ul></>}
