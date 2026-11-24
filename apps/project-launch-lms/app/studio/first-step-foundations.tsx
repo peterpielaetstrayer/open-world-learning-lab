@@ -83,15 +83,33 @@ export function FirstStepMiniLesson() {
   </section>;
 }
 
+const mayaPrompts = [
+  { label: "Purpose", hint: "What is Maya trying to improve?" },
+  { label: "Milestones", hint: "What three steps could she put in order?" },
+  { label: "Resources", hint: "What information, materials or support could she use?" },
+  { label: "Constraint", hint: "What is not yet available or permitted?" },
+  { label: "Intended evidence", hint: "What could she actually observe or document? What would it not prove?" },
+] as const;
+
 export function MayaGardenModel() {
+  const id = useId();
   const [revealed, setRevealed] = useState(false);
+  const [notes, setNotes] = useState<string[]>(() => mayaPrompts.map(() => ""));
   return <section className="foundation-lesson" aria-labelledby="maya-garden-heading">
     <p className="eyebrow">Module 2 · Observe · 5 minutes</p>
     <h3 id="maya-garden-heading">Maya&apos;s school garden: a worked decision</h3>
     <p>Maya wants to improve her school garden, but a complete redesign needs supplies, time and school permission she does not have yet. She can still prepare a useful first step.</p>
     <div className="foundation-prompt">
       <h4>Think before seeing the model</h4>
-      <p>What could Maya learn from sketching one bed and checking requirements with an approved school sponsor? What would remain unknown?</p>
+      <p>Suppose Maya has paper and existing garden information. She can check school requirements with an approved sponsor, sketch one possible bed, and review the constraints before deciding whether to test it. She has not gathered measurements or received feedback yet.</p>
+      <p>Identify the plan components in your own words. These brief notes are optional, ungraded practice; you can compare with the model at any time.</p>
+      {mayaPrompts.map((prompt, index) => <div className="launch-field" key={prompt.label}>
+        <label htmlFor={`${id}-maya-${index}`}>{prompt.label}</label>
+        <p className="form-note">{prompt.hint}</p>
+        <textarea id={`${id}-maya-${index}`} rows={2} maxLength={1000} value={notes[index]}
+          onChange={event => setNotes(previous => previous.map((value, position) => position === index ? event.target.value : value))} />
+      </div>)}
+      <p className="form-note">Keep a private copy of any notes you want to retain. These practice fields do not automatically save or submit.</p>
       <button type="button" className="secondary-button" aria-expanded={revealed}
         onClick={() => setRevealed(value => !value)}>{revealed ? "Hide annotated model" : "Show annotated model"}</button>
     </div>
@@ -104,6 +122,7 @@ export function MayaGardenModel() {
         <dt>Prediction and potential evidence</dt><dd>“This bed will work” is a prediction. Measurements or specific staff feedback could be evidence if collected; planning them is not the same as collecting them.</dd>
         <dt>Limits and next decision</dt><dd>A sketch or permission check cannot prove that plants will grow. Actual feedback could justify a revision or a reasoned decision to retain the sketch.</dd>
       </dl>
+      <p><strong>Compare your notes:</strong> Did you distinguish available resources from missing permission, and intended evidence from observations that have actually happened? Revise your notes if useful.</p>
       <p className="form-note">This is a hypothetical example—not a claim that Maya obtained permission, planted anything or received feedback.</p>
     </div>}
   </section>;
