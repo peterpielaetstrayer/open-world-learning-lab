@@ -20,8 +20,8 @@ export function getResourceUrl(text: string): URL | null {
   }
 }
 
-export function LessonText({ text, lessonProgress, onPrepareResponse, headingLevel = 4 }: {
-  text: string; headingLevel?: 3 | 4; lessonProgress?: LessonProgressIdentity; onPrepareResponse?: (text: string) => boolean;
+export function LessonText({ text, lessonProgress, onPrepareResponse, headingLevel = 4, review = false }: {
+  text: string; headingLevel?: 3 | 4; lessonProgress?: LessonProgressIdentity; onPrepareResponse?: (text: string) => boolean; review?: boolean;
 }) {
   const blocks: string[] = [];
   for (const block of text.trim().split(/\r?\n\s*\r?\n/)) {
@@ -36,8 +36,8 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
   return blocks.map((block, index) => {
     const lines = block.split(/\r?\n/);
     const key = `${index}-${lines[0]}`;
-    if (block === "[[direction-video]]") return <CourseMedia key={key} item="direction" />;
-    if (block === "[[first-move-video]]") return <CourseMedia key={key} item="firstmove" />;
+    if (block === "[[direction-video]]") return <CourseMedia key={key} item="direction" review={review} />;
+    if (block === "[[first-move-video]]") return <CourseMedia key={key} item="firstmove" review={review} />;
     if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} />;
     if (block === "[[project-direction-lesson]]") return <ProjectDirectionLesson key={key} progress={lessonProgress} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[entry-diagnostic]]") return <EntryDiagnostic key={key} onPrepareResponse={onPrepareResponse} />;
