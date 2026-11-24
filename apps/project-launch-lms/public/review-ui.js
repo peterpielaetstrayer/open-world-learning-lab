@@ -190,8 +190,6 @@
       prevButton.disabled = activeModule === 0 && activeIndex === 0;
       nextButton.textContent = (activeModule === 1 && activeIndex === lessons[1].length - 1)
         ? "Finish modules" : "Next activity";
-      nextButton.onclick = activeModule === 1 && activeIndex === lessons[1].length - 1
-        ? () => show("assignments", true) : () => moveLesson(1);
       show("modules", false, false);
       if (updateHash) history.replaceState(null, "", "#modules/" + (moduleIndex + 1) + "/" + (lessonIndex + 1));
       if (focus) { $("h2", current).focus({ preventScroll: true }); window.scrollTo({ top: 0, behavior: "instant" }); }
