@@ -71,7 +71,7 @@ export function CourseQuiz({ supabase, courseId, identity, instructor, preview }
     <h2 id="quiz-heading">Project Launch knowledge check</h2>
     <p className="form-note"><strong>Level 2 · Knowledge and scenario judgment.</strong> These questions check
       how you reason about project decisions in examples. They do not, by themselves, show how you apply
-      those decisions to your own project. Your Direction Brief and other project work provide separate
+      those decisions to your own project. Your Direction Brief and Launch Portfolio provide separate
       evidence of applied skills. A quiz score is not a measure of your confidence or intentions.</p>
     {loading && <p role="status">Loading quiz…</p>}
     {error && <p className="form-error" role="alert">{error}</p>}
@@ -81,7 +81,7 @@ export function CourseQuiz({ supabase, courseId, identity, instructor, preview }
         ? `${(attempts.reduce((sum, item) => sum + item.score, 0) / attempts.length).toFixed(1)} / 10`
         : "pending"}</p>}
       {attempt && <p className="form-success" role="status">Your score: {attempt.score} / 10</p>}
-      {!attempt && !instructor && !preview && <p>Answer all ten questions. After submitting, you’ll see your score and an explanation for each answer.</p>}
+      {!attempt && !instructor && !preview && <p>Answer all ten questions. You can submit one attempt. After submitting, you’ll see your score and an explanation for each answer.</p>}
       <form onSubmit={submit}>
         {questions.map(question => {
           const feedback = attempt ? attempt.feedback.find(item => item.position === question.position) : undefined;
