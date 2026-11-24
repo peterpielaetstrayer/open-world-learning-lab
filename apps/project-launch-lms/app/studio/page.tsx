@@ -156,6 +156,13 @@ export default function StudioPage() {
   const portfolioSubmissionOnHold = portfolioAssignmentRubric !== null && !(portfolioOpen && portfolioAssignmentRubric.matchesAcademicDraft);
   const portfolioReviewOnHold = portfolioRubricComparison !== null && !(portfolioOpen && portfolioRubricComparison.matchesAcademicDraft);
 
+  useEffect(() => {
+    if (section !== "modules" || !selectedActivity) return;
+    const heading = document.getElementById("studio-lesson-title");
+    heading?.focus({ preventScroll: true });
+    heading?.scrollIntoView?.({ block: "start", behavior: "instant" });
+  }, [section, selectedActivity]);
+
   function chooseActivity(id: string) {
     setSelectedActivity(id);
     const matching = drafts.find((draft) => draft.activity_id === id && draft.learner_id === identity);
@@ -339,7 +346,7 @@ export default function StudioPage() {
                 {!readableActivity && <p>Choose a lesson from the module list.</p>}
           {activeActivity && readableActivity && (
             <div className="studio-panel">
-              <h3>{activeActivity.title}</h3>
+              <h3 id="studio-lesson-title" tabIndex={-1}>{activeActivity.title}</h3>
               {orderedActivities.some(activity => activity.slug === "module-one-introduction") &&
                 <ActivityPacing slug={activeActivity.slug} />}
               <LessonText key={activeActivity.id} text={activeActivity.instructions}
