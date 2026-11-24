@@ -1038,3 +1038,46 @@ test("faculty preview checklist permits reading and copying but not course respo
   assert.match(screen.getByLabelText(/Your scenario checklist/).value, /ARI FIRST-ACTION CHECKLIST/);
   assert.equal(screen.queryByRole("button", { name: /Use this checklist in my course response/ }), null);
 });
+
+
+test("unsaved course response survives cancelled navigation and is not silently submitted", async () => {
+  resetData();
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  const response = screen.getByLabelText("Your practice reflection or question for feedback");
+  fireEvent.change(response, { target: { value: "My unsaved reasoning." } });
+  assert.ok(screen.getByText(/Unsaved response changes/));
+  let prompts = 0;
+  window.confirm = () => { prompts++; return false; };
+  fireEvent.click(screen.getByRole("button", { name: /Direction Brief/ }));
+  assert.equal(response.value, "My unsaved reasoning.");
+  fireEvent.click(screen.getByRole("button", { name: "Resources" }));
+  assert.equal(response.value, "My unsaved reasoning.");
+  assert.equal(prompts, 2);
+  assert.equal(db.pll_drafts.length, 0);
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+  await waitFor(() => assert.ok(screen.getByText("Your draft was saved.")));
+  assert.equal(screen.queryByText(/Unsaved response changes/), null);
+  fireEvent.click(screen.getByRole("button", { name: /Direction Brief/ }));
+  assert.equal(prompts, 2, "A saved response should not trigger the discard prompt");
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  assert.equal(screen.getByLabelText("Your practice reflection or question for feedback").value, "My unsaved reasoning.");
+  assert.equal(db.pll_submissions.length, 0);
+});
+
+test("confirming discard returns to the previously saved response rather than silently saving", async () => {
+  resetData();
+  db.pll_drafts.push({ id: "saved-draft", activity_id: "practice-1", course_id: "course-1", learner_id: "learner-1", response_text: "Previously saved work" });
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  fireEvent.change(screen.getByLabelText("Your practice reflection or question for feedback"), { target: { value: "Uncommitted edit" } });
+  window.confirm = () => true;
+  fireEvent.click(screen.getByRole("button", { name: "Resources" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  assert.equal(screen.getByLabelText("Your practice reflection or question for feedback").value, "Previously saved work");
+  assert.equal(db.pll_drafts[0].response_text, "Previously saved work");
+  assert.equal(db.pll_submissions.length, 0);
+});
