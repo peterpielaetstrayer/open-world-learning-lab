@@ -26,11 +26,12 @@ export function CourseHome({ description, modules, activities, submissions, feed
         <p className="course-home-lead">You will choose a project direction that matters to you, plan a realistic first step, and learn from what happens. You do not need a perfect idea or a successful outcome to do meaningful work.</p>
         {description && <div className="course-description"><LessonText text={description} headingLevel={3} /></div>}
         {hasOrientation && <>
+          <p><strong>Welcome to Project Launch Lab.</strong> Start with something you are curious about. I will guide you through examples and practice, but the project direction and decisions are yours. Read the module introduction first, and return to the examples whenever you need support.</p>
           <CourseMedia item="overview" review={review} />
           <section aria-labelledby="course-help-heading">
             <h3 id="course-help-heading">Meet your facilitator</h3>
             <p>Peter Pielaet-Strayer designed Project Launch Lab for his University of San Diego Learning Design and Technology capstone. His work focuses on helping learners explore interests, make decisions, and start projects they care about.</p>
-            {review ? <p>This is a read-only faculty review of published instruction. Enrolled learners can use Discussions and private response areas in the authenticated course.</p> : <p>Open Discussions and choose Course questions for help with directions, access, or the next step. Use your assignment response and the feedback area for private project work. Leave personal details out of discussion posts.</p>}
+            {review ? <p>This is a read-only faculty review of published instruction. Enrolled learners can use Discussions and private response areas in the authenticated course.</p> : <p>To contact your facilitator, open Discussions and choose Course questions for general help with directions, access, or the next step. Use your assignment response to ask project-specific questions and Feedback to read your facilitator’s published comments. Leave personal details out of discussion posts.</p>}
           </section>
         </>}
         <div className="studio-actions">
@@ -93,6 +94,26 @@ export function CourseHome({ description, modules, activities, submissions, feed
         </ol>
         {modules.length === 0 && <p>The instructor has not published any modules yet.</p>}
       </section>
+
+      {hasOrientation && <section aria-labelledby="course-assessment-heading" className="course-how">
+        <h3 id="course-assessment-heading">What you will create and share</h3>
+        <p>Use the examples and ungraded practice to prepare your own work. The two project assignments are separate records: your first choice in Module 1 becomes the starting point for planning in Module 2.</p>
+        {[
+          { slug: "project-direction-brief", detail: "Module 1 · Day 7. Explain two possibilities, your decision and one remaining question." },
+          { slug: "launch-portfolio", detail: "Module 2 · Day 7. Show your plan, feedback, a genuine first attempt or documented barrier, and your next decision." },
+        ].map(item => {
+          const activity = activities.find(candidate => candidate.slug === item.slug);
+          if (!activity) return null;
+          const points = criteria.filter(criterion => criterion.activity_id === activity.id)
+            .reduce((sum, criterion) => sum + Number(criterion.maximum_points), 0);
+          return <article key={item.slug} className="assignment-card">
+            <h4>{activity.title}{points > 0 ? ` · ${points} points` : ""}</h4>
+            <p>{item.detail}</p>
+            <button type="button" className="text-button" onClick={() => onOpen(activity.id)}>Review directions and criteria</button>
+          </article>;
+        })}
+        <p>Share the comparison and First Move Card by Day 3 of their respective modules for formative feedback. Day 1 begins when the facilitator opens the module. At the end, complete the knowledge quiz and the separate ungraded course evaluation.</p>
+      </section>}
 
       <section aria-labelledby="how-heading" className="course-how">
         <h3 id="how-heading">How your work moves forward</h3>
@@ -217,6 +238,15 @@ export function CourseResources({ activities, onOpen, review = false }: { activi
           </article>;
         })}
       </section>
+      {activities.some(activity => activity.slug === "project-direction-lesson") && <section aria-labelledby="optional-resources-heading">
+        <h3 id="optional-resources-heading">Optional enrichment</h3>
+        <p>These resources are not required viewing or reading. Use them if they help you think about your own project.</p>
+        <article className="assignment-card">
+          <h4>Picking Your Topic Is Research!</h4>
+          <p>NC State University Libraries · An example of narrowing an idea after checking available information. The publisher provides a transcript.</p>
+          <a className="back-link" href="https://www.lib.ncsu.edu/videos/picking-your-topic-is-research" target="_blank" rel="noopener noreferrer">Video and transcript (opens in a new tab)</a>
+        </article>
+      </section>}
       <h3>Worksheets and external practice</h3>
       {activities.some(activity => activity.slug === "module-one-introduction") && <ul>
         <li><a className="back-link" href={review ? "/review-materials/project-launch-worksheets.txt" : "/resources/project-launch-worksheets.txt"} download>Download the project worksheets and first-action checklist (plain text)</a></li>
