@@ -38,7 +38,7 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
     const key = `${index}-${lines[0]}`;
     if (block === "[[direction-video]]") return <CourseMedia key={key} item="direction" review={review} />;
     if (block === "[[first-move-video]]") return <CourseMedia key={key} item="firstmove" review={review} />;
-    if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} review={review} />;
+    if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} review={review} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[project-direction-lesson]]") return <ProjectDirectionLesson key={key} progress={lessonProgress} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[entry-diagnostic]]") return <EntryDiagnostic key={key} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[direction-comparison]]") return <DirectionComparison key={key} onPrepareResponse={onPrepareResponse} />;
