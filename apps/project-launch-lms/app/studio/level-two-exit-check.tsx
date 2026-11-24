@@ -42,7 +42,7 @@ export function LevelTwoExitCheck({ onPrepareResponse }: {
     <div className="diagnostic-intro">
       <p className="eyebrow">After your project work · 5–8 minutes</p>
       <h3 id={id + "-heading"}>Your Next Move</h3>
-      <p>This short reflection helps you notice how prepared you feel to use your project-planning skills beyond this course. There are no right or wrong ratings. This reflection is not graded. The knowledge quiz, Project Direction Brief and Launch Portfolio provide separate evidence of learning; the course evaluation asks about your experience of the course.</p>
+      <p>This short reflection helps you notice how prepared you feel to use your project-planning skills beyond this course. There are no right or wrong ratings. This reflection is not graded and does not replace the knowledge check, Project Direction Brief or Launch Portfolio. Those assessments provide separate evidence of learning; the course evaluation asks about your experience of the course.</p>
       <p className="form-note">Choose a safe, low-resource next step or describe a genuine barrier. You do not need to take an action, use an AI tool, identify another person or share private information to complete this reflection.</p>
     </div>
     <div className="diagnostic-form">
