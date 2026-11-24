@@ -10,7 +10,7 @@ body.review-lms{background:var(--review-paper);color:var(--review-ink);font:16px
 .review-lms .review-top-label{color:#486156;font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .review-lms .review-shell{width:min(100%,1360px);margin:0 auto;padding:clamp(24px,4vw,60px) clamp(18px,3vw,44px) 100px;display:grid;grid-template-columns:176px minmax(0,1fr);gap:34px;align-items:start}
 .review-lms .review-course-nav{position:sticky;top:24px;display:flex;flex-direction:column;gap:3px;min-width:0}
-.review-lms .review-nav-button{border:0;border-left:3px solid transparent;background:transparent;color:#273d34;text-align:left;font:600 .92rem/1.4 inherit;letter-spacing:0;padding:12px 13px;min-height:43px;cursor:pointer;overflow-wrap:anywhere}
+.review-lms .review-nav-button{border:0;border-left:3px solid transparent;background:transparent;color:#273d34;text-align:left;font:inherit;font-size:.92rem;font-weight:650;line-height:1.4;letter-spacing:0;padding:12px 13px;min-height:43px;cursor:pointer;overflow-wrap:anywhere}
 .review-lms .review-nav-button[aria-current=page]{border-left-color:var(--review-water);background:#e1ebe5;color:#17392f}
 .review-lms .review-nav-button:hover{background:#e8eee8}
 .review-lms .review-content{width:100%;max-width:none;min-width:0;margin:0;padding:0;display:block}
