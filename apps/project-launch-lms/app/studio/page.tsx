@@ -481,7 +481,7 @@ export default function StudioPage() {
         </section>
           ) : <AssignmentList activities={orderedActivities} criteria={criteria} submissions={ownSubmissions}
             feedback={feedbackRows} scores={scores} portfolioOpen={portfolioOpen} onOpen={openActivity} showFeedback={true} />)}
-          {section === "resources" && <CourseResources activities={orderedActivities} />}
+          {section === "resources" && <CourseResources activities={orderedActivities} onOpen={openActivity} />}
           {section === "discussions" && supabase && <Discussions supabase={supabase}
             courseId={membership.course_id} identity={identity} preview={studentPreview} />}
           {section === "quiz" && supabase && <CourseQuiz supabase={supabase}
