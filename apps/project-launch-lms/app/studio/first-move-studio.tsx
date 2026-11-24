@@ -35,7 +35,19 @@ const decisions = [
   },
 ];
 
-export function FirstMoveStudio({ review = false }: { review?: boolean }) {
+const checklistPrompts = [
+  { label: "Purpose and learning question", hint: "What does Ari want to find out about the count-in?" },
+  { label: "Resources and permission", hint: "What is available, and what conditions must be respected?" },
+  { label: "Safe, bounded action", hint: "Which small test would you choose, and why?" },
+  { label: "Observable evidence and its limit", hint: "What could Ari observe, and what would that not establish?" },
+  { label: "Constraint and fallback", hint: "If noise prevents the recording, what could Ari do instead?" },
+  { label: "Privacy and sharing", hint: "How could Ari document the test without sharing identifying information?" },
+] as const;
+
+export function FirstMoveStudio({ review = false, onPrepareResponse }: {
+  review?: boolean;
+  onPrepareResponse?: (text: string) => boolean;
+}) {
   const id = useId();
   const [step, setStep] = useState(0);
   const [choices, setChoices] = useState<(number | null)[]>([null, null, null]);
@@ -45,6 +57,16 @@ export function FirstMoveStudio({ review = false }: { review?: boolean }) {
   const decision = decisions[step];
   const heading = useRef<HTMLHeadingElement>(null);
   const focusHeading = useRef(false);
+  const [checklist, setChecklist] = useState<string[]>(() => checklistPrompts.map(() => ""));
+  const [prepared, setPrepared] = useState(false);
+  const checklistComplete = checklist.every(value => value.trim());
+  const summary = [
+    "PROJECT LAUNCH LAB · ARI FIRST-ACTION CHECKLIST",
+    "Ungraded scenario reasoning — not evidence of my own project attempt.",
+    ...decisions.map((item, index) => `${item.title}: ${choices[index] === null ? "Not selected" : item.options[choices[index]!].label}`),
+    ...checklistPrompts.map((item, index) => `${item.label}: ${checklist[index].trim() || "(not answered)"}`),
+  ].join("\n");
+  const ready = checklistComplete && reveals.every(Boolean);
 
   useEffect(() => {
     if (focusHeading.current) {
@@ -78,6 +100,7 @@ export function FirstMoveStudio({ review = false }: { review?: boolean }) {
               <label key={option.label} className={choice === index ? "option selected" : "option"}>
                 <input type="radio" name={id} checked={choice === index}
                   onChange={() => {
+                    setPrepared(false);
                     setChoices(previous => previous.map((answer, position) => position === step ? index : answer));
                     setReveals(previous => previous.map((shown, position) => position === step ? false : shown));
                   }} />
@@ -95,7 +118,7 @@ export function FirstMoveStudio({ review = false }: { review?: boolean }) {
           <>
             <div className="feedback" role="status">
               <p>{decision.options[choice].feedback}</p>
-              {step === decisions.length - 1 && <p>Now use the directions below to plan a test for your own project.</p>}
+              {step === decisions.length - 1 && <p>Now complete the scenario checklist below before planning your own first move.</p>}
             </div>
             {step < decisions.length - 1 && (
               <button type="button" className="feedback-button" onClick={() => goTo(step + 1)}>Next decision</button>
@@ -103,6 +126,32 @@ export function FirstMoveStudio({ review = false }: { review?: boolean }) {
           </>
         )}
       </div>
+      <section className="lab-body" aria-labelledby={`${id}-checklist`}>
+        <h4 id={`${id}-checklist`}>Apply the first-action checklist to Ari’s scenario</h4>
+        <p>Use six prompts adapted from the course worksheet. Explain each choice in your own words. This is practice, not a grade; you will apply the checklist again to your own project.</p>
+        {checklistPrompts.map((item, index) => <div className="launch-field" key={item.label}>
+          <label htmlFor={`${id}-check-${index}`}>{index + 1}. {item.label}</label>
+          <p className="form-note">{item.hint}</p>
+          <textarea id={`${id}-check-${index}`} rows={2} maxLength={1000} value={checklist[index]}
+            onChange={event => {
+              setPrepared(false);
+              setChecklist(previous => previous.map((value, position) => position === index ? event.target.value : value));
+            }} />
+        </div>)}
+        <details>
+          <summary>Compare with one reasoned checklist</summary>
+          <p>Ari wants to learn whether the opening cue supports a timely entry. A permitted phone and quiet period are useful resources. Testing just the opening is manageable. Late taps suggest Ari needs to revise the cue, but cannot establish that all beginners will struggle. If noise blocks recording, a silent timing check is a reasonable fallback, with the audible cue still untested. Private, non-identifying notes are sufficient.</p>
+        </details>
+        {!ready && <p className="form-note">Explore feedback for all three decisions and complete the six prompts before preparing a full checklist.</p>}
+        {ready && <>
+          <label htmlFor={`${id}-summary`}>Your scenario checklist (copy or keep for reference)</label>
+          <textarea id={`${id}-summary`} rows={10} readOnly value={summary} />
+          {onPrepareResponse && <button type="button" className="secondary-button"
+            onClick={() => setPrepared(onPrepareResponse(summary))}>Use this checklist in my course response</button>}
+          {prepared && <p role="status" className="form-success">Prepared in the response box, not saved or shared. Choose Save draft or Share with facilitator when ready.</p>}
+          {!onPrepareResponse && <p className="form-note">Copy your checklist if you want to retain it. This view does not save or submit it.</p>}
+        </>}
+      </section>
     </section>
   );
 }
