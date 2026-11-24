@@ -6,9 +6,9 @@ import { activityExpectsResponse } from "./activity-order";
 export type CourseSection = "home" | "modules" | "assignments" | "feedback" | "resources" | "discussions" | "quiz" | "evaluation" | "manage";
 export type CourseModule = { id: string; title: string; module_number: number; is_published: boolean };
 
-export function CourseHome({ description, modules, activities, submissions, feedback, instructor, criteria = [], onOpen, onModules }: {
+export function CourseHome({ description, modules, activities, submissions, feedback, instructor, criteria = [], onOpen, onModules, review = false }: {
   description: string; modules: CourseModule[]; activities: CourseActivity[];
-  submissions: LearnerSubmission[]; feedback: PublishedFeedback[]; instructor: boolean; criteria?: RubricCriterion[];
+  submissions: LearnerSubmission[]; feedback: PublishedFeedback[]; instructor: boolean; criteria?: RubricCriterion[]; review?: boolean;
   onOpen: (id: string) => void; onModules: () => void;
 }) {
   const ordered = modules.flatMap(item => activities.filter(activity => activity.module_id === item.id));
@@ -26,11 +26,11 @@ export function CourseHome({ description, modules, activities, submissions, feed
         <p className="course-home-lead">You will choose a project direction that matters to you, plan a realistic first step, and learn from what happens. You do not need a perfect idea or a successful outcome to do meaningful work.</p>
         {description && <div className="course-description"><LessonText text={description} headingLevel={3} /></div>}
         {hasOrientation && <>
-          <CourseMedia item="overview" />
+          <CourseMedia item="overview" review={review} />
           <section aria-labelledby="course-help-heading">
             <h3 id="course-help-heading">Meet your facilitator</h3>
             <p>Peter Pielaet-Strayer designed Project Launch Lab for his University of San Diego Learning Design and Technology capstone. His work focuses on helping learners explore interests, make decisions, and start projects they care about.</p>
-            <p>Open Discussions and choose Course questions for help with directions, access, or the next step. Use your assignment response and the feedback area for private project work. Leave personal details out of discussion posts.</p>
+            {review ? <p>This is a read-only faculty review of published instruction. Enrolled learners can use Discussions and private response areas in the authenticated course.</p> : <p>Open Discussions and choose Course questions for help with directions, access, or the next step. Use your assignment response and the feedback area for private project work. Leave personal details out of discussion posts.</p>}
           </section>
         </>}
         <div className="studio-actions">
