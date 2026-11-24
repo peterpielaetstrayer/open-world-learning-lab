@@ -452,6 +452,12 @@ export function ProjectDirectionLesson({ progress, onPrepareResponse }: {
             </fieldset>
             <p className="direction-small" aria-live="polite">{consideredCount} of {directionChecks.length} questions considered. You can continue at any point.</p>
             <div className="direction-insight"><strong>A useful first direction is revisable.</strong> If an idea feels too big, try describing a smaller first attempt. If you are unsure why it matters, return to what sparked your curiosity.</div>
+            <details className="direction-help">
+              <summary>Optional example: how a research topic changes</summary>
+              <p>NC State University Libraries illustrates how a learner checks available sources and adjusts an initial research idea. The publisher page includes a written transcript; you do not need to watch the video.</p>
+              <p><a className="back-link" href="https://www.lib.ncsu.edu/videos/picking-your-topic-is-research" target="_blank" rel="noopener noreferrer">Picking Your Topic Is Research! — video and transcript (opens in a new tab)</a></p>
+              <p>Notice what makes an idea too broad or too narrow. For your own project, think of one way to check whether your first direction is realistic. Your project does not have to be a research paper.</p>
+            </details>
           </div>
         )}
 
