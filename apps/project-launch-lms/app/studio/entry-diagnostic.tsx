@@ -35,7 +35,7 @@ export function EntryDiagnostic({ onPrepareResponse }: { onPrepareResponse?: (te
   const summary = [
     "Project Launch Lab — Entry diagnostic (ungraded)",
     ...prompts.map((prompt, index) => `${index + 1}. ${prompt.question}\nContext: ${prompt.help}\nResponse: ${answers[index].trim()}`),
-    `5. Starting confidence (1 = not yet confident, 5 = very confident): ${confidence ?? "Not answered"}`,
+    `5. Confidence in narrowing an idea to a feasible first action (1–5): ${confidence ?? "Not answered"}`,
   ].join("\n\n");
 
   return (
@@ -60,7 +60,7 @@ export function EntryDiagnostic({ onPrepareResponse }: { onPrepareResponse?: (te
           </div>
         ))}
         <fieldset className="diagnostic-confidence">
-          <legend><span className="diagnostic-number">05</span> How confident are you right now that you can move from an idea to a realistic first action?</legend>
+          <legend><span className="diagnostic-number">05</span> How confident are you that you could narrow a big idea to one first action that fits your time and resources?</legend>
           <div className="diagnostic-scale">
             {[1, 2, 3, 4, 5].map(number => <label key={number}>
               <input type="radio" name={id + "-confidence"} checked={confidence === number}
