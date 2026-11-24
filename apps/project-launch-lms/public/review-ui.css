@@ -92,3 +92,9 @@ body.review-lms{background:var(--review-paper);color:var(--review-ink);font:16px
  .review-lms .review-info{padding:18px}
 }
 @media(prefers-reduced-motion:reduce){.review-lms *{scroll-behavior:auto!important}}
+
+.review-lms .review-question-preview{list-style:decimal;display:grid;gap:16px;padding-left:32px;margin:24px 0 32px}
+.review-lms .review-question{background:var(--review-card);border:1px solid var(--review-border);padding:22px 26px;line-height:1.55}
+.review-lms .review-answer-options{margin:12px 0 0;padding-left:23px;list-style:upper-alpha}
+.review-lms .review-answer-options li{padding:5px 0}
+@media(max-width:470px){.review-lms .review-question-preview{padding-left:25px}.review-lms .review-question{padding:15px 13px}}
