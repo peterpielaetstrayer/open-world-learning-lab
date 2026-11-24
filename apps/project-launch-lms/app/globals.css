@@ -299,3 +299,42 @@
 .direction-pocket-check ol{margin:14px 0;padding-left:23px}
 @media(max-width:760px){.direction-lens-grid{grid-template-columns:1fr}.direction-steps{display:flex;overflow-x:auto;scroll-snap-type:x proximity}.direction-steps button{min-width:125px;flex:0 0 125px;scroll-snap-align:start;padding:15px 10px;font-size:.8rem;flex-direction:column;align-items:start;gap:5px}.direction-lens{padding:19px}.direction-controls>button{flex:1 1 165px}.direction-intro{padding-bottom:22px}.direction-quiz-item{padding:19px 16px}}
 @media(max-width:440px){.direction-step-number{font-size:.7rem}.direction-option{gap:10px;padding:12px}.direction-panel{padding:21px}.direction-draft-export{padding:18px 14px}}
+
+
+/* Responsive studio layout hardening — reconciled PR #19.
+ * Keep the reading column usable in both enrolled and faculty-review views.
+ * Source-level candidate; real viewport and zoom acceptance remain required.
+ */
+.studio-container{max-width:1320px;width:100%}
+.studio-top{flex-wrap:wrap}
+.studio-top>div:first-child{min-width:0;flex:1 1 350px}
+.course-content,.module-reader>.studio-work,.module-reader>.course-outline,.studio-panel,.lab-card,.lab-body{min-width:0}
+.course-outline button,.studio-panel .prewrap{overflow-wrap:anywhere}
+.studio-panel fieldset,.lab-body fieldset{min-inline-size:0}
+.studio-panel textarea,.studio-panel select,.studio-panel audio{max-width:100%}
+@media(max-width:1250px){
+  .module-reader{grid-template-columns:minmax(0,1fr)}
+  .module-reader>.course-outline{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:18px}
+  .module-outline{border:1px solid var(--border);padding:16px;min-width:0}
+}
+@media(max-width:980px){
+  .direction-steps{display:flex;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity}
+  .direction-steps button{flex:0 0 140px;min-width:140px;scroll-snap-align:start}
+  .direction-lens-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:860px){
+  .course-layout{grid-template-columns:minmax(0,1fr)}
+  .course-navigation{position:static;flex-direction:row;overflow-x:auto;max-width:100%;min-width:0}
+  .course-navigation button{flex:0 0 auto;white-space:nowrap;border-left:0;border-bottom:3px solid transparent}
+  .course-navigation button[aria-current=page]{border-left:0;border-bottom-color:var(--water)}
+  .studio-top{flex-direction:column;gap:12px}
+  .studio-top>div:first-child{flex-basis:auto}
+}
+@media(max-width:700px){
+  .module-reader>.course-outline{grid-template-columns:minmax(0,1fr)}
+  .direction-comparison-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:440px){
+  .studio-panel,.lab-body,.direction-panel{padding:20px 15px}
+  .studio-actions>*{max-width:100%}
+}
