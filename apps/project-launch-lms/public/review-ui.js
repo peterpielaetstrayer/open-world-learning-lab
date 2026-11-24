@@ -168,6 +168,7 @@
       if (next >= 0 && next < lessons[activeModule].length) selectLesson(activeModule, next, true);
       else if (next >= lessons[activeModule].length && activeModule === 0) selectLesson(1, 0, true);
       else if (next < 0 && activeModule === 1) selectLesson(0, lessons[0].length - 1, true);
+      else if (next >= lessons[activeModule].length && activeModule === 1) show("assignments", true);
     }
     function selectLesson(moduleIndex, lessonIndex, focus, updateHash = true) {
       activeModule = moduleIndex;
