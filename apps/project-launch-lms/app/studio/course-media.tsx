@@ -88,6 +88,7 @@ export function CourseMedia({ item, review = false }: { item: keyof typeof media
   const media = mediaItems[item];
   return <section className="course-how" aria-label={media.title}>
     <p><strong>{media.title}</strong></p>
+    {item === "direction" && <p>Watch Jordan compare two school-guide ideas using relevance, feasibility and scope. Notice what she gains and what she postpones by choosing a smaller first version. In the interactive lesson that follows, apply the same lenses to Tessa’s drawing project. You can use the transcript instead of the video.</p>}
     <video controls playsInline preload="metadata" aria-label={media.title} style={{ width: "100%", maxWidth: "50rem" }}>
       <source src={`${review ? "/review-materials" : "/media"}/${item}.mp4`} type="video/mp4" />
       <track default kind="captions" src={`${review ? "/review-materials" : "/media"}/${item}.vtt`} srcLang="en" label="English" />
