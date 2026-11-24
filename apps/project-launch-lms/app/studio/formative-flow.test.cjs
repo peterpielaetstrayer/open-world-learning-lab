@@ -987,3 +987,54 @@ test("approved Portfolio review publishes all four academic grades and feedback"
   assert.deepEqual(review.values.p_scores.map(score => score.points), points);
   assert.equal(review.values.p_summary, "QA feedback about the evidence.");
 });
+
+
+test("Ari checklist is a separate ungraded artifact that prepares and saves only on explicit learner actions", async () => {
+  resetData();
+  addModuleTwoActivity("First Move Studio", "[[first-move-studio]]");
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /First Move Studio/ }));
+  const labels = [
+    "Purpose and learning question", "Resources and permission", "Safe, bounded action",
+    "Observable evidence and its limit", "Constraint and fallback", "Privacy and sharing",
+  ];
+  for (const label of labels) {
+    fireEvent.change(screen.getByLabelText(new RegExp(label)), { target: { value: "Reasoned scenario note: " + label } });
+  }
+  const prepareName = "Use this checklist in my course response";
+  assert.equal(screen.queryByRole("button", { name: prepareName }), null);
+  for (const [step, choice] of [1, 0, 1].entries()) {
+    fireEvent.click(screen.getAllByRole("radio")[choice]);
+    fireEvent.click(screen.getByRole("button", { name: "Show feedback" }));
+    if (step < 2) fireEvent.click(screen.getByRole("button", { name: "Next decision" }));
+  }
+  const prepare = screen.getByRole("button", { name: prepareName });
+  fireEvent.click(prepare);
+  const response = screen.getByLabelText("Your practice reflection or question for feedback");
+  assert.match(response.value, /ARI FIRST-ACTION CHECKLIST/);
+  assert.match(response.value, /not evidence of my own project attempt/);
+  assert.match(response.value, /Privacy and sharing/);
+  assert.equal(db.pll_drafts.length, 0);
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+  await waitFor(() => assert.equal(db.pll_drafts.length, 1));
+  assert.equal(db.pll_drafts[0].activity_id, "m2-activity");
+  assert.equal(db.pll_submissions.length, 0);
+});
+
+test("faculty preview checklist permits reading and copying but not course response preparation", () => {
+  render(React.createElement(FirstMoveStudio, { review: true }));
+  for (const label of ["Purpose and learning question", "Resources and permission", "Safe, bounded action",
+    "Observable evidence and its limit", "Constraint and fallback", "Privacy and sharing"]) {
+    fireEvent.change(screen.getByLabelText(new RegExp(label)), { target: { value: "Practice note" } });
+  }
+  for (const [step, choice] of [1, 0, 1].entries()) {
+    fireEvent.click(screen.getAllByRole("radio")[choice]);
+    fireEvent.click(screen.getByRole("button", { name: "Show feedback" }));
+    if (step < 2) fireEvent.click(screen.getByRole("button", { name: "Next decision" }));
+  }
+  assert.match(screen.getByLabelText(/Your scenario checklist/).value, /ARI FIRST-ACTION CHECKLIST/);
+  assert.equal(screen.queryByRole("button", { name: /Use this checklist in my course response/ }), null);
+});
