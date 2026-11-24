@@ -38,7 +38,7 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
     const key = `${index}-${lines[0]}`;
     if (block === "[[direction-video]]") return <CourseMedia key={key} item="direction" review={review} />;
     if (block === "[[first-move-video]]") return <CourseMedia key={key} item="firstmove" review={review} />;
-    if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} />;
+    if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} review={review} />;
     if (block === "[[project-direction-lesson]]") return <ProjectDirectionLesson key={key} progress={lessonProgress} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[entry-diagnostic]]") return <EntryDiagnostic key={key} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[direction-comparison]]") return <DirectionComparison key={key} onPrepareResponse={onPrepareResponse} />;
@@ -59,7 +59,7 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
     const resource = getResourceUrl(block);
     if (resource) {
       return <p key={key}><a className="back-link" href={resource.href} target="_blank" rel="noopener noreferrer">
-        Open {resource.hostname} (opens in new tab)
+        {resource.hostname === "project-launch-gauntlet.vercel.app" ? "Open Project Launch Gauntlet" : `Open ${resource.hostname}`} (opens in new tab)
       </a></p>;
     }
     const heading = lines[0].match(/^#{1,4} (.+)$/);
