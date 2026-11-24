@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ActivityPacing, AssignmentList, CourseHome, CourseOutline, CourseResources,
   type CourseSection
@@ -54,10 +54,16 @@ export function ReviewStudio() {
   const portfolio = selected?.slug === "launch-portfolio";
   const selectedIndex = selected ? orderedActivities.findIndex(item => item.id === selectedId) : -1;
 
+  useEffect(() => {
+    if (section !== "modules" || !selectedId) return;
+    const heading = document.getElementById("review-lesson-title");
+    heading?.focus({ preventScroll: true });
+    heading?.scrollIntoView?.({ block: "start", behavior: "instant" });
+  }, [section, selectedId]);
+
   function openActivity(id: string) {
     setSelectedId(id);
     setSection("modules");
-    window.scrollTo({ top: 0, behavior: "instant" });
   }
   function openSection(id: ReviewSection) {
     setSection(id);
@@ -102,7 +108,7 @@ export function ReviewStudio() {
                 <button type="button" className="feedback-button" onClick={() => openActivity(orderedActivities[0].id)}>Begin Module 1</button>
               </div>}
               {selected && <div className="studio-panel">
-                <h2>{selected.title}</h2>
+                <h2 id="review-lesson-title" tabIndex={-1}>{selected.title}</h2>
                 <ActivityPacing slug={selected.slug} />
                 <LessonText key={selected.id} text={selected.instructions} review={true} headingLevel={3} />
                 {portfolio && <LaunchPortfolioPreparation review />}
