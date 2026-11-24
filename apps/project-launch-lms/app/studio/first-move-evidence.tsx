@@ -30,7 +30,7 @@ const routes: Record<Route, { title: string; description: string; prompts: { key
     title: "A genuine obstacle prevented the first move",
     description: "Use this route when an actual access, time, permission, safety or other barrier stopped the planned attempt. You are not expected to force an unsafe action or invent an outcome.",
     prompts: [
-      { key: "barrier", label: "What actually blocked the planned action", hint: "Describe the barrier without sharing sensitive details." },
+      { key: "barrier", label: "What actually blocked the planned action", hint: "Describe the actual barrier, when it occurred, and what preparation you completed. Keep a dated note or non-identifying artifact if useful. Do not share sensitive details." },
       { key: "safetyChoice", label: "Why I did not push past the barrier", hint: "Explain the practical, ethical, safety or permission decision." },
       { key: "barrierLearning", label: "What I learned about the conditions", hint: "Distinguish a limitation in your test conditions from a conclusion about the whole idea." },
       { key: "alternative", label: "A safer or lower-resource alternative", hint: "Consider a paper model, desk-based comparison, permission request, different time, or smaller inquiry." },
