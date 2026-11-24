@@ -21,7 +21,7 @@ const initialPlan: FirstMovePlan = {
 };
 
 const fields: { key: keyof FirstMovePlan; title: string; hint: string }[] = [
-  { key: "direction", title: "My project direction", hint: "Use your Module 1 direction or a thoughtful revision." },
+  { key: "direction", title: "My project direction", hint: "Return to your Project Direction Brief and use that direction or a thoughtful revision. Carry forward the question you still need to answer." },
   { key: "purpose", title: "My purpose and who or what it serves", hint: "Explain why the direction matters without naming or identifying another person." },
   { key: "firstAction", title: "The smallest safe first action", hint: "What can you investigate, sketch, compare or test without unsafe or costly requirements?" },
   { key: "learningQuestion", title: "What I want to learn", hint: "Name information the attempt could reveal, not simply a finished product you hope to make." },
@@ -29,7 +29,7 @@ const fields: { key: keyof FirstMovePlan; title: string; hint: string }[] = [
   { key: "resources", title: "Materials, permission, trusted support and low-resource alternative", hint: "What do you already have? If you need help or permission, what can you do safely before getting it?" },
   { key: "constraint", title: "One possible constraint and a safe substitute", hint: "Consider access, time, physical safety, privacy, tools or support. A barrier is not a failure." },
   { key: "evidence", title: "Non-sensitive evidence I could collect", hint: "For example, a private observation note, an anonymized tally or a sketch. No identifiable photos or public posts required." },
-  { key: "usefulInformation", title: "What I could learn even if my attempt does not work", hint: "A test can be informative when the result differs from your hope." },
+  { key: "usefulInformation", title: "What I could learn even if my attempt does not work", hint: "A test can be informative when the result differs from your hope. Name one thing that will remain uncertain even after this test." },
   { key: "facilitatorQuestion", title: "One specific question for facilitator feedback", hint: "Ask about feasibility, safety, evidence or scope—not just 'Is this good?'" },
 ];
 
@@ -114,6 +114,7 @@ export function FirstMoveCard({ onPrepareResponse, onPlanChange }: {
         <li><strong>Purpose → action:</strong> Does your smallest action tell you something useful about the purpose?</li>
         <li><strong>Conditions → safety:</strong> If time, access or permission changes, will your substitute still be safe?</li>
         <li><strong>Evidence → decision:</strong> Could your notes reveal a limit, surprise or next question—even without a success?</li>
+        <li><strong>Checklist:</strong> Return to the first-action worksheet in Resources. Record your own answers about purpose, resources and permission, safety, evidence, a fallback and privacy; keep this completed checklist for your Launch Portfolio.</li>
       </ul>
       <p className="form-note">This check confirms the prompts are filled in; it does not determine whether your plan is good, safe or feasible. That judgment needs you and, where appropriate, a trusted facilitator.</p>
       <label htmlFor={`${id}-copy`}>Your First Move Card (select and copy if useful)</label>
