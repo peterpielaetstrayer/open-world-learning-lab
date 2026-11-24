@@ -35,7 +35,7 @@ const decisions = [
   },
 ];
 
-export function FirstMoveStudio() {
+export function FirstMoveStudio({ review = false }: { review?: boolean }) {
   const id = useId();
   const [step, setStep] = useState(0);
   const [choices, setChoices] = useState<(number | null)[]>([null, null, null]);
@@ -66,8 +66,8 @@ export function FirstMoveStudio() {
         <p>{decision.context}</p>
         {step === 1 && <figure className="playback-example">
           <figcaption id={`${id}-playback`}>Illustrative playback from Ari’s first test</figcaption>
-          <audio controls preload="none" aria-labelledby={`${id}-playback`}
-            src="/media/first-move-count-in.wav" />
+          {review ? <p className="form-note">In this read-only review, use the equivalent description below. Enrolled learners can also listen to the playback.</p> : <audio controls preload="none" aria-labelledby={`${id}-playback`}
+            src="/media/first-move-count-in.wav" />}
           <p>Audio description: Four high clicks count in. A lower tone marks beat one.
             Ari’s tap follows about a quarter of a second later, and the next two taps are late too.</p>
         </figure>}
