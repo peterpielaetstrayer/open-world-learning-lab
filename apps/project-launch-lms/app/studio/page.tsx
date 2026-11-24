@@ -163,6 +163,24 @@ export default function StudioPage() {
     heading?.scrollIntoView?.({ block: "start", behavior: "instant" });
   }, [section, selectedActivity]);
 
+  const unsavedResponse = !isInstructor && !!activeActivity && !finalSubmission &&
+    response !== (activeDraft?.response_text ?? "");
+
+  useEffect(() => {
+    if (!unsavedResponse) return;
+    const warn = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [unsavedResponse]);
+
+  function canLeaveResponse() {
+    if (busy) return false;
+    return !unsavedResponse || window.confirm("You have unsaved changes in your course response. Leave without saving? Choose Cancel to keep working or save your draft first.");
+  }
+
   function chooseActivity(id: string) {
     setSelectedActivity(id);
     const matching = drafts.find((draft) => draft.activity_id === id && draft.learner_id === identity);
@@ -280,7 +298,7 @@ export default function StudioPage() {
   }
 
   async function signOut() {
-    if (!supabase) return;
+    if (!supabase || !canLeaveResponse()) return;
     await supabase.auth.signOut();
     setMembership(null);
     window.location.replace("/login");
@@ -294,8 +312,18 @@ export default function StudioPage() {
   if (!membership) return null;
 
   function openActivity(id: string) {
-    chooseActivity(id);
+    if (id !== selectedActivity) {
+      if (!canLeaveResponse()) return;
+      chooseActivity(id);
+    }
     setSection("modules");
+  }
+
+  function openSection(next: CourseSection) {
+    if (next === section) return;
+    if (!canLeaveResponse()) return;
+    if (unsavedResponse) setResponse(activeDraft?.response_text ?? "");
+    setSection(next);
   }
 
   function togglePreview() {
@@ -332,12 +360,12 @@ export default function StudioPage() {
         <nav aria-label="Course navigation" className="course-navigation">
           {sectionLinks.map(item => <button key={item.id} type="button"
             aria-current={section === item.id ? "page" : undefined}
-            onClick={() => setSection(item.id as CourseSection)}>{item.label}</button>)}
+            onClick={() => openSection(item.id as CourseSection)}>{item.label}</button>)}
         </nav>
         <div className="course-content">
           {section === "home" && <CourseHome description={courseDescription} modules={visibleModules}
             activities={orderedActivities} submissions={ownSubmissions} criteria={criteria}
-            feedback={feedbackRows} instructor={isInstructor} onOpen={openActivity} onModules={() => setSection("modules")} />}
+            feedback={feedbackRows} instructor={isInstructor} onOpen={openActivity} onModules={() => openSection("modules")} />}
           {section === "modules" && (
             <div className="module-reader">
               <CourseOutline modules={visibleModules} activities={orderedActivities} criteria={criteria}
@@ -399,6 +427,7 @@ export default function StudioPage() {
                   <label htmlFor="learner-response">{assignedCriteria.length > 0 ? "Your project reasoning or response" : "Your practice reflection or question for feedback"}</label>
                   <textarea id="learner-response" value={response} onChange={(e) => setResponse(e.target.value)}
                     rows={9} maxLength={20000} placeholder="Explain your choices, constraints, and what you would do next…" />
+                  {unsavedResponse && <p className="form-note">Unsaved response changes. Save draft before leaving if you want to keep them.</p>}
                   <div className="studio-actions">
                     <button disabled={busy} type="button" onClick={() => void saveDraft()} className="secondary-button">
                       {busy ? "Working…" : "Save draft"}
