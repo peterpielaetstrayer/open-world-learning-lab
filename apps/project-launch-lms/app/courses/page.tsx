@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { routePasswordEmail } from "@/lib/password-email";
 import { browserSupabase } from "@/lib/supabase-browser";
+import { LessonText } from "@/app/studio/lesson-text";
 
 type Course = { id: string; title: string; description: string };
 type Enrollment = { course_id: string; member_role: "learner" | "facilitator" };
@@ -74,7 +75,7 @@ export default function CoursesPage() {
         <article key={course.id} className="studio-panel">
           <p className="eyebrow">{course.role === "facilitator" ? "Instructor" : "Student"}</p>
           <h2><Link href={`/studio?course=${encodeURIComponent(course.id)}`}>{course.title}</Link></h2>
-          {course.description && <p>{course.description}</p>}
+          {course.description && <div className="course-description"><LessonText text={course.description} headingLevel={3} /></div>}
         </article>
       ))}
     </main>

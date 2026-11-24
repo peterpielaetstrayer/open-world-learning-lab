@@ -312,6 +312,7 @@ export default function StudioPage() {
           {isInstructor && <button type="button" className="secondary-button" onClick={togglePreview}>
             {studentPreview ? "Exit Student Preview" : "Student Preview"}
           </button>}
+          <Link href="/account" className="text-button">Account settings</Link>
           <button className="text-button" onClick={signOut} type="button">Sign out</button>
         </div>
       </div>

@@ -42,7 +42,7 @@ export default function SetPasswordPage() {
     setWorking(true);
     try {
       const { data: user, error: userError } = await browserSupabase().auth.getUser();
-      if (userError || !user.user) throw new Error("Your invitation session has expired. Request a new invitation.");
+      if (userError || !user.user) throw new Error("Your password setup or recovery session has expired. Request a new recovery link.");
       const { error: updateError } = await browserSupabase().auth.updateUser({ password });
       if (updateError) throw updateError;
       router.replace("/courses");
@@ -57,13 +57,13 @@ export default function SetPasswordPage() {
     <main className="auth-page">
       <section className="auth-card" aria-labelledby="password-title">
         <Link href="/" className="back-link">← My Courses</Link>
-        <p className="eyebrow">Account setup / Invited participants</p>
+        <p className="eyebrow">Account setup / Password recovery</p>
         <h1 id="password-title">Set your password</h1>
         {checking ? <p role="status">Checking your setup link…</p> : !ready ? (
-          <p role="status">Your invitation session is not active. Open your invitation link first, or <Link href="/login">sign in</Link>.</p>
+          <p role="status">No active password-setup session. Open a fresh invitation or recovery email first, or <Link href="/login">sign in</Link>.</p>
         ) : (
           <>
-            <p>Choose a password to return to your learning studio.</p>
+            <p>Choose a new password for your account. Your recovery link can be used only once.</p>
             <form className="auth-form" onSubmit={setAccountPassword}>
               <label htmlFor="password-new">Password (12 characters minimum)</label>
               <input id="password-new" type="password" autoComplete="new-password" minLength={12} required

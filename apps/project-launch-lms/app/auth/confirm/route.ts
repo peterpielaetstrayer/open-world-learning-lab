@@ -4,16 +4,17 @@ import { createRequestSupabaseClient } from "@/lib/supabase-server";
 /**
  * For Supabase email templates using TokenHash:
  * https://example.com/auth/confirm?token_hash={{ .TokenHash }}&type=invite
+ * Recovery template uses type=recovery and the same server-side verification flow.
  * This route is also usable with magiclink/email links if configured.
  */
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
   const hash = url.searchParams.get("token_hash");
   const kind = url.searchParams.get("type");
-  if (!hash || (kind !== "invite" && kind !== "email" && kind !== "magiclink")) {
+  if (!hash || (kind !== "invite" && kind !== "recovery" && kind !== "email" && kind !== "magiclink")) {
     return NextResponse.redirect(new URL("/login?error=invalid-link", url.origin));
   }
-  const target = kind === "invite" ? "/set-password" : "/studio";
+  const target = (kind === "invite" || kind === "recovery") ? "/set-password" : "/studio";
   const response = NextResponse.redirect(new URL(target, url.origin));
   response.headers.set("Cache-Control", "no-store");
   try {
