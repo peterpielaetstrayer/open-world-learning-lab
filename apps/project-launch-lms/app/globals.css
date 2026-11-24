@@ -299,3 +299,27 @@
 .direction-pocket-check ol{margin:14px 0;padding-left:23px}
 @media(max-width:760px){.direction-lens-grid{grid-template-columns:1fr}.direction-steps{display:flex;overflow-x:auto;scroll-snap-type:x proximity}.direction-steps button{min-width:125px;flex:0 0 125px;scroll-snap-align:start;padding:15px 10px;font-size:.8rem;flex-direction:column;align-items:start;gap:5px}.direction-lens{padding:19px}.direction-controls>button{flex:1 1 165px}.direction-intro{padding-bottom:22px}.direction-quiz-item{padding:19px 16px}}
 @media(max-width:440px){.direction-step-number{font-size:.7rem}.direction-option{gap:10px;padding:12px}.direction-panel{padding:21px}.direction-draft-export{padding:18px 14px}}
+
+/*
+ * Responsive studio layout hardening.
+ * Keep the authenticated reading area comfortable when course and module
+ * navigation are both visible. This is a CSS-only QA candidate; confirm
+ * rendered layouts at desktop/tablet widths before any production release.
+ */
+.studio-container{max-width:1320px}
+.studio-top{flex-wrap:wrap}
+.studio-top>div:first-child{min-width:0;flex:1 1 350px}
+.course-content,.module-reader>.studio-work{min-width:0}
+@media(max-width:1250px){
+  .module-reader{grid-template-columns:minmax(0,1fr)}
+  .module-reader>.course-outline{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+}
+@media(max-width:980px){
+  .direction-steps{display:flex;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity}
+  .direction-steps button{flex:0 0 140px;min-width:140px;scroll-snap-align:start}
+  .direction-lens-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:700px){
+  .module-reader>.course-outline{grid-template-columns:minmax(0,1fr)}
+  .studio-top>div:first-child{flex-basis:100%}
+}
