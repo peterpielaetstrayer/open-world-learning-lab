@@ -106,8 +106,31 @@
       if (child.tagName === "H3" && /Knowledge check|Attitudes/i.test(child.textContent)) target = quiz;
       target.append(child);
     }
-    const quizInfo = node("p", "review-info", "The assessment preview is read-only. Grading and response submission remain within enrolled learner accounts.");
-    quiz.insertBefore(quizInfo, quiz.children[3] || null);
+    // Reviewed question stems and choices only. Never include correctness or explanations.
+    const previewQuestions = [{"position":1,"prompt":"Ari has 20 minutes and wants to know whether they can enter on beat one. Which first action fits that question?","options":["Record the entire tutorial series","Record and play back just the count-in and first beat","Ask whether the track sounds professional"]},{"position":2,"prompt":"What does personal relevance help you decide?","options":["Whether the direction matters enough to pursue","Whether you already have all the resources","Whether the project fits on one page"]},{"position":3,"prompt":"Which is the clearest example of narrowing scope?","options":["Try every kind of rhythm tutorial","Create one short track for a beginner learning to enter on beat one","Buy equipment before defining the project"]},{"position":4,"prompt":"Which question most directly checks feasibility?","options":["Will it impress other people?","What resources, time, and support do I actually have?","Can I make the goal bigger?"]},{"position":5,"prompt":"A peer says your test is too broad. What is the most useful response?","options":["Ask what part of the test could answer your immediate question","Remove the feedback from your plan","Complete the whole project before testing"]},{"position":6,"prompt":"Ari misses beat one in two playbacks. What can they conclude?","options":["The guide will fail for all beginners","The cue needs revision in the current test setup","The whole project should be abandoned"]},{"position":7,"prompt":"Noise makes your recording unusable. What should your evidence record include?","options":["A successful result you expected to see","Only the date of the test","What you tried, what blocked the observation, and what you will do next"]},{"position":8,"prompt":"Which evidence would best show whether a revised cue helped Ari?","options":["The size of the audio file","A repeat of the same playback check after changing the cue","A list of favorite songs"]},{"position":9,"prompt":"What belongs in a Project Direction Brief?","options":["A choice between ideas and the tradeoff behind it","A completed final project","A score with no explanation"]},{"position":10,"prompt":"Which Launch Portfolio response makes the strongest case for a next move?","options":["I will keep going because I like the idea","My peer suggested a change, so I copied it","I observed this result, considered this feedback, and chose this next step for this reason"]}];
+    const heading = $("h3", quiz).find((h) => h.textContent.startsWith("Knowledge check"));
+    const attitudesHeading = $("h3", quiz).find((h) => h.textContent.startsWith("Attitudes"));
+    if (heading && attitudesHeading) {
+      let candidate = heading.nextSibling;
+      while (candidate && candidate !== attitudesHeading) {
+        const next = candidate.nextSibling;
+        candidate.remove();
+        candidate = next;
+      }
+      heading.textContent = "Knowledge check · 10 questions";
+      const intro = node("p", "review-info", "All ten authored knowledge-check questions and answer choices are presented for design review. Correct answers, explanations, scoring, and submission are retained in the protected learner experience.");
+      quiz.insertBefore(intro, attitudesHeading);
+      const questions = node("ol", "review-question-preview");
+      previewQuestions.forEach((question) => {
+        const item = node("li", "review-question");
+        item.append(node("strong", "", question.prompt));
+        const choices = node("ol", "review-answer-options");
+        question.options.forEach((option) => choices.append(node("li", "", option)));
+        item.append(choices);
+        questions.append(item);
+      });
+      quiz.insertBefore(questions, attitudesHeading);
+    }
 
     const evaluation = screen("evaluation", "Course evaluation", "Kirkpatrick Level 1 · anonymous course-reaction prompts, ten ratings and an optional comment.");
     while (source.evaluation.firstChild) evaluation.append(source.evaluation.firstChild);
