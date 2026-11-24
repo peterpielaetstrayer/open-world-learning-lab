@@ -193,7 +193,7 @@ export function ActivityPacing({ slug }: { slug: string }) {
   return target ? <p className="form-note"><strong>Module pacing:</strong> {target} Day 1 begins when your facilitator opens the module. Follow any schedule your facilitator shares.</p> : null;
 }
 
-export function CourseResources({ activities }: { activities: CourseActivity[] }) {
+export function CourseResources({ activities, onOpen, review = false }: { activities: CourseActivity[]; onOpen?: (id: string) => void; review?: boolean }) {
   const resources = activities.flatMap(activity => {
     const urls = [...new Set(activity.instructions.split(/\r?\n/)
       .map(line => getResourceUrl(line.trim())?.href).filter((url): url is string => Boolean(url)))];
@@ -202,14 +202,29 @@ export function CourseResources({ activities }: { activities: CourseActivity[] }
   return (
     <section aria-labelledby="resources-heading">
       <h2 id="resources-heading">Resources</h2>
-      <p>These resources support work in both modules.</p>
+      <p>These resources support work in both modules. Return to the assigned readings before applying the decision lenses or planning your first move.</p>
+      <section aria-labelledby="assigned-readings-heading">
+        <h3 id="assigned-readings-heading">Assigned readings</h3>
+        {[
+          { slug: "module-one-introduction", title: "Three Lenses, One Decision", description: "Module 1 · Relevance, feasibility, scope, and tradeoffs." },
+          { slug: "module-two-introduction", title: "An Informative First Move", description: "Module 2 · Purpose, milestones, constraints, and evidence." },
+        ].map(reading => {
+          const activity = activities.find(item => item.slug === reading.slug);
+          if (!activity) return null;
+          return <article className="assignment-card" key={reading.slug}>
+            <h4>{reading.title}</h4><p>{reading.description}</p>
+            {onOpen ? <button type="button" className="secondary-button" onClick={() => onOpen(activity.id)}>Read in module</button> : <p>Find this reading in {activity.title}.</p>}
+          </article>;
+        })}
+      </section>
+      <h3>Worksheets and external practice</h3>
       {activities.some(activity => activity.slug === "module-one-introduction") && <ul>
-        <li><a className="back-link" href="/resources/project-launch-worksheets.txt" download>Download the project worksheets and first-action checklist (plain text)</a></li>
+        <li><a className="back-link" href={review ? "/review-materials/project-launch-worksheets.txt" : "/resources/project-launch-worksheets.txt"} download>Download the project worksheets and first-action checklist (plain text)</a></li>
       </ul>}
       {resources.map(({ activity, url }) => <article className="assignment-card" key={activity.id + url}>
         <h3>{activity.title}</h3>
         <a className="back-link" href={url} target="_blank" rel="noopener noreferrer">
-          Open {new URL(url).hostname} (opens in new tab)
+          {new URL(url).hostname === "project-launch-gauntlet.vercel.app" ? "Open Project Launch Gauntlet" : `Open ${new URL(url).hostname}`} (opens in new tab)
         </a>
       </article>)}
       {resources.length === 0 && <p>Resources will appear here when they are added to published lessons.</p>}
