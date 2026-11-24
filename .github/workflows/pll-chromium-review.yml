@@ -1,7 +1,7 @@
 name: Project Launch LMS — Chromium review
 on:
-  push:
-    branches: [feat/pll-final-qa-foundations-2026-11-24]
+  pull_request:
+    branches: [feat/project-launch-lms-foundation-2026-11-03]
     paths:
       - 'apps/project-launch-lms/**'
       - '.github/workflows/pll-chromium-review.yml'
