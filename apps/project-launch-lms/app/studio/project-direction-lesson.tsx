@@ -41,9 +41,9 @@ const lenses = [
 ] as const;
 
 const directionChecks = [
-  { label: "Meaning", question: "Can I explain why this direction interests me or helps someone?" },
-  { label: "Reality", question: "Can I identify a first attempt using time and resources I actually have?" },
-  { label: "Focus", question: "Can I describe a version small enough to try and learn from?" },
+  { label: "Meaning (relevance)", question: "Can I explain why this direction interests me or helps someone?" },
+  { label: "Reality (feasibility)", question: "Can I identify a first attempt using time and resources I actually have?" },
+  { label: "Focus (scope)", question: "Can I describe a version small enough to try and learn from?" },
   { label: "Learning potential", question: "Is there something useful I could find out by trying it?" },
 ] as const;
 
@@ -363,7 +363,7 @@ export function ProjectDirectionLesson({ progress, onPrepareResponse }: {
       <div className="direction-intro">
         <p className="direction-kicker">Project Launch Lab · Module 1</p>
         <h3 id={`${id}-lesson-heading`}>Find a project direction</h3>
-        <p>Turn something you are curious about into a direction you can actually explore.</p>
+        <p>Turn something you are curious about into a direction you can actually explore. The preceding video models Jordan’s school-guide decision; here you will practice with Tessa’s drawing project and other examples before applying the lenses to your own ideas.</p>
         <p className="direction-save-note"><strong>Interactive draft:</strong> {progress
           ? "Your work is private to your learner account. Select Save my lesson work before leaving or changing devices; changes are not autosaved. This is not a graded submission. You can also export your draft in Part 9."
           : "Your answers stay on this page for this session, but are not yet saved to your account. Download or copy your Project Direction Draft in Part 9 before leaving."}</p>
@@ -485,10 +485,10 @@ export function ProjectDirectionLesson({ progress, onPrepareResponse }: {
                 <p>{options[chosen].feedback}</p>
                 <p><strong>Keep thinking:</strong> Tessa will need evidence from trying a guide with a beginner before claiming it helps. A first decision is a testable direction, not a finished answer.</p>
                 <ul>
-                  <li><strong>Meaning:</strong> Making drawing easier for beginners matters to Tessa.</li>
-                  <li><strong>Reality:</strong> She can begin with the paper and pencils she has.</li>
-                  <li><strong>Focus:</strong> A single guide is narrower than a schoolwide campaign.</li>
-                  <li><strong>Learning:</strong> A voluntary clarity check could reveal what she needs to revise.</li>
+                  <li><strong>Relevance (meaning):</strong> Making drawing easier for beginners matters to Tessa.</li>
+                  <li><strong>Feasibility (reality):</strong> She can begin with the paper and pencils she has.</li>
+                  <li><strong>Scope (focus):</strong> A single guide is narrower than a schoolwide campaign.</li>
+                  <li><strong>Learning:</strong> A private clarity check, with appropriate permission and a willing participant, could reveal what she needs to revise.</li>
                 </ul>
                 <button type="button" className="direction-link-button" onClick={() => { setChosen(null); setFeedbackVisible(false); }}>
                   Reconsider the options
