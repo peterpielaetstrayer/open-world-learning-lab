@@ -353,7 +353,7 @@
 .comparison-save-bar .form-note{margin:0}
 .direction-comparison-idea{border-top:3px solid #567668}
 .direction-comparison-idea:nth-child(2){border-top-color:#8a7552}
-.comparison-direction-letter{display:inline-grid;place-items:center;width:32px;height:32px;background:#dfe9df;color:#28493b;font:700 1rem/1 inherit;margin-right:5px}
+.comparison-direction-letter{display:inline-grid;place-items:center;width:32px;height:32px;background:#dfe9df;color:#28493b;font-size:1rem;font-weight:700;line-height:1;margin-right:5px}
 .direction-comparison-idea:nth-child(2) .comparison-direction-letter{background:#eee6d7;color:#594a34}
 .direction-comparison-question:last-child{margin-bottom:0}
 .direction-comparison-decision>.secondary-button{margin-right:10px;margin-bottom:8px}
