@@ -29,8 +29,8 @@ function inlineEmphasis(text: string) {
       : part);
 }
 
-export function LessonText({ text, lessonProgress, onPrepareResponse, headingLevel = 4, review = false }: {
-  text: string; headingLevel?: 3 | 4; lessonProgress?: LessonProgressIdentity; onPrepareResponse?: (text: string) => boolean; review?: boolean;
+export function LessonText({ text, lessonProgress, onPrepareResponse, headingLevel = 4, review = false, finalized = false, onStructuredDirty }: {
+  text: string; headingLevel?: 3 | 4; lessonProgress?: LessonProgressIdentity; onPrepareResponse?: (text: string) => boolean; review?: boolean; finalized?: boolean; onStructuredDirty?: (dirty: boolean) => void;
 }) {
   const blocks: string[] = [];
   for (const block of text.trim().split(/\r?\n\s*\r?\n/)) {
@@ -50,7 +50,7 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
     if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} review={review} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[project-direction-lesson]]") return <ProjectDirectionLesson key={key} progress={lessonProgress} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[entry-diagnostic]]") return <EntryDiagnostic key={key} onPrepareResponse={onPrepareResponse} />;
-    if (block === "[[direction-comparison]]") return <DirectionComparison key={key} onPrepareResponse={onPrepareResponse} />;
+    if (block === "[[direction-comparison]]") return finalized ? <p key={key} className="form-note">Your comparison has been shared. See your final response and feedback below.</p> : <DirectionComparison key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
     if (block === "[[gauntlet-bridge]]") return <GauntletBridge key={key} />;
     if (block === "[[first-move-card]]") return <FirstMoveCard key={key} onPrepareResponse={onPrepareResponse} />;
     if (block === "[[first-move-revision]]") return <FirstMoveRevision key={key} onPrepareResponse={onPrepareResponse} />;
