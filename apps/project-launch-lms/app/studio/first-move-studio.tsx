@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { LessonProgressIdentity } from "./project-direction-lesson";
 import { usePrivateLessonDraft } from "./use-private-lesson-draft";
+import { PrivateDraftReceipt } from "./private-draft-receipt";
 
 const decisions = [
   {
@@ -173,7 +174,7 @@ export function FirstMoveStudio({ review = false, onPrepareResponse, progress, o
           <summary>Compare with one reasoned checklist</summary>
           <p>Ari wants to learn whether the opening cue supports a timely entry. A permitted phone and quiet period are useful resources. Testing just the opening is manageable. Late taps suggest Ari needs to revise the cue, but cannot establish that all beginners will struggle. If noise blocks recording, a silent timing check is a reasonable fallback, with the audible cue still untested. Private, non-identifying notes are sufficient.</p>
         </details>
-        {progress && saveButton}
+        {progress && <div className="private-draft-actions">{saveButton}<PrivateDraftReceipt draft={draft} /></div>}
         {!ready && <p className="form-note">Explore feedback for all three decisions and complete the six prompts before preparing a full checklist.</p>}
         {ready && <>
           <label htmlFor={`${id}-summary`}>Your scenario checklist (copy or keep for reference)</label>
