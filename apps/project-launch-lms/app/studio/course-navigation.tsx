@@ -24,6 +24,13 @@ export function CourseHome({ description, modules, activities, submissions, feed
         <p className="eyebrow">Project Launch Lab · Your learning studio</p>
         <h2 id="course-home-heading">Start with curiosity. Leave with a next move.</h2>
         <p className="course-home-lead">You will choose a project direction that matters to you, plan a realistic first step, and learn from what happens. You do not need a perfect idea or a successful outcome to do meaningful work.</p>
+        <div className="studio-actions">
+          {beginning && <button type="button" className="feedback-button" onClick={() => submittedCount ? onModules() : onOpen(beginning.id)}>
+            {instructor ? "Open first activity" : submittedCount ? "Open module pathway" : "Begin exploring"}
+          </button>}
+          <button type="button" className="secondary-button" onClick={onModules}>View the module map</button>
+        </div>
+        <p className="course-small"><strong>Getting started:</strong> Follow the module pathway in order. You can return to readings and examples whenever you need them. Use Resources for worksheets and Discussions for course questions.</p>
         {description && <div className="course-description"><LessonText text={description} headingLevel={3} /></div>}
         {hasOrientation && <>
           <p><strong>Welcome to Project Launch Lab.</strong> Start with something you are curious about. I will guide you through examples and practice, but the project direction and decisions are yours. Read the module introduction first, and return to the examples whenever you need support.</p>
@@ -34,12 +41,7 @@ export function CourseHome({ description, modules, activities, submissions, feed
             {review ? <p>This is a read-only faculty review of published instruction. Enrolled learners can use Discussions and private response areas in the authenticated course.</p> : <p>To contact your facilitator, open Discussions and choose Course questions for general help with directions, access, or the next step. Use your assignment response to ask project-specific questions and Feedback to read your facilitator’s published comments. Leave personal details out of discussion posts.</p>}
           </section>
         </>}
-        <div className="studio-actions">
-          {beginning && <button type="button" className="feedback-button" onClick={() => submittedCount ? onModules() : onOpen(beginning.id)}>
-            {instructor ? "Open first activity" : submittedCount ? "Open module pathway" : "Begin exploring"}
-          </button>}
-          <button type="button" className="secondary-button" onClick={onModules}>View the module map</button>
-        </div>
+
       </div>
 
       <section className="course-how" aria-labelledby="course-outcomes-heading">
@@ -134,6 +136,22 @@ export function CourseHome({ description, modules, activities, submissions, feed
   );
 }
 
+/** Orientation only: sequence position is not completion or mastery. */
+export function LessonContext({ modules, activities, activity, criteria }: {
+  modules: CourseModule[]; activities: CourseActivity[]; activity: CourseActivity; criteria: RubricCriterion[];
+}) {
+  const module = modules.find(item => item.id === activity.module_id);
+  const lessons = activities.filter(item => item.module_id === activity.module_id);
+  const position = lessons.findIndex(item => item.id === activity.id);
+  if (!module || position < 0) return null;
+  const kind = criteria.some(item => item.activity_id === activity.id) ? "Graded assignment"
+    : activityExpectsResponse(activity, criteria) ? "Practice and feedback" : "Instruction";
+  return <div className="lesson-context">
+    <p className="eyebrow">Module {module.module_number} · {module.title}</p>
+    <p className="course-small">Activity {position + 1} of {lessons.length} in this module · {kind}</p>
+  </div>;
+}
+
 export function CourseOutline({ modules, activities, criteria, selectedId, portfolioOpen = false, onOpen }: {
   modules: CourseModule[]; activities: CourseActivity[]; criteria: RubricCriterion[];
   selectedId: string; portfolioOpen?: boolean; onOpen: (id: string) => void;
@@ -151,7 +169,7 @@ export function CourseOutline({ modules, activities, criteria, selectedId, portf
                 <button type="button" aria-current={selectedId === activity.id ? "page" : undefined}
                   onClick={() => onOpen(activity.id)}>
                   {activity.title}
-                  <span>{activity.slug === "launch-portfolio" && !portfolioOpen ? "Assessment on hold" : criteria.some(criterion => criterion.activity_id === activity.id) ? "Assignment" : "Lesson"}
+                  <span>{activity.slug === "launch-portfolio" && !portfolioOpen ? "Assessment on hold" : criteria.some(criterion => criterion.activity_id === activity.id) ? "Assignment" : activityExpectsResponse(activity, criteria) ? "Practice · share response" : "Lesson"}
                     {!activity.is_published && " · Draft"}</span>
                 </button>
               </li>
