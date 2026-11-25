@@ -128,11 +128,12 @@ export function FirstMoveStudio({ review = false, onPrepareResponse }: {
       </div>
       <section className="lab-body" aria-labelledby={`${id}-checklist`}>
         <h4 id={`${id}-checklist`}>Apply the first-action checklist to Ari’s scenario</h4>
-        <p>Use six prompts adapted from the course worksheet. Explain each choice in your own words. This is practice, not a grade; you will apply the checklist again to your own project.</p>
+        <p>Use the planning ideas from Maya’s garden model in a different setting. Explain each choice in your own words. This is practice, not a grade; you will apply the checklist again to your own project.</p>
+        <p className="form-note">Your entries stay on this page until you prepare a response or copy your work. They are not automatically saved. If you need to leave before completing the checklist, keep a private copy of your notes.</p>
         {checklistPrompts.map((item, index) => <div className="launch-field" key={item.label}>
           <label htmlFor={`${id}-check-${index}`}>{index + 1}. {item.label}</label>
-          <p className="form-note">{item.hint}</p>
-          <textarea id={`${id}-check-${index}`} rows={2} maxLength={1000} value={checklist[index]}
+          <p className="form-note" id={`${id}-check-hint-${index}`}>{item.hint}</p>
+          <textarea aria-describedby={`${id}-check-hint-${index}`} id={`${id}-check-${index}`} rows={2} maxLength={1000} value={checklist[index]}
             onChange={event => {
               setPrepared(false);
               setChecklist(previous => previous.map((value, position) => position === index ? event.target.value : value));
