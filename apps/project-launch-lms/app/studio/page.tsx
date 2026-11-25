@@ -43,6 +43,7 @@ export default function StudioPage() {
   const [selectedActivity, setSelectedActivity] = useState("");
   const [selectedSubmission, setSelectedSubmission] = useState("");
   const [response, setResponse] = useState("");
+  const [structuredDirty, setStructuredDirty] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [pointInputs, setPointInputs] = useState<Record<string, string>>({});
   const [noteInputs, setNoteInputs] = useState<Record<string, string>>({});
@@ -167,21 +168,22 @@ export default function StudioPage() {
     response !== (activeDraft?.response_text ?? "");
 
   useEffect(() => {
-    if (!unsavedResponse) return;
+    if (!unsavedResponse && !structuredDirty) return;
     const warn = (event: BeforeUnloadEvent) => {
       event.preventDefault();
       event.returnValue = "";
     };
     window.addEventListener("beforeunload", warn);
     return () => window.removeEventListener("beforeunload", warn);
-  }, [unsavedResponse]);
+  }, [unsavedResponse, structuredDirty]);
 
   function canLeaveResponse() {
     if (busy) return false;
-    return !unsavedResponse || window.confirm("You have unsaved changes in your course response. Leave without saving? Choose Cancel to keep working or save your draft first.");
+    return !(unsavedResponse || structuredDirty) || window.confirm("You have unsaved changes in your course work. Leave without saving? Choose Cancel to keep working or save your draft first.");
   }
 
   function chooseActivity(id: string) {
+    setStructuredDirty(false);
     setSelectedActivity(id);
     const matching = drafts.find((draft) => draft.activity_id === id && draft.learner_id === identity);
     setResponse(matching?.response_text ?? "");
@@ -233,6 +235,7 @@ export default function StudioPage() {
       return;
     }
     if (!response.trim()) { setError("Please write your explanation before submitting."); return; }
+    if (structuredDirty) { setError("Save your structured activity draft before sharing the final response."); return; }
     if (!window.confirm("Submit this response for facilitator review? Final submissions cannot be edited.")) return;
     setBusy(true); setError(""); setNotice("");
     try {
@@ -323,6 +326,7 @@ export default function StudioPage() {
     if (next === section) return;
     if (!canLeaveResponse()) return;
     if (unsavedResponse) setResponse(activeDraft?.response_text ?? "");
+    setStructuredDirty(false);
     setSection(next);
   }
 
@@ -347,7 +351,7 @@ export default function StudioPage() {
           {isInstructor && <button type="button" className="secondary-button" onClick={togglePreview}>
             {studentPreview ? "Exit Student Preview" : "Student Preview"}
           </button>}
-          <Link href="/account" className="text-button">Account settings</Link>
+          <Link href="/account" className="text-button" onClick={event => { if (!canLeaveResponse()) event.preventDefault(); }}>Account settings</Link>
           <button className="text-button" onClick={signOut} type="button">Sign out</button>
         </div>
       </div>
@@ -379,6 +383,7 @@ export default function StudioPage() {
               {orderedActivities.some(activity => activity.slug === "module-one-introduction") &&
                 <ActivityPacing slug={activeActivity.slug} />}
               <LessonText key={activeActivity.id} text={activeActivity.instructions}
+                finalized={Boolean(finalSubmission) && !isInstructor} onStructuredDirty={setStructuredDirty}
                 lessonProgress={!isInstructor ? {
                   courseId: membership.course_id,
                   activityId: activeActivity.id,
