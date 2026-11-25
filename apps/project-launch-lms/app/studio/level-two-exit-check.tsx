@@ -3,6 +3,7 @@
 import { useCallback, useId, useState } from "react";
 import type { LessonProgressIdentity } from "./project-direction-lesson";
 import { usePrivateLessonDraft } from "./use-private-lesson-draft";
+import { PrivateDraftReceipt } from "./private-draft-receipt";
 
 const commitmentOptions = [
   "Try one safe, bounded first action",
@@ -118,7 +119,7 @@ export function LevelTwoExitCheck({ onPrepareResponse, progress, onStructuredDir
         <p className="form-note">This is a practice explanation, not a graded performance claim. You do not need to actually organize a mural.</p>
       </div>
 
-      {progress && saveButton}
+      {progress && <div className="private-draft-actions">{saveButton}<PrivateDraftReceipt draft={draft} /></div>}
       <button type="button" className="feedback-button" disabled={!complete}
         onClick={() => { setReviewed(true); setPrepared(false); }}>Review my next move</button>
       {!complete && <p className="form-note">Choose both ratings, one next-move option, and write brief responses to review your reflection.</p>}
@@ -128,7 +129,7 @@ export function LevelTwoExitCheck({ onPrepareResponse, progress, onStructuredDir
       <h4 id={id + "-feedback"}>You can change your direction when you learn something new.</h4>
       <p>Your confidence and willingness ratings describe how you feel now. Your proposed next action describes an intention. Neither proves that you have already taken the step. Your new-setting explanation is a chance to practice checking relevance, feasibility and scope.</p>
       <p>Before you continue, ask yourself: Is the first move safe and genuinely possible with the permissions and resources available? What evidence could change your thinking?</p>
-      {progress && draft.dirty && <div className="comparison-save-bar"><p className="form-note">Save your reflection before sharing.</p>{saveButton}</div>}
+      {progress && <div className="comparison-save-bar"><div><p className="form-note">Keep your structured work before sharing.</p><PrivateDraftReceipt draft={draft} /></div>{saveButton}</div>}
       {onPrepareResponse ? <>
         <button type="button" className="secondary-button" onClick={() => { const accepted = onPrepareResponse(summary); setPrepared(accepted); if (accepted) document.getElementById("learner-response")?.focus(); }}>
           Use these answers in my course response
