@@ -1110,3 +1110,39 @@ test("authored reading emphasis is retained without rendering arbitrary HTML", (
   assert.ok(screen.getByText("Literal <img src=x onerror=alert(1)>."));
   assert.equal(document.querySelector("img"), null);
 });
+
+
+test("revision distinguishes a pending question from feedback actually received", () => {
+  render(React.createElement(FirstMoveRevision));
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet; I am still waiting/ }));
+  fireEvent.change(screen.getByLabelText("What question are you waiting to have answered?"), { target: { value: "Is a sketch enough?" } });
+  fireEvent.click(screen.getByRole("radio", { name: /Yes, feedback has arrived/ }));
+  const received = screen.getByLabelText(/What feedback did you actually receive/);
+  assert.equal(received.value, "");
+  fireEvent.change(received, { target: { value: "Check permission first." } });
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet; I am still waiting/ }));
+  assert.equal(screen.getByLabelText("What question are you waiting to have answered?").value, "Is a sketch enough?");
+  assert.doesNotMatch(screen.getByLabelText("Working note (copy if you need to leave)").value, /Check permission first/);
+});
+
+test("evidence separates received feedback and pending questions when switching routes", () => {
+  render(React.createElement(FirstMoveEvidence));
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet—I will record a question/ }));
+  fireEvent.change(screen.getByLabelText("What question is still waiting for feedback?"), { target: { value: "May I use a paper model?" } });
+  fireEvent.click(screen.getByRole("radio", { name: /Yes, I can describe what someone said/ }));
+  const received = screen.getByLabelText("What feedback did you actually receive?");
+  assert.equal(received.value, "");
+  fireEvent.change(received, { target: { value: "Use an anonymous sketch." } });
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet—I will record a question/ }));
+  assert.equal(screen.getByLabelText("What question is still waiting for feedback?").value, "May I use a paper model?");
+});
+
+test("worked and transfer scenario field hints are accessible descriptions", () => {
+  render(React.createElement(MayaGardenModel));
+  assert.equal(screen.getByLabelText("Purpose").getAttribute("aria-describedby") !== null, true);
+  assert.equal(document.getElementById(screen.getByLabelText("Purpose").getAttribute("aria-describedby")).textContent, "What is Maya trying to improve?");
+  cleanup();
+  render(React.createElement(FirstMoveStudio));
+  const field = screen.getByLabelText(/Purpose and learning question/);
+  assert.equal(document.getElementById(field.getAttribute("aria-describedby")).textContent, "What does Ari want to find out about the count-in?");
+});
