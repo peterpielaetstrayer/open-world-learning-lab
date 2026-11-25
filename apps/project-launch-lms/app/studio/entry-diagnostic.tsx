@@ -3,6 +3,7 @@
 import { useCallback, useId, useState } from "react";
 import type { LessonProgressIdentity } from "./project-direction-lesson";
 import { usePrivateLessonDraft } from "./use-private-lesson-draft";
+import { PrivateDraftReceipt } from "./private-draft-receipt";
 
 const prompts = [
   {
@@ -94,7 +95,7 @@ export function EntryDiagnostic({ onPrepareResponse, progress, onStructuredDirty
           </div>
           <p className="form-note">1 = not yet confident · 5 = very confident. This is how you feel, not a grade or proof of skill.</p>
         </fieldset>
-        {progress && saveButton}
+        {progress && <div className="private-draft-actions">{saveButton}<PrivateDraftReceipt draft={draft} /></div>}
         <button type="button" className="feedback-button" disabled={!complete}
           onClick={() => { setReviewed(true); setPrepared(false); }}>Review my starting point</button>
         {!complete && <p className="form-note">Answer all five questions to see the explanatory feedback. Short notes are fine.</p>}
@@ -105,7 +106,7 @@ export function EntryDiagnostic({ onPrepareResponse, progress, onStructuredDirty
         <p>A direction usually becomes easier to test when you can describe whom or what it is for, what you can safely try, and what resources or permissions you actually have. A small first step is a way to gather information, not a smaller ambition.</p>
         <p>Look back at your comparison. Does the more focused direction name a realistic test? If you identified a barrier, that is useful evidence about feasibility—not a reason to abandon the interest.</p>
         <p className="form-note">You are not graded on your starting point. You can compare your confidence with the same question at the end of the lab. A confidence change is self-report, not proof of competence.</p>
-        {progress && draft.dirty && <div className="comparison-save-bar"><p className="form-note">Save your reflection before sharing.</p>{saveButton}</div>}
+        {progress && <div className="comparison-save-bar"><div><p className="form-note">Keep your structured work before sharing.</p><PrivateDraftReceipt draft={draft} /></div>{saveButton}</div>}
         {onPrepareResponse && <button type="button" className="secondary-button" onClick={() => {
           const accepted = onPrepareResponse(summary); setPrepared(accepted); if (accepted) document.getElementById("learner-response")?.focus();
         }}>Use these answers in my course response</button>}
