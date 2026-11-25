@@ -1,6 +1,8 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useCallback, useId, useState } from "react";
+import type { LessonProgressIdentity } from "./project-direction-lesson";
+import { usePrivateLessonDraft } from "./use-private-lesson-draft";
 
 type Idea = { direction: string; relevance: string; feasibility: string; scope: string; tradeoff: string };
 type IdeaField = keyof Idea;
@@ -14,7 +16,27 @@ const questions: { field: IdeaField; label: string; hint: string }[] = [
   { field: "tradeoff", label: "One tradeoff", hint: "What might you gain by choosing this, and what might you set aside or need to change?" },
 ];
 
-export function DirectionComparison({ onPrepareResponse }: { onPrepareResponse?: (text: string) => boolean }) {
+type ComparisonSnapshot = { version: 1; ideas: Idea[]; chosen: 0 | 1 | null; reconsider: string; question: string; practiceInsight: string };
+function normalizeComparison(raw: unknown): ComparisonSnapshot | null {
+  if (!raw || typeof raw !== "object" || !("version" in raw) || raw.version !== 1) return null;
+  const value = raw as Partial<ComparisonSnapshot>;
+  const text = (input: unknown, max = 1200) => typeof input === "string" ? input.slice(0, max) : "";
+  return {
+    version: 1,
+    ideas: [0, 1].map(index => {
+      const idea = value.ideas?.[index];
+      return { direction: text(idea?.direction), relevance: text(idea?.relevance), feasibility: text(idea?.feasibility), scope: text(idea?.scope), tradeoff: text(idea?.tradeoff) };
+    }),
+    chosen: value.chosen === 0 || value.chosen === 1 ? value.chosen : null,
+    reconsider: text(value.reconsider), question: text(value.question), practiceInsight: text(value.practiceInsight, 900),
+  };
+}
+
+export function DirectionComparison({ onPrepareResponse, progress, onStructuredDirty }: {
+  onPrepareResponse?: (text: string) => boolean;
+  progress?: LessonProgressIdentity;
+  onStructuredDirty?: (dirty: boolean) => void;
+}) {
   const id = useId();
   const [ideas, setIdeas] = useState<Idea[]>([blankIdea(), blankIdea()]);
   const [chosen, setChosen] = useState<0 | 1 | null>(null);
@@ -23,6 +45,24 @@ export function DirectionComparison({ onPrepareResponse }: { onPrepareResponse?:
   const [practiceInsight, setPracticeInsight] = useState("");
   const [reviewed, setReviewed] = useState(false);
   const [preparedFingerprint, setPreparedFingerprint] = useState("");
+
+  const snapshot: ComparisonSnapshot = { version: 1, ideas, chosen, reconsider, question, practiceInsight };
+  const restore = useCallback((value: ComparisonSnapshot) => {
+    setIdeas(value.ideas); setChosen(value.chosen); setReconsider(value.reconsider);
+    setQuestion(value.question); setPracticeInsight(value.practiceInsight);
+    setReviewed(false); setPreparedFingerprint("");
+  }, []);
+  const draft = usePrivateLessonDraft({ progress, lessonKey: "direction-comparison-v1", snapshot, restore, normalize: normalizeComparison, onDirty: onStructuredDirty });
+  const canEdit = draft.status === "preview" || draft.status === "ready";
+  const savedStatus = draft.status === "loading" ? "Loading your saved comparison…"
+    : draft.status === "saving" ? "Saving your comparison…"
+    : draft.status === "error" ? "Could not load saved work. Refresh before editing."
+    : draft.dirty ? "Unsaved comparison changes"
+    : draft.savedOnce ? "Comparison draft saved privately" : "No saved comparison yet";
+  const saveBar = progress ? <div className="comparison-save-bar">
+    <div><p className="eyebrow">Private workspace</p><p className="form-note" role="status">{savedStatus}</p></div>
+    <button type="button" className="secondary-button" disabled={draft.status !== "ready" || (!draft.dirty && draft.savedOnce)} onClick={() => void draft.save()}>Save comparison draft</button>
+  </div> : null;
 
   const complete = ideas.every(idea => Object.values(idea).every(value => value.trim()))
     && chosen !== null && Boolean(reconsider.trim()) && Boolean(question.trim());
@@ -59,6 +99,10 @@ export function DirectionComparison({ onPrepareResponse }: { onPrepareResponse?:
       <p className="form-note">This is ungraded practice. Short notes are fine. No purchases, public posts, travel, contact with strangers, AI use or disclosure of private information are required. If an action needs permission, write a safe alternative.</p>
     </header>
 
+    {saveBar}
+    {draft.error && <p className="form-error" role="alert">{draft.error}</p>}
+    {progress ? <p className="form-note">Save any time, even if you have not finished. Your saved fields will return when you reopen this activity. Saving is private and does not share work with your facilitator.</p> : <p className="form-note">Practice view: entries are not stored. Copy any work you want to retain.</p>}
+    <fieldset className="comparison-work-fields" disabled={!canEdit} aria-label="Compare project directions">
     <details className="direction-comparison-model">
       <summary>Need an example? Compare a broad idea with a manageable one</summary>
       <p><strong>Broad:</strong> “Teach everyone how to eat healthy.” There is a meaningful purpose, but the audience and first test are too large to check quickly.</p>
@@ -85,11 +129,11 @@ export function DirectionComparison({ onPrepareResponse }: { onPrepareResponse?:
 
     <div className="direction-comparison-grid">
       {ideas.map((idea, index) => <fieldset key={index} className="direction-comparison-idea">
-        <legend>Direction {index === 0 ? "A" : "B"}</legend>
+        <legend><span className="comparison-direction-letter">{index === 0 ? "A" : "B"}</span> Direction {index === 0 ? "A" : "B"}</legend>
         {questions.map(({ field, label, hint }) => <div className="direction-comparison-question" key={field}>
           <label htmlFor={`${id}-${index}-${field}`}>{label}</label>
-          <p className="form-note">{hint}</p>
-          <textarea id={`${id}-${index}-${field}`} rows={field === "direction" ? 2 : 3}
+          <p className="form-note" id={`${id}-${index}-${field}-hint`}>{hint}</p>
+          <textarea aria-describedby={`${id}-${index}-${field}-hint`} id={`${id}-${index}-${field}`} rows={field === "direction" ? 2 : 3}
             maxLength={1200} value={idea[field]} onChange={event => updateIdea(index, field, event.target.value)}
             placeholder={field === "tradeoff" ? "I gain… but I may give up or need…" : "My thinking so far…"} />
         </div>)}
@@ -115,11 +159,13 @@ export function DirectionComparison({ onPrepareResponse }: { onPrepareResponse?:
         onChange={event => { setQuestion(event.target.value); setReviewed(false); setPreparedFingerprint(""); }}
         placeholder="I would like feedback on whether…" />
 
+      {progress && <button type="button" className="secondary-button" disabled={draft.status !== "ready" || (!draft.dirty && draft.savedOnce)} onClick={() => void draft.save()}>Save comparison draft</button>}
       <button type="button" className="feedback-button" disabled={!complete}
         onClick={() => { setReviewed(true); setPreparedFingerprint(""); }}>Review my comparison</button>
       {!complete && <p className="form-note" role="status">Complete both directions, all three decision lenses, one tradeoff for each, a tentative choice, what could change it, and a question for feedback. A short phrase is enough for each box.</p>}
     </div>
 
+    </fieldset>
     {reviewed && <div className="direction-comparison-feedback" aria-live="polite">
       <p className="eyebrow">Your ungraded comparison card</p>
       <h4>You have a reasoned starting point—not a permanent answer.</h4>
@@ -129,9 +175,13 @@ export function DirectionComparison({ onPrepareResponse }: { onPrepareResponse?:
       <textarea id={`${id}-card`} rows={13} readOnly value={summary} />
       {onPrepareResponse ? <>
         <button type="button" className="secondary-button"
-          onClick={() => setPreparedFingerprint(onPrepareResponse(summary) ? summary : "")}>Use this comparison in my course response</button>
-        {preparedFingerprint === summary && <p className="form-success" role="status">Your comparison is in the course response box below. It has <strong>not been saved or shared</strong>. Choose Save draft, or Share with facilitator (final) when ready.</p>}
-      </> : <p className="form-note">This private preview does not save or send anything. Copy the card if you want to keep it.</p>}
+          onClick={() => {
+            const prepared = onPrepareResponse(summary);
+            setPreparedFingerprint(prepared ? summary : "");
+            if (prepared) document.getElementById("learner-response")?.focus();
+          }}>Use this comparison in my course response</button>
+        {preparedFingerprint === summary && <p className="form-success" role="status">Your comparison has been copied to the response box below. The response is <strong>not saved or shared yet</strong>. Review it before sharing; your private comparison draft is separate.</p>}
+      </> : <p className="form-note">This view cannot share a response. Copy the card if you want to keep it.</p>}
       <p><strong>Next:</strong> After receiving feedback, prepare your graded Project Direction Brief. Explain your choice, resources, safe alternatives, scope, tradeoff and a question that is still open.</p>
     </div>}
   </section>;
