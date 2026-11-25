@@ -404,6 +404,7 @@ test("two-direction comparison prepares a formative draft and respects overwrite
   await screen.findByRole("heading", { name: /Start with curiosity/ });
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  await screen.findByText("No saved comparison yet");
   const comparisonButton = screen.getByRole("button", { name: "Review my comparison" });
   assert.equal(comparisonButton.disabled, true);
   for (const index of ["A", "B"]) {
@@ -461,6 +462,7 @@ test("optional Gauntlet insight accompanies personal comparison without requirin
   await screen.findByRole("heading", { name: /Start with curiosity/ });
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  await screen.findByText("No saved comparison yet");
   assert.ok(screen.getByRole("link", { name: /Open Project Launch Gauntlet/ }));
   const insight = screen.getByLabelText(/Optional: What did the Gauntlet/);
   fireEvent.change(insight, { target: { value: "Permission matters more than a fast public launch." } });
@@ -1145,4 +1147,51 @@ test("worked and transfer scenario field hints are accessible descriptions", () 
   render(React.createElement(FirstMoveStudio));
   const field = screen.getByLabelText(/Purpose and learning question/);
   assert.equal(document.getElementById(field.getAttribute("aria-describedby")).textContent, "What does Ari want to find out about the count-in?");
+});
+
+
+test("comparison saves partial structured fields privately and restores them after leaving", async () => {
+  resetData();
+  db.pll_activities[0].instructions = "[[direction-comparison]]";
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  await screen.findByText("No saved comparison yet");
+  const directions = screen.getAllByLabelText("Possible project direction");
+  fireEvent.change(directions[0], { target: { value: "A paper garden plan" } });
+  fireEvent.change(directions[1], { target: { value: "A full garden redesign" } });
+  assert.ok(screen.getByText("Unsaved comparison changes"));
+  window.confirm = () => false;
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  assert.equal(screen.getAllByLabelText("Possible project direction")[0].value, "A paper garden plan");
+  fireEvent.click(screen.getAllByRole("button", { name: "Save comparison draft" })[0]);
+  await screen.findByText("Comparison draft saved privately");
+  assert.equal(db.pll_lesson_progress.length, 1);
+  assert.equal(db.pll_lesson_progress[0].lesson_key, "direction-comparison-v1");
+  assert.equal(db.pll_lesson_progress[0].state.ideas[1].direction, "A full garden redesign");
+  assert.equal(db.pll_drafts.length, 0);
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  await screen.findByText("Comparison draft saved privately");
+  assert.equal(screen.getAllByLabelText("Possible project direction")[0].value, "A paper garden plan");
+  assert.equal(screen.getAllByLabelText("Possible project direction")[1].value, "A full garden redesign");
+  fireEvent.change(screen.getAllByLabelText("Possible project direction")[1], { target: { value: "A revised second direction" } });
+  fireEvent.click(screen.getAllByRole("button", { name: "Save comparison draft" })[0]);
+  await screen.findByText("Comparison draft saved privately");
+  assert.equal(db.pll_lesson_progress.length, 1);
+  assert.equal(db.pll_lesson_progress[0].state.ideas[1].direction, "A revised second direction");
+});
+
+test("shared comparison does not present editable structured inputs as the final record", async () => {
+  resetData();
+  db.pll_activities[0].instructions = "[[direction-comparison]]";
+  db.pll_submissions.push({ id: "comparison-final", course_id: "course-1", activity_id: "practice-1", learner_id: "learner-1", response_text: "Final comparison record", submitted_at: "2026-11-25T18:00:00Z" });
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  assert.ok(screen.getByText("Your comparison has been shared. See your final response and feedback below."));
+  assert.equal(screen.queryByLabelText("Possible project direction"), null);
+  assert.ok(screen.getByText("Final comparison record"));
 });
