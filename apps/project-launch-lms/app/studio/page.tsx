@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ActivityPacing, CourseHome, CourseOutline, AssignmentList, CourseResources, type CourseSection } from "./course-navigation";
+import { ActivityPacing, LessonContext, CourseHome, CourseOutline, AssignmentList, CourseResources, type CourseSection } from "./course-navigation";
 import { CourseQuiz } from "./course-quiz";
 import { Discussions } from "./discussions";
 import { CourseEvaluation } from "./course-evaluation";
@@ -374,6 +374,7 @@ export default function StudioPage() {
                 {!readableActivity && <p>Choose a lesson from the module list.</p>}
           {activeActivity && readableActivity && (
             <div className="studio-panel">
+              <LessonContext modules={visibleModules} activities={orderedActivities} activity={activeActivity} criteria={criteria} />
               <h3 id="studio-lesson-title" tabIndex={-1}>{activeActivity.title}</h3>
               {orderedActivities.some(activity => activity.slug === "module-one-introduction") &&
                 <ActivityPacing slug={activeActivity.slug} />}
@@ -464,7 +465,7 @@ export default function StudioPage() {
           {section === "feedback" && (isInstructor && !studentPreview ? (
         <section className="studio-work" aria-labelledby="reviews-heading">
           <h2 id="reviews-heading">Learner submissions</h2>
-          {submissions.length === 0 ? <p>No learner submissions yet. The platform uses synthetic demonstration accounts until reviewer access is configured.</p> : (
+          {submissions.length === 0 ? <p>No learner submissions yet. Shared learner work will appear here when it is ready for review.</p> : (
             <>
               <label htmlFor="submission-choice">Submission to review</label>
               <select id="submission-choice" value={selectedSubmission} onChange={e => chooseSubmission(e.target.value)}>
