@@ -1,3 +1,6 @@
+"use client";
+
+import { useId, useState } from "react";
 import { CourseMedia } from "./course-media";
 import { LessonText, getResourceUrl } from "./lesson-text";
 import type { CourseActivity, CriterionScore, LearnerSubmission, PublishedFeedback, RubricCriterion } from "@/lib/course-types";
@@ -156,8 +159,13 @@ export function CourseOutline({ modules, activities, criteria, selectedId, portf
   modules: CourseModule[]; activities: CourseActivity[]; criteria: RubricCriterion[];
   selectedId: string; portfolioOpen?: boolean; onOpen: (id: string) => void;
 }) {
+  const [expanded, setExpanded] = useState(true);
+  const outlineId = useId();
   return (
-    <nav aria-label="Module lessons" className="course-outline">
+    <nav aria-label="Module lessons" className={`course-outline${expanded ? "" : " outline-collapsed"}`}>
+      <button type="button" className="outline-toggle" aria-expanded={expanded} aria-controls={outlineId}
+        onClick={() => setExpanded(value => !value)}>{expanded ? "Hide module outline" : "Show module outline"} <span aria-hidden="true">{expanded ? "−" : "+"}</span></button>
+      <div id={outlineId} className="outline-modules" hidden={!expanded}>
       {modules.length === 0 && <p>No published modules are available yet.</p>}
       {modules.map(item => (
         <section key={item.id} className="module-outline">
@@ -178,6 +186,7 @@ export function CourseOutline({ modules, activities, criteria, selectedId, portf
           {!activities.some(activity => activity.module_id === item.id) && <p className="form-note">Lessons will appear here when available.</p>}
         </section>
       ))}
+      </div>
     </nav>
   );
 }
