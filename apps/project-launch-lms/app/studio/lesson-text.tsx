@@ -47,9 +47,9 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
     const key = `${index}-${lines[0]}`;
     if (block === "[[direction-video]]") return <CourseMedia key={key} item="direction" review={review} />;
     if (block === "[[first-move-video]]") return <CourseMedia key={key} item="firstmove" review={review} />;
-    if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} review={review} onPrepareResponse={onPrepareResponse} />;
+    if (block === "[[first-move-studio]]") return finalized ? <p key={key} className="form-note">Your scenario checklist has been shared. See your final response and feedback below.</p> : <FirstMoveStudio key={key} review={review} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
     if (block === "[[project-direction-lesson]]") return <ProjectDirectionLesson key={key} progress={lessonProgress} onPrepareResponse={onPrepareResponse} />;
-    if (block === "[[entry-diagnostic]]") return <EntryDiagnostic key={key} onPrepareResponse={onPrepareResponse} />;
+    if (block === "[[entry-diagnostic]]") return finalized ? <p key={key} className="form-note">Your starting reflection has been shared. See your final response and feedback below.</p> : <EntryDiagnostic key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
     if (block === "[[direction-comparison]]") return finalized ? <p key={key} className="form-note">Your comparison has been shared. See your final response and feedback below.</p> : <DirectionComparison key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
     if (block === "[[gauntlet-bridge]]") return <GauntletBridge key={key} />;
     if (block === "[[first-move-card]]") return finalized ? <p key={key} className="form-note">Your First Move Card has been shared. See your final response and feedback below.</p> : <FirstMoveCard key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
@@ -58,7 +58,7 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
     if (block === "[[first-step-mini-lesson]]") return <FirstStepMiniLesson key={key} />;
     if (block === "[[maya-garden-model]]") return <MayaGardenModel key={key} />;
     if (block === "[[first-step-checks]]") return <FirstStepChecks key={key} />;
-    if (block === "[[level-two-exit-check]]") return <LevelTwoExitCheck key={key} onPrepareResponse={onPrepareResponse} />;
+    if (block === "[[level-two-exit-check]]") return finalized ? <p key={key} className="form-note">Your exit reflection has been shared. See your final response and feedback below.</p> : <LevelTwoExitCheck key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
     if (lines.every(line => /^\d+\. /.test(line))) {
       return <ol key={key}>{lines.map((line, position) => <li key={position}>{inlineEmphasis(line.replace(/^\d+\. /, ""))}</li>)}</ol>;
     }
