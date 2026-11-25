@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  ActivityPacing, AssignmentList, CourseHome, CourseOutline, CourseResources,
+  ActivityPacing, LessonContext, AssignmentList, CourseHome, CourseOutline, CourseResources,
   type CourseSection
 } from "@/app/studio/course-navigation";
 import { CourseMedia } from "@/app/studio/course-media";
@@ -108,6 +108,7 @@ export function ReviewStudio() {
                 <button type="button" className="feedback-button" onClick={() => openActivity(orderedActivities[0].id)}>Begin Module 1</button>
               </div>}
               {selected && <div className="studio-panel">
+                <LessonContext modules={modules} activities={orderedActivities} activity={selected} criteria={criteria} />
                 <h2 id="review-lesson-title" tabIndex={-1}>{selected.title}</h2>
                 <ActivityPacing slug={selected.slug} />
                 <LessonText key={selected.id} text={selected.instructions} review={true} headingLevel={3} />
