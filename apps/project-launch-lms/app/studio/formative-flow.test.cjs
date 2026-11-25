@@ -1178,8 +1178,13 @@ test("comparison saves partial structured fields privately and restores them aft
   window.confirm = () => false;
   fireEvent.click(screen.getByRole("button", { name: "Home" }));
   assert.equal(screen.getAllByLabelText("Possible project direction")[0].value, "A paper garden plan");
-  fireEvent.click(screen.getAllByRole("button", { name: "Save comparison draft" })[0]);
+  const lowerSave = screen.getAllByRole("button", { name: "Save comparison draft" })[1];
+  const localControls = lowerSave.closest(".private-draft-actions");
+  assert.ok(within(localControls).getByText("Changes have not been saved."));
+  fireEvent.click(lowerSave);
   await screen.findByText("Comparison draft saved privately");
+  assert.ok(within(localControls).getByText("✓ All current fields are saved privately."));
+  assert.equal(lowerSave.disabled, true);
   assert.equal(db.pll_lesson_progress.length, 1);
   assert.equal(db.pll_lesson_progress[0].lesson_key, "direction-comparison-v1");
   assert.equal(db.pll_lesson_progress[0].state.ideas[1].direction, "A full garden redesign");
