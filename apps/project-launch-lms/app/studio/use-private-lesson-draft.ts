@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type { LessonProgressIdentity } from "./project-direction-lesson";
 
@@ -53,10 +53,12 @@ export function usePrivateLessonDraft<T extends object>({
     return () => { active = false; };
   }, [courseId, activityId, learnerId, lessonKey, normalize, restore]);
 
-  useEffect(() => {
+  // Publish the gate before paint so a saved receipt and the parent Share
+  // control never disagree for an intervening interaction.
+  useLayoutEffect(() => {
     onDirty?.(dirty || status === "saving");
-    return () => onDirty?.(false);
   }, [dirty, status, onDirty]);
+  useLayoutEffect(() => () => onDirty?.(false), [onDirty]);
 
   async function save() {
     if (!courseId || !activityId || !learnerId || status !== "ready") return;
