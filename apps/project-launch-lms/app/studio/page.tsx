@@ -434,11 +434,12 @@ export default function StudioPage() {
                   <textarea id="learner-response" value={response} onChange={(e) => setResponse(e.target.value)}
                     rows={9} maxLength={20000} placeholder="Explain your choices, constraints, and what you would do next…" />
                   {unsavedResponse && <p className="form-note">Unsaved response changes. Save draft before leaving if you want to keep them.</p>}
+                  {structuredDirty && <p className="form-note" role="status">Save your structured activity draft above before sharing your final response.</p>}
                   <div className="studio-actions">
                     <button disabled={busy} type="button" onClick={() => void saveDraft()} className="secondary-button">
                       {busy ? "Working…" : "Save draft"}
                     </button>
-                    <button disabled={busy || !response.trim() || portfolioSubmissionOnHold} type="button" onClick={() => void submitFinal()} className="feedback-button">
+                    <button disabled={busy || !response.trim() || portfolioSubmissionOnHold || structuredDirty} type="button" onClick={() => void submitFinal()} className="feedback-button">
                       {assignedCriteria.length > 0 ? "Submit final response" : "Share with facilitator (final)"}
                     </button>
                   </div>
