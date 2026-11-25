@@ -3,6 +3,7 @@
 import { useCallback, useId, useState } from "react";
 import type { LessonProgressIdentity } from "./project-direction-lesson";
 import { usePrivateLessonDraft } from "./use-private-lesson-draft";
+import { PrivateDraftReceipt } from "./private-draft-receipt";
 
 type Idea = { direction: string; relevance: string; feasibility: string; scope: string; tradeoff: string };
 type IdeaField = keyof Idea;
@@ -159,7 +160,7 @@ export function DirectionComparison({ onPrepareResponse, progress, onStructuredD
         onChange={event => { setQuestion(event.target.value); setReviewed(false); setPreparedFingerprint(""); }}
         placeholder="I would like feedback on whether…" />
 
-      {progress && <button type="button" className="secondary-button" disabled={draft.status !== "ready" || (!draft.dirty && draft.savedOnce)} onClick={() => void draft.save()}>Save comparison draft</button>}
+      {progress && <div className="private-draft-actions"><button type="button" className="secondary-button" disabled={draft.status !== "ready" || (!draft.dirty && draft.savedOnce)} onClick={() => void draft.save()}>Save comparison draft</button><PrivateDraftReceipt draft={draft} /></div>}
       <button type="button" className="feedback-button" disabled={!complete}
         onClick={() => { setReviewed(true); setPreparedFingerprint(""); }}>Review my comparison</button>
       {!complete && <p className="form-note" role="status">Complete both directions, all three decision lenses, one tradeoff for each, a tentative choice, what could change it, and a question for feedback. A short phrase is enough for each box.</p>}
@@ -173,7 +174,7 @@ export function DirectionComparison({ onPrepareResponse, progress, onStructuredD
       <p className="form-note">This feedback confirms the comparison steps, not the quality or correctness of your reasoning. A facilitator can challenge your assumptions after you share your response.</p>
       <label htmlFor={`${id}-card`}>Your comparison card (select and copy if useful)</label>
       <textarea id={`${id}-card`} rows={13} readOnly value={summary} />
-      {progress && draft.dirty && <div className="comparison-save-bar"><p className="form-note">Save the structured draft before sharing your final response.</p><button type="button" className="secondary-button" disabled={draft.status !== "ready"} onClick={() => void draft.save()}>Save reviewed comparison</button></div>}
+      {progress && <div className="comparison-save-bar"><div><p className="form-note">Keep your structured work before sharing.</p><PrivateDraftReceipt draft={draft} /></div><button type="button" className="secondary-button" disabled={draft.status !== "ready" || (!draft.dirty && draft.savedOnce)} onClick={() => void draft.save()}>Save reviewed comparison</button></div>}
       {onPrepareResponse ? <>
         <button type="button" className="secondary-button"
           onClick={() => {
