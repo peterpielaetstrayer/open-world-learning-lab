@@ -1195,3 +1195,20 @@ test("shared comparison does not present editable structured inputs as the final
   assert.equal(screen.queryByLabelText("Possible project direction"), null);
   assert.ok(screen.getByText("Final comparison record"));
 });
+
+
+test("module outline can collapse for focused reading without losing the active lesson", async () => {
+  resetData();
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  const collapse = screen.getByRole("button", { name: "Hide module outline" });
+  assert.equal(collapse.getAttribute("aria-expanded"), "true");
+  fireEvent.click(collapse);
+  const expand = screen.getByRole("button", { name: "Show module outline" });
+  assert.equal(expand.getAttribute("aria-expanded"), "false");
+  assert.equal(document.getElementById(expand.getAttribute("aria-controls")).hidden, true);
+  assert.ok(screen.getByRole("heading", { name: "Practice choosing" }));
+  fireEvent.click(expand);
+  assert.equal(screen.getByRole("button", { name: /Practice choosing/ }).getAttribute("aria-current"), "page");
+});
