@@ -374,8 +374,8 @@ export default function StudioPage() {
                 {!readableActivity && <p>Choose a lesson from the module list.</p>}
           {activeActivity && readableActivity && (
             <div className="studio-panel">
-              <LessonContext modules={visibleModules} activities={orderedActivities} activity={activeActivity} criteria={criteria} />
               <h3 id="studio-lesson-title" tabIndex={-1}>{activeActivity.title}</h3>
+              <LessonContext modules={visibleModules} activities={orderedActivities} activity={activeActivity} criteria={criteria} />
               {orderedActivities.some(activity => activity.slug === "module-one-introduction") &&
                 <ActivityPacing slug={activeActivity.slug} />}
               <LessonText key={activeActivity.id} text={activeActivity.instructions}
