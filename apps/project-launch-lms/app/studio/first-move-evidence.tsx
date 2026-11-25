@@ -120,8 +120,8 @@ export function FirstMoveEvidence({ plan, onPrepareResponse }: {
         <p>{routes[route].description}</p>
         {activePrompts.map((prompt, index) => <div key={prompt.key} className="launch-field">
           <label htmlFor={`${id}-${prompt.key}`}>{index + 1}. {prompt.label}</label>
-          <p className="form-note">{prompt.hint}</p>
-          <textarea id={`${id}-${prompt.key}`} rows={3} maxLength={1200}
+          <p className="form-note" id={`${id}-${prompt.key}-hint`}>{prompt.hint}</p>
+          <textarea aria-describedby={`${id}-${prompt.key}-hint`} id={`${id}-${prompt.key}`} rows={3} maxLength={1200}
             value={evidence[prompt.key]} onChange={event => update(prompt.key, event.target.value)} />
         </div>)}
       </div>}
