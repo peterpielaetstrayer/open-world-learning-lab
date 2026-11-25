@@ -1081,3 +1081,18 @@ test("confirming discard returns to the previously saved response rather than si
   assert.equal(db.pll_drafts[0].response_text, "Previously saved work");
   assert.equal(db.pll_submissions.length, 0);
 });
+
+
+test("module orientation identifies sequence and activity type without implying mastery", async () => {
+  resetData();
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  const context = document.querySelector(".lesson-context");
+  assert.match(context.textContent, /Module 1 · Discover & Define/);
+  assert.match(context.textContent, /Activity 1 of 2 in this module · Practice and feedback/);
+  assert.match(screen.getByRole("navigation", { name: "Module lessons" }).textContent, /Practice · share response/);
+  fireEvent.click(screen.getByRole("button", { name: /Direction Brief/ }));
+  assert.match(document.querySelector(".lesson-context").textContent, /Activity 2 of 2 in this module · Graded assignment/);
+  assert.equal(db.pll_submissions.length, 0);
+});
