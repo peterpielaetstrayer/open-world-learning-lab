@@ -689,9 +689,13 @@ test("separate authenticated feedback follow-up cannot overwrite an earlier fina
   assert.match(draftText, /school's boundaries/);
   assert.equal(db.pll_submissions.length, 1, "A preparation action must not submit anything");
   assert.equal(db.pll_submissions[0].response_text, originalText);
+  const share = screen.getByRole("button", { name: "Share with facilitator (final)" });
+  assert.equal(share.disabled, true, "Unsaved structured changes must disable sharing");
+  assert.ok(screen.getByText("Save your structured activity draft above before sharing your final response."));
   fireEvent.click(screen.getAllByRole("button", { name: "Save revision draft" })[0]);
   await screen.findByText("Your revision is saved privately");
-  fireEvent.click(screen.getByRole("button", { name: "Share with facilitator (final)" }));
+  assert.equal(share.disabled, false, "A saved receipt must immediately agree with the share gate");
+  fireEvent.click(share);
   await waitFor(() => assert.equal(db.pll_submissions.length, 2));
   assert.equal(db.pll_submissions.find(row => row.activity_id === "first-card").response_text, originalText);
   assert.equal(db.pll_submissions.find(row => row.activity_id === "revision-follow-up").response_text, draftText);
