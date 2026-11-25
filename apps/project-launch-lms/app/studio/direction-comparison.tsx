@@ -129,7 +129,7 @@ export function DirectionComparison({ onPrepareResponse, progress, onStructuredD
 
     <div className="direction-comparison-grid">
       {ideas.map((idea, index) => <fieldset key={index} className="direction-comparison-idea">
-        <legend><span className="comparison-direction-letter">{index === 0 ? "A" : "B"}</span> Direction {index === 0 ? "A" : "B"}</legend>
+        <legend><span className="comparison-direction-letter" aria-hidden="true">{index === 0 ? "A" : "B"}</span> Direction {index === 0 ? "A" : "B"}</legend>
         {questions.map(({ field, label, hint }) => <div className="direction-comparison-question" key={field}>
           <label htmlFor={`${id}-${index}-${field}`}>{label}</label>
           <p className="form-note" id={`${id}-${index}-${field}-hint`}>{hint}</p>
@@ -173,6 +173,7 @@ export function DirectionComparison({ onPrepareResponse, progress, onStructuredD
       <p className="form-note">This feedback confirms the comparison steps, not the quality or correctness of your reasoning. A facilitator can challenge your assumptions after you share your response.</p>
       <label htmlFor={`${id}-card`}>Your comparison card (select and copy if useful)</label>
       <textarea id={`${id}-card`} rows={13} readOnly value={summary} />
+      {progress && draft.dirty && <div className="comparison-save-bar"><p className="form-note">Save the structured draft before sharing your final response.</p><button type="button" className="secondary-button" disabled={draft.status !== "ready"} onClick={() => void draft.save()}>Save reviewed comparison</button></div>}
       {onPrepareResponse ? <>
         <button type="button" className="secondary-button"
           onClick={() => {
@@ -180,7 +181,7 @@ export function DirectionComparison({ onPrepareResponse, progress, onStructuredD
             setPreparedFingerprint(prepared ? summary : "");
             if (prepared) document.getElementById("learner-response")?.focus();
           }}>Use this comparison in my course response</button>
-        {preparedFingerprint === summary && <p className="form-success" role="status">Your comparison has been copied to the response box below. The response is <strong>not saved or shared yet</strong>. Review it before sharing; your private comparison draft is separate.</p>}
+        {preparedFingerprint === summary && <p className="form-success" role="status">Your comparison has been copied to the response box below. The response has <strong>not been saved or shared</strong>. Review it before sharing; your private comparison draft is separate.</p>}
       </> : <p className="form-note">This view cannot share a response. Copy the card if you want to keep it.</p>}
       <p><strong>Next:</strong> After receiving feedback, prepare your graded Project Direction Brief. Explain your choice, resources, safe alternatives, scope, tradeoff and a question that is still open.</p>
     </div>}
