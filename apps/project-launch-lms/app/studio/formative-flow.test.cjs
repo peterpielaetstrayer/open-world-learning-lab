@@ -530,7 +530,7 @@ test("First Move Card saves incomplete structured plans and restores fields with
   addModuleTwoActivity("First Move Card", "[[first-move-card]]");
   render(React.createElement(StudioPage));
   fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
-  fireEvent.click(screen.getByRole("button", { name: /First Move Card/ }));
+  fireEvent.click(within(screen.getByRole("navigation", { name: "Module lessons" })).getByRole("button", { name: /First Move Card/ }));
   await screen.findByText("No saved plan yet");
   fireEvent.change(screen.getByLabelText(/My project direction/), { target: { value: "Try one drawing prompt" } });
   assert.equal(screen.getByRole("button", { name: "Review my First Move Card" }).disabled, true);
@@ -544,7 +544,7 @@ test("First Move Card saves incomplete structured plans and restores fields with
   assert.equal(db.pll_submissions.length, 0);
   fireEvent.click(screen.getByRole("button", { name: "Home" }));
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
-  fireEvent.click(screen.getByRole("button", { name: /First Move Card/ }));
+  fireEvent.click(within(screen.getByRole("navigation", { name: "Module lessons" })).getByRole("button", { name: /First Move Card/ }));
   await screen.findByText("First Move Card saved privately");
   assert.equal(screen.getByLabelText(/My project direction/).value, "Try one drawing prompt");
   assert.equal(screen.getByRole("button", { name: "Review my First Move Card" }).disabled, true);
