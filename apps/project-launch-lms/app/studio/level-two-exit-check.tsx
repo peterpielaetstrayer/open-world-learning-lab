@@ -137,7 +137,7 @@ export function LevelTwoExitCheck({ onPrepareResponse, progress, onStructuredDir
       </> : <>
         <label htmlFor={id + "-summary"}>Your reflection (select and copy if you want to keep it)</label>
         <textarea id={id + "-summary"} readOnly rows={10} value={summary} />
-        <p className="form-note">This view cannot share a response. Copy your reflection if useful.</p>
+        <p className="form-note">{progress ? "This view cannot share a response. Copy your reflection if useful." : "This preview does not save answers to a learner account. Copy your reflection if useful."}</p>
       </>}
     </section>}
   </section>;
