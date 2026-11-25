@@ -13,7 +13,10 @@ export function FirstMoveRevision({ plan, onPrepareResponse }: {
   const id = useId();
   const [originalAction, setOriginalAction] = useState("");
   const [feedbackState, setFeedbackState] = useState<FeedbackState>(null);
-  const [feedbackText, setFeedbackText] = useState("");
+  const [receivedFeedback, setReceivedFeedback] = useState("");
+  const [pendingQuestion, setPendingQuestion] = useState("");
+  const feedbackText = feedbackState === "received" ? receivedFeedback : pendingQuestion;
+  const setFeedbackText = feedbackState === "received" ? setReceivedFeedback : setPendingQuestion;
   const [responseDecision, setResponseDecision] = useState<ResponseDecision>(null);
   const [decisionReason, setDecisionReason] = useState("");
   const [revisedAction, setRevisedAction] = useState("");
@@ -59,7 +62,7 @@ export function FirstMoveRevision({ plan, onPrepareResponse }: {
       <p className="eyebrow">Module 2 · First Move Studio & Feedback · Ungraded follow-up</p>
       <h3 id={id + "-heading"}>Show what feedback changed—or why you kept your plan</h3>
       <p>Keep your original First Move Card intact. Use this <strong>separate revision record</strong> to explain the feedback you actually received and the decision you made afterward.</p>
-      <p className="form-note">In the signed-in course, this must be its own authorized ungraded activity after the initial card. It cannot edit an earlier final submission. This screen does not automatically retrieve or verify prior feedback.</p>
+      <p className="form-note">Return to your original card and published comments in Feedback. This activity keeps your original submission intact. Enter the feedback you actually received; it is not copied automatically.</p>
       <p className="form-note">Do not invent feedback, name another learner, include private information, or attempt an unsafe action. If feedback has not arrived, keep a working copy and wait to claim a feedback-informed revision.</p>
     </header>
 
@@ -69,7 +72,7 @@ export function FirstMoveRevision({ plan, onPrepareResponse }: {
       </div>}
       <div className="launch-field">
         <label htmlFor={id + "-original"}>Original First Move Card action or relevant excerpt</label>
-        <p className="form-note">When using the signed-in course, refer to your previously shared card. This reference is not an automatic copy of an authenticated record.</p>
+        <p className="form-note">Refer to your previously shared card. Copy only the relevant action or excerpt; your original card remains unchanged.</p>
         <textarea id={id + "-original"} rows={3} maxLength={1200} value={originalAction}
           onChange={event => { setOriginalAction(event.target.value); invalidate(); }}
           placeholder="In my first card, I planned to…" />
