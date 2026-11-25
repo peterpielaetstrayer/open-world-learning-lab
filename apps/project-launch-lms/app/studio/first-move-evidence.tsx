@@ -3,6 +3,7 @@
 import { useCallback, useId, useState } from "react";
 import type { LessonProgressIdentity } from "./project-direction-lesson";
 import { usePrivateLessonDraft } from "./use-private-lesson-draft";
+import { PrivateDraftReceipt } from "./private-draft-receipt";
 import type { FirstMovePlan } from "./first-move-card";
 
 type Route = "attempt" | "obstacle";
@@ -192,7 +193,7 @@ export function FirstMoveEvidence({ plan, onPrepareResponse, progress, onStructu
         <textarea id={`${id}-next`} rows={3} maxLength={1200} value={nextMove}
           onChange={event => { setNextMove(event.target.value); invalidate(); }} />
       </div>
-      {progress && saveButton}
+      {progress && <div className="private-draft-actions">{saveButton}<PrivateDraftReceipt draft={draft} /></div>}
       <button type="button" className="feedback-button" disabled={!complete}
         onClick={() => { setReviewed(true); setPreparedText(""); }}>Review my evidence and decision</button>
       {!complete && <p role="status" className="form-note">Choose an honest route, explain its five prompts, describe actual feedback or an unanswered feedback question, and name a safe next move. You can keep this page open while working, but nothing is autosaved.</p>}
@@ -213,7 +214,7 @@ export function FirstMoveEvidence({ plan, onPrepareResponse, progress, onStructu
       <p className="form-note">This is explanatory guidance, not a judgment that your evidence is authentic or your plan is safe. A facilitator can review your reasoning after you deliberately share the response.</p>
       <label htmlFor={`${id}-copy`}>Your evidence and reflection (select and copy if useful)</label>
       <textarea id={`${id}-copy`} rows={14} readOnly value={summary} />
-      {progress && draft.dirty && <div className="comparison-save-bar"><p className="form-note">Save your structured draft before sharing.</p>{saveButton}</div>}
+      {progress && <div className="comparison-save-bar"><div><p className="form-note">Keep your structured work before sharing.</p><PrivateDraftReceipt draft={draft} /></div>{saveButton}</div>}
       {onPrepareResponse ? <>
         <button type="button" className="secondary-button"
           onClick={() => { const prepared = onPrepareResponse(summary); setPreparedText(prepared ? summary : ""); if (prepared) document.getElementById("learner-response")?.focus(); }}>Use this record in my course response</button>
