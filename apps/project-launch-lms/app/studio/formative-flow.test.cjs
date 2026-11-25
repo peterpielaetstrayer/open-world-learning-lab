@@ -1096,3 +1096,17 @@ test("module orientation identifies sequence and activity type without implying 
   assert.match(document.querySelector(".lesson-context").textContent, /Activity 2 of 2 in this module · Graded assignment/);
   assert.equal(db.pll_submissions.length, 0);
 });
+
+
+test("authored reading emphasis is retained without rendering arbitrary HTML", () => {
+  const { LessonText } = require("./lesson-text.tsx");
+  render(React.createElement(LessonText, {
+    text: "## **Decision lenses**\n\n**Relevance:** Why does it matter?\n\n- **Scope:** Focus the idea.\n\n1. **Feasibility:** Check constraints.\n\nLiteral <img src=x onerror=alert(1)>."
+  }));
+  assert.equal(screen.getByRole("heading", { name: "Decision lenses" }).querySelector("strong").textContent, "Decision lenses");
+  for (const label of ["Relevance:", "Scope:", "Feasibility:"]) {
+    assert.equal(screen.getByText(label).tagName, "STRONG");
+  }
+  assert.ok(screen.getByText("Literal <img src=x onerror=alert(1)>."));
+  assert.equal(document.querySelector("img"), null);
+});
