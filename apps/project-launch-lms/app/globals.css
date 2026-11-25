@@ -338,3 +338,9 @@
   .studio-panel,.lab-body,.direction-panel{padding:20px 15px}
   .studio-actions>*{max-width:100%}
 }
+
+/* Shared lesson orientation: sequence, not mastery. */
+.lesson-context{margin:0 0 20px;padding:0 0 12px;border-bottom:1px solid var(--border)}
+.lesson-context p{margin:0 0 5px;overflow-wrap:anywhere}
+.lesson-context p:last-child{margin-bottom:0}
+.course-welcome>.studio-actions{margin:20px 0 12px}
