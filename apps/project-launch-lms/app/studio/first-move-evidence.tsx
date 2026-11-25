@@ -48,7 +48,10 @@ export function FirstMoveEvidence({ plan, onPrepareResponse }: {
   const [route, setRoute] = useState<Route | null>(null);
   const [evidence, setEvidence] = useState<Evidence>(initialEvidence);
   const [feedbackStatus, setFeedbackStatus] = useState<"received" | "pending" | null>(null);
-  const [feedbackText, setFeedbackText] = useState("");
+  const [receivedFeedback, setReceivedFeedback] = useState("");
+  const [pendingQuestion, setPendingQuestion] = useState("");
+  const feedbackText = feedbackStatus === "received" ? receivedFeedback : pendingQuestion;
+  const setFeedbackText = feedbackStatus === "received" ? setReceivedFeedback : setPendingQuestion;
   const [decision, setDecision] = useState<"revised" | "retained" | null>(null);
   const [decisionReason, setDecisionReason] = useState("");
   const [nextMove, setNextMove] = useState("");
