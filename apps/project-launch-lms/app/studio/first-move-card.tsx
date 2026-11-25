@@ -3,6 +3,7 @@
 import { useCallback, useId, useState } from "react";
 import type { LessonProgressIdentity } from "./project-direction-lesson";
 import { usePrivateLessonDraft } from "./use-private-lesson-draft";
+import { PrivateDraftReceipt } from "./private-draft-receipt";
 
 export type FirstMovePlan = {
   direction: string;
@@ -127,7 +128,7 @@ export function FirstMoveCard({ onPrepareResponse, onPlanChange, progress, onStr
           onChange={event => update(field.key, event.target.value)} placeholder="My current thinking…" />
       </div>)}
 
-      {progress && saveButton}
+      {progress && <div className="private-draft-actions">{saveButton}<PrivateDraftReceipt draft={draft} /></div>}
       <button type="button" className="feedback-button" disabled={!complete}
         onClick={() => { setReviewed(true); setPreparedText(""); }}>Review my First Move Card</button>
       {!complete && <p className="form-note" role="status">Complete all ten short prompts to review the card. If a resource or permission is unavailable, you can name that obstacle and propose a safe alternative.</p>}
@@ -151,7 +152,7 @@ export function FirstMoveCard({ onPrepareResponse, onPlanChange, progress, onStr
       <p className="form-note">This check confirms the prompts are filled in; it does not determine whether your plan is good, safe or feasible. That judgment needs you and, where appropriate, a trusted facilitator.</p>
       <label htmlFor={`${id}-copy`}>Your First Move Card (select and copy if useful)</label>
       <textarea id={`${id}-copy`} rows={13} readOnly value={summary} />
-      {progress && draft.dirty && <div className="comparison-save-bar"><p className="form-note">Save your structured plan before sharing.</p>{saveButton}</div>}
+      {progress && <div className="comparison-save-bar"><div><p className="form-note">Keep your structured work before sharing.</p><PrivateDraftReceipt draft={draft} /></div>{saveButton}</div>}
       {onPrepareResponse ? <>
         <button type="button" className="secondary-button"
           onClick={() => { const prepared = onPrepareResponse(summary); setPreparedText(prepared ? summary : ""); if (prepared) document.getElementById("learner-response")?.focus(); }}>Use this card in my course response</button>
