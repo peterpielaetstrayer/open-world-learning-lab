@@ -140,14 +140,14 @@ export function CourseHome({ description, modules, activities, submissions, feed
 export function LessonContext({ modules, activities, activity, criteria }: {
   modules: CourseModule[]; activities: CourseActivity[]; activity: CourseActivity; criteria: RubricCriterion[];
 }) {
-  const module = modules.find(item => item.id === activity.module_id);
+  const currentModule = modules.find(item => item.id === activity.module_id);
   const lessons = activities.filter(item => item.module_id === activity.module_id);
   const position = lessons.findIndex(item => item.id === activity.id);
-  if (!module || position < 0) return null;
+  if (!currentModule || position < 0) return null;
   const kind = criteria.some(item => item.activity_id === activity.id) ? "Graded assignment"
     : activityExpectsResponse(activity, criteria) ? "Practice and feedback" : "Instruction";
   return <div className="lesson-context">
-    <p className="eyebrow">Module {module.module_number} · {module.title}</p>
+    <p className="eyebrow">Module {currentModule.module_number} · {currentModule.title}</p>
     <p className="course-small">Activity {position + 1} of {lessons.length} in this module · {kind}</p>
   </div>;
 }
