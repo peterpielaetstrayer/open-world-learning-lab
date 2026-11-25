@@ -20,6 +20,15 @@ export function getResourceUrl(text: string): URL | null {
   }
 }
 
+// Deliberately narrow inline syntax: React escapes all authored text.
+// Never interpret arbitrary HTML or expand the allowed link protocols.
+function inlineEmphasis(text: string) {
+  return text.split(/(\*\*[^*\n]+\*\*)/g).map((part, index) =>
+    part.startsWith("**") && part.endsWith("**") && part.length > 4
+      ? <strong key={index}>{part.slice(2, -2)}</strong>
+      : part);
+}
+
 export function LessonText({ text, lessonProgress, onPrepareResponse, headingLevel = 4, review = false }: {
   text: string; headingLevel?: 3 | 4; lessonProgress?: LessonProgressIdentity; onPrepareResponse?: (text: string) => boolean; review?: boolean;
 }) {
@@ -51,10 +60,10 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
     if (block === "[[first-step-checks]]") return <FirstStepChecks key={key} />;
     if (block === "[[level-two-exit-check]]") return <LevelTwoExitCheck key={key} onPrepareResponse={onPrepareResponse} />;
     if (lines.every(line => /^\d+\. /.test(line))) {
-      return <ol key={key}>{lines.map((line, position) => <li key={position}>{line.replace(/^\d+\. /, "").replaceAll("**", "")}</li>)}</ol>;
+      return <ol key={key}>{lines.map((line, position) => <li key={position}>{inlineEmphasis(line.replace(/^\d+\. /, ""))}</li>)}</ol>;
     }
     if (lines.every(line => /^- /.test(line))) {
-      return <ul key={key}>{lines.map((line, position) => <li key={position}>{line.slice(2).replaceAll("**", "")}</li>)}</ul>;
+      return <ul key={key}>{lines.map((line, position) => <li key={position}>{inlineEmphasis(line.slice(2))}</li>)}</ul>;
     }
     const resource = getResourceUrl(block);
     if (resource) {
@@ -65,10 +74,10 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
     const heading = lines[0].match(/^#{1,4} (.+)$/);
     if (heading) {
       return <div key={key}>
-        <Heading>{heading[1]}</Heading>
-        {lines.length > 1 && <p className="prewrap">{lines.slice(1).join("\n")}</p>}
+        <Heading>{inlineEmphasis(heading[1])}</Heading>
+        {lines.length > 1 && <p className="prewrap">{inlineEmphasis(lines.slice(1).join("\n"))}</p>}
       </div>;
     }
-    return <p key={key} className="prewrap">{block.replaceAll("**", "")}</p>;
+    return <p key={key} className="prewrap">{inlineEmphasis(block)}</p>;
   });
 }
