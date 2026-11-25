@@ -53,8 +53,8 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
     if (block === "[[direction-comparison]]") return finalized ? <p key={key} className="form-note">Your comparison has been shared. See your final response and feedback below.</p> : <DirectionComparison key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
     if (block === "[[gauntlet-bridge]]") return <GauntletBridge key={key} />;
     if (block === "[[first-move-card]]") return finalized ? <p key={key} className="form-note">Your First Move Card has been shared. See your final response and feedback below.</p> : <FirstMoveCard key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
-    if (block === "[[first-move-revision]]") return <FirstMoveRevision key={key} onPrepareResponse={onPrepareResponse} />;
-    if (block === "[[first-move-evidence]]") return <FirstMoveEvidence key={key} onPrepareResponse={onPrepareResponse} />;
+    if (block === "[[first-move-revision]]") return finalized ? <p key={key} className="form-note">Your revision record has been shared. See your final response and feedback below.</p> : <FirstMoveRevision key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
+    if (block === "[[first-move-evidence]]") return finalized ? <p key={key} className="form-note">Your evidence record has been shared. See your final response and feedback below.</p> : <FirstMoveEvidence key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
     if (block === "[[first-step-mini-lesson]]") return <FirstStepMiniLesson key={key} />;
     if (block === "[[maya-garden-model]]") return <MayaGardenModel key={key} />;
     if (block === "[[first-step-checks]]") return <FirstStepChecks key={key} />;
