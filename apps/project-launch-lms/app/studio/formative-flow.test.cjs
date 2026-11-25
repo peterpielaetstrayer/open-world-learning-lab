@@ -557,6 +557,7 @@ test("real-obstacle path transfers honest conditions and no invented attempt int
   await screen.findByRole("heading", { name: /Start with curiosity/ });
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /Evidence or obstacle/ }));
+  await screen.findByText("No saved evidence record yet");
   const review = screen.getByRole("button", { name: "Review my evidence and decision" });
   assert.equal(review.disabled, true);
   fireEvent.change(screen.getByLabelText(/Project direction \(or a change/), { target: { value: "Sketch a guide for one beginner" } });
@@ -665,6 +666,7 @@ test("separate authenticated feedback follow-up cannot overwrite an earlier fina
   await screen.findByRole("heading", { name: /Start with curiosity/ });
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /Feedback revision follow-up/ }));
+  await screen.findByText("No saved revision yet");
   fireEvent.change(screen.getByLabelText("Original First Move Card action or relevant excerpt"),
     { target: { value: "Sketch one garden area before asking permission" } });
   fireEvent.click(screen.getByRole("radio", { name: /Yes, feedback has arrived/ }));
@@ -686,6 +688,8 @@ test("separate authenticated feedback follow-up cannot overwrite an earlier fina
   assert.match(draftText, /school's boundaries/);
   assert.equal(db.pll_submissions.length, 1, "A preparation action must not submit anything");
   assert.equal(db.pll_submissions[0].response_text, originalText);
+  fireEvent.click(screen.getAllByRole("button", { name: "Save revision draft" })[0]);
+  await screen.findByText("Your revision is saved privately");
   fireEvent.click(screen.getByRole("button", { name: "Share with facilitator (final)" }));
   await waitFor(() => assert.equal(db.pll_submissions.length, 2));
   assert.equal(db.pll_submissions.find(row => row.activity_id === "first-card").response_text, originalText);
@@ -1215,4 +1219,51 @@ test("module outline can collapse for focused reading without losing the active 
   assert.ok(screen.getByRole("heading", { name: "Practice choosing" }));
   fireEvent.click(expand);
   assert.equal(screen.getByRole("button", { name: /Practice choosing/ }).getAttribute("aria-current"), "page");
+});
+
+
+test("revision draft restores pending questions without claiming actual feedback", async () => {
+  resetData();
+  addModuleTwoActivity("Revision follow-up", "[[first-move-revision]]");
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  const open = () => fireEvent.click(within(screen.getByRole("navigation", { name: "Module lessons" })).getByRole("button", { name: /Revision follow-up/ }));
+  open();
+  await screen.findByText("No saved revision yet");
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet; I am still waiting/ }));
+  fireEvent.change(screen.getByLabelText("What question are you waiting to have answered?"), { target: { value: "May I use a paper model?" } });
+  fireEvent.click(screen.getAllByRole("button", { name: "Save revision draft" })[0]);
+  await screen.findByText("Your revision is saved privately");
+  assert.equal(db.pll_lesson_progress[0].state.receivedFeedback, "");
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  open();
+  await screen.findByText("Your revision is saved privately");
+  assert.equal(screen.getByLabelText("What question are you waiting to have answered?").value, "May I use a paper model?");
+  assert.equal(screen.getByRole("button", { name: "Review my feedback decision" }).disabled, true);
+  fireEvent.click(screen.getByRole("radio", { name: /Yes, feedback has arrived/ }));
+  assert.equal(screen.getByLabelText(/What feedback did you actually receive/).value, "");
+});
+
+test("evidence draft restores the selected obstacle route and its actual details", async () => {
+  resetData();
+  addModuleTwoActivity("Evidence or obstacle", "[[first-move-evidence]]");
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  const open = () => fireEvent.click(within(screen.getByRole("navigation", { name: "Module lessons" })).getByRole("button", { name: /Evidence or obstacle/ }));
+  open();
+  await screen.findByText("No saved evidence record yet");
+  fireEvent.click(screen.getByRole("radio", { name: /A genuine obstacle prevented/ }));
+  fireEvent.change(screen.getByLabelText("What actually blocked the planned action"), { target: { value: "School permission was not available." } });
+  fireEvent.click(screen.getAllByRole("button", { name: "Save evidence draft" })[0]);
+  await screen.findByText("Your evidence record is saved privately");
+  assert.equal(db.pll_lesson_progress[0].state.route, "obstacle");
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  open();
+  await screen.findByText("Your evidence record is saved privately");
+  assert.equal(screen.getByLabelText("What actually blocked the planned action").value, "School permission was not available.");
+  assert.equal(screen.queryByLabelText("What I actually did"), null);
 });
