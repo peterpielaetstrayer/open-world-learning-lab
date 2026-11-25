@@ -497,6 +497,7 @@ test("authenticated Module 2 First Move Card prepares but does not silently subm
   await screen.findByRole("heading", { name: /Start with curiosity/ });
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /First Move Card/ }));
+  await screen.findByText("No saved plan yet");
   const review = screen.getByRole("button", { name: "Review my First Move Card" });
   assert.equal(review.disabled, true);
   const prompts = [
@@ -524,26 +525,29 @@ test("authenticated Module 2 First Move Card prepares but does not silently subm
   assert.equal(db.pll_submissions.length, 0);
 });
 
-test("long First Move Card supports an explicit incomplete draft without pretending completion", async () => {
+test("First Move Card saves incomplete structured plans and restores fields without submission", async () => {
   resetData();
   addModuleTwoActivity("First Move Card", "[[first-move-card]]");
   render(React.createElement(StudioPage));
-  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /First Move Card/ }));
+  await screen.findByText("No saved plan yet");
+  fireEvent.change(screen.getByLabelText(/My project direction/), { target: { value: "Try one drawing prompt" } });
+  assert.equal(screen.getByRole("button", { name: "Review my First Move Card" }).disabled, true);
+  assert.ok(screen.getByText("Unsaved plan changes"));
+  fireEvent.click(screen.getAllByRole("button", { name: "Save plan draft" })[0]);
+  await screen.findByText("First Move Card saved privately");
+  assert.equal(db.pll_lesson_progress.length, 1);
+  assert.equal(db.pll_lesson_progress[0].lesson_key, "first-move-card-v1");
+  assert.equal(db.pll_lesson_progress[0].state.plan.direction, "Try one drawing prompt");
+  assert.equal(db.pll_drafts.length, 0);
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /First Move Card/ }));
-  const prepare = screen.getByRole("button", { name: "Prepare working copy for Save draft" });
-  assert.equal(prepare.disabled, true);
-  fireEvent.change(screen.getByLabelText(/My project direction/), { target: { value: "Try one drawing prompt" } });
-  assert.equal(prepare.disabled, false);
+  await screen.findByText("First Move Card saved privately");
+  assert.equal(screen.getByLabelText(/My project direction/).value, "Try one drawing prompt");
   assert.equal(screen.getByRole("button", { name: "Review my First Move Card" }).disabled, true);
-  fireEvent.click(prepare);
-  const response = screen.getByLabelText("Your practice reflection or question for feedback");
-  assert.match(response.value, /INCOMPLETE WORKING COPY/);
-  assert.match(response.value, /Try one drawing prompt/);
-  assert.equal(db.pll_drafts.length, 0);
-  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
-  await waitFor(() => assert.equal(db.pll_drafts.length, 1));
-  assert.equal(db.pll_submissions.length, 0);
 });
 
 test("real-obstacle path transfers honest conditions and no invented attempt into ungraded draft", async () => {
