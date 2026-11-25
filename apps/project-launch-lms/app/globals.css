@@ -358,3 +358,29 @@
 .direction-comparison-question:last-child{margin-bottom:0}
 .direction-comparison-decision>.secondary-button{margin-right:10px;margin-bottom:8px}
 @container (max-width:650px){.direction-comparison-grid{grid-template-columns:minmax(0,1fr)}.direction-comparison-idea{padding:18px}.comparison-save-bar>button{width:100%}}
+
+/* Course workspace: one course-level navigation row and one optional lesson rail. */
+.studio-container .course-layout{grid-template-columns:minmax(0,1fr);gap:26px}
+.studio-container .course-navigation{position:static;display:flex;flex-direction:row;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.studio-container .course-navigation button{flex:0 0 auto;padding:11px 15px;border-left:0;border-bottom:3px solid transparent;white-space:normal}
+.studio-container .course-navigation button[aria-current=page]{border-left:0;border-bottom-color:var(--water)}
+.studio-container .module-reader{grid-template-columns:240px minmax(0,1fr);gap:28px}
+.studio-container .module-reader>.course-outline{display:block;min-width:0}
+.outline-modules[hidden]{display:none!important}
+.outline-toggle{display:flex;justify-content:space-between;gap:12px;align-items:center;font-weight:700!important;border:1px solid var(--border)!important;background:#f1f5ef!important;margin-bottom:16px}
+.course-outline .outline-toggle span{display:inline;margin:0;font-size:1.2rem;line-height:1}
+.studio-container .module-reader:has(>.outline-collapsed){grid-template-columns:minmax(0,1fr);gap:12px}
+.outline-collapsed .outline-toggle{width:auto;min-width:200px;margin:0}
+.studio-container .module-reader>.studio-work{width:100%;min-width:0}
+.studio-container .module-reader .studio-panel{padding:clamp(20px,3vw,38px)}
+@media(max-width:1050px){
+ .studio-container .module-reader{grid-template-columns:minmax(0,1fr)}
+ .outline-modules:not([hidden]){display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:14px}
+ .outline-modules .module-outline{margin:0;padding:16px;border:1px solid var(--border)}
+}
+@media(max-width:700px){
+ .studio-container .course-navigation{flex-wrap:wrap;gap:2px}
+ .studio-container .course-navigation button{padding:10px 12px;font-size:.9rem}
+ .studio-container .module-reader .studio-panel{padding:20px 15px}
+ .outline-modules:not([hidden]){grid-template-columns:minmax(0,1fr)}
+}
