@@ -105,8 +105,8 @@ export function MayaGardenModel() {
       <p>Identify the plan components in your own words. These brief notes are optional, ungraded practice; you can compare with the model at any time.</p>
       {mayaPrompts.map((prompt, index) => <div className="launch-field" key={prompt.label}>
         <label htmlFor={`${id}-maya-${index}`}>{prompt.label}</label>
-        <p className="form-note">{prompt.hint}</p>
-        <textarea id={`${id}-maya-${index}`} rows={2} maxLength={1000} value={notes[index]}
+        <p className="form-note" id={`${id}-maya-hint-${index}`}>{prompt.hint}</p>
+        <textarea aria-describedby={`${id}-maya-hint-${index}`} id={`${id}-maya-${index}`} rows={2} maxLength={1000} value={notes[index]}
           onChange={event => setNotes(previous => previous.map((value, position) => position === index ? event.target.value : value))} />
       </div>)}
       <p className="form-note">Keep a private copy of any notes you want to retain. These practice fields do not automatically save or submit.</p>
