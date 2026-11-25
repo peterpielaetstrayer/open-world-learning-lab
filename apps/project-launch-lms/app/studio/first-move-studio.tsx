@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import type { LessonProgressIdentity } from "./project-direction-lesson";
+import { usePrivateLessonDraft } from "./use-private-lesson-draft";
 
 const decisions = [
   {
@@ -44,7 +46,25 @@ const checklistPrompts = [
   { label: "Privacy and sharing", hint: "How could Ari document the test without sharing identifying information?" },
 ] as const;
 
-export function FirstMoveStudio({ review = false, onPrepareResponse }: {
+type StudioSnapshot = { version: 1; step: number; choices: (number | null)[]; reveals: boolean[]; checklist: string[] };
+function normalizeStudio(raw: unknown): StudioSnapshot | null {
+  if (!raw || typeof raw !== "object" || !("version" in raw) || raw.version !== 1) return null;
+  const value = raw as Partial<StudioSnapshot>;
+  const choices = decisions.map((decision, index) => {
+    const choice = value.choices?.[index];
+    return typeof choice === "number" && Number.isInteger(choice) && choice >= 0 && choice < decision.options.length ? choice : null;
+  });
+  return {
+    version: 1,
+    step: typeof value.step === "number" && Number.isInteger(value.step) && value.step >= 0 && value.step < decisions.length ? value.step : 0,
+    choices,
+    reveals: decisions.map((_, index) => choices[index] !== null && value.reveals?.[index] === true),
+    checklist: checklistPrompts.map((_, index) => typeof value.checklist?.[index] === "string" ? value.checklist[index].slice(0, 1000) : ""),
+  };
+}
+export function FirstMoveStudio({ review = false, onPrepareResponse, progress, onStructuredDirty }: {
+  progress?: LessonProgressIdentity;
+  onStructuredDirty?: (dirty: boolean) => void;
   review?: boolean;
   onPrepareResponse?: (text: string) => boolean;
 }) {
@@ -59,6 +79,13 @@ export function FirstMoveStudio({ review = false, onPrepareResponse }: {
   const focusHeading = useRef(false);
   const [checklist, setChecklist] = useState<string[]>(() => checklistPrompts.map(() => ""));
   const [prepared, setPrepared] = useState(false);
+  const restore = useCallback((value: StudioSnapshot) => {
+    setStep(value.step); setChoices(value.choices); setReveals(value.reveals); setChecklist(value.checklist); setPrepared(false);
+  }, []);
+  const draft = usePrivateLessonDraft({ progress, lessonKey: "first-move-studio-v1", snapshot: { version: 1, step, choices, reveals, checklist } as StudioSnapshot, restore, normalize: normalizeStudio, onDirty: onStructuredDirty });
+  const canEdit = draft.status === "ready" || draft.status === "preview";
+  const status = draft.status === "loading" ? "Loading your scenario…" : draft.status === "saving" ? "Saving your scenario…" : draft.status === "error" ? "Could not load saved work. Refresh before editing." : draft.dirty ? "Unsaved scenario changes" : draft.savedOnce ? "Scenario draft saved privately" : "No saved scenario yet";
+  const saveButton = <button type="button" className="secondary-button" disabled={draft.status !== "ready" || (!draft.dirty && draft.savedOnce)} onClick={() => void draft.save()}>Save scenario draft</button>;
   const checklistComplete = checklist.every(value => value.trim());
   const summary = [
     "PROJECT LAUNCH LAB · ARI FIRST-ACTION CHECKLIST",
@@ -82,6 +109,9 @@ export function FirstMoveStudio({ review = false, onPrepareResponse }: {
 
   return (
     <section className="lab-card" aria-labelledby={`${id}-heading`}>
+      {progress && <div className="comparison-save-bar"><div><p className="eyebrow">Private workspace</p><p className="form-note" role="status">{status}</p></div>{saveButton}</div>}
+      {draft.error && <p className="form-error" role="alert">{draft.error}</p>}
+      <fieldset className="comparison-work-fields" disabled={!canEdit} aria-label="Scenario and first-action checklist">
       <div className="lab-body">
         <p className="form-note">Decision {step + 1} of {decisions.length}</p>
         <h4 id={`${id}-heading`} tabIndex={-1} ref={heading}>{decision.title}</h4>
@@ -129,7 +159,7 @@ export function FirstMoveStudio({ review = false, onPrepareResponse }: {
       <section className="lab-body" aria-labelledby={`${id}-checklist`}>
         <h4 id={`${id}-checklist`}>Apply the first-action checklist to Ari’s scenario</h4>
         <p>Use the planning ideas from Maya’s garden model in a different setting. Explain each choice in your own words. This is practice, not a grade; you will apply the checklist again to your own project.</p>
-        <p className="form-note">Your entries stay on this page until you prepare a response or copy your work. They are not automatically saved. If you need to leave before completing the checklist, keep a private copy of your notes.</p>
+        <p className="form-note">{progress ? "Save your scenario at any point to restore your decisions, feedback and notes when you return. Saving does not share a response." : "Entries are not automatically saved. Copy your notes if you want to retain them."}</p>
         {checklistPrompts.map((item, index) => <div className="launch-field" key={item.label}>
           <label htmlFor={`${id}-check-${index}`}>{index + 1}. {item.label}</label>
           <p className="form-note" id={`${id}-check-hint-${index}`}>{item.hint}</p>
@@ -143,16 +173,18 @@ export function FirstMoveStudio({ review = false, onPrepareResponse }: {
           <summary>Compare with one reasoned checklist</summary>
           <p>Ari wants to learn whether the opening cue supports a timely entry. A permitted phone and quiet period are useful resources. Testing just the opening is manageable. Late taps suggest Ari needs to revise the cue, but cannot establish that all beginners will struggle. If noise blocks recording, a silent timing check is a reasonable fallback, with the audible cue still untested. Private, non-identifying notes are sufficient.</p>
         </details>
+        {progress && saveButton}
         {!ready && <p className="form-note">Explore feedback for all three decisions and complete the six prompts before preparing a full checklist.</p>}
         {ready && <>
           <label htmlFor={`${id}-summary`}>Your scenario checklist (copy or keep for reference)</label>
           <textarea id={`${id}-summary`} rows={10} readOnly value={summary} />
           {onPrepareResponse && <button type="button" className="secondary-button"
-            onClick={() => setPrepared(onPrepareResponse(summary))}>Use this checklist in my course response</button>}
+            onClick={() => { const accepted = onPrepareResponse(summary); setPrepared(accepted); if (accepted) document.getElementById("learner-response")?.focus(); }}>Use this checklist in my course response</button>}
           {prepared && <p role="status" className="form-success">Prepared in the response box, not saved or shared. Choose Save draft or Share with facilitator when ready.</p>}
-          {!onPrepareResponse && <p className="form-note">Copy your checklist if you want to retain it. This view does not save or submit it.</p>}
+          {!onPrepareResponse && <p className="form-note">Copy your checklist if useful. This view cannot share a response.</p>}
         </>}
       </section>
+      </fieldset>
     </section>
   );
 }
