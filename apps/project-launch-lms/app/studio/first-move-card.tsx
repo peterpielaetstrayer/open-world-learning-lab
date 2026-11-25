@@ -83,16 +83,16 @@ export function FirstMoveCard({ onPrepareResponse, onPlanChange }: {
       <h4>Purpose and a manageable test</h4>
       {fields.slice(0, 5).map((field, index) => <div key={field.key} className="launch-field">
         <label htmlFor={`${id}-${field.key}`}><span className="diagnostic-number">{String(index + 1).padStart(2, "0")}</span> {field.title}</label>
-        <p className="form-note">{field.hint}</p>
-        <textarea id={`${id}-${field.key}`} rows={3} maxLength={1200} value={plan[field.key]}
+        <p className="form-note" id={`${id}-${field.key}-hint`}>{field.hint}</p>
+        <textarea aria-describedby={`${id}-${field.key}-hint`} id={`${id}-${field.key}`} rows={3} maxLength={1200} value={plan[field.key]}
           onChange={event => update(field.key, event.target.value)} placeholder="My current thinking…" />
       </div>)}
 
       <h4>Conditions, evidence and feedback</h4>
       {fields.slice(5).map((field, index) => <div key={field.key} className="launch-field">
         <label htmlFor={`${id}-${field.key}`}><span className="diagnostic-number">{String(index + 6).padStart(2, "0")}</span> {field.title}</label>
-        <p className="form-note">{field.hint}</p>
-        <textarea id={`${id}-${field.key}`} rows={3} maxLength={1200} value={plan[field.key]}
+        <p className="form-note" id={`${id}-${field.key}-hint`}>{field.hint}</p>
+        <textarea aria-describedby={`${id}-${field.key}-hint`} id={`${id}-${field.key}`} rows={3} maxLength={1200} value={plan[field.key]}
           onChange={event => update(field.key, event.target.value)} placeholder="My current thinking…" />
       </div>)}
 
