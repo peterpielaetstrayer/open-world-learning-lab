@@ -3,6 +3,7 @@
 import { useCallback, useId, useState } from "react";
 import type { LessonProgressIdentity } from "./project-direction-lesson";
 import { usePrivateLessonDraft } from "./use-private-lesson-draft";
+import { PrivateDraftReceipt } from "./private-draft-receipt";
 import type { FirstMovePlan } from "./first-move-card";
 
 type FeedbackState = "received" | "pending" | null;
@@ -163,7 +164,7 @@ export function FirstMoveRevision({ plan, onPrepareResponse, progress, onStructu
           onChange={event => { setNextCheckpoint(event.target.value); invalidate(); }} />
       </div>
 
-      {progress && saveButton}
+      {progress && <div className="private-draft-actions">{saveButton}<PrivateDraftReceipt draft={draft} /></div>}
       <button type="button" className="feedback-button" disabled={!complete}
         onClick={() => { setReviewed(true); setPreparedText(""); }}>Review my feedback decision</button>
       {!complete && <p className="form-note" role="status">
@@ -183,7 +184,7 @@ export function FirstMoveRevision({ plan, onPrepareResponse, progress, onStructu
       <p>This record makes your response to feedback inspectable. It does not certify the feedback&apos;s accuracy or show that an action has been performed.</p>
       <label htmlFor={id + "-copy"}>Your separate feedback and revision record</label>
       <textarea id={id + "-copy"} rows={13} readOnly value={summary} />
-      {progress && draft.dirty && <div className="comparison-save-bar"><p className="form-note">Save your structured draft before sharing.</p>{saveButton}</div>}
+      {progress && <div className="comparison-save-bar"><div><p className="form-note">Keep your structured work before sharing.</p><PrivateDraftReceipt draft={draft} /></div>{saveButton}</div>}
       {onPrepareResponse ? <>
         <button type="button" className="secondary-button"
           onClick={() => { const prepared = onPrepareResponse(summary); setPreparedText(prepared ? summary : ""); if (prepared) document.getElementById("learner-response")?.focus(); }}>
