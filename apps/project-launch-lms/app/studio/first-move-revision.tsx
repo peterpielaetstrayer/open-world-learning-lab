@@ -1,19 +1,36 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useCallback, useId, useState } from "react";
+import type { LessonProgressIdentity } from "./project-direction-lesson";
+import { usePrivateLessonDraft } from "./use-private-lesson-draft";
+import { PrivateDraftReceipt } from "./private-draft-receipt";
 import type { FirstMovePlan } from "./first-move-card";
 
 type FeedbackState = "received" | "pending" | null;
 type ResponseDecision = "revised" | "retained" | null;
 
-export function FirstMoveRevision({ plan, onPrepareResponse }: {
+type SavedWork = { version: 1; originalAction: string; receivedFeedback: string; pendingQuestion: string; decisionReason: string; revisedAction: string; stillUnknown: string; nextCheckpoint: string; feedbackState: "received" | "pending" | null; responseDecision: "revised" | "retained" | null;  };
+function normalizeWork(raw: unknown): SavedWork | null {
+  if (!raw || typeof raw !== "object" || !("version" in raw) || raw.version !== 1) return null;
+  const value = raw as Partial<SavedWork>;
+  const asText = (text: unknown) => typeof text === "string" ? text.slice(0, 1200) : "";
+  
+  return { version: 1, originalAction: asText(value.originalAction), receivedFeedback: asText(value.receivedFeedback), pendingQuestion: asText(value.pendingQuestion), decisionReason: asText(value.decisionReason), revisedAction: asText(value.revisedAction), stillUnknown: asText(value.stillUnknown), nextCheckpoint: asText(value.nextCheckpoint), feedbackState: value.feedbackState === "received" || value.feedbackState === "pending" ? value.feedbackState : null, responseDecision: value.responseDecision === "revised" || value.responseDecision === "retained" ? value.responseDecision : null };
+}
+
+export function FirstMoveRevision({ plan, onPrepareResponse, progress, onStructuredDirty }: {
+  progress?: LessonProgressIdentity;
+  onStructuredDirty?: (dirty: boolean) => void;
   plan?: FirstMovePlan;
   onPrepareResponse?: (text: string) => boolean;
 }) {
   const id = useId();
   const [originalAction, setOriginalAction] = useState("");
   const [feedbackState, setFeedbackState] = useState<FeedbackState>(null);
-  const [feedbackText, setFeedbackText] = useState("");
+  const [receivedFeedback, setReceivedFeedback] = useState("");
+  const [pendingQuestion, setPendingQuestion] = useState("");
+  const feedbackText = feedbackState === "received" ? receivedFeedback : pendingQuestion;
+  const setFeedbackText = feedbackState === "received" ? setReceivedFeedback : setPendingQuestion;
   const [responseDecision, setResponseDecision] = useState<ResponseDecision>(null);
   const [decisionReason, setDecisionReason] = useState("");
   const [revisedAction, setRevisedAction] = useState("");
@@ -21,6 +38,14 @@ export function FirstMoveRevision({ plan, onPrepareResponse }: {
   const [nextCheckpoint, setNextCheckpoint] = useState("");
   const [reviewed, setReviewed] = useState(false);
   const [preparedText, setPreparedText] = useState("");
+  const restore = useCallback((value: SavedWork) => {
+    setOriginalAction(value.originalAction); setReceivedFeedback(value.receivedFeedback); setPendingQuestion(value.pendingQuestion); setDecisionReason(value.decisionReason); setRevisedAction(value.revisedAction); setStillUnknown(value.stillUnknown); setNextCheckpoint(value.nextCheckpoint); setFeedbackState(value.feedbackState); setResponseDecision(value.responseDecision);
+    setReviewed(false); setPreparedText("");
+  }, []);
+  const draft = usePrivateLessonDraft({ progress, lessonKey: "first-move-revision-v1", snapshot: { version: 1, originalAction, receivedFeedback, pendingQuestion, decisionReason, revisedAction, stillUnknown, nextCheckpoint, feedbackState, responseDecision } as SavedWork, restore, normalize: normalizeWork, onDirty: onStructuredDirty });
+  const canEdit = draft.status === "ready" || draft.status === "preview";
+  const status = draft.status === "loading" ? "Loading saved work…" : draft.status === "saving" ? "Saving your work…" : draft.status === "error" ? "Could not load saved work. Refresh before editing." : draft.dirty ? "Unsaved revision changes" : draft.savedOnce ? "Your revision is saved privately" : "No saved revision yet";
+  const saveButton = <button type="button" className="secondary-button" disabled={draft.status !== "ready" || (!draft.dirty && draft.savedOnce)} onClick={() => void draft.save()}>Save revision draft</button>;
 
   const original = originalAction.trim() || plan?.firstAction.trim() || "";
   const complete = Boolean(
@@ -59,17 +84,20 @@ export function FirstMoveRevision({ plan, onPrepareResponse }: {
       <p className="eyebrow">Module 2 · First Move Studio & Feedback · Ungraded follow-up</p>
       <h3 id={id + "-heading"}>Show what feedback changed—or why you kept your plan</h3>
       <p>Keep your original First Move Card intact. Use this <strong>separate revision record</strong> to explain the feedback you actually received and the decision you made afterward.</p>
-      <p className="form-note">In the signed-in course, this must be its own authorized ungraded activity after the initial card. It cannot edit an earlier final submission. This screen does not automatically retrieve or verify prior feedback.</p>
+      <p className="form-note">Return to your original card and published comments in Feedback. This activity keeps your original submission intact. Enter the feedback you actually received; it is not copied automatically.</p>
       <p className="form-note">Do not invent feedback, name another learner, include private information, or attempt an unsafe action. If feedback has not arrived, keep a working copy and wait to claim a feedback-informed revision.</p>
     </header>
 
-    <div className="launch-form">
+    {progress && <div className="comparison-save-bar"><div><p className="eyebrow">Private workspace</p><p className="form-note" role="status">{status}</p></div>{saveButton}</div>}
+    {draft.error && <p role="alert" className="form-error">{draft.error}</p>}
+    {progress && <p className="form-note">Save at any point, even while waiting for feedback. Your fields will be restored when you return. Saving does not share your work.</p>}
+    <fieldset className="launch-form comparison-work-fields" aria-label="Your revision" disabled={!canEdit}>
       {plan?.firstAction.trim() && <div className="launch-plan-context">
         <strong>Current in-page plan for reference (not a verified submitted card):</strong> {plan.firstAction}
       </div>}
       <div className="launch-field">
         <label htmlFor={id + "-original"}>Original First Move Card action or relevant excerpt</label>
-        <p className="form-note">When using the signed-in course, refer to your previously shared card. This reference is not an automatic copy of an authenticated record.</p>
+        <p className="form-note">Refer to your previously shared card. Copy only the relevant action or excerpt; your original card remains unchanged.</p>
         <textarea id={id + "-original"} rows={3} maxLength={1200} value={originalAction}
           onChange={event => { setOriginalAction(event.target.value); invalidate(); }}
           placeholder="In my first card, I planned to…" />
@@ -136,6 +164,7 @@ export function FirstMoveRevision({ plan, onPrepareResponse }: {
           onChange={event => { setNextCheckpoint(event.target.value); invalidate(); }} />
       </div>
 
+      {progress && <div className="private-draft-actions">{saveButton}<PrivateDraftReceipt draft={draft} /></div>}
       <button type="button" className="feedback-button" disabled={!complete}
         onClick={() => { setReviewed(true); setPreparedText(""); }}>Review my feedback decision</button>
       {!complete && <p className="form-note" role="status">
@@ -147,7 +176,7 @@ export function FirstMoveRevision({ plan, onPrepareResponse }: {
         <label htmlFor={id + "-working-copy"}>Working note (copy if you need to leave)</label>
         <textarea id={id + "-working-copy"} rows={10} readOnly value={summary} />
       </div>}
-    </div>
+    </fieldset>
 
     {reviewed && complete && <section className="launch-review" aria-live="polite">
       <p className="eyebrow">Before/after rationale · No score</p>
@@ -155,16 +184,17 @@ export function FirstMoveRevision({ plan, onPrepareResponse }: {
       <p>This record makes your response to feedback inspectable. It does not certify the feedback&apos;s accuracy or show that an action has been performed.</p>
       <label htmlFor={id + "-copy"}>Your separate feedback and revision record</label>
       <textarea id={id + "-copy"} rows={13} readOnly value={summary} />
+      {progress && <div className="comparison-save-bar"><div><p className="form-note">Keep your structured work before sharing.</p><PrivateDraftReceipt draft={draft} /></div>{saveButton}</div>}
       {onPrepareResponse ? <>
         <button type="button" className="secondary-button"
-          onClick={() => setPreparedText(onPrepareResponse(summary) ? summary : "")}>
+          onClick={() => { const prepared = onPrepareResponse(summary); setPreparedText(prepared ? summary : ""); if (prepared) document.getElementById("learner-response")?.focus(); }}>
           Use my revision record in this course activity
         </button>
         {preparedText === summary && <p className="form-success" role="status">
           Your revision record is in the course response area below. It is <strong>not saved or shared yet</strong>.
           Select Save draft or Share with facilitator (final) only when ready.
         </p>}
-      </> : <p className="form-note">Private preview only. Nothing was saved or shared; copy your work if useful.</p>}
+      </> : <p className="form-note">This view cannot share a response. Copy your work if useful.</p>}
       <p><strong>Next:</strong> Try the revised or retained first step only when it is safe and permitted, or honestly document a genuine barrier. The later evidence record must distinguish what happened from what was only planned.</p>
     </section>}
   </section>;

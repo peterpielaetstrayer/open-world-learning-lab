@@ -2,20 +2,20 @@
 
 **Status: source code ready for configuration, not yet a live end-to-end Auth test.** Applies to dedicated Supabase project `wjormscrikzocelbjxvc` in the OWLL Free organization. Never store credentials, invitation links, user emails, student work, or screenshots of authenticated pages in the public repository.
 
-## Verified preview configuration and remaining operator actions (November 3, 2026)
+## Current delivery origin and remaining operator actions (November 24, 2026)
 
-**Latest verified Vercel deployment:** The dedicated `project-launch-lms` project, separate from the OWLL website, successfully built the feature branch. For Auth configuration, use the **branch-stable hostname** below, not an immutable deployment URL that changes on each push:
+**Production course origin:** the stable submitted host below is already serving the read-only faculty review. Use it for actual invited-user Auth configuration; do not use a changing preview deployment URL as Site URL.
 
-`https://project-launch-lms-git-f-3c42e5-peter-pielaet-strayers-projects.vercel.app`
+`https://project-launch-lms.vercel.app`
 
-Vercel project ID: `prj_GYl06IyFCEXH0gbgiCgefliQBvUy`. Preview-only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` variable names are configured in Vercel, but their values and actual browser connectivity have **not** been tested. The current preview is gated behind **Vercel SSO**. It is suitable for owner/team testing, not yet a peer/faculty-accessible invitation experience. Do not disable preview protection or publish a production class merely to make a test link accessible.
+Vercel project ID: `prj_GYl06IyFCEXH0gbgiCgefliQBvUy`. Production baseline commit 4993aa975a733277cde88e7aee9ea4e73605f0f6, deployment dpl_6MGGRSD1Pq1h6HQkzAiicnvuZfXL. LA5.1 submitted November 23; preserve the exact course URL. PR #23 is an isolated protected preview. Provider Site URL, exact redirects, invitation email delivery and independent browser login are still unverified. Do not disable preview protection or change production merely to make a test link accessible.
 
 **Supabase dashboard configuration checklist (not yet verified or performed):**
 
-1. In the **dedicated** Supabase project's Authentication → URL Configuration, set **Site URL** to the exact HTTPS branch-stable origin above. Add only the exact necessary callback paths on that same origin to the Redirect URLs list: `/auth/confirm`, `/auth/callback`, and `/set-password`. Avoid unbounded preview wildcards. Supabase documentation notes that an unallowlisted `redirectTo` may silently fall back to the Site URL.
+1. In the **dedicated** Supabase project's Authentication → URL Configuration, set **Site URL** to the exact production HTTPS origin above. Add only the exact necessary callback paths on that same origin to the Redirect URLs list: `/auth/confirm`, `/auth/callback`, and `/set-password`. Avoid unbounded preview wildcards. Supabase documentation notes that an unallowlisted `redirectTo` may silently fall back to the Site URL.
 2. In Authentication → Email Templates → **Invite user**, use an explicit invitation link targeting this server handler: `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite`. Do **not** place a real token, password or invitation URL in GitHub, logs or chat. Ensure the hyperlink's `href` uses the expression, not merely visible link text. Check any existing template before replacing it.
 3. In Authentication's configuration/provider settings, turn **Allow new users to sign up** off, ensure anonymous sign-ins are disabled, and preserve email confirmation for actual invited users. The app has no public sign-up page, but that alone does not disable provider-level registration.
-4. Check rate limits, email delivery/OTP expiry and Vercel preview authorization before the first adult invite. Email scanners can prefetch and consume single-use link tokens; if encountered, implement a confirm-then-POST acceptance flow or OTP rather than repeatedly exposing invitation hashes.
+4. Check rate limits, email delivery/OTP expiry and production sign-in route and email delivery before the first adult invite. Email scanners can prefetch and consume single-use link tokens; if encountered, implement a confirm-then-POST acceptance flow or OTP rather than repeatedly exposing invitation hashes.
 5. Keep `SUPABASE_SERVICE_ROLE_KEY` / newer Supabase server-side secret credentials only in a trusted administrator's local secret store or ephemeral controlled test runner. **Do not** add them to Vercel's browser public variables, the GitHub repository, unsecured CI, or this document.
 6. Only after the above, execute `smoke-roles.mjs` against this exact Supabase project with the required opt-in flags. The current version requires the Module 1 practice and Direction Brief to be *already published* and never changes publication flags. Verify all three live Auth sessions, RLS denials, private lesson save/reload, formative feedback, final-submission immutability, rubric feedback and post-test cleanup. The script requires access not currently exposed by the connected Supabase management tools, and **has not been run**.
 7. Subsequently, test the invitation email and password setup with one explicitly approved consenting adult account, then repeat learner A/B/facilitator tasks in separate browsers. Test invalid/expired links and sign-out. Do not use real minors or professor/peer accounts until faculty/platform approval.
@@ -24,9 +24,9 @@ The canonical readme and PeterOS handoff distinguish **source built and deployed
 
 ## Current OWLL delivery route
 
-**November 22 delivery decision:** The existing custom OWLL Project Launch LMS (Next.js, GitHub, Supabase, Vercel) is the sole course delivery platform. USD Canvas is for official academic instructions and assignment submissions. Use the stable [OWLL course URL](https://project-launch-lms-git-f-3c42e5-peter-pielaet-strayers-projects.vercel.app/studio?course=99dc9de5-bfbf-4891-8f5e-444212ec2073) for role verification. Earlier platform options are superseded. Keep pre-release safeguards in place until the corresponding access, assessment, and QA gates pass.
+**November 22 delivery decision:** The existing custom OWLL Project Launch LMS (Next.js, GitHub, Supabase, Vercel) is the sole course delivery platform. USD Canvas is for official academic instructions and assignment submissions. Use the stable [OWLL course URL](https://project-launch-lms.vercel.app/studio?course=99dc9de5-bfbf-4891-8f5e-444212ec2073) for role verification. Earlier platform options are superseded. Keep pre-release safeguards in place until the corresponding access, assessment, and QA gates pass.
 
-An existing instructor session loaded this course alias and opened the rubric, quiz, survey and both module outlines. An independent external reviewer session and learner test accounts are still needed before the URL is submitted. Use the same alias consistently for callback configuration and browser QA.
+An existing instructor session loaded this course alias and opened the rubric, quiz, survey and both module outlines. The URL has already been submitted; independent external reviewer and learner/facilitator acceptance remains outstanding. Use the same alias consistently for callback configuration and browser QA.
 
 ## What exists
 
@@ -49,7 +49,7 @@ The email templates and Auth redirect settings MUST match the exact deployed dom
    Where templates differ, inspect Supabase's current template documentation before changing. Do not expose invite token hash in logs or screenshots.
 5. Disable public user signups / limit users to invitation-only **in Supabase Auth settings**, after verifying current provider capabilities. No learner should self-assign a role.
 6. Use Supabase Auth admin invite flow or dashboard to provision **synthetic** students and facilitators, then insert course membership in a trusted server/admin context. No direct SQL writes to `auth.users`; never trust `raw_user_meta_data` for authorization.
-7. Before allowing actual visitors, replace placeholder assignment instructions with reviewed course material and publish only the relevant content using privileged, audited admin action.
+7. Published content already exists. Preserve its identifiers and approved public snapshot; coordinate any content edits with the established release procedure.
 8. Confirm email delivery, link expiration and password setup using disposable consenting *adult* accounts. No real minor accounts or student data during this Capstone test.
 
 ## Invitation helper (manual, no email sent during development)
@@ -81,7 +81,7 @@ Expected test: read the **existing published** M1 practice and Direction Brief, 
 - Confirm course/module/activity publication flags and role grants remain exactly as found; the role-test script should not modify them.
 - Rerun Supabase security/performance advisors and close any **critical** finding.
 - Test actual mobile/keyboard flow, invalid invitation, expired token, signed-out session, learner A vs B, facilitator rubric publication, error handling, and reload persistence.
-- Confirm Dr. Evans accepts this approach, then create **reviewer-specific** roles and share credentials through a secure channel only, not repository documentation.
+- Verify official peer assignment and obtain explicit approval for each actual invitation, then create **reviewer-specific** roles and share credentials through a secure channel only, not repository documentation.
 - Verify instructor and learner walks on the custom OWLL course before approval and release.
 
 ## Sources
@@ -89,3 +89,6 @@ Expected test: read the **existing published** M1 practice and Direction Brief, 
 - [Supabase passwordless email](https://supabase.com/docs/guides/auth/auth-email-passwordless)
 - [Supabase Auth admin createUser](https://supabase.com/docs/reference/javascript/auth-admin-createuser)
 - [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security)
+
+## Expanded held-state integration harness (November 24)
+The smoke test now covers quiz receipt/answer-key denial, one deliberately incorrect answer with ten explanations, incomplete and duplicate attempts, peer-result isolation, evaluation shape/receipt/duplicate/forgery/isolation, and held Portfolio draft-versus-final submission. It never changes the hold. Run only against the exact dedicated course while no external evaluator is using it; coordinate an appropriate controlled test window before executing. The currently held Portfolio test is not proof of open-state grading; that requires separately accepted testing before any hold release. The server-only runner accesses answer keys privately and must never print them. The expanded script signs out synthetic sessions, removes only quiz/evaluation/submission rows scoped to newly created synthetic IDs and the exact course, checks those rows are absent, then deletes synthetic Auth users. Quiz/evaluation foreign keys to auth.users do not cascade. Verify remaining scoped records and user cleanup in the trusted environment; do not run again if cleanup fails. No runtime execution yet. Actual email invitation/recovery, browser tests and provider settings remain separate operator gates.

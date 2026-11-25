@@ -41,9 +41,9 @@ const lenses = [
 ] as const;
 
 const directionChecks = [
-  { label: "Meaning", question: "Can I explain why this direction interests me or helps someone?" },
-  { label: "Reality", question: "Can I identify a first attempt using time and resources I actually have?" },
-  { label: "Focus", question: "Can I describe a version small enough to try and learn from?" },
+  { label: "Meaning (relevance)", question: "Can I explain why this direction interests me or helps someone?" },
+  { label: "Reality (feasibility)", question: "Can I identify a first attempt using time and resources I actually have?" },
+  { label: "Focus (scope)", question: "Can I describe a version small enough to try and learn from?" },
   { label: "Learning potential", question: "Is there something useful I could find out by trying it?" },
 ] as const;
 
@@ -363,7 +363,7 @@ export function ProjectDirectionLesson({ progress, onPrepareResponse }: {
       <div className="direction-intro">
         <p className="direction-kicker">Project Launch Lab · Module 1</p>
         <h3 id={`${id}-lesson-heading`}>Find a project direction</h3>
-        <p>Turn something you are curious about into a direction you can actually explore.</p>
+        <p>Turn something you are curious about into a direction you can actually explore. The preceding video models Jordan’s school-guide decision; here you will practice with Tessa’s drawing project and other examples before applying the lenses to your own ideas.</p>
         <p className="direction-save-note"><strong>Interactive draft:</strong> {progress
           ? "Your work is private to your learner account. Select Save my lesson work before leaving or changing devices; changes are not autosaved. This is not a graded submission. You can also export your draft in Part 9."
           : "Your answers stay on this page for this session, but are not yet saved to your account. Download or copy your Project Direction Draft in Part 9 before leaving."}</p>
@@ -452,6 +452,12 @@ export function ProjectDirectionLesson({ progress, onPrepareResponse }: {
             </fieldset>
             <p className="direction-small" aria-live="polite">{consideredCount} of {directionChecks.length} questions considered. You can continue at any point.</p>
             <div className="direction-insight"><strong>A useful first direction is revisable.</strong> If an idea feels too big, try describing a smaller first attempt. If you are unsure why it matters, return to what sparked your curiosity.</div>
+            <details className="direction-help">
+              <summary>Optional example: how a research topic changes</summary>
+              <p>NC State University Libraries illustrates how a learner checks available sources and adjusts an initial research idea. The publisher page includes a written transcript; you do not need to watch the video.</p>
+              <p><a className="back-link" href="https://www.lib.ncsu.edu/videos/picking-your-topic-is-research" target="_blank" rel="noopener noreferrer">Picking Your Topic Is Research! — video and transcript (opens in a new tab)</a></p>
+              <p>Notice what makes an idea too broad or too narrow. For your own project, think of one way to check whether your first direction is realistic. Your project does not have to be a research paper.</p>
+            </details>
           </div>
         )}
 
@@ -485,10 +491,10 @@ export function ProjectDirectionLesson({ progress, onPrepareResponse }: {
                 <p>{options[chosen].feedback}</p>
                 <p><strong>Keep thinking:</strong> Tessa will need evidence from trying a guide with a beginner before claiming it helps. A first decision is a testable direction, not a finished answer.</p>
                 <ul>
-                  <li><strong>Meaning:</strong> Making drawing easier for beginners matters to Tessa.</li>
-                  <li><strong>Reality:</strong> She can begin with the paper and pencils she has.</li>
-                  <li><strong>Focus:</strong> A single guide is narrower than a schoolwide campaign.</li>
-                  <li><strong>Learning:</strong> A voluntary clarity check could reveal what she needs to revise.</li>
+                  <li><strong>Relevance (meaning):</strong> Making drawing easier for beginners matters to Tessa.</li>
+                  <li><strong>Feasibility (reality):</strong> She can begin with the paper and pencils she has.</li>
+                  <li><strong>Scope (focus):</strong> A single guide is narrower than a schoolwide campaign.</li>
+                  <li><strong>Learning:</strong> A private clarity check, with appropriate permission and a willing participant, could reveal what she needs to revise.</li>
                 </ul>
                 <button type="button" className="direction-link-button" onClick={() => { setChosen(null); setFeedbackVisible(false); }}>
                   Reconsider the options

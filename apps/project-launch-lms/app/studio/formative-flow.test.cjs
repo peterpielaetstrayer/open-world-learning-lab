@@ -349,6 +349,7 @@ test("entry diagnostic explains the starting point and prepares a real ungraded 
   await screen.findByRole("heading", { name: /Start with curiosity/ });
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  await screen.findByText("No saved reflection yet");
   const review = screen.getByRole("button", { name: "Review my starting point" });
   assert.equal(review.disabled, true);
   const answers = [
@@ -404,6 +405,7 @@ test("two-direction comparison prepares a formative draft and respects overwrite
   await screen.findByRole("heading", { name: /Start with curiosity/ });
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  await screen.findByText("No saved comparison yet");
   const comparisonButton = screen.getByRole("button", { name: "Review my comparison" });
   assert.equal(comparisonButton.disabled, true);
   for (const index of ["A", "B"]) {
@@ -461,6 +463,7 @@ test("optional Gauntlet insight accompanies personal comparison without requirin
   await screen.findByRole("heading", { name: /Start with curiosity/ });
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  await screen.findByText("No saved comparison yet");
   assert.ok(screen.getByRole("link", { name: /Open Project Launch Gauntlet/ }));
   const insight = screen.getByLabelText(/Optional: What did the Gauntlet/);
   fireEvent.change(insight, { target: { value: "Permission matters more than a fast public launch." } });
@@ -495,6 +498,7 @@ test("authenticated Module 2 First Move Card prepares but does not silently subm
   await screen.findByRole("heading", { name: /Start with curiosity/ });
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /First Move Card/ }));
+  await screen.findByText("No saved plan yet");
   const review = screen.getByRole("button", { name: "Review my First Move Card" });
   assert.equal(review.disabled, true);
   const prompts = [
@@ -522,26 +526,29 @@ test("authenticated Module 2 First Move Card prepares but does not silently subm
   assert.equal(db.pll_submissions.length, 0);
 });
 
-test("long First Move Card supports an explicit incomplete draft without pretending completion", async () => {
+test("First Move Card saves incomplete structured plans and restores fields without submission", async () => {
   resetData();
   addModuleTwoActivity("First Move Card", "[[first-move-card]]");
   render(React.createElement(StudioPage));
-  await screen.findByRole("heading", { name: /Start with curiosity/ });
-  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
-  fireEvent.click(screen.getByRole("button", { name: /First Move Card/ }));
-  const prepare = screen.getByRole("button", { name: "Prepare working copy for Save draft" });
-  assert.equal(prepare.disabled, true);
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(within(screen.getByRole("navigation", { name: "Module lessons" })).getByRole("button", { name: /First Move Card/ }));
+  await screen.findByText("No saved plan yet");
   fireEvent.change(screen.getByLabelText(/My project direction/), { target: { value: "Try one drawing prompt" } });
-  assert.equal(prepare.disabled, false);
   assert.equal(screen.getByRole("button", { name: "Review my First Move Card" }).disabled, true);
-  fireEvent.click(prepare);
-  const response = screen.getByLabelText("Your practice reflection or question for feedback");
-  assert.match(response.value, /INCOMPLETE WORKING COPY/);
-  assert.match(response.value, /Try one drawing prompt/);
+  assert.ok(screen.getByText("Unsaved plan changes"));
+  fireEvent.click(screen.getAllByRole("button", { name: "Save plan draft" })[0]);
+  await screen.findByText("First Move Card saved privately");
+  assert.equal(db.pll_lesson_progress.length, 1);
+  assert.equal(db.pll_lesson_progress[0].lesson_key, "first-move-card-v1");
+  assert.equal(db.pll_lesson_progress[0].state.plan.direction, "Try one drawing prompt");
   assert.equal(db.pll_drafts.length, 0);
-  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
-  await waitFor(() => assert.equal(db.pll_drafts.length, 1));
   assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(within(screen.getByRole("navigation", { name: "Module lessons" })).getByRole("button", { name: /First Move Card/ }));
+  await screen.findByText("First Move Card saved privately");
+  assert.equal(screen.getByLabelText(/My project direction/).value, "Try one drawing prompt");
+  assert.equal(screen.getByRole("button", { name: "Review my First Move Card" }).disabled, true);
 });
 
 test("real-obstacle path transfers honest conditions and no invented attempt into ungraded draft", async () => {
@@ -551,6 +558,7 @@ test("real-obstacle path transfers honest conditions and no invented attempt int
   await screen.findByRole("heading", { name: /Start with curiosity/ });
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /Evidence or obstacle/ }));
+  await screen.findByText("No saved evidence record yet");
   const review = screen.getByRole("button", { name: "Review my evidence and decision" });
   assert.equal(review.disabled, true);
   fireEvent.change(screen.getByLabelText(/Project direction \(or a change/), { target: { value: "Sketch a guide for one beginner" } });
@@ -659,6 +667,7 @@ test("separate authenticated feedback follow-up cannot overwrite an earlier fina
   await screen.findByRole("heading", { name: /Start with curiosity/ });
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   fireEvent.click(screen.getByRole("button", { name: /Feedback revision follow-up/ }));
+  await screen.findByText("No saved revision yet");
   fireEvent.change(screen.getByLabelText("Original First Move Card action or relevant excerpt"),
     { target: { value: "Sketch one garden area before asking permission" } });
   fireEvent.click(screen.getByRole("radio", { name: /Yes, feedback has arrived/ }));
@@ -680,7 +689,13 @@ test("separate authenticated feedback follow-up cannot overwrite an earlier fina
   assert.match(draftText, /school's boundaries/);
   assert.equal(db.pll_submissions.length, 1, "A preparation action must not submit anything");
   assert.equal(db.pll_submissions[0].response_text, originalText);
-  fireEvent.click(screen.getByRole("button", { name: "Share with facilitator (final)" }));
+  const share = screen.getByRole("button", { name: "Share with facilitator (final)" });
+  assert.equal(share.disabled, true, "Unsaved structured changes must disable sharing");
+  assert.ok(screen.getByText("Save your structured activity draft above before sharing your final response."));
+  fireEvent.click(screen.getAllByRole("button", { name: "Save revision draft" })[0]);
+  await screen.findByText("Your revision is saved privately");
+  assert.equal(share.disabled, false, "A saved receipt must immediately agree with the share gate");
+  fireEvent.click(share);
   await waitFor(() => assert.equal(db.pll_submissions.length, 2));
   assert.equal(db.pll_submissions.find(row => row.activity_id === "first-card").response_text, originalText);
   assert.equal(db.pll_submissions.find(row => row.activity_id === "revision-follow-up").response_text, draftText);
@@ -986,4 +1001,350 @@ test("approved Portfolio review publishes all four academic grades and feedback"
   const review = calls.find(call => call.name === "pll_publish_review");
   assert.deepEqual(review.values.p_scores.map(score => score.points), points);
   assert.equal(review.values.p_summary, "QA feedback about the evidence.");
+});
+
+
+test("Ari checklist is a separate ungraded artifact that prepares and saves only on explicit learner actions", async () => {
+  resetData();
+  addModuleTwoActivity("First Move Studio", "[[first-move-studio]]");
+  render(React.createElement(StudioPage));
+  await screen.findByRole("heading", { name: /Start with curiosity/ });
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /First Move Studio/ }));
+  await screen.findByText("No saved scenario yet");
+  const labels = [
+    "Purpose and learning question", "Resources and permission", "Safe, bounded action",
+    "Observable evidence and its limit", "Constraint and fallback", "Privacy and sharing",
+  ];
+  for (const label of labels) {
+    fireEvent.change(screen.getByLabelText(new RegExp(label)), { target: { value: "Reasoned scenario note: " + label } });
+  }
+  const prepareName = "Use this checklist in my course response";
+  assert.equal(screen.queryByRole("button", { name: prepareName }), null);
+  for (const [step, choice] of [1, 0, 1].entries()) {
+    fireEvent.click(screen.getAllByRole("radio")[choice]);
+    fireEvent.click(screen.getByRole("button", { name: "Show feedback" }));
+    if (step < 2) fireEvent.click(screen.getByRole("button", { name: "Next decision" }));
+  }
+  const prepare = screen.getByRole("button", { name: prepareName });
+  fireEvent.click(prepare);
+  const response = screen.getByLabelText("Your practice reflection or question for feedback");
+  assert.match(response.value, /ARI FIRST-ACTION CHECKLIST/);
+  assert.match(response.value, /not evidence of my own project attempt/);
+  assert.match(response.value, /Privacy and sharing/);
+  assert.equal(db.pll_drafts.length, 0);
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+  await waitFor(() => assert.equal(db.pll_drafts.length, 1));
+  assert.equal(db.pll_drafts[0].activity_id, "m2-activity");
+  assert.equal(db.pll_submissions.length, 0);
+});
+
+test("faculty preview checklist permits reading and copying but not course response preparation", () => {
+  render(React.createElement(FirstMoveStudio, { review: true }));
+  for (const label of ["Purpose and learning question", "Resources and permission", "Safe, bounded action",
+    "Observable evidence and its limit", "Constraint and fallback", "Privacy and sharing"]) {
+    fireEvent.change(screen.getByLabelText(new RegExp(label)), { target: { value: "Practice note" } });
+  }
+  for (const [step, choice] of [1, 0, 1].entries()) {
+    fireEvent.click(screen.getAllByRole("radio")[choice]);
+    fireEvent.click(screen.getByRole("button", { name: "Show feedback" }));
+    if (step < 2) fireEvent.click(screen.getByRole("button", { name: "Next decision" }));
+  }
+  assert.match(screen.getByLabelText(/Your scenario checklist/).value, /ARI FIRST-ACTION CHECKLIST/);
+  assert.equal(screen.queryByRole("button", { name: /Use this checklist in my course response/ }), null);
+});
+
+
+test("unsaved course response survives cancelled navigation and is not silently submitted", async () => {
+  resetData();
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  const response = screen.getByLabelText("Your practice reflection or question for feedback");
+  fireEvent.change(response, { target: { value: "My unsaved reasoning." } });
+  assert.ok(screen.getByText(/Unsaved response changes/));
+  let prompts = 0;
+  window.confirm = () => { prompts++; return false; };
+  fireEvent.click(screen.getByRole("button", { name: /Direction Brief/ }));
+  assert.equal(response.value, "My unsaved reasoning.");
+  fireEvent.click(screen.getByRole("button", { name: "Resources" }));
+  assert.equal(response.value, "My unsaved reasoning.");
+  assert.equal(prompts, 2);
+  assert.equal(db.pll_drafts.length, 0);
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+  await waitFor(() => assert.ok(screen.getByText("Your draft was saved.")));
+  assert.equal(screen.queryByText(/Unsaved response changes/), null);
+  fireEvent.click(screen.getByRole("button", { name: /Direction Brief/ }));
+  assert.equal(prompts, 2, "A saved response should not trigger the discard prompt");
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  assert.equal(screen.getByLabelText("Your practice reflection or question for feedback").value, "My unsaved reasoning.");
+  assert.equal(db.pll_submissions.length, 0);
+});
+
+test("confirming discard returns to the previously saved response rather than silently saving", async () => {
+  resetData();
+  db.pll_drafts.push({ id: "saved-draft", activity_id: "practice-1", course_id: "course-1", learner_id: "learner-1", response_text: "Previously saved work" });
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  fireEvent.change(screen.getByLabelText("Your practice reflection or question for feedback"), { target: { value: "Uncommitted edit" } });
+  window.confirm = () => true;
+  fireEvent.click(screen.getByRole("button", { name: "Resources" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  assert.equal(screen.getByLabelText("Your practice reflection or question for feedback").value, "Previously saved work");
+  assert.equal(db.pll_drafts[0].response_text, "Previously saved work");
+  assert.equal(db.pll_submissions.length, 0);
+});
+
+
+test("module orientation identifies sequence and activity type without implying mastery", async () => {
+  resetData();
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  const context = document.querySelector(".lesson-context");
+  assert.match(context.textContent, /Module 1 · Discover & Define/);
+  assert.match(context.textContent, /Activity 1 of 2 in this module · Practice and feedback/);
+  assert.match(screen.getByRole("navigation", { name: "Module lessons" }).textContent, /Practice · share response/);
+  fireEvent.click(screen.getByRole("button", { name: /Direction Brief/ }));
+  assert.match(document.querySelector(".lesson-context").textContent, /Activity 2 of 2 in this module · Graded assignment/);
+  assert.equal(db.pll_submissions.length, 0);
+});
+
+
+test("authored reading emphasis is retained without rendering arbitrary HTML", () => {
+  const { LessonText } = require("./lesson-text.tsx");
+  render(React.createElement(LessonText, {
+    text: "## **Decision lenses**\n\n**Relevance:** Why does it matter?\n\n- **Scope:** Focus the idea.\n\n1. **Feasibility:** Check constraints.\n\nLiteral <img src=x onerror=alert(1)>."
+  }));
+  assert.equal(screen.getByRole("heading", { name: "Decision lenses" }).querySelector("strong").textContent, "Decision lenses");
+  for (const label of ["Relevance:", "Scope:", "Feasibility:"]) {
+    assert.equal(screen.getByText(label).tagName, "STRONG");
+  }
+  assert.ok(screen.getByText("Literal <img src=x onerror=alert(1)>."));
+  assert.equal(document.querySelector("img"), null);
+});
+
+
+test("revision distinguishes a pending question from feedback actually received", () => {
+  render(React.createElement(FirstMoveRevision));
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet; I am still waiting/ }));
+  fireEvent.change(screen.getByLabelText("What question are you waiting to have answered?"), { target: { value: "Is a sketch enough?" } });
+  fireEvent.click(screen.getByRole("radio", { name: /Yes, feedback has arrived/ }));
+  const received = screen.getByLabelText(/What feedback did you actually receive/);
+  assert.equal(received.value, "");
+  fireEvent.change(received, { target: { value: "Check permission first." } });
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet; I am still waiting/ }));
+  assert.equal(screen.getByLabelText("What question are you waiting to have answered?").value, "Is a sketch enough?");
+  assert.doesNotMatch(screen.getByLabelText("Working note (copy if you need to leave)").value, /Check permission first/);
+});
+
+test("evidence separates received feedback and pending questions when switching routes", () => {
+  render(React.createElement(FirstMoveEvidence));
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet—I will record a question/ }));
+  fireEvent.change(screen.getByLabelText("What question is still waiting for feedback?"), { target: { value: "May I use a paper model?" } });
+  fireEvent.click(screen.getByRole("radio", { name: /Yes, I can describe what someone said/ }));
+  const received = screen.getByLabelText("What feedback did you actually receive?");
+  assert.equal(received.value, "");
+  fireEvent.change(received, { target: { value: "Use an anonymous sketch." } });
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet—I will record a question/ }));
+  assert.equal(screen.getByLabelText("What question is still waiting for feedback?").value, "May I use a paper model?");
+});
+
+test("worked and transfer scenario field hints are accessible descriptions", () => {
+  render(React.createElement(MayaGardenModel));
+  assert.equal(screen.getByLabelText("Purpose").getAttribute("aria-describedby") !== null, true);
+  assert.equal(document.getElementById(screen.getByLabelText("Purpose").getAttribute("aria-describedby")).textContent, "What is Maya trying to improve?");
+  cleanup();
+  render(React.createElement(FirstMoveStudio));
+  const field = screen.getByLabelText(/Purpose and learning question/);
+  assert.equal(document.getElementById(field.getAttribute("aria-describedby")).textContent, "What does Ari want to find out about the count-in?");
+});
+
+
+test("comparison saves partial structured fields privately and restores them after leaving", async () => {
+  resetData();
+  db.pll_activities[0].instructions = "[[direction-comparison]]";
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  await screen.findByText("No saved comparison yet");
+  const directions = screen.getAllByLabelText("Possible project direction");
+  fireEvent.change(directions[0], { target: { value: "A paper garden plan" } });
+  fireEvent.change(directions[1], { target: { value: "A full garden redesign" } });
+  assert.ok(screen.getByText("Unsaved comparison changes"));
+  window.confirm = () => false;
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  assert.equal(screen.getAllByLabelText("Possible project direction")[0].value, "A paper garden plan");
+  const lowerSave = screen.getAllByRole("button", { name: "Save comparison draft" })[1];
+  const localControls = lowerSave.closest(".private-draft-actions");
+  assert.ok(within(localControls).getByText("Changes have not been saved."));
+  fireEvent.click(lowerSave);
+  await screen.findByText("Comparison draft saved privately");
+  assert.ok(within(localControls).getByText("✓ All current fields are saved privately."));
+  assert.equal(lowerSave.disabled, true);
+  assert.equal(db.pll_lesson_progress.length, 1);
+  assert.equal(db.pll_lesson_progress[0].lesson_key, "direction-comparison-v1");
+  assert.equal(db.pll_lesson_progress[0].state.ideas[1].direction, "A full garden redesign");
+  assert.equal(db.pll_drafts.length, 0);
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  await screen.findByText("Comparison draft saved privately");
+  assert.equal(screen.getAllByLabelText("Possible project direction")[0].value, "A paper garden plan");
+  assert.equal(screen.getAllByLabelText("Possible project direction")[1].value, "A full garden redesign");
+  fireEvent.change(screen.getAllByLabelText("Possible project direction")[1], { target: { value: "A revised second direction" } });
+  fireEvent.click(screen.getAllByRole("button", { name: "Save comparison draft" })[0]);
+  await screen.findByText("Comparison draft saved privately");
+  assert.equal(db.pll_lesson_progress.length, 1);
+  assert.equal(db.pll_lesson_progress[0].state.ideas[1].direction, "A revised second direction");
+});
+
+test("shared comparison does not present editable structured inputs as the final record", async () => {
+  resetData();
+  db.pll_activities[0].instructions = "[[direction-comparison]]";
+  db.pll_submissions.push({ id: "comparison-final", course_id: "course-1", activity_id: "practice-1", learner_id: "learner-1", response_text: "Final comparison record", submitted_at: "2026-11-25T18:00:00Z" });
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  assert.ok(screen.getByText("Your comparison has been shared. See your final response and feedback below."));
+  assert.equal(screen.queryByLabelText("Possible project direction"), null);
+  assert.ok(screen.getByText("Final comparison record"));
+});
+
+
+test("module outline can collapse for focused reading without losing the active lesson", async () => {
+  resetData();
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  fireEvent.click(screen.getByRole("button", { name: /Practice choosing/ }));
+  const collapse = screen.getByRole("button", { name: "Hide module outline" });
+  assert.equal(collapse.getAttribute("aria-expanded"), "true");
+  fireEvent.click(collapse);
+  const expand = screen.getByRole("button", { name: "Show module outline" });
+  assert.equal(expand.getAttribute("aria-expanded"), "false");
+  assert.equal(document.getElementById(expand.getAttribute("aria-controls")).hidden, true);
+  assert.ok(screen.getByRole("heading", { name: "Practice choosing" }));
+  fireEvent.click(expand);
+  assert.equal(screen.getByRole("button", { name: /Practice choosing/ }).getAttribute("aria-current"), "page");
+});
+
+
+test("revision draft restores pending questions without claiming actual feedback", async () => {
+  resetData();
+  addModuleTwoActivity("Revision follow-up", "[[first-move-revision]]");
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  const open = () => fireEvent.click(within(screen.getByRole("navigation", { name: "Module lessons" })).getByRole("button", { name: /Revision follow-up/ }));
+  open();
+  await screen.findByText("No saved revision yet");
+  fireEvent.click(screen.getByRole("radio", { name: /Not yet; I am still waiting/ }));
+  fireEvent.change(screen.getByLabelText("What question are you waiting to have answered?"), { target: { value: "May I use a paper model?" } });
+  fireEvent.click(screen.getAllByRole("button", { name: "Save revision draft" })[0]);
+  await screen.findByText("Your revision is saved privately");
+  assert.equal(db.pll_lesson_progress[0].state.receivedFeedback, "");
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  open();
+  await screen.findByText("Your revision is saved privately");
+  assert.equal(screen.getByLabelText("What question are you waiting to have answered?").value, "May I use a paper model?");
+  assert.equal(screen.getByRole("button", { name: "Review my feedback decision" }).disabled, true);
+  fireEvent.click(screen.getByRole("radio", { name: /Yes, feedback has arrived/ }));
+  assert.equal(screen.getByLabelText(/What feedback did you actually receive/).value, "");
+});
+
+test("evidence draft restores the selected obstacle route and its actual details", async () => {
+  resetData();
+  addModuleTwoActivity("Evidence or obstacle", "[[first-move-evidence]]");
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  const open = () => fireEvent.click(within(screen.getByRole("navigation", { name: "Module lessons" })).getByRole("button", { name: /Evidence or obstacle/ }));
+  open();
+  await screen.findByText("No saved evidence record yet");
+  fireEvent.click(screen.getByRole("radio", { name: /A genuine obstacle prevented/ }));
+  fireEvent.change(screen.getByLabelText(/What actually blocked the planned action/), { target: { value: "School permission was not available." } });
+  fireEvent.click(screen.getAllByRole("button", { name: "Save evidence draft" })[0]);
+  await screen.findByText("Your evidence record is saved privately");
+  assert.equal(db.pll_lesson_progress[0].state.route, "obstacle");
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  open();
+  await screen.findByText("Your evidence record is saved privately");
+  assert.equal(screen.getByLabelText(/What actually blocked the planned action/).value, "School permission was not available.");
+  assert.equal(screen.queryByLabelText(/What I actually did/), null);
+});
+
+
+test("Ari scenario restores the selected decision, feedback and partial checklist", async () => {
+  resetData();
+  addModuleTwoActivity("First Move Studio", "[[first-move-studio]]");
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  const open = () => fireEvent.click(within(screen.getByRole("navigation", { name: "Module lessons" })).getByRole("button", { name: /First Move Studio/ }));
+  open();
+  await screen.findByText("No saved scenario yet");
+  fireEvent.click(screen.getAllByRole("radio")[1]);
+  fireEvent.click(screen.getByRole("button", { name: "Show feedback" }));
+  fireEvent.click(screen.getByRole("button", { name: "Next decision" }));
+  fireEvent.change(screen.getByLabelText(/Purpose and learning question/), { target: { value: "Test the count-in." } });
+  fireEvent.click(screen.getAllByRole("button", { name: "Save scenario draft" })[0]);
+  await screen.findByText("Scenario draft saved privately");
+  assert.equal(db.pll_lesson_progress[0].state.step, 1);
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  open();
+  await screen.findByText("Scenario draft saved privately");
+  assert.ok(screen.getByRole("heading", { name: "Use the result" }));
+  assert.equal(screen.getByLabelText(/Purpose and learning question/).value, "Test the count-in.");
+  fireEvent.click(screen.getByRole("button", { name: "Previous decision" }));
+  assert.equal(screen.getAllByRole("radio")[1].checked, true);
+  assert.ok(screen.getByText(/gives Ari a short sample/));
+});
+
+test("entry reflection restores a partial answer and confidence without grading or sharing", async () => {
+  resetData();
+  db.pll_activities[0].instructions = "[[entry-diagnostic]]";
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  const open = () => fireEvent.click(within(screen.getByRole("navigation", { name: "Module lessons" })).getByRole("button", { name: /Practice choosing/ }));
+  open();
+  await screen.findByText("No saved reflection yet");
+  fireEvent.change(screen.getByLabelText(/Two interests, questions, or problems/), { target: { value: "Music and gardens" } });
+  fireEvent.click(screen.getByRole("radio", { name: "3" }));
+  fireEvent.click(screen.getAllByRole("button", { name: "Save reflection draft" })[0]);
+  await screen.findByText("Reflection saved privately");
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  open();
+  await screen.findByText("Reflection saved privately");
+  assert.equal(screen.getByLabelText(/Two interests, questions, or problems/).value, "Music and gardens");
+  assert.equal(screen.getByRole("radio", { name: "3" }).checked, true);
+});
+
+test("exit reflection restores an intended next move as a private draft", async () => {
+  resetData();
+  addModuleTwoActivity("Your Next Move", "[[level-two-exit-check]]");
+  render(React.createElement(StudioPage));
+  fireEvent.click(await screen.findByRole("button", { name: "Modules" }));
+  const open = () => fireEvent.click(within(screen.getByRole("navigation", { name: "Module lessons" })).getByRole("button", { name: /Your Next Move/ }));
+  open();
+  await screen.findByText("No saved reflection yet");
+  fireEvent.click(screen.getByRole("radio", { name: "Pause and reconsider my direction" }));
+  fireEvent.change(screen.getByLabelText(/Name the smallest possible step/), { target: { value: "Review my plan privately." } });
+  fireEvent.click(screen.getAllByRole("button", { name: "Save reflection draft" })[0]);
+  await screen.findByText("Reflection saved privately");
+  assert.equal(db.pll_submissions.length, 0);
+  fireEvent.click(screen.getByRole("button", { name: "Home" }));
+  fireEvent.click(screen.getByRole("button", { name: "Modules" }));
+  open();
+  await screen.findByText("Reflection saved privately");
+  assert.equal(screen.getByRole("radio", { name: "Pause and reconsider my direction" }).checked, true);
+  assert.equal(screen.getByLabelText(/Name the smallest possible step/).value, "Review my plan privately.");
 });

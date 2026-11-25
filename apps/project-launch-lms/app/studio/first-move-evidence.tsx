@@ -1,6 +1,9 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useCallback, useId, useState } from "react";
+import type { LessonProgressIdentity } from "./project-direction-lesson";
+import { usePrivateLessonDraft } from "./use-private-lesson-draft";
+import { PrivateDraftReceipt } from "./private-draft-receipt";
 import type { FirstMovePlan } from "./first-move-card";
 
 type Route = "attempt" | "obstacle";
@@ -30,7 +33,7 @@ const routes: Record<Route, { title: string; description: string; prompts: { key
     title: "A genuine obstacle prevented the first move",
     description: "Use this route when an actual access, time, permission, safety or other barrier stopped the planned attempt. You are not expected to force an unsafe action or invent an outcome.",
     prompts: [
-      { key: "barrier", label: "What actually blocked the planned action", hint: "Describe the barrier without sharing sensitive details." },
+      { key: "barrier", label: "What actually blocked the planned action", hint: "Describe the actual barrier, when it occurred, and what preparation you completed. Keep a dated note or non-identifying artifact if useful. Do not share sensitive details." },
       { key: "safetyChoice", label: "Why I did not push past the barrier", hint: "Explain the practical, ethical, safety or permission decision." },
       { key: "barrierLearning", label: "What I learned about the conditions", hint: "Distinguish a limitation in your test conditions from a conclusion about the whole idea." },
       { key: "alternative", label: "A safer or lower-resource alternative", hint: "Consider a paper model, desk-based comparison, permission request, different time, or smaller inquiry." },
@@ -39,7 +42,18 @@ const routes: Record<Route, { title: string; description: string; prompts: { key
   },
 };
 
-export function FirstMoveEvidence({ plan, onPrepareResponse }: {
+type SavedWork = { version: 1; direction: string; route: Route | null; evidence: Evidence; feedbackStatus: "received" | "pending" | null; receivedFeedback: string; pendingQuestion: string; decision: "revised" | "retained" | null; decisionReason: string; nextMove: string };
+function normalizeWork(raw: unknown): SavedWork | null {
+  if (!raw || typeof raw !== "object" || !("version" in raw) || raw.version !== 1) return null;
+  const value = raw as Partial<SavedWork>;
+  const asText = (text: unknown) => typeof text === "string" ? text.slice(0, 1200) : "";
+  const evidence = { ...initialEvidence };
+  for (const key of Object.keys(evidence) as (keyof Evidence)[]) evidence[key] = asText(value.evidence?.[key]);
+  return { version: 1, direction: asText(value.direction), route: value.route === "attempt" || value.route === "obstacle" ? value.route : null, evidence, feedbackStatus: value.feedbackStatus === "received" || value.feedbackStatus === "pending" ? value.feedbackStatus : null, receivedFeedback: asText(value.receivedFeedback), pendingQuestion: asText(value.pendingQuestion), decision: value.decision === "revised" || value.decision === "retained" ? value.decision : null, decisionReason: asText(value.decisionReason), nextMove: asText(value.nextMove) };
+}
+export function FirstMoveEvidence({ plan, onPrepareResponse, progress, onStructuredDirty }: {
+  progress?: LessonProgressIdentity;
+  onStructuredDirty?: (dirty: boolean) => void;
   plan?: FirstMovePlan;
   onPrepareResponse?: (text: string) => boolean;
 }) {
@@ -48,12 +62,22 @@ export function FirstMoveEvidence({ plan, onPrepareResponse }: {
   const [route, setRoute] = useState<Route | null>(null);
   const [evidence, setEvidence] = useState<Evidence>(initialEvidence);
   const [feedbackStatus, setFeedbackStatus] = useState<"received" | "pending" | null>(null);
-  const [feedbackText, setFeedbackText] = useState("");
+  const [receivedFeedback, setReceivedFeedback] = useState("");
+  const [pendingQuestion, setPendingQuestion] = useState("");
+  const feedbackText = feedbackStatus === "received" ? receivedFeedback : pendingQuestion;
+  const setFeedbackText = feedbackStatus === "received" ? setReceivedFeedback : setPendingQuestion;
   const [decision, setDecision] = useState<"revised" | "retained" | null>(null);
   const [decisionReason, setDecisionReason] = useState("");
   const [nextMove, setNextMove] = useState("");
   const [reviewed, setReviewed] = useState(false);
   const [preparedText, setPreparedText] = useState("");
+  const restore = useCallback((value: SavedWork) => {
+    setDirection(value.direction); setRoute(value.route); setEvidence(value.evidence); setFeedbackStatus(value.feedbackStatus); setReceivedFeedback(value.receivedFeedback); setPendingQuestion(value.pendingQuestion); setDecision(value.decision); setDecisionReason(value.decisionReason); setNextMove(value.nextMove); setReviewed(false); setPreparedText("");
+  }, []);
+  const draft = usePrivateLessonDraft({ progress, lessonKey: "first-move-evidence-v1", snapshot: { version: 1, direction, route, evidence, feedbackStatus, receivedFeedback, pendingQuestion, decision, decisionReason, nextMove } as SavedWork, restore, normalize: normalizeWork, onDirty: onStructuredDirty });
+  const canEdit = draft.status === "ready" || draft.status === "preview";
+  const status = draft.status === "loading" ? "Loading saved work…" : draft.status === "saving" ? "Saving your work…" : draft.status === "error" ? "Could not load saved work. Refresh before editing." : draft.dirty ? "Unsaved evidence changes" : draft.savedOnce ? "Your evidence record is saved privately" : "No saved evidence record yet";
+  const saveButton = <button type="button" className="secondary-button" disabled={draft.status !== "ready" || (!draft.dirty && draft.savedOnce)} onClick={() => void draft.save()}>Save evidence draft</button>;
   const projectDirection = direction.trim() || plan?.direction.trim() || "";
   const activePrompts = route ? routes[route].prompts : [];
   const routeComplete = route !== null && activePrompts.every(prompt => evidence[prompt.key].trim());
@@ -95,7 +119,10 @@ export function FirstMoveEvidence({ plan, onPrepareResponse }: {
       <p className="form-note">Only report an attempt you truly made or an obstacle that actually occurred. If you have not tried anything and have not encountered a genuine barrier, return to your First Move Card and save your plan. You do not need to fabricate evidence or take an unsafe action.</p>
     </header>
 
-    <div className="launch-form">
+    {progress && <div className="comparison-save-bar"><div><p className="eyebrow">Private workspace</p><p className="form-note" role="status">{status}</p></div>{saveButton}</div>}
+    {draft.error && <p role="alert" className="form-error">{draft.error}</p>}
+    {progress && <p className="form-note">Save at any point, even while waiting for feedback. Your fields will be restored when you return. Saving does not share your work.</p>}
+    <fieldset className="launch-form comparison-work-fields" aria-label="Your evidence record" disabled={!canEdit}>
       {plan?.direction.trim() && <div className="launch-plan-context"><strong>Your draft direction from this preview:</strong> {plan.direction}</div>}
       <div className="launch-field">
         <label htmlFor={`${id}-direction`}>Project direction (or a change to your earlier choice)</label>
@@ -117,8 +144,8 @@ export function FirstMoveEvidence({ plan, onPrepareResponse }: {
         <p>{routes[route].description}</p>
         {activePrompts.map((prompt, index) => <div key={prompt.key} className="launch-field">
           <label htmlFor={`${id}-${prompt.key}`}>{index + 1}. {prompt.label}</label>
-          <p className="form-note">{prompt.hint}</p>
-          <textarea id={`${id}-${prompt.key}`} rows={3} maxLength={1200}
+          <p className="form-note" id={`${id}-${prompt.key}-hint`}>{prompt.hint}</p>
+          <textarea aria-describedby={`${id}-${prompt.key}-hint`} id={`${id}-${prompt.key}`} rows={3} maxLength={1200}
             value={evidence[prompt.key]} onChange={event => update(prompt.key, event.target.value)} />
         </div>)}
       </div>}
@@ -166,16 +193,17 @@ export function FirstMoveEvidence({ plan, onPrepareResponse }: {
         <textarea id={`${id}-next`} rows={3} maxLength={1200} value={nextMove}
           onChange={event => { setNextMove(event.target.value); invalidate(); }} />
       </div>
+      {progress && <div className="private-draft-actions">{saveButton}<PrivateDraftReceipt draft={draft} /></div>}
       <button type="button" className="feedback-button" disabled={!complete}
         onClick={() => { setReviewed(true); setPreparedText(""); }}>Review my evidence and decision</button>
       {!complete && <p role="status" className="form-note">Choose an honest route, explain its five prompts, describe actual feedback or an unanswered feedback question, and name a safe next move. You can keep this page open while working, but nothing is autosaved.</p>}
-      {onPrepareResponse && !reviewed && <div className="launch-working-copy">
+      {!progress && onPrepareResponse && !reviewed && <div className="launch-working-copy">
         <p className="form-note">You can pause with an incomplete working copy. Preparing a course response does not write anything; select <strong>Save draft</strong> below afterward. These form fields do not automatically reload from a saved response.</p>
         <button type="button" className="secondary-button" disabled={!hasWorkingContent}
           onClick={() => setPreparedText(onPrepareResponse(summary) ? summary : "")}>Prepare working evidence for Save draft</button>
         {preparedText === summary && <p role="status" className="form-success">Working copy prepared, <strong>not saved or shared</strong>. Select Save draft below.</p>}
       </div>}
-    </div>
+    </fieldset>
 
     {reviewed && <section className="launch-review" aria-live="polite">
       <p className="eyebrow">Evidence and next-step check · no score</p>
@@ -186,11 +214,12 @@ export function FirstMoveEvidence({ plan, onPrepareResponse }: {
       <p className="form-note">This is explanatory guidance, not a judgment that your evidence is authentic or your plan is safe. A facilitator can review your reasoning after you deliberately share the response.</p>
       <label htmlFor={`${id}-copy`}>Your evidence and reflection (select and copy if useful)</label>
       <textarea id={`${id}-copy`} rows={14} readOnly value={summary} />
+      {progress && <div className="comparison-save-bar"><div><p className="form-note">Keep your structured work before sharing.</p><PrivateDraftReceipt draft={draft} /></div>{saveButton}</div>}
       {onPrepareResponse ? <>
         <button type="button" className="secondary-button"
-          onClick={() => setPreparedText(onPrepareResponse(summary) ? summary : "")}>Use this record in my course response</button>
+          onClick={() => { const prepared = onPrepareResponse(summary); setPreparedText(prepared ? summary : ""); if (prepared) document.getElementById("learner-response")?.focus(); }}>Use this record in my course response</button>
         {preparedText === summary && <p role="status" className="form-success">Your evidence record is in the course response box. It is <strong>not saved or shared yet</strong>. Save a draft or share it with your facilitator when ready.</p>}
-      </> : <p className="form-note">Preview only: nothing was saved or submitted. Keep a private copy if you need it.</p>}
+      </> : <p className="form-note">This view cannot share a response. Keep a private copy if useful.</p>}
       <p><strong>Next:</strong> Use your plan, genuine observation or barrier, feedback status and next decision in the separately graded Launch Portfolio. Never invent a successful test to fill a portfolio.</p>
     </section>}
   </section>;

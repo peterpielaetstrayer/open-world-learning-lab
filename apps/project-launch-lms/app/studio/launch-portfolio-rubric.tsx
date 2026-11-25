@@ -70,6 +70,27 @@ export function compareLaunchPortfolioRubric(rows: ReadonlyArray<{ title: string
   return { matchesAcademicDraft: problems.length === 0, actualTotal, academicTotal: 60, problems };
 }
 
+export function LaunchPortfolioPreparation({ review = false }: { review?: boolean }) {
+  return <section className="launch-model" aria-labelledby="portfolio-preparation-heading">
+    <h3 id="portfolio-preparation-heading">Assemble your Launch Portfolio</h3>
+    <p>Bring together the work you have already developed. Use the structure below to organize one portfolio; do not invent new observations or feedback to fill a section.</p>
+    <details>
+      <summary>Open the portfolio outline and evidence checklist</summary>
+      <ol>
+        <li><strong>Purpose:</strong> your direction, why it matters, and the question carried forward from Module 1.</li>
+        <li><strong>Milestones:</strong> three ordered steps and the checkpoint where you reconsider the plan.</li>
+        <li><strong>Resources:</strong> materials, time, information, permission and trusted support.</li>
+        <li><strong>Constraints:</strong> a meaningful limitation and your safe response.</li>
+        <li><strong>First action:</strong> the bounded attempt, or the genuine barrier and preparation you completed.</li>
+        <li><strong>Evidence:</strong> what you actually observed or documented, what it suggests, and one thing it cannot establish.</li>
+      </ol>
+      <p>Include your completed first-action checklist and identify actual feedback, your reasoned revision or retention, a credible next step, and one remaining uncertainty. If feedback is pending, save a working draft and request help rather than inventing feedback.</p>
+      <p><a className="back-link" href={review ? "/review-materials/project-launch-worksheets.txt" : "/resources/project-launch-worksheets.txt"} download>Download project worksheets and first-action checklist (plain text)</a></p>
+      <p className="form-note">This outline helps you organize the existing assignment; it adds no scoring criteria. For an equivalent accessible format or private artifact submission, coordinate with the facilitator.</p>
+    </details>
+  </section>;
+}
+
 export function LaunchPortfolioRubricReview({ onHold = true }: { onHold?: boolean }) {
   const bands = ["Proficient", "Developing", "Beginning", "Missing"] as const;
   return <section className="launch-model" aria-labelledby="launch-rubric-heading">

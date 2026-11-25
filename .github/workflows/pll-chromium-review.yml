@@ -1,0 +1,58 @@
+name: Project Launch LMS — Chromium review
+on:
+  pull_request:
+    branches: [feat/project-launch-lms-foundation-2026-11-03]
+    paths:
+      - 'apps/project-launch-lms/**'
+      - '.github/workflows/pll-chromium-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pll-chromium-review-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: apps/project-launch-lms
+    env:
+      PLL_FACULTY_REVIEW_ENABLED: '1'
+      PLL_PLAYWRIGHT_MODULE: ${{ runner.temp }}/pll-browser/node_modules/playwright-core
+      PLL_BROWSER_OUTPUT: ${{ runner.temp }}/pll-browser-evidence
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install exact app dependencies
+        run: npm ci
+      - name: Install isolated browser test dependency
+        run: npm install --prefix "$RUNNER_TEMP/pll-browser" --no-save --package-lock=false --ignore-scripts playwright-core@1.56.1
+      - name: Build review candidate (no live credentials)
+        run: npm run build
+      - name: Run actual browser acceptance
+        run: |
+          set -euo pipefail
+          export PLL_CHROME="$(command -v google-chrome || command -v chromium)"
+          npm run start -- --hostname 127.0.0.1 --port 3210 > "$RUNNER_TEMP/pll-browser-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:3210/review/project-launch-course >/dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" = 1
+          node scripts/browser-review-acceptance.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pll-public-review-browser-evidence
+          path: ${{ runner.temp }}/pll-browser-evidence
+          if-no-files-found: ignore
+          retention-days: 7

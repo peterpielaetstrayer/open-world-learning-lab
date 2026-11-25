@@ -27,6 +27,8 @@ const admin = createClient(url, serviceKey, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 const ids = [];
+const sessions = [];
+const expectedCourseId = "99dc9de5-bfbf-4891-8f5e-444212ec2073";
 const tag = randomUUID().slice(0, 12);
 const courseSlug = "project-launch-lab";
 let cleanupFailed = false;
@@ -49,6 +51,7 @@ async function makeClient(role) {
   const login = createClient(url, publishableKey, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
+  sessions.push(login);
   const signedIn = await login.auth.signInWithPassword({ email, password });
   assertNoError(signedIn, "Auth sign-in " + role);
   expect(signedIn.data.user?.id === user.id, role + " signed in to correct account");
@@ -60,6 +63,7 @@ try {
     await admin.from("pll_courses").select("id").eq("slug", courseSlug).single(),
     "Find dedicated course"
   );
+  expect(course.id === expectedCourseId, "Exact intended course identity confirmed");
   const courseModule = assertNoError(
     await admin.from("pll_modules").select("id,is_published").eq("course_id", course.id)
       .eq("module_number", 1).single(),
@@ -254,10 +258,101 @@ try {
     .select("id").eq("submission_id", practiceResponse.id), "Learner B ungraded feedback query");
   expect(otherPracticeFeedback.length === 0, "Learner B cannot read another learner's formative feedback");
 
+  // Use only new synthetic accounts. The key is read privately by the
+  // trusted runner; never print answer keys, submitted answers or feedback.
+  const quiz = assertNoError(await admin.from("pll_quiz_questions")
+    .select("position,options,correct_option").eq("course_id", course.id).order("position"), "Inspect quiz fixture privately");
+  expect(quiz.length === 10 && quiz.every((q, i) => q.position === i + 1 &&
+    Array.isArray(q.options) && q.options.length >= 2 &&
+    q.correct_option >= 1 && q.correct_option <= q.options.length),
+    "Ten valid ordered quiz questions");
+  const publicQuestions = assertNoError(await alice.login.from("pll_quiz_questions")
+    .select("position,prompt,options").eq("course_id", course.id), "Learner reads allowed quiz columns");
+  expect(publicQuestions.length === 10, "Learner can read all ten questions");
+  const secretColumns = await alice.login.from("pll_quiz_questions")
+    .select("correct_option,explanation").eq("course_id", course.id);
+  expect(Boolean(secretColumns.error), "Learner cannot select quiz answer key");
+  const answers = quiz.map((q, i) => i === 0 ? (q.correct_option % q.options.length) + 1 : q.correct_option);
+  const badQuiz = await alice.login.rpc("pll_submit_quiz", { p_course_id: course.id, p_answers: answers.slice(0, 9) });
+  expect(Boolean(badQuiz.error), "Incomplete quiz attempt rejected");
+  const staffQuiz = await facilitator.login.rpc("pll_submit_quiz", { p_course_id: course.id, p_answers: answers });
+  expect(Boolean(staffQuiz.error), "Facilitator cannot submit as a learner");
+  assertNoError(await alice.login.rpc("pll_submit_quiz", { p_course_id: course.id, p_answers: answers }), "Learner submits quiz");
+  const receipt = assertNoError(await alice.login.from("pll_quiz_attempts")
+    .select("score,feedback,submitted_at").eq("course_id", course.id).eq("learner_id", alice.user.id).single(), "Learner retrieves own quiz receipt");
+  expect(receipt.score === 9 && Boolean(receipt.submitted_at), "Quiz score matches one intentionally incorrect answer");
+  expect(Array.isArray(receipt.feedback) && receipt.feedback.length === 10 &&
+    receipt.feedback.every(item => typeof item.explanation === "string" && item.explanation.trim() &&
+      item.correct === (item.position !== 1)) &&
+    new Set(receipt.feedback.map(item => item.position)).size === 10,
+    "Every quiz item has correct/incorrect explanation");
+  const repeatQuiz = await alice.login.rpc("pll_submit_quiz", { p_course_id: course.id, p_answers: answers });
+  expect(Boolean(repeatQuiz.error), "Second quiz attempt rejected");
+  const peerQuiz = assertNoError(await bob.login.from("pll_quiz_attempts").select("score")
+    .eq("course_id", course.id).eq("learner_id", alice.user.id), "Peer quiz visibility query");
+  expect(peerQuiz.length === 0, "Peer cannot read learner A quiz receipt");
+  const staffReceipt = assertNoError(await facilitator.login.from("pll_quiz_attempts").select("score")
+    .eq("course_id", course.id).eq("learner_id", alice.user.id).single(), "Facilitator quiz receipt");
+  expect(staffReceipt.score === 9, "Facilitator sees assigned quiz result");
+
+  const ratings = Array(10).fill(4);
+  const evaluation = { course_id: course.id, ratings, comments: "SYNTHETIC QA — remove after this test." };
+  const invalidEvaluation = await alice.login.from("pll_course_evaluations")
+    .insert({ ...evaluation, ratings: [4] });
+  expect(Boolean(invalidEvaluation.error), "Incomplete evaluation rejected");
+  const forgedEvaluation = await bob.login.from("pll_course_evaluations")
+    .insert({ ...evaluation, learner_id: alice.user.id });
+  expect(Boolean(forgedEvaluation.error), "Peer cannot forge evaluation");
+  const evaluationReceipt = assertNoError(await alice.login.from("pll_course_evaluations")
+    .insert(evaluation).select("ratings,submitted_at").single(), "Learner evaluation receipt");
+  expect(evaluationReceipt.ratings.length === 10 && Boolean(evaluationReceipt.submitted_at),
+    "Learner can submit and retrieve ten evaluation ratings");
+  const repeatEvaluation = await alice.login.from("pll_course_evaluations").insert(evaluation);
+  expect(Boolean(repeatEvaluation.error), "Duplicate evaluation rejected");
+  const peerEvaluation = assertNoError(await bob.login.from("pll_course_evaluations").select("ratings")
+    .eq("course_id", course.id).eq("learner_id", alice.user.id), "Peer evaluation visibility query");
+  expect(peerEvaluation.length === 0, "Peer cannot read learner A evaluation");
+  const staffEvaluation = assertNoError(await facilitator.login.from("pll_course_evaluations").select("ratings")
+    .eq("course_id", course.id).eq("learner_id", alice.user.id).single(), "Facilitator evaluation read");
+  expect(staffEvaluation.ratings.length === 10, "Facilitator sees assigned evaluation");
+
+  // Test the currently held Portfolio. Never toggle the hold.
+  const portfolio = assertNoError(await admin.from("pll_activities").select("id,is_published")
+    .eq("course_id", course.id).eq("slug", "launch-portfolio").single(), "Locate Portfolio");
+  expect(portfolio.is_published, "Portfolio exists in published course");
+  const portfolioOpen = assertNoError(await alice.login.rpc("pll_portfolio_is_open", { p_course_id: course.id }), "Read Portfolio gate");
+  expect(portfolioOpen === false, "Portfolio hold active; this harness is for held-state testing");
+  const portfolioDraft = assertNoError(await alice.login.from("pll_drafts").insert({
+    course_id: course.id, activity_id: portfolio.id, learner_id: alice.user.id,
+    response_text: "SYNTHETIC QA — honest working Portfolio draft."
+  }).select("id").single(), "Held Portfolio draft");
+  expect(Boolean(portfolioDraft.id), "Held Portfolio still allows draft");
+  const heldFinal = await alice.login.from("pll_submissions").insert({
+    course_id: course.id, activity_id: portfolio.id, learner_id: alice.user.id,
+    response_text: "SYNTHETIC QA — this final submission must be rejected."
+  });
+  expect(Boolean(heldFinal.error), "Held Portfolio rejects final submission");
   console.log("ROLE SMOKE TEST COMPLETE — all assertions passed (synthetic accounts only).");
 } finally {
-  // Delete only the synthetic accounts created by this run. Their enrolled
-  // records cascade from auth.users; leave all course publication as found.
+  // Revoke synthetic sessions first. Quiz and evaluation FKs do not cascade.
+  // Explicitly remove only records for newly created IDs and the exact course.
+  for (const login of sessions) {
+    try {
+      const result = await login.auth.signOut({ scope: "global" });
+      if (result.error) cleanupFailed = true;
+    } catch { cleanupFailed = true; }
+  }
+  if (ids.length) {
+    for (const table of ["pll_quiz_attempts", "pll_course_evaluations", "pll_submissions"]) {
+      try {
+        const removed = await admin.from(table).delete().eq("course_id", expectedCourseId).in("learner_id", ids);
+        if (removed.error) cleanupFailed = true;
+        const remaining = await admin.from(table).select("learner_id", { count: "exact", head: true })
+          .eq("course_id", expectedCourseId).in("learner_id", ids);
+        if (remaining.error || remaining.count !== 0) cleanupFailed = true;
+      } catch { cleanupFailed = true; }
+    }
+  }
   for (const userId of ids) {
     const r = await admin.auth.admin.deleteUser(userId);
     if (r.error) { cleanupFailed = true; console.error("CLEANUP WARNING: synthetic Auth user requires review."); }

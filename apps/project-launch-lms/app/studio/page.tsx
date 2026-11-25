@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ActivityPacing, CourseHome, CourseOutline, AssignmentList, CourseResources, type CourseSection } from "./course-navigation";
+import { ActivityPacing, LessonContext, CourseHome, CourseOutline, AssignmentList, CourseResources, type CourseSection } from "./course-navigation";
 import { CourseQuiz } from "./course-quiz";
 import { Discussions } from "./discussions";
 import { CourseEvaluation } from "./course-evaluation";
@@ -10,7 +10,7 @@ import { ModuleEditor } from "./module-editor";
 import { LessonText } from "./lesson-text";
 import { LessonEditor } from "./lesson-editor";
 import { RubricEditor } from "./rubric-editor";
-import { academicLaunchPortfolioPointBands, compareLaunchPortfolioRubric, LaunchPortfolioRubricReview } from "./launch-portfolio-rubric";
+import { academicLaunchPortfolioPointBands, compareLaunchPortfolioRubric, LaunchPortfolioPreparation, LaunchPortfolioRubricReview } from "./launch-portfolio-rubric";
 import { sortCourseActivities, activityExpectsResponse } from "./activity-order";
 import { browserSupabase } from "@/lib/supabase-browser";
 import type {
@@ -43,6 +43,7 @@ export default function StudioPage() {
   const [selectedActivity, setSelectedActivity] = useState("");
   const [selectedSubmission, setSelectedSubmission] = useState("");
   const [response, setResponse] = useState("");
+  const [structuredDirty, setStructuredDirty] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [pointInputs, setPointInputs] = useState<Record<string, string>>({});
   const [noteInputs, setNoteInputs] = useState<Record<string, string>>({});
@@ -156,7 +157,33 @@ export default function StudioPage() {
   const portfolioSubmissionOnHold = portfolioAssignmentRubric !== null && !(portfolioOpen && portfolioAssignmentRubric.matchesAcademicDraft);
   const portfolioReviewOnHold = portfolioRubricComparison !== null && !(portfolioOpen && portfolioRubricComparison.matchesAcademicDraft);
 
+  useEffect(() => {
+    if (section !== "modules" || !selectedActivity) return;
+    const heading = document.getElementById("studio-lesson-title");
+    heading?.focus({ preventScroll: true });
+    heading?.scrollIntoView?.({ block: "start", behavior: "instant" });
+  }, [section, selectedActivity]);
+
+  const unsavedResponse = !isInstructor && !!activeActivity && !finalSubmission &&
+    response !== (activeDraft?.response_text ?? "");
+
+  useEffect(() => {
+    if (!unsavedResponse && !structuredDirty) return;
+    const warn = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [unsavedResponse, structuredDirty]);
+
+  function canLeaveResponse() {
+    if (busy) return false;
+    return !(unsavedResponse || structuredDirty) || window.confirm("You have unsaved changes in your course work. Leave without saving? Choose Cancel to keep working or save your draft first.");
+  }
+
   function chooseActivity(id: string) {
+    setStructuredDirty(false);
     setSelectedActivity(id);
     const matching = drafts.find((draft) => draft.activity_id === id && draft.learner_id === identity);
     setResponse(matching?.response_text ?? "");
@@ -208,6 +235,7 @@ export default function StudioPage() {
       return;
     }
     if (!response.trim()) { setError("Please write your explanation before submitting."); return; }
+    if (structuredDirty) { setError("Save your structured activity draft before sharing the final response."); return; }
     if (!window.confirm("Submit this response for facilitator review? Final submissions cannot be edited.")) return;
     setBusy(true); setError(""); setNotice("");
     try {
@@ -273,7 +301,7 @@ export default function StudioPage() {
   }
 
   async function signOut() {
-    if (!supabase) return;
+    if (!supabase || !canLeaveResponse()) return;
     await supabase.auth.signOut();
     setMembership(null);
     window.location.replace("/login");
@@ -287,8 +315,19 @@ export default function StudioPage() {
   if (!membership) return null;
 
   function openActivity(id: string) {
-    chooseActivity(id);
+    if (id !== selectedActivity) {
+      if (!canLeaveResponse()) return;
+      chooseActivity(id);
+    }
     setSection("modules");
+  }
+
+  function openSection(next: CourseSection) {
+    if (next === section) return;
+    if (!canLeaveResponse()) return;
+    if (unsavedResponse) setResponse(activeDraft?.response_text ?? "");
+    setStructuredDirty(false);
+    setSection(next);
   }
 
   function togglePreview() {
@@ -312,6 +351,7 @@ export default function StudioPage() {
           {isInstructor && <button type="button" className="secondary-button" onClick={togglePreview}>
             {studentPreview ? "Exit Student Preview" : "Student Preview"}
           </button>}
+          <Link href="/account" className="text-button" onClick={event => { if (!canLeaveResponse()) event.preventDefault(); }}>Account settings</Link>
           <button className="text-button" onClick={signOut} type="button">Sign out</button>
         </div>
       </div>
@@ -324,12 +364,12 @@ export default function StudioPage() {
         <nav aria-label="Course navigation" className="course-navigation">
           {sectionLinks.map(item => <button key={item.id} type="button"
             aria-current={section === item.id ? "page" : undefined}
-            onClick={() => setSection(item.id as CourseSection)}>{item.label}</button>)}
+            onClick={() => openSection(item.id as CourseSection)}>{item.label}</button>)}
         </nav>
         <div className="course-content">
           {section === "home" && <CourseHome description={courseDescription} modules={visibleModules}
             activities={orderedActivities} submissions={ownSubmissions} criteria={criteria}
-            feedback={feedbackRows} instructor={isInstructor} onOpen={openActivity} onModules={() => setSection("modules")} />}
+            feedback={feedbackRows} instructor={isInstructor} onOpen={openActivity} onModules={() => openSection("modules")} />}
           {section === "modules" && (
             <div className="module-reader">
               <CourseOutline modules={visibleModules} activities={orderedActivities} criteria={criteria}
@@ -338,10 +378,12 @@ export default function StudioPage() {
                 {!readableActivity && <p>Choose a lesson from the module list.</p>}
           {activeActivity && readableActivity && (
             <div className="studio-panel">
-              <h3>{activeActivity.title}</h3>
+              <h3 id="studio-lesson-title" tabIndex={-1}>{activeActivity.title}</h3>
+              <LessonContext modules={visibleModules} activities={orderedActivities} activity={activeActivity} criteria={criteria} />
               {orderedActivities.some(activity => activity.slug === "module-one-introduction") &&
                 <ActivityPacing slug={activeActivity.slug} />}
               <LessonText key={activeActivity.id} text={activeActivity.instructions}
+                finalized={Boolean(finalSubmission) && !isInstructor} onStructuredDirty={setStructuredDirty}
                 lessonProgress={!isInstructor ? {
                   courseId: membership.course_id,
                   activityId: activeActivity.id,
@@ -356,6 +398,7 @@ export default function StudioPage() {
                   setResponse(prepared);
                   return true;
                 } : undefined} />
+              {portfolioAssignmentRubric && <LaunchPortfolioPreparation />}
               {assignedCriteria.length > 0 && !portfolioAssignmentRubric && <>
               <h4>How your work will be evaluated</h4>
               <ul>{assignedCriteria.map(c => <li key={c.id}><strong>{c.title} ({c.maximum_points} points)</strong> — {c.description}</li>)}</ul></>}
@@ -390,11 +433,13 @@ export default function StudioPage() {
                   <label htmlFor="learner-response">{assignedCriteria.length > 0 ? "Your project reasoning or response" : "Your practice reflection or question for feedback"}</label>
                   <textarea id="learner-response" value={response} onChange={(e) => setResponse(e.target.value)}
                     rows={9} maxLength={20000} placeholder="Explain your choices, constraints, and what you would do next…" />
+                  {unsavedResponse && <p className="form-note">Unsaved response changes. Save draft before leaving if you want to keep them.</p>}
+                  {structuredDirty && <p className="form-note" role="status">Save your structured activity draft above before sharing your final response.</p>}
                   <div className="studio-actions">
                     <button disabled={busy} type="button" onClick={() => void saveDraft()} className="secondary-button">
                       {busy ? "Working…" : "Save draft"}
                     </button>
-                    <button disabled={busy || !response.trim() || portfolioSubmissionOnHold} type="button" onClick={() => void submitFinal()} className="feedback-button">
+                    <button disabled={busy || !response.trim() || portfolioSubmissionOnHold || structuredDirty} type="button" onClick={() => void submitFinal()} className="feedback-button">
                       {assignedCriteria.length > 0 ? "Submit final response" : "Share with facilitator (final)"}
                     </button>
                   </div>
@@ -426,7 +471,7 @@ export default function StudioPage() {
           {section === "feedback" && (isInstructor && !studentPreview ? (
         <section className="studio-work" aria-labelledby="reviews-heading">
           <h2 id="reviews-heading">Learner submissions</h2>
-          {submissions.length === 0 ? <p>No learner submissions yet. The platform uses synthetic demonstration accounts until reviewer access is configured.</p> : (
+          {submissions.length === 0 ? <p>No learner submissions yet. Shared learner work will appear here when it is ready for review.</p> : (
             <>
               <label htmlFor="submission-choice">Submission to review</label>
               <select id="submission-choice" value={selectedSubmission} onChange={e => chooseSubmission(e.target.value)}>
@@ -481,7 +526,7 @@ export default function StudioPage() {
         </section>
           ) : <AssignmentList activities={orderedActivities} criteria={criteria} submissions={ownSubmissions}
             feedback={feedbackRows} scores={scores} portfolioOpen={portfolioOpen} onOpen={openActivity} showFeedback={true} />)}
-          {section === "resources" && <CourseResources activities={orderedActivities} />}
+          {section === "resources" && <CourseResources activities={orderedActivities} onOpen={openActivity} />}
           {section === "discussions" && supabase && <Discussions supabase={supabase}
             courseId={membership.course_id} identity={identity} preview={studentPreview} />}
           {section === "quiz" && supabase && <CourseQuiz supabase={supabase}

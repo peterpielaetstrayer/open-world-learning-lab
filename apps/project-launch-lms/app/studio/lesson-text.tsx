@@ -20,8 +20,17 @@ export function getResourceUrl(text: string): URL | null {
   }
 }
 
-export function LessonText({ text, lessonProgress, onPrepareResponse, headingLevel = 4, review = false }: {
-  text: string; headingLevel?: 3 | 4; lessonProgress?: LessonProgressIdentity; onPrepareResponse?: (text: string) => boolean; review?: boolean;
+// Deliberately narrow inline syntax: React escapes all authored text.
+// Never interpret arbitrary HTML or expand the allowed link protocols.
+function inlineEmphasis(text: string) {
+  return text.split(/(\*\*[^*\n]+\*\*)/g).map((part, index) =>
+    part.startsWith("**") && part.endsWith("**") && part.length > 4
+      ? <strong key={index}>{part.slice(2, -2)}</strong>
+      : part);
+}
+
+export function LessonText({ text, lessonProgress, onPrepareResponse, headingLevel = 4, review = false, finalized = false, onStructuredDirty }: {
+  text: string; headingLevel?: 3 | 4; lessonProgress?: LessonProgressIdentity; onPrepareResponse?: (text: string) => boolean; review?: boolean; finalized?: boolean; onStructuredDirty?: (dirty: boolean) => void;
 }) {
   const blocks: string[] = [];
   for (const block of text.trim().split(/\r?\n\s*\r?\n/)) {
@@ -38,37 +47,37 @@ export function LessonText({ text, lessonProgress, onPrepareResponse, headingLev
     const key = `${index}-${lines[0]}`;
     if (block === "[[direction-video]]") return <CourseMedia key={key} item="direction" review={review} />;
     if (block === "[[first-move-video]]") return <CourseMedia key={key} item="firstmove" review={review} />;
-    if (block === "[[first-move-studio]]") return <FirstMoveStudio key={key} />;
+    if (block === "[[first-move-studio]]") return finalized ? <p key={key} className="form-note">Your scenario checklist has been shared. See your final response and feedback below.</p> : <FirstMoveStudio key={key} review={review} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
     if (block === "[[project-direction-lesson]]") return <ProjectDirectionLesson key={key} progress={lessonProgress} onPrepareResponse={onPrepareResponse} />;
-    if (block === "[[entry-diagnostic]]") return <EntryDiagnostic key={key} onPrepareResponse={onPrepareResponse} />;
-    if (block === "[[direction-comparison]]") return <DirectionComparison key={key} onPrepareResponse={onPrepareResponse} />;
+    if (block === "[[entry-diagnostic]]") return finalized ? <p key={key} className="form-note">Your starting reflection has been shared. See your final response and feedback below.</p> : <EntryDiagnostic key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
+    if (block === "[[direction-comparison]]") return finalized ? <p key={key} className="form-note">Your comparison has been shared. See your final response and feedback below.</p> : <DirectionComparison key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
     if (block === "[[gauntlet-bridge]]") return <GauntletBridge key={key} />;
-    if (block === "[[first-move-card]]") return <FirstMoveCard key={key} onPrepareResponse={onPrepareResponse} />;
-    if (block === "[[first-move-revision]]") return <FirstMoveRevision key={key} onPrepareResponse={onPrepareResponse} />;
-    if (block === "[[first-move-evidence]]") return <FirstMoveEvidence key={key} onPrepareResponse={onPrepareResponse} />;
+    if (block === "[[first-move-card]]") return finalized ? <p key={key} className="form-note">Your First Move Card has been shared. See your final response and feedback below.</p> : <FirstMoveCard key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
+    if (block === "[[first-move-revision]]") return finalized ? <p key={key} className="form-note">Your revision record has been shared. See your final response and feedback below.</p> : <FirstMoveRevision key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
+    if (block === "[[first-move-evidence]]") return finalized ? <p key={key} className="form-note">Your evidence record has been shared. See your final response and feedback below.</p> : <FirstMoveEvidence key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
     if (block === "[[first-step-mini-lesson]]") return <FirstStepMiniLesson key={key} />;
     if (block === "[[maya-garden-model]]") return <MayaGardenModel key={key} />;
     if (block === "[[first-step-checks]]") return <FirstStepChecks key={key} />;
-    if (block === "[[level-two-exit-check]]") return <LevelTwoExitCheck key={key} onPrepareResponse={onPrepareResponse} />;
+    if (block === "[[level-two-exit-check]]") return finalized ? <p key={key} className="form-note">Your exit reflection has been shared. See your final response and feedback below.</p> : <LevelTwoExitCheck key={key} onPrepareResponse={onPrepareResponse} progress={lessonProgress} onStructuredDirty={onStructuredDirty} />;
     if (lines.every(line => /^\d+\. /.test(line))) {
-      return <ol key={key}>{lines.map((line, position) => <li key={position}>{line.replace(/^\d+\. /, "").replaceAll("**", "")}</li>)}</ol>;
+      return <ol key={key}>{lines.map((line, position) => <li key={position}>{inlineEmphasis(line.replace(/^\d+\. /, ""))}</li>)}</ol>;
     }
     if (lines.every(line => /^- /.test(line))) {
-      return <ul key={key}>{lines.map((line, position) => <li key={position}>{line.slice(2).replaceAll("**", "")}</li>)}</ul>;
+      return <ul key={key}>{lines.map((line, position) => <li key={position}>{inlineEmphasis(line.slice(2))}</li>)}</ul>;
     }
     const resource = getResourceUrl(block);
     if (resource) {
       return <p key={key}><a className="back-link" href={resource.href} target="_blank" rel="noopener noreferrer">
-        Open {resource.hostname} (opens in new tab)
+        {resource.hostname === "project-launch-gauntlet.vercel.app" ? "Open Project Launch Gauntlet" : `Open ${resource.hostname}`} (opens in new tab)
       </a></p>;
     }
     const heading = lines[0].match(/^#{1,4} (.+)$/);
     if (heading) {
       return <div key={key}>
-        <Heading>{heading[1]}</Heading>
-        {lines.length > 1 && <p className="prewrap">{lines.slice(1).join("\n")}</p>}
+        <Heading>{inlineEmphasis(heading[1])}</Heading>
+        {lines.length > 1 && <p className="prewrap">{inlineEmphasis(lines.slice(1).join("\n"))}</p>}
       </div>;
     }
-    return <p key={key} className="prewrap">{block.replaceAll("**", "")}</p>;
+    return <p key={key} className="prewrap">{inlineEmphasis(block)}</p>;
   });
 }

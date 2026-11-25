@@ -45,8 +45,11 @@ export default function LoginPage() {
       const { error: resetError } = await browserSupabase().auth.resetPasswordForEmail(email.trim(), {
         redirectTo: callback.toString(),
       });
+      if (resetError && (resetError.status === 429 || resetError.code === "over_email_send_rate_limit")) {
+        throw new Error("Password-reset email requests are temporarily limited. Avoid repeated retries; contact the course administrator if access is urgent.");
+      }
       if (resetError && resetError.code !== "email_address_not_authorized") {
-        throw new Error("The password reset request failed. Wait a moment and try again.");
+        throw new Error("The reset email could not be sent. Contact the course administrator if access is urgent.");
       }
       setNotice("If a reset link can be sent to this address, it will arrive by email. Open it in this same browser.");
     } catch (cause) {

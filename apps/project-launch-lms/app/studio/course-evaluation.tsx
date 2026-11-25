@@ -7,7 +7,7 @@ const questions = [
   "The course explained what I would be able to do.",
   "I could find the next activity without help.",
   "The resources were readable and easy to use.",
-  "The Gauntlet helped me compare possible projects.",
+  "The project-direction practice helped me compare possible projects (for example, the Gauntlet, text case or guided lesson).",
   "The Direction Brief helped me choose a focused project.",
   "First Move Studio helped me design a useful first test.",
   "Feedback helped me make or justify a change.",

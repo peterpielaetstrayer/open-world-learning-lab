@@ -1,6 +1,9 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useCallback, useId, useState } from "react";
+import type { LessonProgressIdentity } from "./project-direction-lesson";
+import { usePrivateLessonDraft } from "./use-private-lesson-draft";
+import { PrivateDraftReceipt } from "./private-draft-receipt";
 
 export type FirstMovePlan = {
   direction: string;
@@ -21,7 +24,7 @@ const initialPlan: FirstMovePlan = {
 };
 
 const fields: { key: keyof FirstMovePlan; title: string; hint: string }[] = [
-  { key: "direction", title: "My project direction", hint: "Use your Module 1 direction or a thoughtful revision." },
+  { key: "direction", title: "My project direction", hint: "Return to your Project Direction Brief and use that direction or a thoughtful revision. Carry forward the question you still need to answer." },
   { key: "purpose", title: "My purpose and who or what it serves", hint: "Explain why the direction matters without naming or identifying another person." },
   { key: "firstAction", title: "The smallest safe first action", hint: "What can you investigate, sketch, compare or test without unsafe or costly requirements?" },
   { key: "learningQuestion", title: "What I want to learn", hint: "Name information the attempt could reveal, not simply a finished product you hope to make." },
@@ -29,11 +32,26 @@ const fields: { key: keyof FirstMovePlan; title: string; hint: string }[] = [
   { key: "resources", title: "Materials, permission, trusted support and low-resource alternative", hint: "What do you already have? If you need help or permission, what can you do safely before getting it?" },
   { key: "constraint", title: "One possible constraint and a safe substitute", hint: "Consider access, time, physical safety, privacy, tools or support. A barrier is not a failure." },
   { key: "evidence", title: "Non-sensitive evidence I could collect", hint: "For example, a private observation note, an anonymized tally or a sketch. No identifiable photos or public posts required." },
-  { key: "usefulInformation", title: "What I could learn even if my attempt does not work", hint: "A test can be informative when the result differs from your hope." },
+  { key: "usefulInformation", title: "What I could learn even if my attempt does not work", hint: "A test can be informative when the result differs from your hope. Name one thing that will remain uncertain even after this test." },
   { key: "facilitatorQuestion", title: "One specific question for facilitator feedback", hint: "Ask about feasibility, safety, evidence or scope—not just 'Is this good?'" },
 ];
 
-export function FirstMoveCard({ onPrepareResponse, onPlanChange }: {
+type PlanSnapshot = { version: 1; plan: FirstMovePlan };
+function normalizePlan(raw: unknown): PlanSnapshot | null {
+  if (!raw || typeof raw !== "object" || !("version" in raw) || raw.version !== 1) return null;
+  const input = (raw as Partial<PlanSnapshot>).plan;
+  if (!input || typeof input !== "object") return null;
+  const plan = { ...initialPlan };
+  for (const field of fields) {
+    const value = input[field.key];
+    plan[field.key] = typeof value === "string" ? value.slice(0, 1200) : "";
+  }
+  return { version: 1, plan };
+}
+
+export function FirstMoveCard({ onPrepareResponse, onPlanChange, progress, onStructuredDirty }: {
+  progress?: LessonProgressIdentity;
+  onStructuredDirty?: (dirty: boolean) => void;
   onPrepareResponse?: (text: string) => boolean;
   onPlanChange?: (plan: FirstMovePlan) => void;
 }) {
@@ -41,6 +59,15 @@ export function FirstMoveCard({ onPrepareResponse, onPlanChange }: {
   const [plan, setPlan] = useState<FirstMovePlan>(initialPlan);
   const [reviewed, setReviewed] = useState(false);
   const [preparedText, setPreparedText] = useState("");
+  const restore = useCallback((value: PlanSnapshot) => {
+    setPlan(value.plan); setReviewed(false); setPreparedText("");
+  }, []);
+  const draft = usePrivateLessonDraft({ progress, lessonKey: "first-move-card-v1", snapshot: { version: 1, plan } as PlanSnapshot, restore, normalize: normalizePlan, onDirty: onStructuredDirty });
+  const canEdit = draft.status === "ready" || draft.status === "preview";
+  const status = draft.status === "loading" ? "Loading your saved plan…" : draft.status === "saving" ? "Saving your plan…"
+    : draft.status === "error" ? "Could not load saved work. Refresh before editing." : draft.dirty ? "Unsaved plan changes"
+    : draft.savedOnce ? "First Move Card saved privately" : "No saved plan yet";
+  const saveButton = <button type="button" className="secondary-button" disabled={draft.status !== "ready" || (!draft.dirty && draft.savedOnce)} onClick={() => void draft.save()}>Save plan draft</button>;
   const complete = fields.every(field => plan[field.key].trim());
   const hasWorkingContent = fields.some(field => plan[field.key].trim());
   const summary = [
@@ -68,6 +95,11 @@ export function FirstMoveCard({ onPrepareResponse, onPlanChange }: {
       <p className="form-note">This planning activity is ungraded. You never need to buy anything, leave home, post publicly, contact strangers, share private details, or use AI. Permission and accessibility matter more than speed.</p>
     </header>
 
+    {progress && <div className="comparison-save-bar">
+      <div><p className="eyebrow">Private workspace</p><p className="form-note" role="status">{status}</p></div>{saveButton}
+    </div>}
+    {draft.error && <p role="alert" className="form-error">{draft.error}</p>}
+    {progress && <p className="form-note">Save at any point. Your plan fields will be restored when you return. Nothing is shared until you choose to share a final response.</p>}
     <details className="launch-model">
       <summary>See a second worked plan: the rhythm guide</summary>
       <dl>
@@ -79,33 +111,34 @@ export function FirstMoveCard({ onPrepareResponse, onPlanChange }: {
       <p>The school-garden model taught the planning framework; this different rhythm-guide example shows how that framework transfers. You do not need to choose a music project.</p>
     </details>
 
-    <div className="launch-form">
+    <fieldset className="launch-form comparison-work-fields" disabled={!canEdit} aria-label="Your first move plan">
       <h4>Purpose and a manageable test</h4>
       {fields.slice(0, 5).map((field, index) => <div key={field.key} className="launch-field">
         <label htmlFor={`${id}-${field.key}`}><span className="diagnostic-number">{String(index + 1).padStart(2, "0")}</span> {field.title}</label>
-        <p className="form-note">{field.hint}</p>
-        <textarea id={`${id}-${field.key}`} rows={3} maxLength={1200} value={plan[field.key]}
+        <p className="form-note" id={`${id}-${field.key}-hint`}>{field.hint}</p>
+        <textarea aria-describedby={`${id}-${field.key}-hint`} id={`${id}-${field.key}`} rows={3} maxLength={1200} value={plan[field.key]}
           onChange={event => update(field.key, event.target.value)} placeholder="My current thinking…" />
       </div>)}
 
       <h4>Conditions, evidence and feedback</h4>
       {fields.slice(5).map((field, index) => <div key={field.key} className="launch-field">
         <label htmlFor={`${id}-${field.key}`}><span className="diagnostic-number">{String(index + 6).padStart(2, "0")}</span> {field.title}</label>
-        <p className="form-note">{field.hint}</p>
-        <textarea id={`${id}-${field.key}`} rows={3} maxLength={1200} value={plan[field.key]}
+        <p className="form-note" id={`${id}-${field.key}-hint`}>{field.hint}</p>
+        <textarea aria-describedby={`${id}-${field.key}-hint`} id={`${id}-${field.key}`} rows={3} maxLength={1200} value={plan[field.key]}
           onChange={event => update(field.key, event.target.value)} placeholder="My current thinking…" />
       </div>)}
 
+      {progress && <div className="private-draft-actions">{saveButton}<PrivateDraftReceipt draft={draft} /></div>}
       <button type="button" className="feedback-button" disabled={!complete}
         onClick={() => { setReviewed(true); setPreparedText(""); }}>Review my First Move Card</button>
       {!complete && <p className="form-note" role="status">Complete all ten short prompts to review the card. If a resource or permission is unavailable, you can name that obstacle and propose a safe alternative.</p>}
-      {onPrepareResponse && !reviewed && <div className="launch-working-copy">
+      {!progress && onPrepareResponse && !reviewed && <div className="launch-working-copy">
         <p className="form-note">Need to pause? Prepare an incomplete working copy in the course response box, then select <strong>Save draft</strong>. It will not automatically save or share. You can continue editing the saved text later; these form fields do not automatically reload from that draft.</p>
         <button type="button" className="secondary-button" disabled={!hasWorkingContent}
           onClick={() => setPreparedText(onPrepareResponse(summary) ? summary : "")}>Prepare working copy for Save draft</button>
         {preparedText === summary && <p role="status" className="form-success">Working copy prepared, <strong>not saved or submitted</strong>. Select Save draft in your course response area below.</p>}
       </div>}
-    </div>
+    </fieldset>
 
     {reviewed && <section className="launch-review" aria-live="polite">
       <p className="eyebrow">Private planning review · no score</p>
@@ -114,15 +147,17 @@ export function FirstMoveCard({ onPrepareResponse, onPlanChange }: {
         <li><strong>Purpose → action:</strong> Does your smallest action tell you something useful about the purpose?</li>
         <li><strong>Conditions → safety:</strong> If time, access or permission changes, will your substitute still be safe?</li>
         <li><strong>Evidence → decision:</strong> Could your notes reveal a limit, surprise or next question—even without a success?</li>
+        <li><strong>Checklist:</strong> Return to the first-action worksheet in Resources. Record your own answers about purpose, resources and permission, safety, evidence, a fallback and privacy; keep this completed checklist for your Launch Portfolio.</li>
       </ul>
       <p className="form-note">This check confirms the prompts are filled in; it does not determine whether your plan is good, safe or feasible. That judgment needs you and, where appropriate, a trusted facilitator.</p>
       <label htmlFor={`${id}-copy`}>Your First Move Card (select and copy if useful)</label>
       <textarea id={`${id}-copy`} rows={13} readOnly value={summary} />
+      {progress && <div className="comparison-save-bar"><div><p className="form-note">Keep your structured work before sharing.</p><PrivateDraftReceipt draft={draft} /></div>{saveButton}</div>}
       {onPrepareResponse ? <>
         <button type="button" className="secondary-button"
-          onClick={() => setPreparedText(onPrepareResponse(summary) ? summary : "")}>Use this card in my course response</button>
+          onClick={() => { const prepared = onPrepareResponse(summary); setPreparedText(prepared ? summary : ""); if (prepared) document.getElementById("learner-response")?.focus(); }}>Use this card in my course response</button>
         {preparedText === summary && <p role="status" className="form-success">Your plan is in the course response box. It is <strong>not saved or shared yet</strong>. Choose Save draft or Share with facilitator (final) when ready.</p>}
-      </> : <p className="form-note">Preview only: the card is not stored or sent. Copy it if you want to keep a working version.</p>}
+      </> : <p className="form-note">This view cannot share a response. Copy the card if you want to keep a working version.</p>}
       <p><strong>Next:</strong> Ask for feedback. If you share a final response, it becomes an immutable course record; later revisions should be documented in a separate follow-up, not silently overwrite it.</p>
     </section>}
   </section>;

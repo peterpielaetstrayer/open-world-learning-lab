@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
-  ActivityPacing, AssignmentList, CourseHome, CourseOutline, CourseResources,
+  ActivityPacing, LessonContext, AssignmentList, CourseHome, CourseOutline, CourseResources,
   type CourseSection
 } from "@/app/studio/course-navigation";
 import { CourseMedia } from "@/app/studio/course-media";
 import { LessonText } from "@/app/studio/lesson-text";
-import { LaunchPortfolioRubricReview } from "@/app/studio/launch-portfolio-rubric";
+import { LaunchPortfolioPreparation, LaunchPortfolioRubricReview } from "@/app/studio/launch-portfolio-rubric";
 import { sortCourseActivities } from "@/app/studio/activity-order";
 import { reviewCourseData } from "./review-course-data";
 import type { CourseActivity, RubricCriterion } from "@/lib/course-types";
@@ -21,7 +21,7 @@ const survey = [
   "The course explained what I would be able to do.",
   "I could find the next activity without help.",
   "The resources were readable and easy to use.",
-  "The Gauntlet helped me compare possible projects.",
+  "The project-direction practice helped me compare possible projects (for example, the Gauntlet, text case or guided lesson).",
   "The Direction Brief helped me choose a focused project.",
   "First Move Studio helped me design a useful first test.",
   "Feedback helped me make or justify a change.",
@@ -54,10 +54,16 @@ export function ReviewStudio() {
   const portfolio = selected?.slug === "launch-portfolio";
   const selectedIndex = selected ? orderedActivities.findIndex(item => item.id === selectedId) : -1;
 
+  useEffect(() => {
+    if (section !== "modules" || !selectedId) return;
+    const heading = document.getElementById("review-lesson-title");
+    heading?.focus({ preventScroll: true });
+    heading?.scrollIntoView?.({ block: "start", behavior: "instant" });
+  }, [section, selectedId]);
+
   function openActivity(id: string) {
     setSelectedId(id);
     setSection("modules");
-    window.scrollTo({ top: 0, behavior: "instant" });
   }
   function openSection(id: ReviewSection) {
     setSection(id);
@@ -72,7 +78,7 @@ export function ReviewStudio() {
           <h1>{reviewCourseData.title}</h1>
           <p className="course-small">Read-only view of the published Project Launch Lab instructional experience.</p>
         </div>
-        <p className="review-status" role="status">Course review · No sign-in required</p>
+        <div><p className="review-status" role="status">Course review · No sign-in required</p><p><a className="back-link" href="/login">Invited student or facilitator? Sign in</a></p></div>
       </div>
       <p className="preview-banner review-banner">
         <strong>Faculty review mode.</strong> This uses the same module navigation, lesson renderer, media and interactive learning
@@ -102,9 +108,11 @@ export function ReviewStudio() {
                 <button type="button" className="feedback-button" onClick={() => openActivity(orderedActivities[0].id)}>Begin Module 1</button>
               </div>}
               {selected && <div className="studio-panel">
-                <h2>{selected.title}</h2>
+                <h2 id="review-lesson-title" tabIndex={-1}>{selected.title}</h2>
+                <LessonContext modules={modules} activities={orderedActivities} activity={selected} criteria={criteria} />
                 <ActivityPacing slug={selected.slug} />
                 <LessonText key={selected.id} text={selected.instructions} review={true} headingLevel={3} />
+                {portfolio && <LaunchPortfolioPreparation review />}
                 {selectedCriteria.length > 0 && <section aria-label="Assignment rubric">
                   <h3>How your work will be evaluated</h3>
                   <ul>{selectedCriteria.map(item =>
@@ -140,9 +148,7 @@ export function ReviewStudio() {
             <CourseMedia item="overview" review={true} />
             <CourseMedia item="direction" review={true} />
             <CourseMedia item="firstmove" review={true} />
-            <p><a href="/review-materials/project-launch-worksheets.txt" target="_blank" rel="noopener noreferrer">
-              Open blank Project Launch worksheets and first-action checklist</a></p>
-            <CourseResources activities={orderedActivities} />
+            <CourseResources activities={orderedActivities} onOpen={openActivity} review={true} />
           </section>}
           {section === "discussions" && <section aria-labelledby="review-discussions-heading">
             <h2 id="review-discussions-heading">Facilitated discussions</h2>
