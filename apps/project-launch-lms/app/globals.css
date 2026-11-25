@@ -344,3 +344,17 @@
 .lesson-context p{margin:0 0 5px;overflow-wrap:anywhere}
 .lesson-context p:last-child{margin-bottom:0}
 .course-welcome>.studio-actions{margin:20px 0 12px}
+
+/* Comparison workspace: adapt to available reading pane, not browser width. */
+.direction-comparison{container-type:inline-size}
+.comparison-work-fields{margin:0;padding:0;border:0;min-inline-size:0}
+.comparison-save-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;background:#edf3ed;border:1px solid #b7c8bc;padding:16px 20px;margin:20px 0 12px}
+.comparison-save-bar p{margin:0 0 4px}
+.comparison-save-bar .form-note{margin:0}
+.direction-comparison-idea{border-top:3px solid #567668}
+.direction-comparison-idea:nth-child(2){border-top-color:#8a7552}
+.comparison-direction-letter{display:inline-grid;place-items:center;width:32px;height:32px;background:#dfe9df;color:#28493b;font:700 1rem/1 inherit;margin-right:5px}
+.direction-comparison-idea:nth-child(2) .comparison-direction-letter{background:#eee6d7;color:#594a34}
+.direction-comparison-question:last-child{margin-bottom:0}
+.direction-comparison-decision>.secondary-button{margin-right:10px;margin-bottom:8px}
+@container (max-width:650px){.direction-comparison-grid{grid-template-columns:minmax(0,1fr)}.direction-comparison-idea{padding:18px}.comparison-save-bar>button{width:100%}}
