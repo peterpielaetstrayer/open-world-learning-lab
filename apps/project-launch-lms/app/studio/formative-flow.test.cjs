@@ -1255,7 +1255,7 @@ test("evidence draft restores the selected obstacle route and its actual details
   open();
   await screen.findByText("No saved evidence record yet");
   fireEvent.click(screen.getByRole("radio", { name: /A genuine obstacle prevented/ }));
-  fireEvent.change(screen.getByLabelText("What actually blocked the planned action"), { target: { value: "School permission was not available." } });
+  fireEvent.change(screen.getByLabelText(/What actually blocked the planned action/), { target: { value: "School permission was not available." } });
   fireEvent.click(screen.getAllByRole("button", { name: "Save evidence draft" })[0]);
   await screen.findByText("Your evidence record is saved privately");
   assert.equal(db.pll_lesson_progress[0].state.route, "obstacle");
@@ -1264,6 +1264,6 @@ test("evidence draft restores the selected obstacle route and its actual details
   fireEvent.click(screen.getByRole("button", { name: "Modules" }));
   open();
   await screen.findByText("Your evidence record is saved privately");
-  assert.equal(screen.getByLabelText("What actually blocked the planned action").value, "School permission was not available.");
-  assert.equal(screen.queryByLabelText("What I actually did"), null);
+  assert.equal(screen.getByLabelText(/What actually blocked the planned action/).value, "School permission was not available.");
+  assert.equal(screen.queryByLabelText(/What I actually did/), null);
 });
